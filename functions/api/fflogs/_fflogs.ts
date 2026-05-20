@@ -98,7 +98,10 @@ export async function fflogsQuery<T>(env: FFLogsEnv, query: string, variables?: 
   }
   const json = (await res.json()) as { data?: T; errors?: Array<{ message: string }> };
   if (json.errors && json.errors.length > 0) {
-    throw new FFLogsError(json.errors.map((e) => e.message).join(' ; '), 502);
+    const msg = json.errors.map((e) => e.message).join(' ; ');
+    // "does not exist" / "not found" are user-facing 404s, not server errors.
+    const isNotFound = /does not exist|not found|private/i.test(msg);
+    throw new FFLogsError(msg, isNotFound ? 404 : 502);
   }
   if (!json.data) throw new FFLogsError('FFLogs returned no data', 502);
   return json.data;
