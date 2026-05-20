@@ -61,10 +61,11 @@ for (const job of seed.jobs) {
     const match = matches[ab.id];
     const path = manual ?? match?.icon_path;
     if (path) {
-      // Keep the symbolic glyph name as fallback in a separate field.
-      ab.icon_glyph = ab.icon;
+      // Preserve the symbolic glyph name only if this is the first run
+      // for this ability — re-running shouldn't overwrite with the URL.
+      if (!ab.icon_glyph) ab.icon_glyph = ab.icon;
       ab.icon = `${ABILITY_ICON_BASE}${path}`;
-      ab.icon_id = match?.icon_id;
+      if (match?.icon_id) ab.icon_id = match.icon_id;
       abilityUpdates++;
     } else {
       abilityMisses++;

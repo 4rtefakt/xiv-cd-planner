@@ -137,9 +137,13 @@ function JobPickerPopover({
 }) {
   const ref = useRef<HTMLDivElement>(null);
 
-  // Filter to jobs in the same role available in the seed. If the seed
-  // ever expands to all 21 jobs this picker won't need to change.
-  const options = allJobs.filter((j) => j.role === currentJob.role);
+  // Filter: tank↔tank and heal↔heal use the broad role. DPS splits into
+  // melee / phys_ranged / magic_ranged via sub_role, since a Samurai
+  // raid slot can't be filled by a Bard or a Black Mage.
+  const options =
+    currentJob.role === 'dps'
+      ? allJobs.filter((j) => j.role === 'dps' && j.sub_role === currentJob.sub_role)
+      : allJobs.filter((j) => j.role === currentJob.role);
 
   // Dismiss on outside click + Escape.
   useEffect(() => {

@@ -447,6 +447,587 @@
       "icon_path": "/i/000000/000869.png",
       "level": 44,
       "recast_csv_s": 120
+    },
+    "DRK.Rampart": {
+      "action_id": 7531,
+      "icon_id": 801,
+      "icon_path": "/i/000000/000801.png",
+      "level": 8,
+      "recast_csv_s": 90
+    },
+    "DRK.ArmsLength": {
+      "action_id": 7548,
+      "icon_id": 822,
+      "icon_path": "/i/000000/000822.png",
+      "level": 32,
+      "recast_csv_s": 120
+    },
+    "DRK.Reprisal": {
+      "action_id": 7535,
+      "icon_id": 806,
+      "icon_path": "/i/000000/000806.png",
+      "level": 22,
+      "recast_csv_s": 60
+    },
+    "DRK.ShadowedVigil": {
+      "action_id": 36927,
+      "icon_id": 3094,
+      "icon_path": "/i/003000/003094.png",
+      "level": 92,
+      "recast_csv_s": 120
+    },
+    "DRK.DarkMind": {
+      "action_id": 3634,
+      "icon_id": 3076,
+      "icon_path": "/i/003000/003076.png",
+      "level": 45,
+      "recast_csv_s": 60
+    },
+    "DRK.DarkMissionary": {
+      "action_id": 16471,
+      "icon_id": 3087,
+      "icon_path": "/i/003000/003087.png",
+      "level": 66,
+      "recast_csv_s": 90
+    },
+    "DRK.Oblation": {
+      "action_id": 25754,
+      "icon_id": 3089,
+      "icon_path": "/i/003000/003089.png",
+      "level": 82,
+      "recast_csv_s": 60
+    },
+    "DRK.TheBlackestNight": {
+      "action_id": 7393,
+      "icon_id": 3081,
+      "icon_path": "/i/003000/003081.png",
+      "level": 70,
+      "recast_csv_s": 15
+    },
+    "DRK.LivingDead": {
+      "action_id": 3638,
+      "icon_id": 3077,
+      "icon_path": "/i/003000/003077.png",
+      "level": 50,
+      "recast_csv_s": 300
+    },
+    "GNB.Rampart": {
+      "action_id": 7531,
+      "icon_id": 801,
+      "icon_path": "/i/000000/000801.png",
+      "level": 8,
+      "recast_csv_s": 90
+    },
+    "GNB.ArmsLength": {
+      "action_id": 7548,
+      "icon_id": 822,
+      "icon_path": "/i/000000/000822.png",
+      "level": 32,
+      "recast_csv_s": 120
+    },
+    "GNB.Reprisal": {
+      "action_id": 7535,
+      "icon_id": 806,
+      "icon_path": "/i/000000/000806.png",
+      "level": 22,
+      "recast_csv_s": 60
+    },
+    "GNB.Camouflage": {
+      "action_id": 16140,
+      "icon_id": 3404,
+      "icon_path": "/i/003000/003404.png",
+      "level": 6,
+      "recast_csv_s": 90
+    },
+    "GNB.GreatNebula": {
+      "action_id": 36935,
+      "icon_id": 3435,
+      "icon_path": "/i/003000/003435.png",
+      "level": 92,
+      "recast_csv_s": 120
+    },
+    "GNB.HeartOfLight": {
+      "action_id": 16160,
+      "icon_id": 3424,
+      "icon_path": "/i/003000/003424.png",
+      "level": 64,
+      "recast_csv_s": 90
+    },
+    "GNB.HeartOfCorundum": {
+      "action_id": 25758,
+      "icon_id": 3430,
+      "icon_path": "/i/003000/003430.png",
+      "level": 82,
+      "recast_csv_s": 25
+    },
+    "GNB.Aurora": {
+      "action_id": 16151,
+      "icon_id": 3415,
+      "icon_path": "/i/003000/003415.png",
+      "level": 45,
+      "recast_csv_s": 60
+    },
+    "GNB.Superbolide": {
+      "action_id": 16152,
+      "icon_id": 3416,
+      "icon_path": "/i/003000/003416.png",
+      "level": 50,
+      "recast_csv_s": 360
+    },
+    "AST.Swiftcast": {
+      "action_id": 7561,
+      "icon_id": 866,
+      "icon_path": "/i/000000/000866.png",
+      "level": 18,
+      "recast_csv_s": 60
+    },
+    "AST.Surecast": {
+      "action_id": 7559,
+      "icon_id": 869,
+      "icon_path": "/i/000000/000869.png",
+      "level": 44,
+      "recast_csv_s": 120
+    },
+    "AST.CollectiveUnconscious": {
+      "action_id": 3613,
+      "icon_id": 3140,
+      "icon_path": "/i/003000/003140.png",
+      "level": 58,
+      "recast_csv_s": 60
+    },
+    "AST.NeutralSect": {
+      "action_id": 16559,
+      "icon_id": 3552,
+      "icon_path": "/i/003000/003552.png",
+      "level": 80,
+      "recast_csv_s": 120
+    },
+    "AST.Exaltation": {
+      "action_id": 25873,
+      "icon_id": 3561,
+      "icon_path": "/i/003000/003561.png",
+      "level": 86,
+      "recast_csv_s": 60
+    },
+    "AST.CelestialOpposition": {
+      "action_id": 16553,
+      "icon_id": 3142,
+      "icon_path": "/i/003000/003142.png",
+      "level": 60,
+      "recast_csv_s": 60
+    },
+    "AST.EarthlyStar": {
+      "action_id": 7439,
+      "icon_id": 3143,
+      "icon_path": "/i/003000/003143.png",
+      "level": 62,
+      "recast_csv_s": 60
+    },
+    "AST.Macrocosmos": {
+      "action_id": 25874,
+      "icon_id": 3562,
+      "icon_path": "/i/003000/003562.png",
+      "level": 90,
+      "recast_csv_s": 180
+    },
+    "AST.Horoscope": {
+      "action_id": 16557,
+      "icon_id": 3550,
+      "icon_path": "/i/003000/003550.png",
+      "level": 76,
+      "recast_csv_s": 60
+    },
+    "AST.LadyOfCrowns": {
+      "action_id": 7445,
+      "icon_id": 3146,
+      "icon_path": "/i/003000/003146.png",
+      "level": 70,
+      "recast_csv_s": 1
+    },
+    "AST.SunSign": {
+      "action_id": 37031,
+      "icon_id": 3109,
+      "icon_path": "/i/003000/003109.png",
+      "level": 100,
+      "recast_csv_s": 1
+    },
+    "SGE.Swiftcast": {
+      "action_id": 7561,
+      "icon_id": 866,
+      "icon_path": "/i/000000/000866.png",
+      "level": 18,
+      "recast_csv_s": 60
+    },
+    "SGE.Surecast": {
+      "action_id": 7559,
+      "icon_id": 869,
+      "icon_path": "/i/000000/000869.png",
+      "level": 44,
+      "recast_csv_s": 120
+    },
+    "SGE.Kerachole": {
+      "action_id": 24298,
+      "icon_id": 3666,
+      "icon_path": "/i/003000/003666.png",
+      "level": 50,
+      "recast_csv_s": 30
+    },
+    "SGE.Taurochole": {
+      "action_id": 24303,
+      "icon_id": 3671,
+      "icon_path": "/i/003000/003671.png",
+      "level": 62,
+      "recast_csv_s": 45
+    },
+    "SGE.Physis": {
+      "action_id": 24302,
+      "icon_id": 3670,
+      "icon_path": "/i/003000/003670.png",
+      "level": 60,
+      "recast_csv_s": 60
+    },
+    "SGE.Haima": {
+      "action_id": 24305,
+      "icon_id": 3673,
+      "icon_path": "/i/003000/003673.png",
+      "level": 70,
+      "recast_csv_s": 120
+    },
+    "SGE.Holos": {
+      "action_id": 24310,
+      "icon_id": 3678,
+      "icon_path": "/i/003000/003678.png",
+      "level": 76,
+      "recast_csv_s": 120
+    },
+    "SGE.Panhaima": {
+      "action_id": 24311,
+      "icon_id": 3679,
+      "icon_path": "/i/003000/003679.png",
+      "level": 80,
+      "recast_csv_s": 120
+    },
+    "SGE.Krasis": {
+      "action_id": 24317,
+      "icon_id": 3685,
+      "icon_path": "/i/003000/003685.png",
+      "level": 86,
+      "recast_csv_s": 60
+    },
+    "SGE.Pneuma": {
+      "action_id": 24318,
+      "icon_id": 3686,
+      "icon_path": "/i/003000/003686.png",
+      "level": 90,
+      "recast_csv_s": 120
+    },
+    "MNK.SecondWind": {
+      "action_id": 7541,
+      "icon_id": 821,
+      "icon_path": "/i/000000/000821.png",
+      "level": 8,
+      "recast_csv_s": 120
+    },
+    "MNK.Bloodbath": {
+      "action_id": 7542,
+      "icon_id": 823,
+      "icon_path": "/i/000000/000823.png",
+      "level": 12,
+      "recast_csv_s": 90
+    },
+    "MNK.Feint": {
+      "action_id": 7549,
+      "icon_id": 828,
+      "icon_path": "/i/000000/000828.png",
+      "level": 22,
+      "recast_csv_s": 90
+    },
+    "MNK.ArmsLength": {
+      "action_id": 7548,
+      "icon_id": 822,
+      "icon_path": "/i/000000/000822.png",
+      "level": 32,
+      "recast_csv_s": 120
+    },
+    "MNK.Mantra": {
+      "action_id": 65,
+      "icon_id": 216,
+      "icon_path": "/i/000000/000216.png",
+      "level": 42,
+      "recast_csv_s": 90
+    },
+    "MNK.RiddleOfEarth": {
+      "action_id": 7394,
+      "icon_id": 2537,
+      "icon_path": "/i/002000/002537.png",
+      "level": 64,
+      "recast_csv_s": 120
+    },
+    "NIN.SecondWind": {
+      "action_id": 7541,
+      "icon_id": 821,
+      "icon_path": "/i/000000/000821.png",
+      "level": 8,
+      "recast_csv_s": 120
+    },
+    "NIN.Bloodbath": {
+      "action_id": 7542,
+      "icon_id": 823,
+      "icon_path": "/i/000000/000823.png",
+      "level": 12,
+      "recast_csv_s": 90
+    },
+    "NIN.Feint": {
+      "action_id": 7549,
+      "icon_id": 828,
+      "icon_path": "/i/000000/000828.png",
+      "level": 22,
+      "recast_csv_s": 90
+    },
+    "NIN.ArmsLength": {
+      "action_id": 7548,
+      "icon_id": 822,
+      "icon_path": "/i/000000/000822.png",
+      "level": 32,
+      "recast_csv_s": 120
+    },
+    "NIN.ShadeShift": {
+      "action_id": 2241,
+      "icon_id": 607,
+      "icon_path": "/i/000000/000607.png",
+      "level": 2,
+      "recast_csv_s": 120
+    },
+    "RPR.SecondWind": {
+      "action_id": 7541,
+      "icon_id": 821,
+      "icon_path": "/i/000000/000821.png",
+      "level": 8,
+      "recast_csv_s": 120
+    },
+    "RPR.Bloodbath": {
+      "action_id": 7542,
+      "icon_id": 823,
+      "icon_path": "/i/000000/000823.png",
+      "level": 12,
+      "recast_csv_s": 90
+    },
+    "RPR.Feint": {
+      "action_id": 7549,
+      "icon_id": 828,
+      "icon_path": "/i/000000/000828.png",
+      "level": 22,
+      "recast_csv_s": 90
+    },
+    "RPR.ArmsLength": {
+      "action_id": 7548,
+      "icon_id": 822,
+      "icon_path": "/i/000000/000822.png",
+      "level": 32,
+      "recast_csv_s": 120
+    },
+    "RPR.ArcaneCrest": {
+      "action_id": 24404,
+      "icon_id": 3632,
+      "icon_path": "/i/003000/003632.png",
+      "level": 40,
+      "recast_csv_s": 30
+    },
+    "VPR.SecondWind": {
+      "action_id": 7541,
+      "icon_id": 821,
+      "icon_path": "/i/000000/000821.png",
+      "level": 8,
+      "recast_csv_s": 120
+    },
+    "VPR.Bloodbath": {
+      "action_id": 7542,
+      "icon_id": 823,
+      "icon_path": "/i/000000/000823.png",
+      "level": 12,
+      "recast_csv_s": 90
+    },
+    "VPR.Feint": {
+      "action_id": 7549,
+      "icon_id": 828,
+      "icon_path": "/i/000000/000828.png",
+      "level": 22,
+      "recast_csv_s": 90
+    },
+    "VPR.ArmsLength": {
+      "action_id": 7548,
+      "icon_id": 822,
+      "icon_path": "/i/000000/000822.png",
+      "level": 32,
+      "recast_csv_s": 120
+    },
+    "MCH.SecondWind": {
+      "action_id": 7541,
+      "icon_id": 821,
+      "icon_path": "/i/000000/000821.png",
+      "level": 8,
+      "recast_csv_s": 120
+    },
+    "MCH.ArmsLength": {
+      "action_id": 7548,
+      "icon_id": 822,
+      "icon_path": "/i/000000/000822.png",
+      "level": 32,
+      "recast_csv_s": 120
+    },
+    "MCH.Tactician": {
+      "action_id": 16889,
+      "icon_id": 3040,
+      "icon_path": "/i/003000/003040.png",
+      "level": 56,
+      "recast_csv_s": 120
+    },
+    "MCH.Dismantle": {
+      "action_id": 2887,
+      "icon_id": 3011,
+      "icon_path": "/i/003000/003011.png",
+      "level": 62,
+      "recast_csv_s": 120
+    },
+    "DNC.SecondWind": {
+      "action_id": 7541,
+      "icon_id": 821,
+      "icon_path": "/i/000000/000821.png",
+      "level": 8,
+      "recast_csv_s": 120
+    },
+    "DNC.ArmsLength": {
+      "action_id": 7548,
+      "icon_id": 822,
+      "icon_path": "/i/000000/000822.png",
+      "level": 32,
+      "recast_csv_s": 120
+    },
+    "DNC.ShieldSamba": {
+      "action_id": 16012,
+      "icon_id": 3469,
+      "icon_path": "/i/003000/003469.png",
+      "level": 56,
+      "recast_csv_s": 120
+    },
+    "DNC.CuringWaltz": {
+      "action_id": 16015,
+      "icon_id": 3468,
+      "icon_path": "/i/003000/003468.png",
+      "level": 52,
+      "recast_csv_s": 60
+    },
+    "DNC.Improvisation": {
+      "action_id": 16014,
+      "icon_id": 3477,
+      "icon_path": "/i/003000/003477.png",
+      "level": 80,
+      "recast_csv_s": 120
+    },
+    "SMN.Addle": {
+      "action_id": 7560,
+      "icon_id": 861,
+      "icon_path": "/i/000000/000861.png",
+      "level": 8,
+      "recast_csv_s": 90
+    },
+    "SMN.Swiftcast": {
+      "action_id": 7561,
+      "icon_id": 866,
+      "icon_path": "/i/000000/000866.png",
+      "level": 18,
+      "recast_csv_s": 60
+    },
+    "SMN.Surecast": {
+      "action_id": 7559,
+      "icon_id": 869,
+      "icon_path": "/i/000000/000869.png",
+      "level": 44,
+      "recast_csv_s": 120
+    },
+    "SMN.RadiantAegis": {
+      "action_id": 25799,
+      "icon_id": 2750,
+      "icon_path": "/i/002000/002750.png",
+      "level": 2,
+      "recast_csv_s": 60
+    },
+    "SMN.Rekindle": {
+      "action_id": 25830,
+      "icon_id": 2764,
+      "icon_path": "/i/002000/002764.png",
+      "level": 80,
+      "recast_csv_s": 20
+    },
+    "SMN.LuxSolaris": {
+      "action_id": 36997,
+      "icon_id": 2787,
+      "icon_path": "/i/002000/002787.png",
+      "level": 100,
+      "recast_csv_s": 60
+    },
+    "RDM.Addle": {
+      "action_id": 7560,
+      "icon_id": 861,
+      "icon_path": "/i/000000/000861.png",
+      "level": 8,
+      "recast_csv_s": 90
+    },
+    "RDM.Swiftcast": {
+      "action_id": 7561,
+      "icon_id": 866,
+      "icon_path": "/i/000000/000866.png",
+      "level": 18,
+      "recast_csv_s": 60
+    },
+    "RDM.Surecast": {
+      "action_id": 7559,
+      "icon_id": 869,
+      "icon_path": "/i/000000/000869.png",
+      "level": 44,
+      "recast_csv_s": 120
+    },
+    "RDM.MagickBarrier": {
+      "action_id": 25857,
+      "icon_id": 3237,
+      "icon_path": "/i/003000/003237.png",
+      "level": 86,
+      "recast_csv_s": 120
+    },
+    "PCT.Addle": {
+      "action_id": 7560,
+      "icon_id": 861,
+      "icon_path": "/i/000000/000861.png",
+      "level": 8,
+      "recast_csv_s": 90
+    },
+    "PCT.Swiftcast": {
+      "action_id": 7561,
+      "icon_id": 866,
+      "icon_path": "/i/000000/000866.png",
+      "level": 18,
+      "recast_csv_s": 60
+    },
+    "PCT.Surecast": {
+      "action_id": 7559,
+      "icon_id": 869,
+      "icon_path": "/i/000000/000869.png",
+      "level": 44,
+      "recast_csv_s": 120
+    },
+    "PCT.TemperaCoat": {
+      "action_id": 34685,
+      "icon_id": 3835,
+      "icon_path": "/i/003000/003835.png",
+      "level": 10,
+      "recast_csv_s": 120
+    },
+    "PCT.TemperaGrassa": {
+      "action_id": 34686,
+      "icon_id": 3836,
+      "icon_path": "/i/003000/003836.png",
+      "level": 88,
+      "recast_csv_s": 1
     }
   },
   "misses": [
