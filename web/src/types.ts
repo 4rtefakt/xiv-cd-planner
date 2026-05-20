@@ -53,13 +53,22 @@ export interface BossLane {
   name: string;
 }
 
+export type MechCategory = 'damage' | 'placement';
+
 export interface Mechanic {
   id: string;
   lane_id: string;
   name: string;
   time: number;               // seconds
-  type: MechType;
-  damage_kind?: DamageKind;   // default 'magical' when omitted
+  category: MechCategory;
+  /** Player IDs hit by this mech. Empty array means "no one" (a pure
+   *  placement mechanic, but also a damage mech where the user hasn't
+   *  picked targets yet). Length === party.length means raidwide. */
+  targets: string[];
+  damage_kind?: DamageKind;   // only meaningful when category === 'damage'
+  /** Legacy field kept for migration ; new mechs derive their visual
+   *  type from category + targets via deriveMechType(). */
+  type?: MechType;
 }
 
 export interface Use {

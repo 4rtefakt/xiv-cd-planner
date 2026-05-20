@@ -1,21 +1,45 @@
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { usePlanStore } from '../../state/planStore';
 import { fmt, pct, xToTime } from '../../lib/time';
 import { MechanicMarker } from './Mechanic';
 
 /**
  * Left labels column — one row per boss lane.
+ *
+ * Click on the lane NAME → inline editable text input. Enter / blur
+ * saves, Esc cancels. The lane-num and × stay fixed.
  */
 export function BossLanesLeft() {
   const bossLanes = usePlanStore((s) => s.bossLanes);
   const removeBossLane = usePlanStore((s) => s.removeBossLane);
+  const setBossLaneName = usePlanStore((s) => s.setBossLaneName);
+  const [editingId, setEditingId] = useState<string | null>(null);
 
   return (
     <div className="left-boss-lanes">
       {bossLanes.map((lane, idx) => (
         <div key={lane.id} className="boss-row-left boss-row-height">
           <span className="lane-num">{String(idx + 1).padStart(2, '0')}</span>
-          <span>{lane.name}</span>
+          {editingId === lane.id ? (
+            <LaneNameEditor
+              initial={lane.name}
+              onSave={(v) => {
+                setBossLaneName(lane.id, v.trim() || lane.name);
+                setEditingId(null);
+              }}
+              onCancel={() => setEditingId(null)}
+            />
+          ) : (
+            <span
+              className="lane-name"
+              role="button"
+              tabIndex={0}
+              title="Rename lane"
+              onClick={() => setEditingId(lane.id)}
+            >
+              {lane.name}
+            </span>
+          )}
           {bossLanes.length > 1 && (
             <span
               className="lane-remove"
@@ -33,6 +57,38 @@ export function BossLanesLeft() {
         </div>
       ))}
     </div>
+  );
+}
+
+function LaneNameEditor({
+  initial,
+  onSave,
+  onCancel,
+}: {
+  initial: string;
+  onSave: (v: string) => void;
+  onCancel: () => void;
+}) {
+  const [value, setValue] = useState(initial);
+  const ref = useRef<HTMLInputElement>(null);
+  useEffect(() => {
+    ref.current?.focus();
+    ref.current?.select();
+  }, []);
+  return (
+    <input
+      ref={ref}
+      className="lane-name-input"
+      type="text"
+      value={value}
+      maxLength={32}
+      onChange={(e) => setValue(e.target.value)}
+      onKeyDown={(e) => {
+        if (e.key === 'Enter') onSave(value);
+        else if (e.key === 'Escape') onCancel();
+      }}
+      onBlur={() => onSave(value)}
+    />
   );
 }
 

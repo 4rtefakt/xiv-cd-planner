@@ -31,8 +31,24 @@ export function TimelineShell() {
   // handler (which needs the latest store-reading function), not via
   // a hook subscription — the handler re-installs on mount only.
 
-  const quickAdd = (type: 'raidwide' | 'tankbuster' | 'autos' | 'custom') =>
-    openModal(firstLaneId, Math.round(fightDuration / 2), type);
+  const party = usePlanStore((s) => s.party);
+
+  const quickAdd = (variant: 'raidwide' | 'tankbuster' | 'autos' | 'placement') => {
+    const t = Math.round(fightDuration / 2);
+    const allIds = party.map((p) => p.id);
+    const tankId = party.find((p) => p.badge === 'MT' || p.badge === 'OT')?.id;
+    const tankTargets = tankId ? [tankId] : [];
+    switch (variant) {
+      case 'raidwide':
+        return openModal(firstLaneId, t, { targets: allIds, damage_kind: 'magical' });
+      case 'tankbuster':
+        return openModal(firstLaneId, t, { targets: tankTargets, damage_kind: 'magical' });
+      case 'autos':
+        return openModal(firstLaneId, t, { targets: tankTargets, damage_kind: 'physical' });
+      case 'placement':
+        return openModal(firstLaneId, t, { category: 'placement', targets: [] });
+    }
+  };
 
   const canvasWidth = Math.max(800, Math.round(fightDuration * BASE_PX_PER_SEC * zoom));
 
@@ -142,7 +158,7 @@ export function TimelineShell() {
         <button type="button" className="tl-btn raidwide"   onClick={() => quickAdd('raidwide')}>RAIDWIDE</button>
         <button type="button" className="tl-btn tankbuster" onClick={() => quickAdd('tankbuster')}>TANKBUSTER</button>
         <button type="button" className="tl-btn autos"      onClick={() => quickAdd('autos')}>AUTOS</button>
-        <button type="button" className="tl-btn custom"     onClick={() => quickAdd('custom')}>CUSTOM</button>
+        <button type="button" className="tl-btn custom"     onClick={() => quickAdd('placement')}>PLACEMENT</button>
         <div className="tl-divider" />
         <span className="tl-tool-label">LANES</span>
         <button type="button" className="tl-btn add-lane" onClick={addBossLane}>

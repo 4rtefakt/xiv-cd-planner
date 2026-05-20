@@ -11,13 +11,28 @@
 
 import type { Ability, DamageKind, MechType, Mechanic, Use } from '../types';
 
-export type CoverageTier = 'bad' | 'warn' | 'good' | 'pure';
+export type CoverageTier = 'bad' | 'warn' | 'good' | 'pure' | 'none';
 
 export interface Coverage {
   pct: number;       // sum of active ability mit_potency, capped at 85
   tier: CoverageTier;
   expected: number;  // baseline used to decide the tier
   pure: boolean;     // true when the mechanic is pure damage (mit ignored)
+  /** True when there is nothing to mitigate (placement mechs). */
+  placement: boolean;
+}
+
+/**
+ * Derive a visual MechType from the new (category, targets) shape so the
+ * existing color tokens keep working without forcing users to pick a
+ * "raidwide / tankbuster / custom" label themselves.
+ */
+export function deriveMechType(mech: Pick<Mechanic, 'category' | 'targets'>, partySize: number): MechType {
+  if (mech.category === 'placement') return 'custom';
+  if (mech.targets.length === 0) return 'custom';
+  if (mech.targets.length >= partySize) return 'raidwide';
+  if (mech.targets.length === 1) return 'tankbuster';
+  return 'custom';
 }
 
 const EXPECTED_MIT_BY_TYPE: Record<MechType, number> = {
@@ -43,10 +58,15 @@ export function computeCoverage(
   mech: Mechanic,
   uses: Use[],
   abilities: Map<string, Ability>,
+  partySize: number,
 ): Coverage {
+  // Placement mechs are informational only — no damage to mitigate.
+  if (mech.category === 'placement') {
+    return { pct: 0, tier: 'none', expected: 0, pure: false, placement: true };
+  }
   const kind: DamageKind = mech.damage_kind ?? 'magical';
   if (kind === 'pure') {
-    return { pct: 0, tier: 'pure', expected: 0, pure: true };
+    return { pct: 0, tier: 'pure', expected: 0, pure: true, placement: false };
   }
   let total = 0;
   for (const u of uses) {
@@ -57,10 +77,11 @@ export function computeCoverage(
     total += ab.mit_potency;
   }
   const pct = Math.min(COVERAGE_CAP, total);
-  const expected = EXPECTED_MIT_BY_TYPE[mech.type];
+  const visualType = deriveMechType(mech, partySize);
+  const expected = EXPECTED_MIT_BY_TYPE[visualType];
   const ratio = expected > 0 ? pct / expected : 0;
   const tier: CoverageTier = ratio < 0.4 ? 'bad' : ratio < 0.75 ? 'warn' : 'good';
-  return { pct, tier, expected, pure: false };
+  return { pct, tier, expected, pure: false, placement: false };
 }
 
 /** Flatten all abilities across all jobs into a single id→Ability map. */

@@ -23,13 +23,17 @@ export interface BossLane {
   name: string;
 }
 
+export type MechCategory = 'damage' | 'placement';
+
 export interface Mechanic {
   id: string;
   lane_id: string;
   name: string;
   time: number;
-  type: MechType;
+  category: MechCategory;
+  targets: string[];
   damage_kind?: DamageKind;
+  type?: MechType;
 }
 
 export interface Use {

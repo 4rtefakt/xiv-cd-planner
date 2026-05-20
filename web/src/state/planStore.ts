@@ -11,16 +11,25 @@
  */
 
 import { create } from 'zustand';
-import type { BossLane, DamageKind, Encounter, Job, MechType, Mechanic, Player, Use } from '../types';
+import type { BossLane, DamageKind, Encounter, Job, MechCategory, MechType, Mechanic, Player, Use } from '../types';
 import { demoParty } from '../data/demoParty';
 
 export type SaveStatus = 'idle' | 'saving' | 'saved' | 'error';
 
 export interface MechanicModalState {
+  /** 'create' opens an empty modal anchored to a lane+time. 'edit'
+   *  pre-fills from an existing mechanic and replaces it on confirm. */
+  mode: 'create' | 'edit';
+  mechanicId?: string;       // set when mode === 'edit'
   laneId: string;
   time: number;
-  type: MechType;
+  name: string;
+  category: MechCategory;
+  targets: string[];
   damage_kind: DamageKind;
+  /** Legacy visual flavour — kept for the modal's color-flavor picker
+   *  if we re-add it later. Unused for now ; derived from targets. */
+  type?: MechType;
 }
 
 /**
@@ -108,9 +117,20 @@ interface PlanState {
   // Actions — boss lanes
   addBossLane(): void;
   removeBossLane(id: string): void;
+  setBossLaneName(id: string, name: string): void;
 
   // Actions — modal
-  openMechanicModal(laneId: string, time: number, type?: MechType, damage_kind?: DamageKind): void;
+  openMechanicModal(
+    laneId: string,
+    time: number,
+    init?: {
+      category?: MechCategory;
+      targets?: string[];
+      damage_kind?: DamageKind;
+      name?: string;
+    },
+  ): void;
+  openEditMechanic(mech: Mechanic): void;
   setMechanicModal(patch: Partial<MechanicModalState>): void;
   closeMechanicModal(): void;
 
@@ -124,6 +144,7 @@ interface PlanState {
   addMechanic(m: Mechanic): void;
   removeMechanic(id: string): void;
   moveMechanic(id: string, time: number): void;
+  updateMechanic(id: string, patch: Partial<Mechanic>): void;
 
   // Actions — uses
   addUse(u: Use): void;
@@ -210,9 +231,36 @@ export const usePlanStore = create<PlanState>((set) => ({
       bossLanes: s.bossLanes.filter((l) => l.id !== id),
       mechanics: s.mechanics.filter((m) => m.lane_id !== id),
     })),
+  setBossLaneName: (id, name) =>
+    set((s) => ({ bossLanes: s.bossLanes.map((l) => (l.id === id ? { ...l, name } : l)) })),
 
-  openMechanicModal: (laneId, time, type = 'raidwide', damage_kind = 'magical') =>
-    set({ mechanicModal: { laneId, time, type, damage_kind } }),
+  openMechanicModal: (laneId, time, init) =>
+    set((s) => ({
+      mechanicModal: {
+        mode: 'create',
+        laneId,
+        time,
+        name: init?.name ?? '',
+        category: init?.category ?? 'damage',
+        // Pre-check every party member by default — most mechs at the
+        // planner's level are raidwides, and unchecking is fast.
+        targets: init?.targets ?? s.party.map((p) => p.id),
+        damage_kind: init?.damage_kind ?? 'magical',
+      },
+    })),
+  openEditMechanic: (m) =>
+    set({
+      mechanicModal: {
+        mode: 'edit',
+        mechanicId: m.id,
+        laneId: m.lane_id,
+        time: m.time,
+        name: m.name,
+        category: m.category,
+        targets: [...m.targets],
+        damage_kind: m.damage_kind ?? 'magical',
+      },
+    }),
   setMechanicModal: (patch) =>
     set((s) => (s.mechanicModal ? { mechanicModal: { ...s.mechanicModal, ...patch } } : {})),
   closeMechanicModal: () => set({ mechanicModal: null }),
@@ -225,6 +273,10 @@ export const usePlanStore = create<PlanState>((set) => ({
   removeMechanic: (id) => set((s) => ({ mechanics: s.mechanics.filter((m) => m.id !== id) })),
   moveMechanic: (id, time) =>
     set((s) => ({ mechanics: s.mechanics.map((m) => (m.id === id ? { ...m, time } : m)) })),
+  updateMechanic: (id, patch) =>
+    set((s) => ({
+      mechanics: s.mechanics.map((m) => (m.id === id ? { ...m, ...patch } : m)),
+    })),
 
   addUse: (u) => set((s) => ({ uses: [...s.uses, u] })),
   removeUse: (id) => set((s) => ({ uses: s.uses.filter((u) => u.id !== id) })),
