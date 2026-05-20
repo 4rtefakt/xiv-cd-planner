@@ -185,6 +185,12 @@ export const onRequestPost: PagesFunction<FFLogsEnv> = async (ctx) => {
     const abilities = new Map(
       (header.reportData.report.masterData.abilities ?? []).map((a) => [a.gameID, a]),
     );
+    // Player roster from the master data — names + raw FFLogs subType
+    // (Paladin/WhiteMage/...). The frontend maps subType to our job
+    // codes (PLD/WHM/...) and assigns badges by role.
+    const players = header.reportData.report.masterData.actors
+      .filter((a) => a.type === 'Player')
+      .map((a) => ({ name: a.name, subType: a.subType }));
 
     /** name → { eventCount, isBoss } for every NPC that did a tracked
      *  damage event. Used to decide which sources deserve their own
@@ -339,6 +345,7 @@ export const onRequestPost: PagesFunction<FFLogsEnv> = async (ctx) => {
       fightEnd: fight.endTime,
       fightDuration: Math.round((fight.endTime - fight.startTime) / 1000),
       bossLanes: lanes,
+      players,
       mechanics: groups,
       _debug: {
         pages,

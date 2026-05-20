@@ -15,6 +15,74 @@ import type { BossLane, DamageKind, Encounter, Job, MechCategory, MechType, Mech
 import { demoParty } from '../data/demoParty';
 import { loadStoredLang, storeLang, type Lang } from '../i18n';
 
+/**
+ * FFLogs subType (Paladin, WhiteMage, BlackMage, …) → our seed job
+ * code (PLD, WHM, BLM). FFLogs stores classes as PascalCase strings ;
+ * we keep our own 3-letter codes for compactness.
+ */
+const SUBTYPE_TO_JOB: Record<string, string> = {
+  Paladin: 'PLD', Warrior: 'WAR', DarkKnight: 'DRK', Gunbreaker: 'GNB',
+  WhiteMage: 'WHM', Scholar: 'SCH', Astrologian: 'AST', Sage: 'SGE',
+  Monk: 'MNK', Dragoon: 'DRG', Ninja: 'NIN', Samurai: 'SAM', Reaper: 'RPR', Viper: 'VPR',
+  Bard: 'BRD', Machinist: 'MCH', Dancer: 'DNC',
+  BlackMage: 'BLM', Summoner: 'SMN', RedMage: 'RDM', Pictomancer: 'PCT',
+};
+
+const SLOT_BADGES = ['MT', 'OT', 'H1', 'H2', 'M1', 'M2', 'R1', 'R2'] as const;
+type Badge = (typeof SLOT_BADGES)[number];
+
+/**
+ * Build an 8-slot Player[] from a FFLogs roster. Greedy slot allocator :
+ * each badge picks from its expected bucket (MT/OT from tanks, H1/H2
+ * from heals, M1/M2 from melee, R1 from phys-ranged, R2 from caster).
+ * If a bucket runs out we fall back to whoever's still in leftover.
+ * Names of slots without a matching player keep the placeholder
+ * names from the existing party (Tank 1, Healer 1, …).
+ */
+function mapLogPlayersToParty(
+  players: Array<{ name: string; subType: string }>,
+  jobs: Job[],
+  fallback: Player[],
+): Player[] {
+  type Resolved = { name: string; code: string; role: string; subRole: string };
+  const resolved: Resolved[] = [];
+  for (const p of players) {
+    const code = SUBTYPE_TO_JOB[p.subType];
+    if (!code) continue;
+    const job = jobs.find((j) => j.code === code);
+    if (!job) continue;
+    resolved.push({ name: p.name, code, role: job.role, subRole: job.sub_role });
+  }
+  if (resolved.length === 0) return fallback;
+
+  const tanks = resolved.filter((p) => p.role === 'tank');
+  const heals = resolved.filter((p) => p.role === 'heal');
+  const melee = resolved.filter((p) => p.subRole === 'melee');
+  const phys = resolved.filter((p) => p.subRole === 'phys_ranged');
+  const caster = resolved.filter((p) => p.subRole === 'magic_ranged');
+
+  const result: Player[] = [];
+  for (let i = 0; i < SLOT_BADGES.length; i++) {
+    const badge = SLOT_BADGES[i]!;
+    let pick: Resolved | undefined;
+    if (badge === 'MT' || badge === 'OT') pick = tanks.shift();
+    else if (badge === 'H1' || badge === 'H2') pick = heals.shift();
+    else if (badge === 'M1' || badge === 'M2') pick = melee.shift();
+    else if (badge === 'R1') pick = phys.shift() ?? caster.shift() ?? melee.shift();
+    else if (badge === 'R2') pick = caster.shift() ?? phys.shift() ?? melee.shift();
+    if (pick) {
+      result.push({ id: `p${i + 1}`, name: pick.name, job: pick.code, badge });
+    } else {
+      // No matching role in the log roster — preserve the placeholder
+      // slot from the previous party so the UI doesn't end up with
+      // missing seats.
+      const prev = fallback[i];
+      if (prev) result.push({ ...prev, id: `p${i + 1}`, badge });
+    }
+  }
+  return result;
+}
+
 export type SaveStatus = 'idle' | 'saving' | 'saved' | 'error';
 
 export interface MechanicModalState {
@@ -159,6 +227,10 @@ interface PlanState {
      *  "Left Wing", "Adds"]). If the array is empty, falls back to a
      *  single "BOSS A" lane. */
     bossLanes?: string[];
+    /** Player roster (from FFLogs masterData). When provided and
+     *  non-empty, the current party is replaced — players are mapped
+     *  by subType to our job codes and badges are auto-assigned. */
+    players?: Array<{ name: string; subType: string }>;
     mechanics: Array<{
       name: string;
       time: number;
@@ -305,13 +377,20 @@ export const usePlanStore = create<PlanState>((set) => ({
       for (let i = 0; i < lanes.length; i++) nameToLane.set(laneNames[i]!, lanes[i]!.id);
       const fallbackLaneId = lanes[lanes.length - 1]!.id;
 
-      const partyIds = s.party.map((p) => p.id);
-      const tankId = s.party.find((p) => p.badge === 'MT' || p.badge === 'OT')?.id;
+      // Build a new party from the log's roster, if provided. Otherwise
+      // reuse the existing party.
+      const newParty =
+        payload.players && payload.players.length > 0
+          ? mapLogPlayersToParty(payload.players, s.jobs, s.party)
+          : s.party;
+
+      const partyIds = newParty.map((p) => p.id);
+      const tankId = newParty.find((p) => p.badge === 'MT' || p.badge === 'OT')?.id;
 
       const importedMechs = payload.mechanics.map((m, i) => {
         const seenCount = m.targetNames.length;
         let targets: string[];
-        if (seenCount >= s.party.length - 1) targets = partyIds; // raidwide-ish
+        if (seenCount >= newParty.length - 1) targets = partyIds; // raidwide-ish
         else if (seenCount === 1) targets = tankId ? [tankId] : [];
         else targets = []; // user to assign
         const laneId = (m.source_name && nameToLane.get(m.source_name)) ?? fallbackLaneId;
@@ -334,6 +413,7 @@ export const usePlanStore = create<PlanState>((set) => ({
           fight_name: payload.fightName,
           fight_duration: Math.max(60, Math.min(900, payload.fightDuration)),
         },
+        party: newParty,
         bossLanes: lanes,
         mechanics: importedMechs,
         uses: [], // can't auto-place ; clear to start from scratch

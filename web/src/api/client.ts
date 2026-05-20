@@ -54,6 +54,13 @@ export interface FFLogsMechanic {
   hit_count?: number;
 }
 
+export interface FFLogsPlayer {
+  name: string;
+  /** Raw FFLogs subType (Paladin, WhiteMage, BlackMage, …). The
+   *  importer maps it to our job codes (PLD, WHM, BLM). */
+  subType: string;
+}
+
 export interface FFLogsFightData {
   fightName: string;
   fightStart: number;
@@ -62,6 +69,8 @@ export interface FFLogsFightData {
   /** Ordered list of boss lane names — Boss subtype first, then by
    *  event count desc. Frontend creates one BossLane per entry. */
   bossLanes: string[];
+  /** Player roster pulled from the report's master data. */
+  players: FFLogsPlayer[];
   mechanics: FFLogsMechanic[];
 }
 
