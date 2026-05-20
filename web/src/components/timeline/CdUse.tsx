@@ -42,17 +42,25 @@ export function CdUse({ use, ability, fightDuration }: CdUseProps) {
         e.stopPropagation();
         e.dataTransfer.effectAllowed = 'move';
         e.dataTransfer.setData('text/plain', `use:${use.id}`);
+        // Preserve the grab offset so the use lands where the cursor is,
+        // not where the cursor lands relative to the left edge.
+        const rect = (e.currentTarget as HTMLElement).getBoundingClientRect();
+        const grabOffsetPx = e.clientX - rect.left;
         setDragCtx({
           kind: 'use',
           playerId: use.player_id,
           abilityId: use.ability_id,
           useId: use.id,
+          grabOffsetPx,
         });
         e.currentTarget.classList.add('dragging-use');
       }}
       onDragEnd={(e) => {
         e.currentTarget.classList.remove('dragging-use');
         setDragCtx(null);
+        // Clear any lingering preview-ghost if the drop happened outside
+        // a matching ability row (onDrop in the row clears it normally).
+        usePlanStore.getState().setPreviewUse(null);
       }}
     >
       <div

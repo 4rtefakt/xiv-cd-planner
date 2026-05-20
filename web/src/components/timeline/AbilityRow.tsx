@@ -45,10 +45,18 @@ export function AbilityRow({ playerId, ability, uses, alt, fightDuration }: Abil
   const previewMatchesThisRow =
     previewUse && previewUse.player_id === playerId && previewUse.ability_id === ability.id;
 
-  function computePreviewAt(clientX: number) {
+  // For new placements (click-to-place hover), excludeUseId is undefined.
+  // For drags of an existing use, we exclude it so the use doesn't
+  // self-conflict against its own current recast window.
+  function computePreviewAt(clientX: number, excludeUseId?: string) {
     if (!ref.current) return null;
-    const time = xToTime(clientX, ref.current, fightDuration);
-    const conflict = findUseConflict(playerId, ability.id, time, ability.recast, rowUses) !== null;
+    // If the user grabbed the use 25px from its left edge, we want the
+    // use to LAND such that its left edge is 25px to the LEFT of the
+    // current cursor — preserve the visual grab anchor.
+    const offsetPx = matchesUseDrag ? dragCtx?.grabOffsetPx ?? 0 : 0;
+    const time = xToTime(clientX - offsetPx, ref.current, fightDuration);
+    const conflict =
+      findUseConflict(playerId, ability.id, time, ability.recast, rowUses, excludeUseId) !== null;
     return { player_id: playerId, ability_id: ability.id, time, conflict };
   }
 
@@ -90,17 +98,33 @@ export function AbilityRow({ playerId, ability, uses, alt, fightDuration }: Abil
         // immediately replacing the ghost.
         setPreviewUse(computePreviewAt(e.clientX));
       }}
-      // --- Drag-to-reposition existing CdUse (kept from C.3) ---
+      // --- Drag-to-reposition existing CdUse (C.3 + E.B preview) ---
       onDragOver={(e) => {
         if (!matchesUseDrag || !ref.current) return;
         e.preventDefault();
         e.dataTransfer.dropEffect = 'move';
+        // Show the same ghost + mech-covered highlight as click-to-place,
+        // anchored to the grab-offset rather than the cursor.
+        const p = computePreviewAt(e.clientX, dragCtx?.useId);
+        if (p) setPreviewUse(p);
+      }}
+      onDragLeave={(e) => {
+        if (!matchesUseDrag || !ref.current) return;
+        // Only clear if we truly left the row — dragover fires on every
+        // child element transition, so verify with relatedTarget.
+        if (!ref.current.contains(e.relatedTarget as Node | null)) {
+          setPreviewUse(null);
+        }
       }}
       onDrop={(e) => {
         if (!matchesUseDrag || !ref.current) return;
         e.preventDefault();
-        const t = xToTime(e.clientX, ref.current, fightDuration);
-        if (dragCtx?.useId) moveUse(dragCtx.useId, t);
+        const offsetPx = dragCtx?.grabOffsetPx ?? 0;
+        const t = xToTime(e.clientX - offsetPx, ref.current, fightDuration);
+        const conflict =
+          findUseConflict(playerId, ability.id, t, ability.recast, rowUses, dragCtx?.useId) !== null;
+        if (!conflict && dragCtx?.useId) moveUse(dragCtx.useId, t);
+        setPreviewUse(null);
       }}
     >
       {mechanics.map((m) => (

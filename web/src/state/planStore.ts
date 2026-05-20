@@ -36,6 +36,10 @@ export interface DragCtx {
   abilityId?: string;
   useId?: string;
   mechId?: string;
+  /** Pixel offset between the cursor and the dragged element's left edge
+   *  at the moment of grab. Subtracted from clientX in dragover/drop so
+   *  the element stays "anchored" to where the user grabbed it. */
+  grabOffsetPx?: number;
 }
 
 /**
@@ -87,6 +91,14 @@ interface PlanState {
 
   // Actions — party
   setParty(party: Player[]): void;
+  setPlayerName(playerId: string, name: string): void;
+  /**
+   * Switch a player to a new job. Uses are remapped by ability NAME:
+   * shared abilities (Reprisal, Rampart, Arm's Length, ...) survive
+   * because every job has its own copy under the same name. Job-specific
+   * abilities (Hallowed Ground on PLD, Holmgang on WAR, ...) are dropped.
+   */
+  switchPlayerJob(playerId: string, newJobCode: string): void;
 
   // Actions — boss lanes
   addBossLane(): void;
@@ -150,6 +162,34 @@ export const usePlanStore = create<PlanState>((set) => ({
   setEncounter: (patch) => set((s) => ({ encounter: { ...s.encounter, ...patch } })),
 
   setParty: (party) => set({ party }),
+  setPlayerName: (playerId, name) =>
+    set((s) => ({ party: s.party.map((p) => (p.id === playerId ? { ...p, name } : p)) })),
+  switchPlayerJob: (playerId, newJobCode) =>
+    set((s) => {
+      const player = s.party.find((p) => p.id === playerId);
+      if (!player || player.job === newJobCode) return {};
+      const oldJob = s.jobs.find((j) => j.code === player.job);
+      const newJob = s.jobs.find((j) => j.code === newJobCode);
+      if (!oldJob || !newJob) return {};
+
+      const remappedUses: Use[] = [];
+      for (const u of s.uses) {
+        if (u.player_id !== playerId) {
+          remappedUses.push(u);
+          continue;
+        }
+        const oldAb = oldJob.abilities.find((a) => a.id === u.ability_id);
+        if (!oldAb) continue;
+        const matchAb = newJob.abilities.find((a) => a.name === oldAb.name);
+        if (matchAb) remappedUses.push({ ...u, ability_id: matchAb.id });
+        // else: ability not in new job → drop the use silently
+      }
+
+      return {
+        party: s.party.map((p) => (p.id === playerId ? { ...p, job: newJobCode } : p)),
+        uses: remappedUses,
+      };
+    }),
 
   addBossLane: () =>
     set((s) => {
