@@ -192,7 +192,13 @@ export function ImportLogModal({ open, onClose }: Props) {
         <div className="modal-footer">
           <div style={{ flex: 1 }} />
           <button type="button" className="modal-btn" onClick={onClose}>CANCEL</button>
-          <button type="button" className="modal-btn primary" disabled={!preview} onClick={confirm}>
+          <button
+            type="button"
+            className="modal-btn primary"
+            disabled={!preview || preview.mechanics.length === 0}
+            onClick={confirm}
+            title={preview && preview.mechanics.length === 0 ? 'No mechs found in this fight (very short pull or parse miss)' : ''}
+          >
             IMPORT
           </button>
         </div>
