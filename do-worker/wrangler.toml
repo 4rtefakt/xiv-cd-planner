@@ -1,0 +1,15 @@
+name = "cooldown-planner-do"
+main = "src/index.ts"
+compatibility_date = "2025-12-01"
+compatibility_flags = ["nodejs_compat"]
+
+# La classe PlanDO est exportée par src/index.ts (re-export depuis plan-do.ts).
+# SQLite-backed DO storage (zero-cost, transactional) — disponible depuis
+# compatibility_date 2024-10-01.
+[[durable_objects.bindings]]
+name = "PLAN_DO"
+class_name = "PlanDO"
+
+[[migrations]]
+tag = "v1"
+new_sqlite_classes = ["PlanDO"]

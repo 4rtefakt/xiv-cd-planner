@@ -1,0 +1,26 @@
+/* Cyberpunk / s9.net design tokens — extracted verbatim from mockup V0.4.
+   Aligned with PARTY//BUILDER for cross-app consistency. */
+:root {
+  --bg: #050810;
+  --panel: #0a0f1a;
+  --panel-2: #0d1422;
+  --panel-3: #0f1828;
+  --panel-4: #121b2e;
+  --line: #1a2236;
+  --line-bright: #2a3550;
+  --text: #d8e1f0;
+  --text-dim: #6b7896;
+  --text-faint: #3d4a66;
+  --cyan: #00e5ff;
+  --pink: #ff2e9a;
+  --tank: #2b9eff;
+  --heal: #4ade80;
+  --dps: #ff4f6e;
+  --raidwide: #ff9f43;
+  --tankbuster: #ff4f6e;
+  --autos: #5a6478;
+  --custom: #c084fc;
+  --good: #4ade80;
+  --warn: #ff9f43;
+  --bad: #ff4f6e;
+}

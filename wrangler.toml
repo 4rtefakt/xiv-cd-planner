@@ -1,0 +1,29 @@
+name = "cooldown-planner"
+compatibility_date = "2025-12-01"
+compatibility_flags = ["nodejs_compat"]
+pages_build_output_dir = "web/dist"
+
+# ---------------------------------------------------------------------------
+# Bindings exposed to Pages Functions (functions/**)
+# ---------------------------------------------------------------------------
+
+# Référentiel jobs/abilities — clef unique "jobs:all" (~30KB JSON).
+# Créer le namespace avant le premier deploy :
+#   wrangler kv namespace create JOBS_KV
+#   wrangler kv namespace create JOBS_KV --preview
+# Puis reporter les IDs ci-dessous.
+[[kv_namespaces]]
+binding = "JOBS_KV"
+id = "PLACEHOLDER_KV_ID"
+preview_id = "PLACEHOLDER_KV_PREVIEW_ID"
+
+# Durable Object hébergé dans le Worker `cooldown-planner-do` (cf do-worker/).
+# Le Worker DOIT être déployé avant Pages, sinon le binding cross-script ne
+# résout pas en prod. En local : `npm run dev` lance les deux en parallèle.
+[[durable_objects.bindings]]
+name = "PLAN_DO"
+class_name = "PlanDO"
+script_name = "cooldown-planner-do"
+
+[vars]
+ENVIRONMENT = "development"

@@ -1,0 +1,30 @@
+{
+  "name": "cooldown-planner",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "COOLDOWN//PLANNER — FFXIV raid cooldown planner (Cloudflare Pages + Functions + DO + KV)",
+  "workspaces": [
+    "web",
+    "do-worker"
+  ],
+  "scripts": {
+    "dev": "concurrently -n web,pages,do -c blue,cyan,magenta \"npm run dev -w web\" \"npm run dev:pages\" \"npm run dev -w do-worker\"",
+    "dev:pages": "wrangler pages dev --port 8788 --persist-to .wrangler/state -- npm --prefix web run dev -- --host 127.0.0.1 --port 5173",
+    "dev:web": "npm run dev -w web",
+    "dev:worker": "npm run dev -w do-worker",
+    "build": "npm run build -w web",
+    "deploy:worker": "npm run deploy -w do-worker",
+    "deploy:pages": "wrangler pages deploy web/dist --project-name=cooldown-planner",
+    "deploy": "npm run deploy:worker && npm run build && npm run deploy:pages",
+    "seed:kv": "node scripts/seed-kv.mjs",
+    "fetch:icons": "node scripts/fetch-icons.mjs",
+    "test": "node --test"
+  },
+  "devDependencies": {
+    "concurrently": "^9.1.0",
+    "wrangler": "^4.20.0",
+    "typescript": "^5.6.3",
+    "@cloudflare/workers-types": "^4.20250520.0"
+  }
+}

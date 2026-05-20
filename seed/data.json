@@ -1,0 +1,163 @@
+{
+  "version": 1,
+  "updated_at": null,
+  "_patch": "FFXIV 7.5 (Dawntrail)",
+  "_sources": [
+    "https://ffxiv.consolegameswiki.com/wiki/ (per-ability and per-job pages)",
+    "https://www.thebalanceffxiv.com/ (per-job basic guides for current usage)"
+  ],
+  "_notes": [
+    "Each ability has 'verified': true when both recast/duration and effect are taken directly from the wiki stat block.",
+    "verified: false when the field is an approximation (e.g. shield absorbed-damage modelled as effective mit %) or when the wiki source did not provide an explicit number.",
+    "Upgrade chains (Sentinel→Guardian, Vengeance→Damnation, Third Eye→Tengentsu, Raw Intuition→Bloodwhetting, Sheltron→Holy Sheltron) keep only the highest-level form, since the planner targets level-100 raids.",
+    "icon field references a glyph name from the V0.4 mockup's SVG sprite (shield/cross/aegis/sword/star/eye/wing/diamond/triangle/note/hex/soil/heart/spark). Replace with /icons/abilities/<id>.png once a real-icon source is wired up.",
+    "mit_potency for shields/barriers is an effective-equivalent at lvl-100 raidwide damage (not the raw shield potency)."
+  ],
+  "jobs": [
+    {
+      "code": "PLD",
+      "name": "Paladin",
+      "role": "tank",
+      "sub_role": "tank",
+      "position_order": 1,
+      "icon": "/icons/jobs/PLD.svg",
+      "abilities": [
+        { "id": "PLD.Rampart",       "name": "Rampart",          "recast": 90,  "effect": 20, "mit_type": "personal", "mit_potency": 20,  "icon": "shield",   "level_unlocked": 8,  "verified": true,  "_source_url": "https://ffxiv.consolegameswiki.com/wiki/Rampart" },
+        { "id": "PLD.ArmsLength",    "name": "Arm's Length",     "recast": 120, "effect": 6,  "mit_type": "personal", "mit_potency": 0,   "icon": "triangle", "level_unlocked": 32, "verified": true,  "_source_url": "https://ffxiv.consolegameswiki.com/wiki/Arm%27s_Length", "_note": "Knockback/draw-in resist + 20% slow on physical strikers" },
+        { "id": "PLD.Reprisal",      "name": "Reprisal",         "recast": 60,  "effect": 15, "mit_type": "party",    "mit_potency": 10,  "icon": "diamond",  "level_unlocked": 22, "verified": true,  "_source_url": "https://ffxiv.consolegameswiki.com/wiki/Reprisal" },
+        { "id": "PLD.Sheltron",      "name": "Holy Sheltron",    "recast": 5,   "effect": 8,  "mit_type": "personal", "mit_potency": 15,  "icon": "aegis",    "level_unlocked": 82, "verified": true,  "_source_url": "https://ffxiv.consolegameswiki.com/wiki/Holy_Sheltron", "_note": "Oath gauge cost 50; grants Knight's Resolve (15% mit, 4s) + Knight's Benediction (250p regen)" },
+        { "id": "PLD.Sentinel",      "name": "Guardian",         "recast": 120, "effect": 15, "mit_type": "personal", "mit_potency": 40,  "icon": "shield",   "level_unlocked": 92, "verified": true,  "_source_url": "https://ffxiv.consolegameswiki.com/wiki/Guardian", "_note": "Replaces Sentinel at lvl 92. 40% mit + 1000p shield" },
+        { "id": "PLD.Bulwark",       "name": "Bulwark",          "recast": 90,  "effect": 10, "mit_type": "personal", "mit_potency": 100, "icon": "shield",   "level_unlocked": 52, "verified": false, "_source_url": "https://ffxiv.consolegameswiki.com/wiki/Bulwark", "_note": "100% block rate for 10s — full mit only against physical attacks. Modelled as 100% personal for raidwide planning approximation" },
+        { "id": "PLD.DivineVeil",    "name": "Divine Veil",      "recast": 90,  "effect": 30, "mit_type": "party",    "mit_potency": 10,  "icon": "wing",     "level_unlocked": 56, "verified": false, "_source_url": "https://ffxiv.consolegameswiki.com/wiki/Divine_Veil", "_note": "10% maxHP barrier + 400p heal on trigger. Modelled as 10% party mit equivalent" },
+        { "id": "PLD.DivineCaress",  "name": "Divine Caress",    "recast": 1,   "effect": 10, "mit_type": "party",    "mit_potency": 10,  "icon": "wing",     "level_unlocked": 100, "verified": false, "_source_url": "https://ffxiv.consolegameswiki.com/wiki/Divine_Caress", "_note": "Requires Divine Grace (post-Temperance/Holy Sheltron). 400p shield + 200p regen 15s" },
+        { "id": "PLD.PassageOfArms", "name": "Passage of Arms",  "recast": 120, "effect": 18, "mit_type": "party",    "mit_potency": 15,  "icon": "aegis",    "level_unlocked": 70, "verified": true,  "_source_url": "https://ffxiv.consolegameswiki.com/wiki/Passage_of_Arms", "_note": "Channelled cone behind player. Ends on movement or action." },
+        { "id": "PLD.Intervention",  "name": "Intervention",     "recast": 10,  "effect": 8,  "mit_type": "party",    "mit_potency": 10,  "icon": "shield",   "level_unlocked": 62, "verified": true,  "_source_url": "https://ffxiv.consolegameswiki.com/wiki/Intervention", "_note": "Single ally. +10% if Rampart/Guardian active. Oath gauge 50" },
+        { "id": "PLD.Cover",         "name": "Cover",            "recast": 120, "effect": 12, "mit_type": "party",    "mit_potency": 100, "icon": "aegis",    "level_unlocked": 45, "verified": true,  "_source_url": "https://ffxiv.consolegameswiki.com/wiki/Cover", "_note": "Take all damage destined for target ally within 20y" },
+        { "id": "PLD.HallowedGround","name": "Hallowed Ground",  "recast": 420, "effect": 10, "mit_type": "personal", "mit_potency": 100, "icon": "shield",   "level_unlocked": 50, "verified": true,  "_source_url": "https://ffxiv.consolegameswiki.com/wiki/Hallowed_Ground", "_note": "Invulnerability" }
+      ]
+    },
+    {
+      "code": "WAR",
+      "name": "Warrior",
+      "role": "tank",
+      "sub_role": "tank",
+      "position_order": 2,
+      "icon": "/icons/jobs/WAR.svg",
+      "abilities": [
+        { "id": "WAR.Rampart",        "name": "Rampart",         "recast": 90,  "effect": 20, "mit_type": "personal", "mit_potency": 20,  "icon": "shield",   "level_unlocked": 8,  "verified": true, "_source_url": "https://ffxiv.consolegameswiki.com/wiki/Rampart" },
+        { "id": "WAR.ArmsLength",     "name": "Arm's Length",    "recast": 120, "effect": 6,  "mit_type": "personal", "mit_potency": 0,   "icon": "triangle", "level_unlocked": 32, "verified": true, "_source_url": "https://ffxiv.consolegameswiki.com/wiki/Arm%27s_Length" },
+        { "id": "WAR.Reprisal",       "name": "Reprisal",        "recast": 60,  "effect": 15, "mit_type": "party",    "mit_potency": 10,  "icon": "diamond",  "level_unlocked": 22, "verified": true, "_source_url": "https://ffxiv.consolegameswiki.com/wiki/Reprisal" },
+        { "id": "WAR.ThrillOfBattle", "name": "Thrill of Battle","recast": 90,  "effect": 10, "mit_type": "personal", "mit_potency": 10,  "icon": "heart",    "level_unlocked": 30, "verified": false, "_source_url": "https://ffxiv.consolegameswiki.com/wiki/Thrill_of_Battle", "_note": "+20% maxHP + 20% incoming heals. Modelled as 10% personal mit equivalent (HP cushion against pct-damage attacks)" },
+        { "id": "WAR.Bloodwhetting",  "name": "Bloodwhetting",   "recast": 25,  "effect": 8,  "mit_type": "personal", "mit_potency": 10,  "icon": "heart",    "level_unlocked": 82, "verified": true,  "_source_url": "https://ffxiv.consolegameswiki.com/wiki/Bloodwhetting", "_note": "10% mit + 400p sustain per weaponskill + 400p shield" },
+        { "id": "WAR.NascentFlash",   "name": "Nascent Flash",   "recast": 25,  "effect": 8,  "mit_type": "party",    "mit_potency": 10,  "icon": "heart",    "level_unlocked": 76, "verified": true,  "_source_url": "https://ffxiv.consolegameswiki.com/wiki/Nascent_Flash", "_note": "Single ally version of Bloodwhetting" },
+        { "id": "WAR.ShakeItOff",     "name": "Shake It Off",    "recast": 90,  "effect": 30, "mit_type": "party",    "mit_potency": 15,  "icon": "aegis",    "level_unlocked": 68, "verified": false, "_source_url": "https://ffxiv.consolegameswiki.com/wiki/Shake_It_Off", "_note": "15% maxHP barrier + 300p heal. Modelled as 15% party mit equivalent" },
+        { "id": "WAR.Equilibrium",    "name": "Equilibrium",     "recast": 60,  "effect": 15, "mit_type": "heal",     "mit_potency": 0,   "icon": "cross",    "level_unlocked": 58, "verified": true,  "_source_url": "https://ffxiv.consolegameswiki.com/wiki/Equilibrium", "_note": "1200p instant heal + 200p regen 15s" },
+        { "id": "WAR.Vengeance",      "name": "Damnation",       "recast": 120, "effect": 15, "mit_type": "personal", "mit_potency": 40,  "icon": "sword",    "level_unlocked": 92, "verified": true,  "_source_url": "https://ffxiv.consolegameswiki.com/wiki/Damnation", "_note": "Replaces Vengeance at lvl 92. 40% mit + 55p counter + 300p post-regen 15s" },
+        { "id": "WAR.Holmgang",       "name": "Holmgang",        "recast": 240, "effect": 10, "mit_type": "personal", "mit_potency": 100, "icon": "sword",    "level_unlocked": 42, "verified": true,  "_source_url": "https://ffxiv.consolegameswiki.com/wiki/Holmgang", "_note": "Prevents HP dropping below 1 (invulnerability)" }
+      ]
+    },
+    {
+      "code": "WHM",
+      "name": "White Mage",
+      "role": "heal",
+      "sub_role": "pure_healer",
+      "position_order": 3,
+      "icon": "/icons/jobs/WHM.svg",
+      "abilities": [
+        { "id": "WHM.Swiftcast",       "name": "Swiftcast",          "recast": 40,  "effect": 10, "mit_type": "personal", "mit_potency": 0,   "icon": "triangle", "level_unlocked": 18, "verified": true, "_source_url": "https://ffxiv.consolegameswiki.com/wiki/Swiftcast" },
+        { "id": "WHM.Surecast",        "name": "Surecast",           "recast": 120, "effect": 6,  "mit_type": "personal", "mit_potency": 0,   "icon": "triangle", "level_unlocked": 44, "verified": true, "_source_url": "https://ffxiv.consolegameswiki.com/wiki/Surecast" },
+        { "id": "WHM.DivineBenison",   "name": "Divine Benison",     "recast": 30,  "effect": 15, "mit_type": "party",    "mit_potency": 5,   "icon": "aegis",    "level_unlocked": 66, "verified": false, "_source_url": "https://ffxiv.consolegameswiki.com/wiki/Divine_Benison", "_note": "500p shield single target (2 charges). Modelled as 5% party mit equivalent" },
+        { "id": "WHM.Aquaveil",        "name": "Aquaveil",           "recast": 60,  "effect": 8,  "mit_type": "party",    "mit_potency": 15,  "icon": "shield",   "level_unlocked": 86, "verified": true,  "_source_url": "https://ffxiv.consolegameswiki.com/wiki/Aquaveil", "_note": "Single ally" },
+        { "id": "WHM.PlenaryIndulgence","name": "Plenary Indulgence","recast": 60,  "effect": 10, "mit_type": "party",    "mit_potency": 10,  "icon": "spark",    "level_unlocked": 70, "verified": true,  "_source_url": "https://ffxiv.consolegameswiki.com/wiki/Plenary_Indulgence", "_note": "10% mit + 200p bonus on AoE GCD heals" },
+        { "id": "WHM.Asylum",          "name": "Asylum",             "recast": 90,  "effect": 24, "mit_type": "heal",     "mit_potency": 0,   "icon": "cross",    "level_unlocked": 52, "verified": true,  "_source_url": "https://ffxiv.consolegameswiki.com/wiki/Asylum", "_note": "Ground AoE: 100p/tick regen + 10% heal-up" },
+        { "id": "WHM.Temperance",      "name": "Temperance",         "recast": 120, "effect": 20, "mit_type": "party",    "mit_potency": 10,  "icon": "aegis",    "level_unlocked": 80, "verified": true,  "_source_url": "https://ffxiv.consolegameswiki.com/wiki/Temperance", "_note": "10% mit + 20% heal-out. Grants Divine Grace for 30s (enables Divine Caress)" },
+        { "id": "WHM.LiturgyOfTheBell","name": "Liturgy of the Bell","recast": 180, "effect": 20, "mit_type": "heal",     "mit_potency": 0,   "icon": "cross",    "level_unlocked": 90, "verified": true,  "_source_url": "https://ffxiv.consolegameswiki.com/wiki/Liturgy_of_the_Bell", "_note": "5 stacks consumed by damage, 400p party heal per trigger (max once/sec)" },
+        { "id": "WHM.DivineCaress",    "name": "Divine Caress",      "recast": 1,   "effect": 10, "mit_type": "party",    "mit_potency": 10,  "icon": "wing",     "level_unlocked": 100, "verified": false, "_source_url": "https://ffxiv.consolegameswiki.com/wiki/Divine_Caress", "_note": "Requires Divine Grace. 400p shield + 200p regen 15s" },
+        { "id": "WHM.Benediction",     "name": "Benediction",        "recast": 180, "effect": 0,  "mit_type": "heal",     "mit_potency": 0,   "icon": "cross",    "level_unlocked": 50, "verified": true,  "_source_url": "https://ffxiv.consolegameswiki.com/wiki/Benediction", "_note": "Full HP restore (single target)" }
+      ]
+    },
+    {
+      "code": "SCH",
+      "name": "Scholar",
+      "role": "heal",
+      "sub_role": "barrier_healer",
+      "position_order": 4,
+      "icon": "/icons/jobs/SCH.svg",
+      "abilities": [
+        { "id": "SCH.Swiftcast",       "name": "Swiftcast",        "recast": 40,  "effect": 10, "mit_type": "personal", "mit_potency": 0,  "icon": "triangle", "level_unlocked": 18, "verified": true, "_source_url": "https://ffxiv.consolegameswiki.com/wiki/Swiftcast" },
+        { "id": "SCH.Surecast",        "name": "Surecast",         "recast": 120, "effect": 6,  "mit_type": "personal", "mit_potency": 0,  "icon": "triangle", "level_unlocked": 44, "verified": true, "_source_url": "https://ffxiv.consolegameswiki.com/wiki/Surecast" },
+        { "id": "SCH.WhisperingDawn",  "name": "Whispering Dawn",  "recast": 60,  "effect": 21, "mit_type": "heal",     "mit_potency": 0,  "icon": "cross",    "level_unlocked": 20, "verified": true, "_source_url": "https://ffxiv.consolegameswiki.com/wiki/Whispering_Dawn", "_note": "Faerie HoT: 80p/tick party" },
+        { "id": "SCH.SacredSoil",      "name": "Sacred Soil",      "recast": 30,  "effect": 15, "mit_type": "party",    "mit_potency": 10, "icon": "soil",     "level_unlocked": 50, "verified": true, "_source_url": "https://ffxiv.consolegameswiki.com/wiki/Sacred_Soil", "_note": "Ground AoE: 10% mit + 100p regen" },
+        { "id": "SCH.FeyIllumination", "name": "Fey Illumination", "recast": 120, "effect": 20, "mit_type": "party",    "mit_potency": 5,  "icon": "star",     "level_unlocked": 40, "verified": true, "_source_url": "https://ffxiv.consolegameswiki.com/wiki/Fey_Illumination", "_note": "5% MAGIC damage reduction + 10% heal-up. Magic-only mit." },
+        { "id": "SCH.DeploymentTactics","name": "Deployment Tactics","recast": 90, "effect": 30, "mit_type": "heal",     "mit_potency": 0,  "icon": "wing",     "level_unlocked": 56, "verified": true, "_source_url": "https://ffxiv.consolegameswiki.com/wiki/Deployment_Tactics", "_note": "Spreads Galvanize shield from target to nearby party" },
+        { "id": "SCH.Excogitation",    "name": "Excogitation",     "recast": 45,  "effect": 45, "mit_type": "heal",     "mit_potency": 0,  "icon": "cross",    "level_unlocked": 62, "verified": true, "_source_url": "https://ffxiv.consolegameswiki.com/wiki/Excogitation", "_note": "800p triggered heal (target <50% HP or expiry). Aetherflow cost." },
+        { "id": "SCH.Indomitability",  "name": "Indomitability",   "recast": 30,  "effect": 0,  "mit_type": "heal",     "mit_potency": 0,  "icon": "cross",    "level_unlocked": 52, "verified": true, "_source_url": "https://ffxiv.consolegameswiki.com/wiki/Indomitability", "_note": "400p party instant heal. Aetherflow cost." },
+        { "id": "SCH.Dissipation",     "name": "Dissipation",      "recast": 180, "effect": 30, "mit_type": "heal",     "mit_potency": 0,  "icon": "triangle", "level_unlocked": 60, "verified": true, "_source_url": "https://ffxiv.consolegameswiki.com/wiki/Dissipation", "_note": "Dismisses faerie, full Aetherflow + 20% heal-up" },
+        { "id": "SCH.Recitation",      "name": "Recitation",       "recast": 60,  "effect": 15, "mit_type": "heal",     "mit_potency": 0,  "icon": "triangle", "level_unlocked": 74, "verified": true, "_source_url": "https://ffxiv.consolegameswiki.com/wiki/Recitation", "_note": "Next Adloquium/Succor/Indomitability/Excogitation is free + guaranteed crit" },
+        { "id": "SCH.FeyBlessing",     "name": "Fey Blessing",     "recast": 60,  "effect": 0,  "mit_type": "heal",     "mit_potency": 0,  "icon": "cross",    "level_unlocked": 76, "verified": true, "_source_url": "https://ffxiv.consolegameswiki.com/wiki/Fey_Blessing", "_note": "320p party instant heal (Eos/Selene)" },
+        { "id": "SCH.Consolation",     "name": "Consolation",      "recast": 20,  "effect": 30, "mit_type": "heal",     "mit_potency": 0,  "icon": "aegis",    "level_unlocked": 80, "verified": true, "_source_url": "https://ffxiv.consolegameswiki.com/wiki/Consolation", "_note": "Seraph only: 250p heal + 250p shield (2 charges)" },
+        { "id": "SCH.Protraction",     "name": "Protraction",      "recast": 60,  "effect": 10, "mit_type": "party",    "mit_potency": 10, "icon": "heart",    "level_unlocked": 86, "verified": false, "_source_url": "https://ffxiv.consolegameswiki.com/wiki/Protraction", "_note": "Single ally: +10% maxHP + 10% heal-up. Modelled as 10% party mit equivalent" },
+        { "id": "SCH.Expedient",       "name": "Expedient",        "recast": 120, "effect": 20, "mit_type": "party",    "mit_potency": 10, "icon": "aegis",    "level_unlocked": 90, "verified": true, "_source_url": "https://ffxiv.consolegameswiki.com/wiki/Expedient", "_note": "10% mit + sprint party-wide" },
+        { "id": "SCH.Seraphism",       "name": "Seraphism",        "recast": 180, "effect": 20, "mit_type": "heal",     "mit_potency": 0,  "icon": "cross",    "level_unlocked": 100, "verified": true, "_source_url": "https://ffxiv.consolegameswiki.com/wiki/Seraphism", "_note": "Continuous party regen + transforms Adloquium/Concitation for 20s" }
+      ]
+    },
+    {
+      "code": "SAM",
+      "name": "Samurai",
+      "role": "dps",
+      "sub_role": "melee",
+      "position_order": 5,
+      "icon": "/icons/jobs/SAM.svg",
+      "abilities": [
+        { "id": "SAM.SecondWind",  "name": "Second Wind", "recast": 120, "effect": 0,  "mit_type": "heal",     "mit_potency": 0,  "icon": "cross",    "level_unlocked": 8,  "verified": true, "_source_url": "https://ffxiv.consolegameswiki.com/wiki/Second_Wind",  "_note": "800p self heal (melee/phys ranged role action)" },
+        { "id": "SAM.Bloodbath",   "name": "Bloodbath",   "recast": 90,  "effect": 20, "mit_type": "personal", "mit_potency": 0,  "icon": "heart",    "level_unlocked": 12, "verified": true, "_source_url": "https://ffxiv.consolegameswiki.com/wiki/Bloodbath",   "_note": "Lifesteal: portion of phys damage dealt → self HP" },
+        { "id": "SAM.Feint",       "name": "Feint",       "recast": 90,  "effect": 15, "mit_type": "party",    "mit_potency": 10, "icon": "diamond",  "level_unlocked": 22, "verified": true, "_source_url": "https://ffxiv.consolegameswiki.com/wiki/Feint",       "_note": "Target enemy -10% phys / -5% magic damage dealt" },
+        { "id": "SAM.ArmsLength",  "name": "Arm's Length","recast": 120, "effect": 6,  "mit_type": "personal", "mit_potency": 0,  "icon": "triangle", "level_unlocked": 32, "verified": true, "_source_url": "https://ffxiv.consolegameswiki.com/wiki/Arm%27s_Length" },
+        { "id": "SAM.ThirdEye",    "name": "Tengentsu",   "recast": 15,  "effect": 4,  "mit_type": "personal", "mit_potency": 10, "icon": "eye",      "level_unlocked": 82, "verified": true, "_source_url": "https://ffxiv.consolegameswiki.com/wiki/Tengentsu",   "_note": "Replaces Third Eye at lvl 82. 10% mit on next hit, then post-hit 10% mit 9s + 200p heal" }
+      ]
+    },
+    {
+      "code": "DRG",
+      "name": "Dragoon",
+      "role": "dps",
+      "sub_role": "melee",
+      "position_order": 6,
+      "icon": "/icons/jobs/DRG.svg",
+      "abilities": [
+        { "id": "DRG.SecondWind", "name": "Second Wind", "recast": 120, "effect": 0,  "mit_type": "heal",     "mit_potency": 0,  "icon": "cross",    "level_unlocked": 8,  "verified": true, "_source_url": "https://ffxiv.consolegameswiki.com/wiki/Second_Wind" },
+        { "id": "DRG.Bloodbath",  "name": "Bloodbath",   "recast": 90,  "effect": 20, "mit_type": "personal", "mit_potency": 0,  "icon": "heart",    "level_unlocked": 12, "verified": true, "_source_url": "https://ffxiv.consolegameswiki.com/wiki/Bloodbath" },
+        { "id": "DRG.Feint",      "name": "Feint",       "recast": 90,  "effect": 15, "mit_type": "party",    "mit_potency": 10, "icon": "diamond",  "level_unlocked": 22, "verified": true, "_source_url": "https://ffxiv.consolegameswiki.com/wiki/Feint" },
+        { "id": "DRG.ArmsLength", "name": "Arm's Length","recast": 120, "effect": 6,  "mit_type": "personal", "mit_potency": 0,  "icon": "triangle", "level_unlocked": 32, "verified": true, "_source_url": "https://ffxiv.consolegameswiki.com/wiki/Arm%27s_Length" }
+      ]
+    },
+    {
+      "code": "BRD",
+      "name": "Bard",
+      "role": "dps",
+      "sub_role": "phys_ranged",
+      "position_order": 7,
+      "icon": "/icons/jobs/BRD.svg",
+      "abilities": [
+        { "id": "BRD.SecondWind",   "name": "Second Wind",        "recast": 120, "effect": 0,  "mit_type": "heal",     "mit_potency": 0,  "icon": "cross",    "level_unlocked": 8,  "verified": true, "_source_url": "https://ffxiv.consolegameswiki.com/wiki/Second_Wind" },
+        { "id": "BRD.ArmsLength",   "name": "Arm's Length",       "recast": 120, "effect": 6,  "mit_type": "personal", "mit_potency": 0,  "icon": "triangle", "level_unlocked": 32, "verified": true, "_source_url": "https://ffxiv.consolegameswiki.com/wiki/Arm%27s_Length" },
+        { "id": "BRD.WardensPaean", "name": "The Warden's Paean", "recast": 45,  "effect": 30, "mit_type": "party",    "mit_potency": 0,  "icon": "diamond",  "level_unlocked": 35, "verified": true, "_source_url": "https://ffxiv.consolegameswiki.com/wiki/The_Warden%27s_Paean", "_note": "Esuna OR pre-emptive status-block (single ally)" },
+        { "id": "BRD.Troubadour",   "name": "Troubadour",         "recast": 90,  "effect": 15, "mit_type": "party",    "mit_potency": 15, "icon": "note",     "level_unlocked": 62, "verified": true, "_source_url": "https://ffxiv.consolegameswiki.com/wiki/Troubadour" },
+        { "id": "BRD.NaturesMinne", "name": "Nature's Minne",     "recast": 120, "effect": 15, "mit_type": "heal",     "mit_potency": 0,  "icon": "note",     "level_unlocked": 66, "verified": true, "_source_url": "https://ffxiv.consolegameswiki.com/wiki/Nature%27s_Minne", "_note": "+15% heal-up party (heal received)" }
+      ]
+    },
+    {
+      "code": "BLM",
+      "name": "Black Mage",
+      "role": "dps",
+      "sub_role": "magic_ranged",
+      "position_order": 8,
+      "icon": "/icons/jobs/BLM.svg",
+      "abilities": [
+        { "id": "BLM.Addle",     "name": "Addle",     "recast": 90,  "effect": 15, "mit_type": "party",    "mit_potency": 10, "icon": "diamond",  "level_unlocked": 8,  "verified": true, "_source_url": "https://ffxiv.consolegameswiki.com/wiki/Addle", "_note": "Target enemy -5% phys / -10% magic damage dealt" },
+        { "id": "BLM.Swiftcast", "name": "Swiftcast", "recast": 40,  "effect": 10, "mit_type": "personal", "mit_potency": 0,  "icon": "triangle", "level_unlocked": 18, "verified": true, "_source_url": "https://ffxiv.consolegameswiki.com/wiki/Swiftcast" },
+        { "id": "BLM.Manaward",  "name": "Manaward",  "recast": 120, "effect": 20, "mit_type": "personal", "mit_potency": 20, "icon": "hex",      "level_unlocked": 30, "verified": false, "_source_url": "https://ffxiv.consolegameswiki.com/wiki/Manaward", "_note": "Shield absorbing 30% maxHP. Modelled as 20% personal mit equivalent" },
+        { "id": "BLM.Surecast",  "name": "Surecast",  "recast": 120, "effect": 6,  "mit_type": "personal", "mit_potency": 0,  "icon": "triangle", "level_unlocked": 44, "verified": true, "_source_url": "https://ffxiv.consolegameswiki.com/wiki/Surecast" }
+      ]
+    }
+  ]
+}

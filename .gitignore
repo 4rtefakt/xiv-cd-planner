@@ -1,0 +1,30 @@
+node_modules/
+*.log
+npm-debug.log*
+.DS_Store
+Thumbs.db
+
+# Claude Code per-project state
+.claude/
+
+# Build outputs
+web/dist/
+do-worker/dist/
+
+# TypeScript incremental build cache
+**/*.tsbuildinfo
+
+# Wrangler local state (emulated KV / DO / D1)
+.wrangler/
+.dev.vars
+.dev.vars.*
+!.dev.vars.example
+
+# Editor / OS
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Cloudflare auth
+.cloudflare/
