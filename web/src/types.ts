@@ -14,7 +14,9 @@ export interface Ability {
   effect: number;             // seconds
   mit_type: MitType;
   mit_potency: number;        // realistic % per ability (e.g. Reprisal=10, Holmgang=100)
-  icon: string;               // path under /icons/abilities/
+  icon: string;               // absolute URL (xivapi /i/folder/id.png)
+  icon_glyph?: string;        // symbolic name for SVG fallback ('shield', 'aegis', …)
+  icon_id?: number;           // raw xivapi icon id, for debugging
   level_unlocked: number;
   verified?: boolean;
   _source_url?: string;

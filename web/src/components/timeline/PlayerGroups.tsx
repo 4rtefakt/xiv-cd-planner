@@ -1,6 +1,6 @@
 import { useMemo } from 'react';
 import type { Job } from '../../types';
-import { jobGlyph, abilityGlyph } from '../../data/glyphFallbacks';
+import { AbilityIcon, JobIcon } from '../Icon';
 import { usePlanStore } from '../../state/planStore';
 import { AbilityRow } from './AbilityRow';
 
@@ -38,7 +38,9 @@ export function PlayerGroupsLeft() {
               className={`player-header-left player-header-row-height role-${role}`}
               onClick={() => toggleCollapsed(p.id)}
             >
-              <div className="ph-job-icon">{job ? jobGlyph(job.code) : null}</div>
+              <div className="ph-job-icon">
+                {job ? <JobIcon src={job.icon} fallbackCode={job.code} alt={job.name} /> : null}
+              </div>
               <div className="ph-name-block">
                 <span className="ph-name">{p.name}</span>
                 <span className="ph-badge">{p.badge}</span>
@@ -52,7 +54,7 @@ export function PlayerGroupsLeft() {
                   <div key={ab.id} className={`cd-row-left type-${ab.mit_type} cd-row-height ${altClass}`}>
                     <span className="cd-indent" />
                     <span className="cd-ability-icon" style={{ color: 'var(--ability-color)' }}>
-                      {abilityGlyph(ab.icon)}
+                      <AbilityIcon src={ab.icon} fallbackGlyph={ab.icon_glyph} alt={ab.name} />
                     </span>
                     <span className="cd-row-name">{ab.name}</span>
                     <span className="cd-row-cd">{ab.recast}s</span>

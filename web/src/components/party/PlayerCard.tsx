@@ -1,6 +1,6 @@
 import { useMemo } from 'react';
 import type { Job, Player } from '../../types';
-import { jobGlyph } from '../../data/glyphFallbacks';
+import { JobIcon } from '../Icon';
 import { MitChip } from './MitChip';
 
 interface PlayerCardProps {
@@ -20,7 +20,9 @@ export function PlayerCard({ player, job }: PlayerCardProps) {
   return (
     <div className={`player-card-mini role-${role}`}>
       <div className="pcm-head">
-        <div className="pcm-job-icon">{job ? jobGlyph(job.code) : null}</div>
+        <div className="pcm-job-icon">
+          {job ? <JobIcon src={job.icon} fallbackCode={job.code} alt={job.name} /> : null}
+        </div>
         <div className="pcm-info">
           <div className="pcm-name" title={player.name}>{player.name}</div>
           <div className="pcm-badge">{player.badge}</div>

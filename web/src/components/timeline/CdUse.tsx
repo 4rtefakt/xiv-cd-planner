@@ -1,6 +1,6 @@
 import type { Ability, Use } from '../../types';
 import { fmt, pct } from '../../lib/time';
-import { abilityGlyph } from '../../data/glyphFallbacks';
+import { AbilityIcon } from '../Icon';
 import { usePlanStore } from '../../state/planStore';
 
 interface CdUseProps {
@@ -60,7 +60,7 @@ export function CdUse({ use, ability, fightDuration }: CdUseProps) {
         style={{ width: `${activeWidthPct}%`, color: 'var(--cd-color)' }}
       >
         <div className="cd-use-icon" style={{ color: 'var(--cd-color)' }}>
-          {abilityGlyph(ability.icon)}
+          <AbilityIcon src={ability.icon} fallbackGlyph={ability.icon_glyph} alt={ability.name} />
         </div>
         <div className="cd-use-active-extend" />
       </div>

@@ -1,0 +1,458 @@
+{
+  "matches": {
+    "PLD.Rampart": {
+      "action_id": 7531,
+      "icon_id": 801,
+      "icon_path": "/i/000000/000801.png",
+      "level": 8,
+      "recast_csv_s": 90
+    },
+    "PLD.ArmsLength": {
+      "action_id": 7548,
+      "icon_id": 822,
+      "icon_path": "/i/000000/000822.png",
+      "level": 32,
+      "recast_csv_s": 120
+    },
+    "PLD.Reprisal": {
+      "action_id": 7535,
+      "icon_id": 806,
+      "icon_path": "/i/000000/000806.png",
+      "level": 22,
+      "recast_csv_s": 60
+    },
+    "PLD.Sheltron": {
+      "action_id": 25746,
+      "icon_id": 2950,
+      "icon_path": "/i/002000/002950.png",
+      "level": 82,
+      "recast_csv_s": 5
+    },
+    "PLD.Sentinel": {
+      "action_id": 36920,
+      "icon_id": 2524,
+      "icon_path": "/i/002000/002524.png",
+      "level": 92,
+      "recast_csv_s": 120
+    },
+    "PLD.Bulwark": {
+      "action_id": 22,
+      "icon_id": 167,
+      "icon_path": "/i/000000/000167.png",
+      "level": 52,
+      "recast_csv_s": 90
+    },
+    "PLD.DivineVeil": {
+      "action_id": 3540,
+      "icon_id": 2508,
+      "icon_path": "/i/002000/002508.png",
+      "level": 56,
+      "recast_csv_s": 90
+    },
+    "PLD.DivineCaress": {
+      "action_id": 37011,
+      "icon_id": 2128,
+      "icon_path": "/i/002000/002128.png",
+      "level": 100,
+      "recast_csv_s": 1
+    },
+    "PLD.PassageOfArms": {
+      "action_id": 7385,
+      "icon_id": 2515,
+      "icon_path": "/i/002000/002515.png",
+      "level": 70,
+      "recast_csv_s": 120
+    },
+    "PLD.Intervention": {
+      "action_id": 7382,
+      "icon_id": 2512,
+      "icon_path": "/i/002000/002512.png",
+      "level": 62,
+      "recast_csv_s": 10
+    },
+    "PLD.Cover": {
+      "action_id": 27,
+      "icon_id": 2501,
+      "icon_path": "/i/002000/002501.png",
+      "level": 45,
+      "recast_csv_s": 120
+    },
+    "PLD.HallowedGround": {
+      "action_id": 30,
+      "icon_id": 2502,
+      "icon_path": "/i/002000/002502.png",
+      "level": 50,
+      "recast_csv_s": 420
+    },
+    "WAR.Rampart": {
+      "action_id": 7531,
+      "icon_id": 801,
+      "icon_path": "/i/000000/000801.png",
+      "level": 8,
+      "recast_csv_s": 90
+    },
+    "WAR.ArmsLength": {
+      "action_id": 7548,
+      "icon_id": 822,
+      "icon_path": "/i/000000/000822.png",
+      "level": 32,
+      "recast_csv_s": 120
+    },
+    "WAR.Reprisal": {
+      "action_id": 7535,
+      "icon_id": 806,
+      "icon_path": "/i/000000/000806.png",
+      "level": 22,
+      "recast_csv_s": 60
+    },
+    "WAR.ThrillOfBattle": {
+      "action_id": 40,
+      "icon_id": 263,
+      "icon_path": "/i/000000/000263.png",
+      "level": 30,
+      "recast_csv_s": 90
+    },
+    "WAR.Bloodwhetting": {
+      "action_id": 25751,
+      "icon_id": 2569,
+      "icon_path": "/i/002000/002569.png",
+      "level": 82,
+      "recast_csv_s": 25
+    },
+    "WAR.NascentFlash": {
+      "action_id": 16464,
+      "icon_id": 2567,
+      "icon_path": "/i/002000/002567.png",
+      "level": 76,
+      "recast_csv_s": 25
+    },
+    "WAR.ShakeItOff": {
+      "action_id": 7388,
+      "icon_id": 2563,
+      "icon_path": "/i/002000/002563.png",
+      "level": 68,
+      "recast_csv_s": 90
+    },
+    "WAR.Equilibrium": {
+      "action_id": 3552,
+      "icon_id": 2560,
+      "icon_path": "/i/002000/002560.png",
+      "level": 58,
+      "recast_csv_s": 60
+    },
+    "WAR.Vengeance": {
+      "action_id": 36923,
+      "icon_id": 2573,
+      "icon_path": "/i/002000/002573.png",
+      "level": 92,
+      "recast_csv_s": 120
+    },
+    "WAR.Holmgang": {
+      "action_id": 43,
+      "icon_id": 266,
+      "icon_path": "/i/000000/000266.png",
+      "level": 42,
+      "recast_csv_s": 240
+    },
+    "WHM.Swiftcast": {
+      "action_id": 7561,
+      "icon_id": 866,
+      "icon_path": "/i/000000/000866.png",
+      "level": 18,
+      "recast_csv_s": 60
+    },
+    "WHM.Surecast": {
+      "action_id": 7559,
+      "icon_id": 869,
+      "icon_path": "/i/000000/000869.png",
+      "level": 44,
+      "recast_csv_s": 120
+    },
+    "WHM.DivineBenison": {
+      "action_id": 7432,
+      "icon_id": 2638,
+      "icon_path": "/i/002000/002638.png",
+      "level": 66,
+      "recast_csv_s": 30
+    },
+    "WHM.Aquaveil": {
+      "action_id": 25861,
+      "icon_id": 2648,
+      "icon_path": "/i/002000/002648.png",
+      "level": 86,
+      "recast_csv_s": 60
+    },
+    "WHM.PlenaryIndulgence": {
+      "action_id": 7433,
+      "icon_id": 2639,
+      "icon_path": "/i/002000/002639.png",
+      "level": 70,
+      "recast_csv_s": 60
+    },
+    "WHM.Asylum": {
+      "action_id": 3569,
+      "icon_id": 2632,
+      "icon_path": "/i/002000/002632.png",
+      "level": 52,
+      "recast_csv_s": 90
+    },
+    "WHM.Temperance": {
+      "action_id": 16536,
+      "icon_id": 2645,
+      "icon_path": "/i/002000/002645.png",
+      "level": 80,
+      "recast_csv_s": 120
+    },
+    "WHM.LiturgyOfTheBell": {
+      "action_id": 25862,
+      "icon_id": 2649,
+      "icon_path": "/i/002000/002649.png",
+      "level": 90,
+      "recast_csv_s": 180
+    },
+    "WHM.DivineCaress": {
+      "action_id": 37011,
+      "icon_id": 2128,
+      "icon_path": "/i/002000/002128.png",
+      "level": 100,
+      "recast_csv_s": 1
+    },
+    "WHM.Benediction": {
+      "action_id": 140,
+      "icon_id": 2627,
+      "icon_path": "/i/002000/002627.png",
+      "level": 50,
+      "recast_csv_s": 180
+    },
+    "SCH.Swiftcast": {
+      "action_id": 7561,
+      "icon_id": 866,
+      "icon_path": "/i/000000/000866.png",
+      "level": 18,
+      "recast_csv_s": 60
+    },
+    "SCH.Surecast": {
+      "action_id": 7559,
+      "icon_id": 869,
+      "icon_path": "/i/000000/000869.png",
+      "level": 44,
+      "recast_csv_s": 120
+    },
+    "SCH.WhisperingDawn": {
+      "action_id": 16537,
+      "icon_id": 2852,
+      "icon_path": "/i/002000/002852.png",
+      "level": 20,
+      "recast_csv_s": 60
+    },
+    "SCH.SacredSoil": {
+      "action_id": 188,
+      "icon_id": 2804,
+      "icon_path": "/i/002000/002804.png",
+      "level": 50,
+      "recast_csv_s": 30
+    },
+    "SCH.FeyIllumination": {
+      "action_id": 16538,
+      "icon_id": 2853,
+      "icon_path": "/i/002000/002853.png",
+      "level": 40,
+      "recast_csv_s": 120
+    },
+    "SCH.DeploymentTactics": {
+      "action_id": 3585,
+      "icon_id": 2808,
+      "icon_path": "/i/002000/002808.png",
+      "level": 56,
+      "recast_csv_s": 120
+    },
+    "SCH.Excogitation": {
+      "action_id": 7434,
+      "icon_id": 2813,
+      "icon_path": "/i/002000/002813.png",
+      "level": 62,
+      "recast_csv_s": 45
+    },
+    "SCH.Indomitability": {
+      "action_id": 3583,
+      "icon_id": 2806,
+      "icon_path": "/i/002000/002806.png",
+      "level": 52,
+      "recast_csv_s": 30
+    },
+    "SCH.Dissipation": {
+      "action_id": 3587,
+      "icon_id": 2810,
+      "icon_path": "/i/002000/002810.png",
+      "level": 60,
+      "recast_csv_s": 180
+    },
+    "SCH.Recitation": {
+      "action_id": 16542,
+      "icon_id": 2822,
+      "icon_path": "/i/002000/002822.png",
+      "level": 74,
+      "recast_csv_s": 90
+    },
+    "SCH.FeyBlessing": {
+      "action_id": 16543,
+      "icon_id": 2854,
+      "icon_path": "/i/002000/002854.png",
+      "level": 76,
+      "recast_csv_s": 60
+    },
+    "SCH.Consolation": {
+      "action_id": 16546,
+      "icon_id": 2851,
+      "icon_path": "/i/002000/002851.png",
+      "level": 80,
+      "recast_csv_s": 30
+    },
+    "SCH.Protraction": {
+      "action_id": 25867,
+      "icon_id": 2877,
+      "icon_path": "/i/002000/002877.png",
+      "level": 86,
+      "recast_csv_s": 60
+    },
+    "SCH.Expedient": {
+      "action_id": 25868,
+      "icon_id": 2878,
+      "icon_path": "/i/002000/002878.png",
+      "level": 90,
+      "recast_csv_s": 120
+    },
+    "SCH.Seraphism": {
+      "action_id": 37014,
+      "icon_id": 2881,
+      "icon_path": "/i/002000/002881.png",
+      "level": 100,
+      "recast_csv_s": 180
+    },
+    "SAM.SecondWind": {
+      "action_id": 7541,
+      "icon_id": 821,
+      "icon_path": "/i/000000/000821.png",
+      "level": 8,
+      "recast_csv_s": 120
+    },
+    "SAM.Bloodbath": {
+      "action_id": 7542,
+      "icon_id": 823,
+      "icon_path": "/i/000000/000823.png",
+      "level": 12,
+      "recast_csv_s": 90
+    },
+    "SAM.Feint": {
+      "action_id": 7549,
+      "icon_id": 828,
+      "icon_path": "/i/000000/000828.png",
+      "level": 22,
+      "recast_csv_s": 90
+    },
+    "SAM.ArmsLength": {
+      "action_id": 7548,
+      "icon_id": 822,
+      "icon_path": "/i/000000/000822.png",
+      "level": 32,
+      "recast_csv_s": 120
+    },
+    "SAM.ThirdEye": {
+      "action_id": 36962,
+      "icon_id": 3190,
+      "icon_path": "/i/003000/003190.png",
+      "level": 82,
+      "recast_csv_s": 15
+    },
+    "DRG.SecondWind": {
+      "action_id": 7541,
+      "icon_id": 821,
+      "icon_path": "/i/000000/000821.png",
+      "level": 8,
+      "recast_csv_s": 120
+    },
+    "DRG.Bloodbath": {
+      "action_id": 7542,
+      "icon_id": 823,
+      "icon_path": "/i/000000/000823.png",
+      "level": 12,
+      "recast_csv_s": 90
+    },
+    "DRG.Feint": {
+      "action_id": 7549,
+      "icon_id": 828,
+      "icon_path": "/i/000000/000828.png",
+      "level": 22,
+      "recast_csv_s": 90
+    },
+    "DRG.ArmsLength": {
+      "action_id": 7548,
+      "icon_id": 822,
+      "icon_path": "/i/000000/000822.png",
+      "level": 32,
+      "recast_csv_s": 120
+    },
+    "BRD.SecondWind": {
+      "action_id": 7541,
+      "icon_id": 821,
+      "icon_path": "/i/000000/000821.png",
+      "level": 8,
+      "recast_csv_s": 120
+    },
+    "BRD.ArmsLength": {
+      "action_id": 7548,
+      "icon_id": 822,
+      "icon_path": "/i/000000/000822.png",
+      "level": 32,
+      "recast_csv_s": 120
+    },
+    "BRD.Troubadour": {
+      "action_id": 7405,
+      "icon_id": 2612,
+      "icon_path": "/i/002000/002612.png",
+      "level": 62,
+      "recast_csv_s": 120
+    },
+    "BRD.NaturesMinne": {
+      "action_id": 7408,
+      "icon_id": 2615,
+      "icon_path": "/i/002000/002615.png",
+      "level": 66,
+      "recast_csv_s": 120
+    },
+    "BLM.Addle": {
+      "action_id": 7560,
+      "icon_id": 861,
+      "icon_path": "/i/000000/000861.png",
+      "level": 8,
+      "recast_csv_s": 90
+    },
+    "BLM.Swiftcast": {
+      "action_id": 7561,
+      "icon_id": 866,
+      "icon_path": "/i/000000/000866.png",
+      "level": 18,
+      "recast_csv_s": 60
+    },
+    "BLM.Manaward": {
+      "action_id": 157,
+      "icon_id": 463,
+      "icon_path": "/i/000000/000463.png",
+      "level": 30,
+      "recast_csv_s": 120
+    },
+    "BLM.Surecast": {
+      "action_id": 7559,
+      "icon_id": 869,
+      "icon_path": "/i/000000/000869.png",
+      "level": 44,
+      "recast_csv_s": 120
+    }
+  },
+  "misses": [
+    {
+      "id": "BRD.WardensPaean",
+      "name": "The Warden's Paean"
+    }
+  ]
+}
