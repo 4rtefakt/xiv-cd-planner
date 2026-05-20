@@ -17,15 +17,20 @@ export function TimelineShell() {
   const fightDuration = usePlanStore((s) => s.encounter.fight_duration);
   const addBossLane = usePlanStore((s) => s.addBossLane);
   const resetEncounter = usePlanStore((s) => s.resetEncounter);
+  const openModal = usePlanStore((s) => s.openMechanicModal);
+  const firstLaneId = usePlanStore((s) => s.bossLanes[0]?.id ?? 'lane-1');
+
+  const quickAdd = (type: 'raidwide' | 'tankbuster' | 'autos' | 'custom') =>
+    openModal(firstLaneId, Math.round(fightDuration / 2), type);
 
   return (
     <>
       <div className="timeline-toolbar">
         <span className="tl-tool-label">QUICK-ADD MECH</span>
-        <button type="button" className="tl-btn raidwide" disabled>RAIDWIDE</button>
-        <button type="button" className="tl-btn tankbuster" disabled>TANKBUSTER</button>
-        <button type="button" className="tl-btn autos" disabled>AUTOS</button>
-        <button type="button" className="tl-btn custom" disabled>CUSTOM</button>
+        <button type="button" className="tl-btn raidwide"   onClick={() => quickAdd('raidwide')}>RAIDWIDE</button>
+        <button type="button" className="tl-btn tankbuster" onClick={() => quickAdd('tankbuster')}>TANKBUSTER</button>
+        <button type="button" className="tl-btn autos"      onClick={() => quickAdd('autos')}>AUTOS</button>
+        <button type="button" className="tl-btn custom"     onClick={() => quickAdd('custom')}>CUSTOM</button>
         <div className="tl-divider" />
         <span className="tl-tool-label">LANES</span>
         <button type="button" className="tl-btn add-lane" onClick={addBossLane}>

@@ -5,6 +5,7 @@ import { Footer } from './components/layout/Footer';
 import { EncounterFields } from './components/encounter/EncounterFields';
 import { PartyRow } from './components/party/PartyRow';
 import { TimelineShell } from './components/timeline/TimelineShell';
+import { AddMechanicModal } from './components/modals/AddMechanicModal';
 import { usePlanStore } from './state/planStore';
 import { api } from './api/client';
 import './styles/components.css';
@@ -75,6 +76,7 @@ export function App() {
       )}
 
       <Footer />
+      <AddMechanicModal />
     </div>
   );
 }

@@ -1,0 +1,58 @@
+/**
+ * Coverage calculation for a single mechanic.
+ *
+ * Simplifications for the MVP (per bootstrap spec):
+ *   - additive mit stacking (not multiplicative) capped at 85%
+ *   - no separation between physical/magic damage
+ *   - 'expected' values per mech type are coarse defaults
+ *
+ * Real FFXIV multiplicative formulas land later as a refinement.
+ */
+
+import type { Ability, MechType, Mechanic, Use } from '../types';
+
+export type CoverageTier = 'bad' | 'warn' | 'good';
+
+export interface Coverage {
+  pct: number;       // sum of active ability mit_potency, capped at 85
+  tier: CoverageTier;
+  expected: number;  // baseline used to decide the tier
+}
+
+const EXPECTED_MIT_BY_TYPE: Record<MechType, number> = {
+  raidwide: 80,
+  tankbuster: 70,
+  autos: 40,
+  custom: 60,
+};
+
+const COVERAGE_CAP = 85;
+
+export function computeCoverage(
+  mech: Mechanic,
+  uses: Use[],
+  abilities: Map<string, Ability>,
+): Coverage {
+  let total = 0;
+  for (const u of uses) {
+    const ab = abilities.get(u.ability_id);
+    if (!ab) continue;
+    if (mech.time >= u.time && mech.time < u.time + ab.effect) {
+      total += ab.mit_potency;
+    }
+  }
+  const pct = Math.min(COVERAGE_CAP, total);
+  const expected = EXPECTED_MIT_BY_TYPE[mech.type];
+  const ratio = expected > 0 ? pct / expected : 0;
+  const tier: CoverageTier = ratio < 0.4 ? 'bad' : ratio < 0.75 ? 'warn' : 'good';
+  return { pct, tier, expected };
+}
+
+/** Flatten all abilities across all jobs into a single id→Ability map. */
+export function abilityIndex(jobs: { abilities: Ability[] }[]): Map<string, Ability> {
+  const map = new Map<string, Ability>();
+  for (const job of jobs) {
+    for (const ab of job.abilities) map.set(ab.id, ab);
+  }
+  return map;
+}
