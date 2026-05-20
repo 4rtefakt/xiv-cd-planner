@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updated_at": "2026-05-20T22:26:48.466Z",
+  "updated_at": "2026-05-20T23:13:14.225Z",
   "_patch": "FFXIV 7.5 (Dawntrail)",
   "_sources": [
     "https://ffxiv.consolegameswiki.com/wiki/ (per-ability and per-job pages)",
@@ -35,7 +35,8 @@
           "_source_url": "https://ffxiv.consolegameswiki.com/wiki/Rampart",
           "icon_glyph": "shield",
           "icon_id": 801,
-          "name_fr": "Rempart"
+          "name_fr": "Rempart",
+          "action_id": 7531
         },
         {
           "id": "PLD.ArmsLength",
@@ -51,7 +52,8 @@
           "_note": "Knockback/draw-in resist + 20% slow on physical strikers",
           "icon_glyph": "triangle",
           "icon_id": 822,
-          "name_fr": "Portée de bras"
+          "name_fr": "Portée de bras",
+          "action_id": 7548
         },
         {
           "id": "PLD.Reprisal",
@@ -66,7 +68,8 @@
           "_source_url": "https://ffxiv.consolegameswiki.com/wiki/Reprisal",
           "icon_glyph": "diamond",
           "icon_id": 806,
-          "name_fr": "Rétorsion"
+          "name_fr": "Rétorsion",
+          "action_id": 7535
         },
         {
           "id": "PLD.Sheltron",
@@ -82,7 +85,8 @@
           "_note": "Oath gauge cost 50; grants Knight's Resolve (15% mit, 4s) + Knight's Benediction (250p regen)",
           "icon_glyph": "aegis",
           "icon_id": 2950,
-          "name_fr": "Schiltron sacré"
+          "name_fr": "Schiltron sacré",
+          "action_id": 25746
         },
         {
           "id": "PLD.Sentinel",
@@ -98,7 +102,8 @@
           "_note": "Replaces Sentinel at lvl 92. 40% mit + 1000p shield",
           "icon_glyph": "shield",
           "icon_id": 2524,
-          "name_fr": "Garde extrême"
+          "name_fr": "Garde extrême",
+          "action_id": 36920
         },
         {
           "id": "PLD.Bulwark",
@@ -115,7 +120,8 @@
           "icon_glyph": "shield",
           "icon_id": 167,
           "mit_kind": "physical",
-          "name_fr": "Forteresse"
+          "name_fr": "Forteresse",
+          "action_id": 22
         },
         {
           "id": "PLD.DivineVeil",
@@ -131,7 +137,8 @@
           "_note": "10% maxHP barrier + 400p heal on trigger. Modelled as 10% party mit equivalent",
           "icon_glyph": "wing",
           "icon_id": 2508,
-          "name_fr": "Voile divin"
+          "name_fr": "Voile divin",
+          "action_id": 3540
         },
         {
           "id": "PLD.DivineCaress",
@@ -147,7 +154,8 @@
           "_note": "Requires Divine Grace (post-Temperance/Holy Sheltron). 400p shield + 200p regen 15s",
           "icon_glyph": "wing",
           "icon_id": 2128,
-          "name_fr": "Caresse divine"
+          "name_fr": "Caresse divine",
+          "action_id": 37011
         },
         {
           "id": "PLD.PassageOfArms",
@@ -163,7 +171,8 @@
           "_note": "Channelled cone behind player. Ends on movement or action.",
           "icon_glyph": "aegis",
           "icon_id": 2515,
-          "name_fr": "Passe d'armes"
+          "name_fr": "Passe d'armes",
+          "action_id": 7385
         },
         {
           "id": "PLD.Intervention",
@@ -179,7 +188,8 @@
           "_note": "Single ally. +10% if Rampart/Guardian active. Oath gauge 50",
           "icon_glyph": "shield",
           "icon_id": 2512,
-          "name_fr": "Intervention"
+          "name_fr": "Intervention",
+          "action_id": 7382
         },
         {
           "id": "PLD.Cover",
@@ -195,7 +205,8 @@
           "_note": "Take all damage destined for target ally within 20y",
           "icon_glyph": "aegis",
           "icon_id": 2501,
-          "name_fr": "Couverture"
+          "name_fr": "Couverture",
+          "action_id": 27
         },
         {
           "id": "PLD.HallowedGround",
@@ -211,7 +222,8 @@
           "_note": "Invulnerability",
           "icon_glyph": "shield",
           "icon_id": 2502,
-          "name_fr": "Invincible"
+          "name_fr": "Invincible",
+          "action_id": 30
         }
       ],
       "name_fr": "Paladin"
@@ -237,7 +249,8 @@
           "_source_url": "https://ffxiv.consolegameswiki.com/wiki/Rampart",
           "icon_glyph": "shield",
           "icon_id": 801,
-          "name_fr": "Rempart"
+          "name_fr": "Rempart",
+          "action_id": 7531
         },
         {
           "id": "WAR.ArmsLength",
@@ -252,7 +265,8 @@
           "_source_url": "https://ffxiv.consolegameswiki.com/wiki/Arm%27s_Length",
           "icon_glyph": "triangle",
           "icon_id": 822,
-          "name_fr": "Portée de bras"
+          "name_fr": "Portée de bras",
+          "action_id": 7548
         },
         {
           "id": "WAR.Reprisal",
@@ -267,7 +281,8 @@
           "_source_url": "https://ffxiv.consolegameswiki.com/wiki/Reprisal",
           "icon_glyph": "diamond",
           "icon_id": 806,
-          "name_fr": "Rétorsion"
+          "name_fr": "Rétorsion",
+          "action_id": 7535
         },
         {
           "id": "WAR.ThrillOfBattle",
@@ -283,7 +298,8 @@
           "_note": "+20% maxHP + 20% incoming heals. Modelled as 10% personal mit equivalent (HP cushion against pct-damage attacks)",
           "icon_glyph": "heart",
           "icon_id": 263,
-          "name_fr": "Frisson de la bataille"
+          "name_fr": "Frisson de la bataille",
+          "action_id": 40
         },
         {
           "id": "WAR.Bloodwhetting",
@@ -299,7 +315,8 @@
           "_note": "10% mit + 400p sustain per weaponskill + 400p shield",
           "icon_glyph": "heart",
           "icon_id": 2569,
-          "name_fr": "Intuition fougueuse"
+          "name_fr": "Intuition fougueuse",
+          "action_id": 25751
         },
         {
           "id": "WAR.NascentFlash",
@@ -315,7 +332,8 @@
           "_note": "Single ally version of Bloodwhetting",
           "icon_glyph": "heart",
           "icon_id": 2567,
-          "name_fr": "Exaltation naissante"
+          "name_fr": "Exaltation naissante",
+          "action_id": 16464
         },
         {
           "id": "WAR.ShakeItOff",
@@ -331,7 +349,8 @@
           "_note": "15% maxHP barrier + 300p heal. Modelled as 15% party mit equivalent",
           "icon_glyph": "aegis",
           "icon_id": 2563,
-          "name_fr": "Débarrassage"
+          "name_fr": "Débarrassage",
+          "action_id": 7388
         },
         {
           "id": "WAR.Equilibrium",
@@ -347,7 +366,8 @@
           "_note": "1200p instant heal + 200p regen 15s",
           "icon_glyph": "cross",
           "icon_id": 2560,
-          "name_fr": "Équilibre"
+          "name_fr": "Équilibre",
+          "action_id": 3552
         },
         {
           "id": "WAR.Vengeance",
@@ -363,7 +383,8 @@
           "_note": "Replaces Vengeance at lvl 92. 40% mit + 55p counter + 300p post-regen 15s",
           "icon_glyph": "sword",
           "icon_id": 2573,
-          "name_fr": "Damnation"
+          "name_fr": "Damnation",
+          "action_id": 36923
         },
         {
           "id": "WAR.Holmgang",
@@ -379,7 +400,8 @@
           "_note": "Prevents HP dropping below 1 (invulnerability)",
           "icon_glyph": "sword",
           "icon_id": 266,
-          "name_fr": "Holmgang"
+          "name_fr": "Holmgang",
+          "action_id": 43
         }
       ],
       "name_fr": "Guerrier"
@@ -405,7 +427,8 @@
           "_source_url": "https://ffxiv.consolegameswiki.com/wiki/Swiftcast",
           "icon_glyph": "triangle",
           "icon_id": 866,
-          "name_fr": "Magie prompte"
+          "name_fr": "Magie prompte",
+          "action_id": 7561
         },
         {
           "id": "WHM.Surecast",
@@ -420,7 +443,8 @@
           "_source_url": "https://ffxiv.consolegameswiki.com/wiki/Surecast",
           "icon_glyph": "triangle",
           "icon_id": 869,
-          "name_fr": "Stoïcisme"
+          "name_fr": "Stoïcisme",
+          "action_id": 7559
         },
         {
           "id": "WHM.DivineBenison",
@@ -436,7 +460,8 @@
           "_note": "500p shield single target (2 charges). Modelled as 5% party mit equivalent",
           "icon_glyph": "aegis",
           "icon_id": 2638,
-          "name_fr": "Faveur divine"
+          "name_fr": "Faveur divine",
+          "action_id": 7432
         },
         {
           "id": "WHM.Aquaveil",
@@ -452,7 +477,8 @@
           "_note": "Single ally",
           "icon_glyph": "shield",
           "icon_id": 2648,
-          "name_fr": "Aquavoile"
+          "name_fr": "Aquavoile",
+          "action_id": 25861
         },
         {
           "id": "WHM.PlenaryIndulgence",
@@ -468,7 +494,8 @@
           "_note": "10% mit + 200p bonus on AoE GCD heals",
           "icon_glyph": "spark",
           "icon_id": 2639,
-          "name_fr": "Indulgence plénière"
+          "name_fr": "Indulgence plénière",
+          "action_id": 7433
         },
         {
           "id": "WHM.Asylum",
@@ -484,7 +511,8 @@
           "_note": "Ground AoE: 100p/tick regen + 10% heal-up",
           "icon_glyph": "cross",
           "icon_id": 2632,
-          "name_fr": "Asile"
+          "name_fr": "Asile",
+          "action_id": 3569
         },
         {
           "id": "WHM.Temperance",
@@ -500,7 +528,8 @@
           "_note": "10% mit + 20% heal-out. Grants Divine Grace for 30s (enables Divine Caress)",
           "icon_glyph": "aegis",
           "icon_id": 2645,
-          "name_fr": "Tempérance"
+          "name_fr": "Tempérance",
+          "action_id": 16536
         },
         {
           "id": "WHM.LiturgyOfTheBell",
@@ -516,7 +545,8 @@
           "_note": "5 stacks consumed by damage, 400p party heal per trigger (max once/sec)",
           "icon_glyph": "cross",
           "icon_id": 2649,
-          "name_fr": "Tintinnabule"
+          "name_fr": "Tintinnabule",
+          "action_id": 25862
         },
         {
           "id": "WHM.DivineCaress",
@@ -532,7 +562,8 @@
           "_note": "Requires Divine Grace. 400p shield + 200p regen 15s",
           "icon_glyph": "wing",
           "icon_id": 2128,
-          "name_fr": "Caresse divine"
+          "name_fr": "Caresse divine",
+          "action_id": 37011
         },
         {
           "id": "WHM.Benediction",
@@ -548,7 +579,8 @@
           "_note": "Full HP restore (single target)",
           "icon_glyph": "cross",
           "icon_id": 2627,
-          "name_fr": "Bénédiction"
+          "name_fr": "Bénédiction",
+          "action_id": 140
         }
       ],
       "name_fr": "Mage blanc"
@@ -574,7 +606,8 @@
           "_source_url": "https://ffxiv.consolegameswiki.com/wiki/Swiftcast",
           "icon_glyph": "triangle",
           "icon_id": 866,
-          "name_fr": "Magie prompte"
+          "name_fr": "Magie prompte",
+          "action_id": 7561
         },
         {
           "id": "SCH.Surecast",
@@ -589,7 +622,8 @@
           "_source_url": "https://ffxiv.consolegameswiki.com/wiki/Surecast",
           "icon_glyph": "triangle",
           "icon_id": 869,
-          "name_fr": "Stoïcisme"
+          "name_fr": "Stoïcisme",
+          "action_id": 7559
         },
         {
           "id": "SCH.WhisperingDawn",
@@ -605,7 +639,8 @@
           "_note": "Faerie HoT: 80p/tick party",
           "icon_glyph": "cross",
           "icon_id": 2852,
-          "name_fr": "Murmure de l'aurore"
+          "name_fr": "Murmure de l'aurore",
+          "action_id": 16537
         },
         {
           "id": "SCH.SacredSoil",
@@ -621,7 +656,8 @@
           "_note": "Ground AoE: 10% mit + 100p regen",
           "icon_glyph": "soil",
           "icon_id": 2804,
-          "name_fr": "Dogme de survie"
+          "name_fr": "Dogme de survie",
+          "action_id": 188
         },
         {
           "id": "SCH.FeyIllumination",
@@ -638,7 +674,8 @@
           "icon_glyph": "star",
           "icon_id": 2853,
           "mit_kind": "magical",
-          "name_fr": "Illumination féérique"
+          "name_fr": "Illumination féérique",
+          "action_id": 16538
         },
         {
           "id": "SCH.DeploymentTactics",
@@ -654,7 +691,8 @@
           "_note": "Spreads Galvanize shield from target to nearby party",
           "icon_glyph": "wing",
           "icon_id": 2808,
-          "name_fr": "Stratagème du déploiement"
+          "name_fr": "Stratagème du déploiement",
+          "action_id": 3585
         },
         {
           "id": "SCH.Excogitation",
@@ -670,7 +708,8 @@
           "_note": "800p triggered heal (target <50% HP or expiry). Aetherflow cost.",
           "icon_glyph": "cross",
           "icon_id": 2813,
-          "name_fr": "Traité de l'excogitation"
+          "name_fr": "Traité de l'excogitation",
+          "action_id": 7434
         },
         {
           "id": "SCH.Indomitability",
@@ -686,7 +725,8 @@
           "_note": "400p party instant heal. Aetherflow cost.",
           "icon_glyph": "cross",
           "icon_id": 2806,
-          "name_fr": "Traité de la persévérance"
+          "name_fr": "Traité de la persévérance",
+          "action_id": 3583
         },
         {
           "id": "SCH.Dissipation",
@@ -702,7 +742,8 @@
           "_note": "Dismisses faerie, full Aetherflow + 20% heal-up",
           "icon_glyph": "triangle",
           "icon_id": 2810,
-          "name_fr": "Dissipation"
+          "name_fr": "Dissipation",
+          "action_id": 3587
         },
         {
           "id": "SCH.Recitation",
@@ -718,7 +759,8 @@
           "_note": "Next Adloquium/Succor/Indomitability/Excogitation is free + guaranteed crit",
           "icon_glyph": "triangle",
           "icon_id": 2822,
-          "name_fr": "Récitation"
+          "name_fr": "Récitation",
+          "action_id": 16542
         },
         {
           "id": "SCH.FeyBlessing",
@@ -734,7 +776,8 @@
           "_note": "320p party instant heal (Eos/Selene)",
           "icon_glyph": "cross",
           "icon_id": 2854,
-          "name_fr": "Bénédiction féérique"
+          "name_fr": "Bénédiction féérique",
+          "action_id": 16543
         },
         {
           "id": "SCH.Consolation",
@@ -750,7 +793,8 @@
           "_note": "Seraph only: 250p heal + 250p shield (2 charges)",
           "icon_glyph": "aegis",
           "icon_id": 2851,
-          "name_fr": "Dictame"
+          "name_fr": "Dictame",
+          "action_id": 16546
         },
         {
           "id": "SCH.Protraction",
@@ -766,7 +810,8 @@
           "_note": "Single ally: +10% maxHP + 10% heal-up. Modelled as 10% party mit equivalent",
           "icon_glyph": "heart",
           "icon_id": 2877,
-          "name_fr": "Loi de la protraction"
+          "name_fr": "Loi de la protraction",
+          "action_id": 25867
         },
         {
           "id": "SCH.Expedient",
@@ -782,7 +827,8 @@
           "_note": "10% mit + sprint party-wide",
           "icon_glyph": "aegis",
           "icon_id": 2878,
-          "name_fr": "Thèse fluidique"
+          "name_fr": "Thèse fluidique",
+          "action_id": 25868
         },
         {
           "id": "SCH.Seraphism",
@@ -798,7 +844,8 @@
           "_note": "Continuous party regen + transforms Adloquium/Concitation for 20s",
           "icon_glyph": "cross",
           "icon_id": 2881,
-          "name_fr": "Séraphisme"
+          "name_fr": "Séraphisme",
+          "action_id": 37014
         }
       ],
       "name_fr": "Érudit"
@@ -825,7 +872,8 @@
           "_note": "800p self heal (melee/phys ranged role action)",
           "icon_glyph": "cross",
           "icon_id": 821,
-          "name_fr": "Second souffle"
+          "name_fr": "Second souffle",
+          "action_id": 7541
         },
         {
           "id": "SAM.Bloodbath",
@@ -841,7 +889,8 @@
           "_note": "Lifesteal: portion of phys damage dealt → self HP",
           "icon_glyph": "heart",
           "icon_id": 823,
-          "name_fr": "Bain de sang"
+          "name_fr": "Bain de sang",
+          "action_id": 7542
         },
         {
           "id": "SAM.Feint",
@@ -857,7 +906,8 @@
           "_note": "Target enemy -10% phys / -5% magic damage dealt",
           "icon_glyph": "diamond",
           "icon_id": 828,
-          "name_fr": "Restreinte"
+          "name_fr": "Restreinte",
+          "action_id": 7549
         },
         {
           "id": "SAM.ArmsLength",
@@ -872,7 +922,8 @@
           "_source_url": "https://ffxiv.consolegameswiki.com/wiki/Arm%27s_Length",
           "icon_glyph": "triangle",
           "icon_id": 822,
-          "name_fr": "Portée de bras"
+          "name_fr": "Portée de bras",
+          "action_id": 7548
         },
         {
           "id": "SAM.ThirdEye",
@@ -888,7 +939,8 @@
           "_note": "Replaces Third Eye at lvl 82. 10% mit on next hit, then post-hit 10% mit 9s + 200p heal",
           "icon_glyph": "eye",
           "icon_id": 3190,
-          "name_fr": "Tengentsû"
+          "name_fr": "Tengentsû",
+          "action_id": 36962
         }
       ],
       "name_fr": "Samouraï"
@@ -914,7 +966,8 @@
           "_source_url": "https://ffxiv.consolegameswiki.com/wiki/Second_Wind",
           "icon_glyph": "cross",
           "icon_id": 821,
-          "name_fr": "Second souffle"
+          "name_fr": "Second souffle",
+          "action_id": 7541
         },
         {
           "id": "DRG.Bloodbath",
@@ -929,7 +982,8 @@
           "_source_url": "https://ffxiv.consolegameswiki.com/wiki/Bloodbath",
           "icon_glyph": "heart",
           "icon_id": 823,
-          "name_fr": "Bain de sang"
+          "name_fr": "Bain de sang",
+          "action_id": 7542
         },
         {
           "id": "DRG.Feint",
@@ -944,7 +998,8 @@
           "_source_url": "https://ffxiv.consolegameswiki.com/wiki/Feint",
           "icon_glyph": "diamond",
           "icon_id": 828,
-          "name_fr": "Restreinte"
+          "name_fr": "Restreinte",
+          "action_id": 7549
         },
         {
           "id": "DRG.ArmsLength",
@@ -959,7 +1014,8 @@
           "_source_url": "https://ffxiv.consolegameswiki.com/wiki/Arm%27s_Length",
           "icon_glyph": "triangle",
           "icon_id": 822,
-          "name_fr": "Portée de bras"
+          "name_fr": "Portée de bras",
+          "action_id": 7548
         }
       ],
       "name_fr": "Chevalier dragon"
@@ -985,7 +1041,8 @@
           "_source_url": "https://ffxiv.consolegameswiki.com/wiki/Second_Wind",
           "icon_glyph": "cross",
           "icon_id": 821,
-          "name_fr": "Second souffle"
+          "name_fr": "Second souffle",
+          "action_id": 7541
         },
         {
           "id": "BRD.ArmsLength",
@@ -1000,7 +1057,8 @@
           "_source_url": "https://ffxiv.consolegameswiki.com/wiki/Arm%27s_Length",
           "icon_glyph": "triangle",
           "icon_id": 822,
-          "name_fr": "Portée de bras"
+          "name_fr": "Portée de bras",
+          "action_id": 7548
         },
         {
           "id": "BRD.WardensPaean",
@@ -1015,7 +1073,8 @@
           "_source_url": "https://ffxiv.consolegameswiki.com/wiki/The_Warden%27s_Paean",
           "_note": "Esuna OR pre-emptive status-block (single ally)",
           "icon_glyph": "diamond",
-          "name_fr": "Hymne du gardien"
+          "name_fr": "Hymne du gardien",
+          "action_id": 3561
         },
         {
           "id": "BRD.Troubadour",
@@ -1030,7 +1089,8 @@
           "_source_url": "https://ffxiv.consolegameswiki.com/wiki/Troubadour",
           "icon_glyph": "note",
           "icon_id": 2612,
-          "name_fr": "Troubadour"
+          "name_fr": "Troubadour",
+          "action_id": 7405
         },
         {
           "id": "BRD.NaturesMinne",
@@ -1046,7 +1106,8 @@
           "_note": "+15% heal-up party (heal received)",
           "icon_glyph": "note",
           "icon_id": 2615,
-          "name_fr": "Minne de la nature"
+          "name_fr": "Minne de la nature",
+          "action_id": 7408
         }
       ],
       "name_fr": "Barde"
@@ -1073,7 +1134,8 @@
           "_note": "Target enemy -5% phys / -10% magic damage dealt",
           "icon_glyph": "diamond",
           "icon_id": 861,
-          "name_fr": "Embrouillement"
+          "name_fr": "Embrouillement",
+          "action_id": 7560
         },
         {
           "id": "BLM.Swiftcast",
@@ -1088,7 +1150,8 @@
           "_source_url": "https://ffxiv.consolegameswiki.com/wiki/Swiftcast",
           "icon_glyph": "triangle",
           "icon_id": 866,
-          "name_fr": "Magie prompte"
+          "name_fr": "Magie prompte",
+          "action_id": 7561
         },
         {
           "id": "BLM.Manaward",
@@ -1104,7 +1167,8 @@
           "_note": "Shield absorbing 30% maxHP. Modelled as 20% personal mit equivalent",
           "icon_glyph": "hex",
           "icon_id": 463,
-          "name_fr": "Barrière de mana"
+          "name_fr": "Barrière de mana",
+          "action_id": 157
         },
         {
           "id": "BLM.Surecast",
@@ -1119,7 +1183,8 @@
           "_source_url": "https://ffxiv.consolegameswiki.com/wiki/Surecast",
           "icon_glyph": "triangle",
           "icon_id": 869,
-          "name_fr": "Stoïcisme"
+          "name_fr": "Stoïcisme",
+          "action_id": 7559
         }
       ],
       "name_fr": "Mage noir"
@@ -1145,7 +1210,8 @@
           "_source_url": "https://ffxiv.consolegameswiki.com/wiki/Dark_Knight",
           "icon_glyph": "shield",
           "icon_id": 801,
-          "name_fr": "Rempart"
+          "name_fr": "Rempart",
+          "action_id": 7531
         },
         {
           "id": "DRK.ArmsLength",
@@ -1160,7 +1226,8 @@
           "_source_url": "https://ffxiv.consolegameswiki.com/wiki/Dark_Knight",
           "icon_glyph": "triangle",
           "icon_id": 822,
-          "name_fr": "Portée de bras"
+          "name_fr": "Portée de bras",
+          "action_id": 7548
         },
         {
           "id": "DRK.Reprisal",
@@ -1175,7 +1242,8 @@
           "_source_url": "https://ffxiv.consolegameswiki.com/wiki/Dark_Knight",
           "icon_glyph": "diamond",
           "icon_id": 806,
-          "name_fr": "Rétorsion"
+          "name_fr": "Rétorsion",
+          "action_id": 7535
         },
         {
           "id": "DRK.ShadowedVigil",
@@ -1191,7 +1259,8 @@
           "_source_url": "https://ffxiv.consolegameswiki.com/wiki/Dark_Knight",
           "icon_glyph": "shield",
           "icon_id": 3094,
-          "name_fr": "Vigile ténébreux"
+          "name_fr": "Vigile ténébreux",
+          "action_id": 36927
         },
         {
           "id": "DRK.DarkMind",
@@ -1208,7 +1277,8 @@
           "icon_glyph": "hex",
           "icon_id": 3076,
           "mit_kind": "magical",
-          "name_fr": "Esprit ténébreux"
+          "name_fr": "Esprit ténébreux",
+          "action_id": 3634
         },
         {
           "id": "DRK.DarkMissionary",
@@ -1225,7 +1295,8 @@
           "icon_glyph": "aegis",
           "icon_id": 3087,
           "mit_kind": "magical",
-          "name_fr": "Missionnaire des Ténèbres"
+          "name_fr": "Missionnaire des Ténèbres",
+          "action_id": 16471
         },
         {
           "id": "DRK.Oblation",
@@ -1241,7 +1312,8 @@
           "_source_url": "https://ffxiv.consolegameswiki.com/wiki/Dark_Knight",
           "icon_glyph": "shield",
           "icon_id": 3089,
-          "name_fr": "Oblation"
+          "name_fr": "Oblation",
+          "action_id": 25754
         },
         {
           "id": "DRK.TheBlackestNight",
@@ -1257,7 +1329,8 @@
           "_source_url": "https://ffxiv.consolegameswiki.com/wiki/Dark_Knight",
           "icon_glyph": "hex",
           "icon_id": 3081,
-          "name_fr": "Nuit noirissime"
+          "name_fr": "Nuit noirissime",
+          "action_id": 7393
         },
         {
           "id": "DRK.LivingDead",
@@ -1273,7 +1346,8 @@
           "_source_url": "https://ffxiv.consolegameswiki.com/wiki/Dark_Knight",
           "icon_glyph": "sword",
           "icon_id": 3077,
-          "name_fr": "Mort-vivant"
+          "name_fr": "Mort-vivant",
+          "action_id": 3638
         }
       ],
       "name_fr": "Chevalier noir"
@@ -1299,7 +1373,8 @@
           "_source_url": "https://ffxiv.consolegameswiki.com/wiki/Gunbreaker",
           "icon_glyph": "shield",
           "icon_id": 801,
-          "name_fr": "Rempart"
+          "name_fr": "Rempart",
+          "action_id": 7531
         },
         {
           "id": "GNB.ArmsLength",
@@ -1314,7 +1389,8 @@
           "_source_url": "https://ffxiv.consolegameswiki.com/wiki/Gunbreaker",
           "icon_glyph": "triangle",
           "icon_id": 822,
-          "name_fr": "Portée de bras"
+          "name_fr": "Portée de bras",
+          "action_id": 7548
         },
         {
           "id": "GNB.Reprisal",
@@ -1329,7 +1405,8 @@
           "_source_url": "https://ffxiv.consolegameswiki.com/wiki/Gunbreaker",
           "icon_glyph": "diamond",
           "icon_id": 806,
-          "name_fr": "Rétorsion"
+          "name_fr": "Rétorsion",
+          "action_id": 7535
         },
         {
           "id": "GNB.Camouflage",
@@ -1345,7 +1422,8 @@
           "_source_url": "https://ffxiv.consolegameswiki.com/wiki/Gunbreaker",
           "icon_glyph": "shield",
           "icon_id": 3404,
-          "name_fr": "Camouflage"
+          "name_fr": "Camouflage",
+          "action_id": 16140
         },
         {
           "id": "GNB.GreatNebula",
@@ -1361,7 +1439,8 @@
           "_source_url": "https://ffxiv.consolegameswiki.com/wiki/Gunbreaker",
           "icon_glyph": "shield",
           "icon_id": 3435,
-          "name_fr": "Grande nébuleuse"
+          "name_fr": "Grande nébuleuse",
+          "action_id": 36935
         },
         {
           "id": "GNB.HeartOfLight",
@@ -1378,7 +1457,8 @@
           "icon_glyph": "aegis",
           "icon_id": 3424,
           "mit_kind": "magical",
-          "name_fr": "Cœur de Lumière"
+          "name_fr": "Cœur de Lumière",
+          "action_id": 16160
         },
         {
           "id": "GNB.HeartOfCorundum",
@@ -1394,7 +1474,8 @@
           "_source_url": "https://ffxiv.consolegameswiki.com/wiki/Gunbreaker",
           "icon_glyph": "aegis",
           "icon_id": 3430,
-          "name_fr": "Cœur de corindon"
+          "name_fr": "Cœur de corindon",
+          "action_id": 25758
         },
         {
           "id": "GNB.Aurora",
@@ -1410,7 +1491,8 @@
           "_source_url": "https://ffxiv.consolegameswiki.com/wiki/Gunbreaker",
           "icon_glyph": "cross",
           "icon_id": 3415,
-          "name_fr": "Aurore"
+          "name_fr": "Aurore",
+          "action_id": 16151
         },
         {
           "id": "GNB.Superbolide",
@@ -1426,7 +1508,8 @@
           "_source_url": "https://ffxiv.consolegameswiki.com/wiki/Gunbreaker",
           "icon_glyph": "sword",
           "icon_id": 3416,
-          "name_fr": "Bolide"
+          "name_fr": "Bolide",
+          "action_id": 16152
         }
       ],
       "name_fr": "Pistosabreur"
@@ -1452,7 +1535,8 @@
           "_source_url": "https://ffxiv.consolegameswiki.com/wiki/Astrologian",
           "icon_glyph": "triangle",
           "icon_id": 866,
-          "name_fr": "Magie prompte"
+          "name_fr": "Magie prompte",
+          "action_id": 7561
         },
         {
           "id": "AST.Surecast",
@@ -1467,7 +1551,8 @@
           "_source_url": "https://ffxiv.consolegameswiki.com/wiki/Astrologian",
           "icon_glyph": "triangle",
           "icon_id": 869,
-          "name_fr": "Stoïcisme"
+          "name_fr": "Stoïcisme",
+          "action_id": 7559
         },
         {
           "id": "AST.CollectiveUnconscious",
@@ -1483,7 +1568,8 @@
           "_source_url": "https://ffxiv.consolegameswiki.com/wiki/Astrologian",
           "icon_glyph": "aegis",
           "icon_id": 3140,
-          "name_fr": "Inconscient collectif"
+          "name_fr": "Inconscient collectif",
+          "action_id": 3613
         },
         {
           "id": "AST.NeutralSect",
@@ -1499,7 +1585,8 @@
           "_source_url": "https://ffxiv.consolegameswiki.com/wiki/Astrologian",
           "icon_glyph": "star",
           "icon_id": 3552,
-          "name_fr": "Adepte de la neutralité"
+          "name_fr": "Adepte de la neutralité",
+          "action_id": 16559
         },
         {
           "id": "AST.Exaltation",
@@ -1515,7 +1602,8 @@
           "_source_url": "https://ffxiv.consolegameswiki.com/wiki/Astrologian",
           "icon_glyph": "shield",
           "icon_id": 3561,
-          "name_fr": "Exaltation"
+          "name_fr": "Exaltation",
+          "action_id": 25873
         },
         {
           "id": "AST.CelestialOpposition",
@@ -1531,7 +1619,8 @@
           "_source_url": "https://ffxiv.consolegameswiki.com/wiki/Astrologian",
           "icon_glyph": "cross",
           "icon_id": 3142,
-          "name_fr": "Opposition céleste"
+          "name_fr": "Opposition céleste",
+          "action_id": 16553
         },
         {
           "id": "AST.EarthlyStar",
@@ -1547,7 +1636,8 @@
           "_source_url": "https://ffxiv.consolegameswiki.com/wiki/Astrologian",
           "icon_glyph": "star",
           "icon_id": 3143,
-          "name_fr": "Étoile terrestre"
+          "name_fr": "Étoile terrestre",
+          "action_id": 7439
         },
         {
           "id": "AST.Macrocosmos",
@@ -1563,7 +1653,8 @@
           "_source_url": "https://ffxiv.consolegameswiki.com/wiki/Astrologian",
           "icon_glyph": "spark",
           "icon_id": 3562,
-          "name_fr": "Macrocosme"
+          "name_fr": "Macrocosme",
+          "action_id": 25874
         },
         {
           "id": "AST.Horoscope",
@@ -1579,7 +1670,8 @@
           "_source_url": "https://ffxiv.consolegameswiki.com/wiki/Astrologian",
           "icon_glyph": "cross",
           "icon_id": 3550,
-          "name_fr": "Horoscope"
+          "name_fr": "Horoscope",
+          "action_id": 16557
         },
         {
           "id": "AST.LadyOfCrowns",
@@ -1595,7 +1687,8 @@
           "_source_url": "https://ffxiv.consolegameswiki.com/wiki/Astrologian",
           "icon_glyph": "cross",
           "icon_id": 3146,
-          "name_fr": "Reine des couronnes"
+          "name_fr": "Reine des couronnes",
+          "action_id": 7445
         },
         {
           "id": "AST.SunSign",
@@ -1611,7 +1704,8 @@
           "_source_url": "https://ffxiv.consolegameswiki.com/wiki/Astrologian",
           "icon_glyph": "star",
           "icon_id": 3109,
-          "name_fr": "Signe solaire"
+          "name_fr": "Signe solaire",
+          "action_id": 37031
         }
       ],
       "name_fr": "Astromancien"
@@ -1637,7 +1731,8 @@
           "_source_url": "https://ffxiv.consolegameswiki.com/wiki/Sage",
           "icon_glyph": "triangle",
           "icon_id": 866,
-          "name_fr": "Magie prompte"
+          "name_fr": "Magie prompte",
+          "action_id": 7561
         },
         {
           "id": "SGE.Surecast",
@@ -1652,7 +1747,8 @@
           "_source_url": "https://ffxiv.consolegameswiki.com/wiki/Sage",
           "icon_glyph": "triangle",
           "icon_id": 869,
-          "name_fr": "Stoïcisme"
+          "name_fr": "Stoïcisme",
+          "action_id": 7559
         },
         {
           "id": "SGE.Kerachole",
@@ -1668,7 +1764,8 @@
           "_source_url": "https://ffxiv.consolegameswiki.com/wiki/Sage",
           "icon_glyph": "soil",
           "icon_id": 3666,
-          "name_fr": "Kerachole"
+          "name_fr": "Kerachole",
+          "action_id": 24298
         },
         {
           "id": "SGE.Taurochole",
@@ -1684,7 +1781,8 @@
           "_source_url": "https://ffxiv.consolegameswiki.com/wiki/Sage",
           "icon_glyph": "aegis",
           "icon_id": 3671,
-          "name_fr": "Taurochole"
+          "name_fr": "Taurochole",
+          "action_id": 24303
         },
         {
           "id": "SGE.Physis",
@@ -1700,7 +1798,8 @@
           "_source_url": "https://ffxiv.consolegameswiki.com/wiki/Sage",
           "icon_glyph": "cross",
           "icon_id": 3670,
-          "name_fr": "Physis II"
+          "name_fr": "Physis II",
+          "action_id": 24302
         },
         {
           "id": "SGE.Haima",
@@ -1716,7 +1815,8 @@
           "_source_url": "https://ffxiv.consolegameswiki.com/wiki/Sage",
           "icon_glyph": "aegis",
           "icon_id": 3673,
-          "name_fr": "Haima"
+          "name_fr": "Haima",
+          "action_id": 24305
         },
         {
           "id": "SGE.Holos",
@@ -1732,7 +1832,8 @@
           "_source_url": "https://ffxiv.consolegameswiki.com/wiki/Sage",
           "icon_glyph": "aegis",
           "icon_id": 3678,
-          "name_fr": "Holos"
+          "name_fr": "Holos",
+          "action_id": 24310
         },
         {
           "id": "SGE.Panhaima",
@@ -1748,7 +1849,8 @@
           "_source_url": "https://ffxiv.consolegameswiki.com/wiki/Sage",
           "icon_glyph": "aegis",
           "icon_id": 3679,
-          "name_fr": "Panhaima"
+          "name_fr": "Panhaima",
+          "action_id": 24311
         },
         {
           "id": "SGE.Krasis",
@@ -1764,7 +1866,8 @@
           "_source_url": "https://ffxiv.consolegameswiki.com/wiki/Sage",
           "icon_glyph": "heart",
           "icon_id": 3685,
-          "name_fr": "Krasis"
+          "name_fr": "Krasis",
+          "action_id": 24317
         },
         {
           "id": "SGE.Pneuma",
@@ -1780,7 +1883,8 @@
           "_source_url": "https://ffxiv.consolegameswiki.com/wiki/Sage",
           "icon_glyph": "cross",
           "icon_id": 3686,
-          "name_fr": "Pneuma"
+          "name_fr": "Pneuma",
+          "action_id": 24318
         }
       ],
       "name_fr": "Sage"
@@ -1806,7 +1910,8 @@
           "_source_url": "https://ffxiv.consolegameswiki.com/wiki/Monk",
           "icon_glyph": "cross",
           "icon_id": 821,
-          "name_fr": "Second souffle"
+          "name_fr": "Second souffle",
+          "action_id": 7541
         },
         {
           "id": "MNK.Bloodbath",
@@ -1821,7 +1926,8 @@
           "_source_url": "https://ffxiv.consolegameswiki.com/wiki/Monk",
           "icon_glyph": "heart",
           "icon_id": 823,
-          "name_fr": "Bain de sang"
+          "name_fr": "Bain de sang",
+          "action_id": 7542
         },
         {
           "id": "MNK.Feint",
@@ -1836,7 +1942,8 @@
           "_source_url": "https://ffxiv.consolegameswiki.com/wiki/Monk",
           "icon_glyph": "diamond",
           "icon_id": 828,
-          "name_fr": "Restreinte"
+          "name_fr": "Restreinte",
+          "action_id": 7549
         },
         {
           "id": "MNK.ArmsLength",
@@ -1851,7 +1958,8 @@
           "_source_url": "https://ffxiv.consolegameswiki.com/wiki/Monk",
           "icon_glyph": "triangle",
           "icon_id": 822,
-          "name_fr": "Portée de bras"
+          "name_fr": "Portée de bras",
+          "action_id": 7548
         },
         {
           "id": "MNK.Mantra",
@@ -1867,7 +1975,8 @@
           "_source_url": "https://ffxiv.consolegameswiki.com/wiki/Monk",
           "icon_glyph": "star",
           "icon_id": 216,
-          "name_fr": "Mantra"
+          "name_fr": "Mantra",
+          "action_id": 65
         },
         {
           "id": "MNK.RiddleOfEarth",
@@ -1883,7 +1992,8 @@
           "_source_url": "https://ffxiv.consolegameswiki.com/wiki/Monk",
           "icon_glyph": "shield",
           "icon_id": 2537,
-          "name_fr": "Énigme de la terre"
+          "name_fr": "Énigme de la terre",
+          "action_id": 7394
         }
       ],
       "name_fr": "Moine"
@@ -1909,7 +2019,8 @@
           "_source_url": "https://ffxiv.consolegameswiki.com/wiki/Ninja",
           "icon_glyph": "cross",
           "icon_id": 821,
-          "name_fr": "Second souffle"
+          "name_fr": "Second souffle",
+          "action_id": 7541
         },
         {
           "id": "NIN.Bloodbath",
@@ -1924,7 +2035,8 @@
           "_source_url": "https://ffxiv.consolegameswiki.com/wiki/Ninja",
           "icon_glyph": "heart",
           "icon_id": 823,
-          "name_fr": "Bain de sang"
+          "name_fr": "Bain de sang",
+          "action_id": 7542
         },
         {
           "id": "NIN.Feint",
@@ -1939,7 +2051,8 @@
           "_source_url": "https://ffxiv.consolegameswiki.com/wiki/Ninja",
           "icon_glyph": "diamond",
           "icon_id": 828,
-          "name_fr": "Restreinte"
+          "name_fr": "Restreinte",
+          "action_id": 7549
         },
         {
           "id": "NIN.ArmsLength",
@@ -1954,7 +2067,8 @@
           "_source_url": "https://ffxiv.consolegameswiki.com/wiki/Ninja",
           "icon_glyph": "triangle",
           "icon_id": 822,
-          "name_fr": "Portée de bras"
+          "name_fr": "Portée de bras",
+          "action_id": 7548
         },
         {
           "id": "NIN.ShadeShift",
@@ -1970,7 +2084,8 @@
           "_source_url": "https://ffxiv.consolegameswiki.com/wiki/Ninja",
           "icon_glyph": "hex",
           "icon_id": 607,
-          "name_fr": "Décalage d'ombre"
+          "name_fr": "Décalage d'ombre",
+          "action_id": 2241
         }
       ],
       "name_fr": "Ninja"
@@ -1996,7 +2111,8 @@
           "_source_url": "https://ffxiv.consolegameswiki.com/wiki/Reaper",
           "icon_glyph": "cross",
           "icon_id": 821,
-          "name_fr": "Second souffle"
+          "name_fr": "Second souffle",
+          "action_id": 7541
         },
         {
           "id": "RPR.Bloodbath",
@@ -2011,7 +2127,8 @@
           "_source_url": "https://ffxiv.consolegameswiki.com/wiki/Reaper",
           "icon_glyph": "heart",
           "icon_id": 823,
-          "name_fr": "Bain de sang"
+          "name_fr": "Bain de sang",
+          "action_id": 7542
         },
         {
           "id": "RPR.Feint",
@@ -2026,7 +2143,8 @@
           "_source_url": "https://ffxiv.consolegameswiki.com/wiki/Reaper",
           "icon_glyph": "diamond",
           "icon_id": 828,
-          "name_fr": "Restreinte"
+          "name_fr": "Restreinte",
+          "action_id": 7549
         },
         {
           "id": "RPR.ArmsLength",
@@ -2041,7 +2159,8 @@
           "_source_url": "https://ffxiv.consolegameswiki.com/wiki/Reaper",
           "icon_glyph": "triangle",
           "icon_id": 822,
-          "name_fr": "Portée de bras"
+          "name_fr": "Portée de bras",
+          "action_id": 7548
         },
         {
           "id": "RPR.ArcaneCrest",
@@ -2057,7 +2176,8 @@
           "_source_url": "https://ffxiv.consolegameswiki.com/wiki/Reaper",
           "icon_glyph": "hex",
           "icon_id": 3632,
-          "name_fr": "Blason arcanique"
+          "name_fr": "Blason arcanique",
+          "action_id": 24404
         }
       ],
       "name_fr": "Faucheur"
@@ -2083,7 +2203,8 @@
           "_source_url": "https://ffxiv.consolegameswiki.com/wiki/Viper",
           "icon_glyph": "cross",
           "icon_id": 821,
-          "name_fr": "Second souffle"
+          "name_fr": "Second souffle",
+          "action_id": 7541
         },
         {
           "id": "VPR.Bloodbath",
@@ -2098,7 +2219,8 @@
           "_source_url": "https://ffxiv.consolegameswiki.com/wiki/Viper",
           "icon_glyph": "heart",
           "icon_id": 823,
-          "name_fr": "Bain de sang"
+          "name_fr": "Bain de sang",
+          "action_id": 7542
         },
         {
           "id": "VPR.Feint",
@@ -2113,7 +2235,8 @@
           "_source_url": "https://ffxiv.consolegameswiki.com/wiki/Viper",
           "icon_glyph": "diamond",
           "icon_id": 828,
-          "name_fr": "Restreinte"
+          "name_fr": "Restreinte",
+          "action_id": 7549
         },
         {
           "id": "VPR.ArmsLength",
@@ -2128,7 +2251,8 @@
           "_source_url": "https://ffxiv.consolegameswiki.com/wiki/Viper",
           "icon_glyph": "triangle",
           "icon_id": 822,
-          "name_fr": "Portée de bras"
+          "name_fr": "Portée de bras",
+          "action_id": 7548
         }
       ],
       "name_fr": "Vipère"
@@ -2154,7 +2278,8 @@
           "_source_url": "https://ffxiv.consolegameswiki.com/wiki/Machinist",
           "icon_glyph": "cross",
           "icon_id": 821,
-          "name_fr": "Second souffle"
+          "name_fr": "Second souffle",
+          "action_id": 7541
         },
         {
           "id": "MCH.ArmsLength",
@@ -2169,7 +2294,8 @@
           "_source_url": "https://ffxiv.consolegameswiki.com/wiki/Machinist",
           "icon_glyph": "triangle",
           "icon_id": 822,
-          "name_fr": "Portée de bras"
+          "name_fr": "Portée de bras",
+          "action_id": 7548
         },
         {
           "id": "MCH.Tactician",
@@ -2185,7 +2311,8 @@
           "_source_url": "https://ffxiv.consolegameswiki.com/wiki/Machinist",
           "icon_glyph": "aegis",
           "icon_id": 3040,
-          "name_fr": "Tacticien"
+          "name_fr": "Tacticien",
+          "action_id": 16889
         },
         {
           "id": "MCH.Dismantle",
@@ -2201,7 +2328,8 @@
           "_source_url": "https://ffxiv.consolegameswiki.com/wiki/Machinist",
           "icon_glyph": "diamond",
           "icon_id": 3011,
-          "name_fr": "Brise-arme"
+          "name_fr": "Brise-arme",
+          "action_id": 2887
         }
       ],
       "name_fr": "Machiniste"
@@ -2227,7 +2355,8 @@
           "_source_url": "https://ffxiv.consolegameswiki.com/wiki/Dancer",
           "icon_glyph": "cross",
           "icon_id": 821,
-          "name_fr": "Second souffle"
+          "name_fr": "Second souffle",
+          "action_id": 7541
         },
         {
           "id": "DNC.ArmsLength",
@@ -2242,7 +2371,8 @@
           "_source_url": "https://ffxiv.consolegameswiki.com/wiki/Dancer",
           "icon_glyph": "triangle",
           "icon_id": 822,
-          "name_fr": "Portée de bras"
+          "name_fr": "Portée de bras",
+          "action_id": 7548
         },
         {
           "id": "DNC.ShieldSamba",
@@ -2258,7 +2388,8 @@
           "_source_url": "https://ffxiv.consolegameswiki.com/wiki/Dancer",
           "icon_glyph": "aegis",
           "icon_id": 3469,
-          "name_fr": "Samba protectrice"
+          "name_fr": "Samba protectrice",
+          "action_id": 16012
         },
         {
           "id": "DNC.CuringWaltz",
@@ -2274,7 +2405,8 @@
           "_source_url": "https://ffxiv.consolegameswiki.com/wiki/Dancer",
           "icon_glyph": "cross",
           "icon_id": 3468,
-          "name_fr": "Valse revigorante"
+          "name_fr": "Valse revigorante",
+          "action_id": 16015
         },
         {
           "id": "DNC.Improvisation",
@@ -2290,7 +2422,8 @@
           "_source_url": "https://ffxiv.consolegameswiki.com/wiki/Dancer",
           "icon_glyph": "note",
           "icon_id": 3477,
-          "name_fr": "Improvisation"
+          "name_fr": "Improvisation",
+          "action_id": 16014
         }
       ],
       "name_fr": "Danseur"
@@ -2316,7 +2449,8 @@
           "_source_url": "https://ffxiv.consolegameswiki.com/wiki/Summoner",
           "icon_glyph": "diamond",
           "icon_id": 861,
-          "name_fr": "Embrouillement"
+          "name_fr": "Embrouillement",
+          "action_id": 7560
         },
         {
           "id": "SMN.Swiftcast",
@@ -2331,7 +2465,8 @@
           "_source_url": "https://ffxiv.consolegameswiki.com/wiki/Summoner",
           "icon_glyph": "triangle",
           "icon_id": 866,
-          "name_fr": "Magie prompte"
+          "name_fr": "Magie prompte",
+          "action_id": 7561
         },
         {
           "id": "SMN.Surecast",
@@ -2346,7 +2481,8 @@
           "_source_url": "https://ffxiv.consolegameswiki.com/wiki/Summoner",
           "icon_glyph": "triangle",
           "icon_id": 869,
-          "name_fr": "Stoïcisme"
+          "name_fr": "Stoïcisme",
+          "action_id": 7559
         },
         {
           "id": "SMN.RadiantAegis",
@@ -2362,7 +2498,8 @@
           "_source_url": "https://ffxiv.consolegameswiki.com/wiki/Summoner",
           "icon_glyph": "hex",
           "icon_id": 2750,
-          "name_fr": "Égide rayonnante"
+          "name_fr": "Égide rayonnante",
+          "action_id": 25799
         },
         {
           "id": "SMN.Rekindle",
@@ -2378,7 +2515,8 @@
           "_source_url": "https://ffxiv.consolegameswiki.com/wiki/Summoner",
           "icon_glyph": "cross",
           "icon_id": 2764,
-          "name_fr": "Ravivement"
+          "name_fr": "Ravivement",
+          "action_id": 25830
         },
         {
           "id": "SMN.LuxSolaris",
@@ -2394,7 +2532,8 @@
           "_source_url": "https://ffxiv.consolegameswiki.com/wiki/Summoner",
           "icon_glyph": "cross",
           "icon_id": 2787,
-          "name_fr": "Lux solaris"
+          "name_fr": "Lux solaris",
+          "action_id": 36997
         }
       ],
       "name_fr": "Invocateur"
@@ -2420,7 +2559,8 @@
           "_source_url": "https://ffxiv.consolegameswiki.com/wiki/Red_Mage",
           "icon_glyph": "diamond",
           "icon_id": 861,
-          "name_fr": "Embrouillement"
+          "name_fr": "Embrouillement",
+          "action_id": 7560
         },
         {
           "id": "RDM.Swiftcast",
@@ -2435,7 +2575,8 @@
           "_source_url": "https://ffxiv.consolegameswiki.com/wiki/Red_Mage",
           "icon_glyph": "triangle",
           "icon_id": 866,
-          "name_fr": "Magie prompte"
+          "name_fr": "Magie prompte",
+          "action_id": 7561
         },
         {
           "id": "RDM.Surecast",
@@ -2450,7 +2591,8 @@
           "_source_url": "https://ffxiv.consolegameswiki.com/wiki/Red_Mage",
           "icon_glyph": "triangle",
           "icon_id": 869,
-          "name_fr": "Stoïcisme"
+          "name_fr": "Stoïcisme",
+          "action_id": 7559
         },
         {
           "id": "RDM.MagickBarrier",
@@ -2467,7 +2609,8 @@
           "icon_glyph": "aegis",
           "icon_id": 3237,
           "mit_kind": "magical",
-          "name_fr": "Barrière anti-magie"
+          "name_fr": "Barrière anti-magie",
+          "action_id": 25857
         }
       ],
       "name_fr": "Mage rouge"
@@ -2493,7 +2636,8 @@
           "_source_url": "https://ffxiv.consolegameswiki.com/wiki/Pictomancer",
           "icon_glyph": "diamond",
           "icon_id": 861,
-          "name_fr": "Embrouillement"
+          "name_fr": "Embrouillement",
+          "action_id": 7560
         },
         {
           "id": "PCT.Swiftcast",
@@ -2508,7 +2652,8 @@
           "_source_url": "https://ffxiv.consolegameswiki.com/wiki/Pictomancer",
           "icon_glyph": "triangle",
           "icon_id": 866,
-          "name_fr": "Magie prompte"
+          "name_fr": "Magie prompte",
+          "action_id": 7561
         },
         {
           "id": "PCT.Surecast",
@@ -2523,7 +2668,8 @@
           "_source_url": "https://ffxiv.consolegameswiki.com/wiki/Pictomancer",
           "icon_glyph": "triangle",
           "icon_id": 869,
-          "name_fr": "Stoïcisme"
+          "name_fr": "Stoïcisme",
+          "action_id": 7559
         },
         {
           "id": "PCT.TemperaCoat",
@@ -2539,7 +2685,8 @@
           "_source_url": "https://ffxiv.consolegameswiki.com/wiki/Pictomancer",
           "icon_glyph": "hex",
           "icon_id": 3835,
-          "name_fr": "Enduit a tempera"
+          "name_fr": "Enduit a tempera",
+          "action_id": 34685
         },
         {
           "id": "PCT.TemperaGrassa",
@@ -2555,7 +2702,8 @@
           "_source_url": "https://ffxiv.consolegameswiki.com/wiki/Pictomancer",
           "icon_glyph": "aegis",
           "icon_id": 3836,
-          "name_fr": "Tempera grassa"
+          "name_fr": "Tempera grassa",
+          "action_id": 34686
         }
       ],
       "name_fr": "Pictomancien"

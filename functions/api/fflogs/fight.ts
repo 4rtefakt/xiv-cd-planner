@@ -131,6 +131,40 @@ const EVENTS_QUERY = `
   }
 `;
 
+/**
+ * Friendly cast events — used to recover the cooldowns players actually
+ * pressed during the pull. Combined with the seed's `action_id` per
+ * ability and the imported player roster, the frontend rebuilds the
+ * uses[] array verbatim.
+ */
+const CASTS_QUERY = `
+  query Casts($code: String!, $fightId: Int!, $start: Float, $end: Float) {
+    reportData {
+      report(code: $code) {
+        events(
+          fightIDs: [$fightId]
+          dataType: Casts
+          startTime: $start
+          endTime: $end
+          hostilityType: Friendlies
+          limit: 10000
+        ) {
+          data
+          nextPageTimestamp
+        }
+      }
+    }
+  }
+`;
+
+interface CastEvent {
+  timestamp: number;
+  type: string;        // "cast" | "begincast"
+  sourceID: number;
+  abilityGameID?: number;
+  ability?: { name: string; guid: number };
+}
+
 /** Multi-hit boss abilities (Akh Morn = 5 hits over ~5s, Earthen Fury
  *  multi-tick raidwide, Tidal Wave double-cast) collapse into a single
  *  mech if the same name fires again within this window. 6s catches
@@ -199,18 +233,13 @@ export const onRequestPost: PagesFunction<FFLogsEnv> = async (ctx) => {
     // potentially 50+ across all pulls). Falls back to the actors
     // filter if FFLogs returned an unexpected shape.
     type PdPlayer = { name?: string; type?: string };
-    let pdRoot: { tanks?: PdPlayer[]; healers?: PdPlayer[]; dps?: PdPlayer[] } | null = null;
-    const raw = header.reportData.report.playerDetails as
-      | { data?: { playerDetails?: { tanks?: PdPlayer[]; healers?: PdPlayer[]; dps?: PdPlayer[] } } }
-      | { tanks?: PdPlayer[]; healers?: PdPlayer[]; dps?: PdPlayer[] }
-      | null
-      | undefined;
-    if (raw && typeof raw === 'object') {
+    type PdShape = { tanks?: PdPlayer[]; healers?: PdPlayer[]; dps?: PdPlayer[] };
+    const rawPd = header.reportData.report.playerDetails as unknown;
+    let pdRoot: PdShape | null = null;
+    if (rawPd && typeof rawPd === 'object') {
       // Two known shapes — try the wrapped one first.
-      const wrapped = (raw as { data?: { playerDetails?: PdPlayer } }).data?.playerDetails;
-      pdRoot =
-        (wrapped as typeof pdRoot) ??
-        (raw as typeof pdRoot);
+      const wrapped = (rawPd as { data?: { playerDetails?: PdShape } }).data?.playerDetails;
+      pdRoot = wrapped ?? (rawPd as PdShape);
     }
     const pdPlayers = [
       ...(pdRoot?.tanks ?? []),
@@ -253,7 +282,9 @@ export const onRequestPost: PagesFunction<FFLogsEnv> = async (ctx) => {
 
     while (cursor !== null && pages < 20) {
       pages++;
-      const evResp = await fflogsQuery<EventsResp>(ctx.env, EVENTS_QUERY, {
+      // Explicit annotation : cursor is updated below from evResp.…, which
+      // creates an indirect self-reference TS can't unwind otherwise.
+      const evResp: EventsResp = await fflogsQuery<EventsResp>(ctx.env, EVENTS_QUERY, {
         code: body.code,
         fightId: body.fightId,
         start: cursor,
@@ -330,6 +361,46 @@ export const onRequestPost: PagesFunction<FFLogsEnv> = async (ctx) => {
 
     groups.sort((a, b) => a.time - b.time);
 
+    // 2b. Paginate friendly cast events — to recover the cooldowns each
+    // player pressed during the fight. We keep ALL casts (it's typically
+    // a few thousand events on a 10-min pull, gzip handles it) and let
+    // the frontend filter via the action_id ↔ ability map in the seed.
+    const playerUses: { playerName: string; actionId: number; time: number }[] = [];
+    let castCursor: number | null = fight.startTime;
+    let castPages = 0;
+    while (castCursor !== null && castPages < 20) {
+      castPages++;
+      // See evResp above — same circular-inference workaround.
+      const cResp: EventsResp = await fflogsQuery<EventsResp>(ctx.env, CASTS_QUERY, {
+        code: body.code,
+        fightId: body.fightId,
+        start: castCursor,
+        end: fight.endTime,
+      });
+      const cRaw = cResp.reportData.report.events.data;
+      const castEvents: CastEvent[] = Array.isArray(cRaw)
+        ? (cRaw as CastEvent[])
+        : typeof cRaw === 'string'
+          ? (JSON.parse(cRaw) as CastEvent[])
+          : [];
+      for (const ev of castEvents) {
+        // Only confirmed casts — drop "begincast" (a long cast that
+        // might get cancelled — we'd otherwise double-count it).
+        if (ev.type !== 'cast') continue;
+        if (ev.abilityGameID == null) continue;
+        const src = actors.get(ev.sourceID);
+        if (!src || src.type !== 'Player') continue;
+        playerUses.push({
+          playerName: src.name,
+          actionId: ev.abilityGameID,
+          time: Math.max(0, Math.round((ev.timestamp - fight.startTime) / 100) / 10),
+        });
+      }
+      castCursor = cResp.reportData.report.events.nextPageTimestamp;
+      if (castCursor !== null && castCursor <= fight.startTime) break;
+      if (castCursor !== null && castCursor >= fight.endTime) break;
+    }
+
     // Resolve damage_kind via xivapi AttackType for each unique gameID.
     // FFLogs' own ability.type is a bitfield about behaviour (auto, AoE,
     // DoT, ...), not damage school — so we go to the source of truth.
@@ -382,7 +453,10 @@ export const onRequestPost: PagesFunction<FFLogsEnv> = async (ctx) => {
       bossLanes: lanes,
       players,
       mechanics: groups,
+      playerUses,
       _debug: {
+        castPages,
+        castEventsKept: playerUses.length,
         pages,
         rawEventCount,
         skipNoAbility,

@@ -27,6 +27,10 @@ export interface Ability {
   icon: string;               // absolute URL (xivapi /i/folder/id.png)
   icon_glyph?: string;        // symbolic name for SVG fallback ('shield', 'aegis', …)
   icon_id?: number;           // raw xivapi icon id, for debugging
+  /** xivapi/FFLogs game action ID — used to map FFLogs cast events back
+   *  onto our ability rows when importing a log. Optional because legacy
+   *  rows haven't all been backfilled. */
+  action_id?: number;
   level_unlocked: number;
   verified?: boolean;
   _source_url?: string;

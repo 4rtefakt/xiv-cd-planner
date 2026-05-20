@@ -61,6 +61,17 @@ export interface FFLogsPlayer {
   subType: string;
 }
 
+export interface FFLogsPlayerUse {
+  /** Player display name — matched against `FFLogsPlayer.name` to find
+   *  the corresponding player_id in the freshly-built party. */
+  playerName: string;
+  /** xivapi/FFLogs action id — looked up against the seed's
+   *  `ability.action_id` to recover the ability row. */
+  actionId: number;
+  /** Seconds since fight start. */
+  time: number;
+}
+
 export interface FFLogsFightData {
   fightName: string;
   fightStart: number;
@@ -72,6 +83,10 @@ export interface FFLogsFightData {
   /** Player roster pulled from the report's master data. */
   players: FFLogsPlayer[];
   mechanics: FFLogsMechanic[];
+  /** All confirmed friendly cast events from the fight. The client
+   *  filters down to those whose actionId matches an ability in our
+   *  seed and rebuilds `uses[]`. */
+  playerUses?: FFLogsPlayerUse[];
 }
 
 /**

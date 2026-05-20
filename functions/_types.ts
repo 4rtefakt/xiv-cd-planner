@@ -19,6 +19,9 @@ export interface Ability {
   mit_potency: number;
   mit_kind?: MitKind;
   icon: string;
+  /** xivapi/FFLogs game action ID — used to map FFLogs cast events to
+   *  abilities when importing a log. */
+  action_id?: number;
   level_unlocked: number;
   verified?: boolean;
   _source_url?: string;

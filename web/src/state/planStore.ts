@@ -238,6 +238,14 @@ interface PlanState {
       source_name?: string;
       hit_count?: number;
     }>;
+    /** Friendly cast events from the log. Mapped to Uses[] via
+     *  playerName→player_id (in newParty) and (job+actionId)→ability_id
+     *  (in jobs seed). Casts we can't resolve are silently dropped. */
+    playerUses?: Array<{
+      playerName: string;
+      actionId: number;
+      time: number;
+    }>;
   }): void;
   /**
    * Switch a player to a new job. Uses are remapped by ability NAME:
@@ -406,6 +414,45 @@ export const usePlanStore = create<PlanState>((set) => ({
           hit_count: m.hit_count && m.hit_count > 1 ? m.hit_count : undefined,
         };
       });
+      // Rebuild uses[] from friendly cast events. Each cast resolves to
+      // a Use iff :
+      //   - playerName matches one of newParty's player names (exact)
+      //   - the player's job has an ability with `action_id === actionId`
+      // Cast events that don't resolve (damage abilities, heals, items,
+      // unknown subjobs, …) are silently dropped — that's expected
+      // because our seed only catalogs defensives.
+      const importedUses: Use[] = [];
+      if (payload.playerUses && payload.playerUses.length > 0 && s.jobs.length > 0) {
+        const playerByName = new Map<string, Player>();
+        for (const p of newParty) playerByName.set(p.name, p);
+        const jobByCode = new Map<string, Job>();
+        for (const j of s.jobs) jobByCode.set(j.code, j);
+        let idx = 0;
+        // Dedup near-duplicate casts (begincast/cast pairs survive the
+        // server-side filter only as cast, but a player can also
+        // legitimately recast the same instant ability twice in <500ms
+        // — extremely unlikely but cheap to guard against). Keyed by
+        // (player_id, ability_id, floor(time / 0.5s)).
+        const seen = new Set<string>();
+        for (const pu of payload.playerUses) {
+          const player = playerByName.get(pu.playerName);
+          if (!player) continue;
+          const job = jobByCode.get(player.job);
+          if (!job) continue;
+          const ab = job.abilities.find((a) => a.action_id === pu.actionId);
+          if (!ab) continue;
+          const dedupKey = `${player.id}|${ab.id}|${Math.floor(pu.time * 2)}`;
+          if (seen.has(dedupKey)) continue;
+          seen.add(dedupKey);
+          importedUses.push({
+            id: `use-fflogs-${Date.now()}-${idx++}`,
+            player_id: player.id,
+            ability_id: ab.id,
+            time: pu.time,
+          });
+        }
+      }
+
       return {
         encounter: {
           ...s.encounter,
@@ -415,7 +462,7 @@ export const usePlanStore = create<PlanState>((set) => ({
         party: newParty,
         bossLanes: lanes,
         mechanics: importedMechs,
-        uses: [], // can't auto-place ; clear to start from scratch
+        uses: importedUses,
       };
     }),
   importParty: (newParty) =>
