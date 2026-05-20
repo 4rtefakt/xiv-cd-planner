@@ -69,7 +69,7 @@ interface DamageEvent {
 
 interface AggregatedMech {
   name: string;
-  time: number;           // seconds since fight start
+  time: number;           // seconds since fight start (first event's time, for display)
   targetNames: string[];  // unique player names hit
   damage_kind: 'physical' | 'magical' | 'pure';
   sample_amount: number;  // for debugging — total damage in the group
@@ -84,6 +84,12 @@ interface AggregatedMech {
    *  see "ELECTROCUTION ×3" vs "ELECTROCUTION ×1" without us having to
    *  show every hit separately on the timeline. */
   hit_count: number;
+  /** Timestamp (ms, absolute) of the LATEST event merged into this
+   *  group. Used as the sliding-window anchor : the next event for
+   *  this ability name merges only if it arrives within GROUP_WINDOW_MS
+   *  of this value (not of the first event's time). Stripped from the
+   *  response. */
+  _lastEventTime: number;
 }
 
 const FIGHT_HEADER_QUERY = `
@@ -241,14 +247,16 @@ export const onRequestPost: PagesFunction<FFLogsEnv> = async (ctx) => {
         if (stats) stats.eventCount++;
         else sourceStats.set(sourceName, { eventCount: 1, isBoss: sourceActor?.subType === 'Boss' });
         const relSec = Math.round((ev.timestamp - fight.startTime) / 100) / 10;
-        // Sliding window : if there's already a group for this ability
-        // within GROUP_WINDOW_MS of THIS event, merge. Otherwise start
-        // a new group. Events arrive in timestamp order from FFLogs.
+        // True sliding-window merge : the next event for this ability
+        // joins the existing group as long as it's within GROUP_WINDOW_MS
+        // of the GROUP'S LATEST event (not its first). So a continuous
+        // stream of DoT ticks or multi-hit beats — even if it stretches
+        // over 30s — stays one mech, while a real gap > window splits.
         const lastIdx = lastGroupIdxByName.get(name);
         let idx: number;
         if (
           lastIdx !== undefined &&
-          ev.timestamp - (groups[lastIdx]!.time * 1000 + fight.startTime) < GROUP_WINDOW_MS
+          ev.timestamp - groups[lastIdx]!._lastEventTime < GROUP_WINDOW_MS
         ) {
           idx = lastIdx;
         } else {
@@ -262,6 +270,7 @@ export const onRequestPost: PagesFunction<FFLogsEnv> = async (ctx) => {
             game_id: ev.abilityGameID,
             source_name: sourceName,
             hit_count: 0,
+            _lastEventTime: ev.timestamp,
           });
           lastGroupIdxByName.set(name, idx);
         }
@@ -270,6 +279,7 @@ export const onRequestPost: PagesFunction<FFLogsEnv> = async (ctx) => {
         const g = groups[idx]!;
         g.sample_amount += ev.amount ?? 0;
         g.hit_count++;
+        g._lastEventTime = ev.timestamp;
         if (!g.targetNames.includes(targetActor.name)) g.targetNames.push(targetActor.name);
       }
       cursor = evResp.reportData.report.events.nextPageTimestamp;
@@ -316,8 +326,11 @@ export const onRequestPost: PagesFunction<FFLogsEnv> = async (ctx) => {
 
     // Rewrite source_name on groups so any mech from a "minor" NPC
     // lands in the "Adds" bucket and doesn't trail a phantom lane.
+    // Also strip the internal _lastEventTime field — it's only useful
+    // server-side during aggregation, the client doesn't need it.
     for (const g of groups) {
       if (g.source_name && !bossNames.includes(g.source_name)) g.source_name = addsName;
+      delete (g as Partial<AggregatedMech>)._lastEventTime;
     }
 
     return jsonResp({
