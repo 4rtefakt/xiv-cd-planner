@@ -20,9 +20,52 @@ export interface JobsResponse {
   jobs: Job[];
 }
 
+export interface FFLogsFight {
+  id: number;
+  name: string;
+  encounterID: number;
+  startTime: number;
+  endTime: number;
+  duration: number;
+  kill: boolean;
+  difficulty: number | null;
+  fightPercentage: number | null;
+}
+
+export interface FFLogsReport {
+  code: string;
+  title: string;
+  owner: string | null;
+  startTime: number;
+  endTime: number;
+  fights: FFLogsFight[];
+}
+
+export interface FFLogsMechanic {
+  name: string;
+  time: number;
+  targetNames: string[];
+  damage_kind: 'physical' | 'magical' | 'pure';
+  sample_amount: number;
+}
+
+export interface FFLogsFightData {
+  fightName: string;
+  fightStart: number;
+  fightEnd: number;
+  fightDuration: number;
+  mechanics: FFLogsMechanic[];
+}
+
 export const api = {
   health(): Promise<{ ok: boolean; env: string; time: string }> {
     return req('/health');
+  },
+  fflogsReport(codeOrUrl: string): Promise<FFLogsReport> {
+    return req(`/fflogs/report/${encodeURIComponent(codeOrUrl)}`);
+  },
+  fflogsFight(code: string, fightId: number): Promise<FFLogsFightData> {
+    return req('/fflogs/fight', { method: 'POST', body: JSON.stringify({ code, fightId }) });
   },
   jobs(): Promise<JobsResponse> {
     return req('/jobs');

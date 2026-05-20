@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { usePlanStore } from '../../state/planStore';
 import { ImportPartyModal } from '../modals/ImportPartyModal';
+import { ImportLogModal } from '../modals/ImportLogModal';
 
 type CopyKind = 'edit' | 'view' | null;
 
@@ -10,6 +11,7 @@ export function Header() {
   const readOnly = usePlanStore((s) => s.readOnly);
   const [copied, setCopied] = useState<CopyKind>(null);
   const [importOpen, setImportOpen] = useState(false);
+  const [importLogOpen, setImportLogOpen] = useState(false);
 
   const pillLabel = (() => {
     if (readOnly) return '◇ READ-ONLY';
@@ -68,6 +70,7 @@ export function Header() {
           <>
             <button className="header-btn" type="button" onClick={newPlan} title="Start a fresh plan">+ NEW</button>
             <button className="header-btn" type="button" onClick={() => setImportOpen(true)} title="Paste a JSON party">+ IMPORT PARTY</button>
+            <button className="header-btn" type="button" onClick={() => setImportLogOpen(true)} title="Import mechanics from FFLogs">+ IMPORT LOG</button>
           </>
         )}
         {slug && (
@@ -100,6 +103,7 @@ export function Header() {
         <div className="header-tag">V0.1</div>
       </div>
       <ImportPartyModal open={importOpen} onClose={() => setImportOpen(false)} />
+      <ImportLogModal open={importLogOpen} onClose={() => setImportLogOpen(false)} />
     </header>
   );
 }

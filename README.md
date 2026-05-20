@@ -45,3 +45,24 @@ xiv-cd-planner/
 ```
 
 Voir [CLAUDE.md](CLAUDE.md) pour les conventions et points d'attention.
+
+## Activer l'import FFLogs
+
+Une seule étape, à faire une fois :
+
+1. Va sur https://www.fflogs.com/api/clients/ (connecté à ton compte FFLogs)
+2. Section "Personal Access Token" → génère un token (24h validity n'a pas
+   d'incidence ici, le token PAT est permanent)
+3. Pose-le comme secret Cloudflare Pages :
+
+   ```sh
+   wrangler pages secret put FFLOGS_API_TOKEN --project-name=cooldown-planner
+   # colle le token au prompt
+   ```
+
+Après ça, le bouton "+ IMPORT LOG" du Header marche : colle une URL
+FFLogs (e.g. `https://www.fflogs.com/reports/abcDEF123`), pick une
+fight, importe les mechanics.
+
+Tant que le secret n'est pas posé, l'endpoint `/api/fflogs/*` renvoie
+un 503 avec un message d'erreur explicite côté UI.

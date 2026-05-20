@@ -132,6 +132,24 @@ interface PlanState {
    */
   importParty(newParty: Player[]): void;
   /**
+   * Replace encounter + boss-lane + mechanics with a synthesised import
+   * from an external log (FFLogs, later ACT). The current party is
+   * preserved ; uses are cleared (they no longer line up with the new
+   * fight's mechanics). targetNames from the log are mapped to current
+   * party slots heuristically — full party = raidwide, single target =
+   * first tank, otherwise empty (user edits later).
+   */
+  importFightFromLog(payload: {
+    fightName: string;
+    fightDuration: number;
+    mechanics: Array<{
+      name: string;
+      time: number;
+      targetNames: string[];
+      damage_kind: 'physical' | 'magical' | 'pure';
+    }>;
+  }): void;
+  /**
    * Switch a player to a new job. Uses are remapped by ability NAME:
    * shared abilities (Reprisal, Rampart, Arm's Length, ...) survive
    * because every job has its own copy under the same name. Job-specific
@@ -245,6 +263,38 @@ export const usePlanStore = create<PlanState>((set) => ({
   setParty: (party) => set({ party }),
   setPlayerName: (playerId, name) =>
     set((s) => ({ party: s.party.map((p) => (p.id === playerId ? { ...p, name } : p)) })),
+  importFightFromLog: (payload) =>
+    set((s) => {
+      const lane = { id: 'lane-1', name: 'BOSS A' };
+      const partyIds = s.party.map((p) => p.id);
+      const tankId = s.party.find((p) => p.badge === 'MT' || p.badge === 'OT')?.id;
+      const importedMechs = payload.mechanics.map((m, i) => {
+        const seenCount = m.targetNames.length;
+        let targets: string[];
+        if (seenCount >= s.party.length - 1) targets = partyIds; // raidwide-ish
+        else if (seenCount === 1) targets = tankId ? [tankId] : [];
+        else targets = []; // user to assign
+        return {
+          id: `mech-fflogs-${Date.now()}-${i}`,
+          lane_id: lane.id,
+          name: m.name.toUpperCase(),
+          time: m.time,
+          category: 'damage' as const,
+          targets,
+          damage_kind: m.damage_kind,
+        };
+      });
+      return {
+        encounter: {
+          ...s.encounter,
+          fight_name: payload.fightName,
+          fight_duration: Math.max(60, Math.min(900, payload.fightDuration)),
+        },
+        bossLanes: [lane],
+        mechanics: importedMechs,
+        uses: [], // can't auto-place ; clear to start from scratch
+      };
+    }),
   importParty: (newParty) =>
     set((s) => {
       // Map slot-id → old job + new job. Slots that didn't change job

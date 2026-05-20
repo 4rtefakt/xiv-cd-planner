@@ -92,6 +92,69 @@
   border-color: var(--good);
 }
 
+/* FFLogs import modal — fight picker + mech preview */
+.fflogs-fights {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  max-height: 200px;
+  overflow-y: auto;
+  border: 1px solid var(--line);
+  padding: 4px;
+  background: rgba(0, 0, 0, 0.25);
+}
+.fflogs-fight {
+  display: grid;
+  grid-template-columns: 16px 1fr auto auto;
+  gap: 8px;
+  align-items: center;
+  padding: 4px 6px;
+  background: transparent;
+  border: 1px solid transparent;
+  color: var(--text-dim);
+  text-align: left;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  cursor: pointer;
+}
+.fflogs-fight:hover { background: rgba(255, 255, 255, 0.04); color: var(--text); }
+.fflogs-fight.on   { border-color: var(--cyan); background: rgba(0, 229, 255, 0.08); color: var(--text); }
+.fflogs-fight .ff-fight-status { color: var(--bad); font-weight: 600; }
+.fflogs-fight.kill .ff-fight-status { color: var(--good); }
+.fflogs-fight .ff-fight-dur { color: var(--text-faint); }
+.fflogs-fight .ff-fight-pct { color: var(--warn); font-size: 10px; }
+.fflogs-empty { padding: 12px; color: var(--text-faint); font-style: italic; }
+
+.fflogs-preview {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  max-height: 220px;
+  overflow-y: auto;
+  border: 1px solid var(--line);
+  padding: 4px;
+  background: rgba(0, 0, 0, 0.25);
+  font-family: 'JetBrains Mono', monospace;
+}
+.fflogs-mech {
+  display: grid;
+  grid-template-columns: 50px 18px 1fr auto;
+  gap: 8px;
+  align-items: center;
+  padding: 2px 4px;
+  font-size: 10px;
+  color: var(--text);
+}
+.fflogs-mech:nth-child(even) { background: rgba(255, 255, 255, 0.025); }
+.ff-mech-time { color: var(--text-dim); }
+.ff-mech-kind { text-align: center; padding: 0 3px; border: 1px solid currentColor; font-size: 8px; }
+.ff-mech-kind.k-physical { color: var(--phys-ranged); }
+.ff-mech-kind.k-magical  { color: var(--magic-ranged); }
+.ff-mech-kind.k-pure     { color: var(--text-faint); }
+.ff-mech-name { color: var(--text); }
+.ff-mech-targets { color: var(--text-faint); font-size: 9px; }
+.fflogs-more { text-align: center; padding: 4px; color: var(--text-faint); font-style: italic; }
+
 /* Hide all edit-only affordances under .app.read-only. JS guards also
    early-return in handlers, so this is mostly visual deduping. */
 .app.read-only .timeline-toolbar { display: none; }
