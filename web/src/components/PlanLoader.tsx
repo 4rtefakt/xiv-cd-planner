@@ -1,6 +1,7 @@
 import { useEffect } from 'react';
 import { api } from '../api/client';
 import { usePlanStore } from '../state/planStore';
+import { resetHistory } from '../state/historyManager';
 
 const SLUG_RE = /^\/p\/([\w-]+)$/;
 
@@ -35,6 +36,9 @@ export function PlanLoader() {
           mechanics: plan.mechanics,
           uses: plan.uses,
         });
+        // Wipe the in-memory history baseline so Ctrl+Z after a fresh
+        // load can't revert the user to the empty-default party.
+        resetHistory();
       })
       .catch((err) => {
         if (cancelled) return;

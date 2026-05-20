@@ -9,6 +9,7 @@ import { AddMechanicModal } from './components/modals/AddMechanicModal';
 import { AutoSaver } from './components/AutoSaver';
 import { PlanLoader } from './components/PlanLoader';
 import { usePlanStore } from './state/planStore';
+import { initHistory, undo, redo } from './state/historyManager';
 import { api } from './api/client';
 import './styles/components.css';
 
@@ -35,6 +36,34 @@ export function App() {
       cancelled = true;
     };
   }, [setJobs, setJobsError, setJobsLoading]);
+
+  // Undo/redo : single keydown listener at the document level, with the
+  // usual "skip when typing in an input" carveout.
+  useEffect(() => {
+    const cleanup = initHistory();
+    const onKey = (e: KeyboardEvent) => {
+      const target = e.target as HTMLElement | null;
+      const tag = target?.tagName ?? '';
+      if (tag === 'INPUT' || tag === 'TEXTAREA' || target?.isContentEditable) return;
+      const meta = e.ctrlKey || e.metaKey;
+      if (!meta) return;
+      const k = e.key.toLowerCase();
+      const isUndo = k === 'z' && !e.shiftKey;
+      const isRedo = k === 'y' || (k === 'z' && e.shiftKey);
+      if (isUndo) {
+        e.preventDefault();
+        undo();
+      } else if (isRedo) {
+        e.preventDefault();
+        redo();
+      }
+    };
+    document.addEventListener('keydown', onKey);
+    return () => {
+      cleanup();
+      document.removeEventListener('keydown', onKey);
+    };
+  }, []);
 
   return (
     <div className="app">

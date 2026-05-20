@@ -181,9 +181,17 @@ interface PlanState {
   // Actions — reset
   resetEncounter(): void;
 
-  // Actions — persistence (C.5)
+  // Actions — persistence (C.5) + history (M.3)
   setSlug(slug: string | null): void;
   setSaveStatus(status: SaveStatus): void;
+  /** Used by historyManager to swap back to a past snapshot. */
+  restoreSnapshot(snap: {
+    encounter: Encounter;
+    party: Player[];
+    bossLanes: BossLane[];
+    mechanics: Mechanic[];
+    uses: Use[];
+  }): void;
   /**
    * Replace the entire plan content from a server payload. Used by
    * PlanLoader on initial /p/:slug fetch. Resets transient UI state so
@@ -364,6 +372,15 @@ export const usePlanStore = create<PlanState>((set) => ({
 
   setSlug: (slug) => set({ slug }),
   setSaveStatus: (saveStatus) => set({ saveStatus }),
+  restoreSnapshot: (snap) =>
+    set({
+      encounter: snap.encounter,
+      party: snap.party,
+      bossLanes: snap.bossLanes,
+      mechanics: snap.mechanics,
+      uses: snap.uses,
+      // Don't touch transient UI ; undo a placement shouldn't reopen a modal.
+    }),
   hydratePlan: (plan) =>
     set((s) => ({
       slug: plan.meta?.slug ?? s.slug,
