@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from 'react';
 import type { Job, Player } from '../../types';
 import { JobIcon } from '../Icon';
 import { usePlanStore } from '../../state/planStore';
+import { useT } from '../../i18n';
 
 interface PlayerCardProps {
   player: Player;
@@ -26,6 +27,7 @@ export function PlayerCard({ player, job }: PlayerCardProps) {
   const setPlayerName = usePlanStore((s) => s.setPlayerName);
   const switchPlayerJob = usePlanStore((s) => s.switchPlayerJob);
   const readOnly = usePlanStore((s) => s.readOnly);
+  const t = useT();
 
   const [editingName, setEditingName] = useState(false);
   const [draft, setDraft] = useState(player.name);
@@ -42,7 +44,7 @@ export function PlayerCard({ player, job }: PlayerCardProps) {
           className={`pcm-job-icon${readOnly ? '' : ' pcm-job-icon-editable'}`}
           role={readOnly ? undefined : 'button'}
           tabIndex={readOnly ? undefined : 0}
-          title={readOnly ? job?.name : 'Change job'}
+          title={readOnly ? job?.name : t('player.changeJob')}
           onClick={(e) => {
             if (readOnly) return;
             e.stopPropagation();
@@ -71,7 +73,7 @@ export function PlayerCard({ player, job }: PlayerCardProps) {
               className={`pcm-name${readOnly ? '' : ' pcm-name-editable'}`}
               role={readOnly ? undefined : 'button'}
               tabIndex={readOnly ? undefined : 0}
-              title={readOnly ? undefined : 'Click to rename'}
+              title={readOnly ? undefined : t('player.clickRename')}
               onClick={() => {
                 if (readOnly) return;
                 setDraft(player.name);
@@ -144,6 +146,7 @@ function JobPickerPopover({
   onPick: (code: string) => void;
 }) {
   const ref = useRef<HTMLDivElement>(null);
+  const t = useT();
 
   // Tank↔tank, heal↔heal. DPS slots can swap to ANY DPS sub-role —
   // a raid roster routinely flexes a melee slot to a caster or vice
@@ -175,7 +178,7 @@ function JobPickerPopover({
 
   return (
     <div ref={ref} className="job-picker-pop">
-      <div className="job-picker-label">CHANGE JOB</div>
+      <div className="job-picker-label">{t('player.pickerLabel')}</div>
       <div className="job-picker-grid">
         {options.map((j) => (
           <button

@@ -2,17 +2,10 @@ import { useEffect, useRef, useState } from 'react';
 import type { DamageKind, MechCategory, Player } from '../../types';
 import { fmt, parseTime } from '../../lib/time';
 import { usePlanStore } from '../../state/planStore';
+import { useT } from '../../i18n';
 
-const CATEGORIES: { key: MechCategory; label: string; help: string }[] = [
-  { key: 'damage',    label: 'DAMAGE',    help: 'Deals damage to one or more players' },
-  { key: 'placement', label: 'PLACEMENT', help: "Positional cue — no damage to mitigate" },
-];
-
-const DAMAGE_KINDS: { key: DamageKind; label: string }[] = [
-  { key: 'physical', label: 'PHYSICAL' },
-  { key: 'magical',  label: 'MAGICAL' },
-  { key: 'pure',     label: 'PURE' },
-];
+const CATEGORY_KEYS: MechCategory[] = ['damage', 'placement'];
+const DAMAGE_KINDS: DamageKind[] = ['physical', 'magical', 'pure'];
 
 let mechSeq = 0;
 
@@ -33,6 +26,7 @@ export function AddMechanicModal() {
   const addMechanic = usePlanStore((s) => s.addMechanic);
   const updateMechanic = usePlanStore((s) => s.updateMechanic);
   const removeMechanic = usePlanStore((s) => s.removeMechanic);
+  const t = useT();
 
   const [name, setName] = useState('');
   const [timeStr, setTimeStr] = useState('');
@@ -113,22 +107,22 @@ export function AddMechanicModal() {
     >
       <div className="modal modal-wide" onClick={(e) => e.stopPropagation()}>
         <div className="modal-header">
-          ◆ {isEdit ? 'EDIT' : 'ADD'} MECHANIC
+          {isEdit ? t('mech.editTitle') : t('mech.addTitle')}
         </div>
         <div className="modal-body">
           <div className="modal-row">
-            <label className="modal-label">Name</label>
+            <label className="modal-label">{t('mech.name')}</label>
             <input
               ref={nameRef}
               className="modal-input"
               type="text"
-              placeholder="e.g. Brutal Impact"
+              placeholder={t('mech.namePlaceholder')}
               value={name}
               onChange={(e) => setName(e.target.value)}
             />
           </div>
           <div className="modal-row">
-            <label className="modal-label">Timestamp</label>
+            <label className="modal-label">{t('mech.timestamp')}</label>
             <input
               className="modal-input"
               type="text"
@@ -140,35 +134,39 @@ export function AddMechanicModal() {
           </div>
 
           <div className="modal-row">
-            <label className="modal-label">Category</label>
+            <label className="modal-label">{t('mech.category')}</label>
             <div className="category-grid">
-              {CATEGORIES.map((c) => (
-                <div
-                  key={c.key}
-                  className={`category-opt c-${c.key}${category === c.key ? ' selected' : ''}`}
-                  onClick={() => setCategory(c.key)}
-                  title={c.help}
-                >
-                  <div className="category-label">{c.label}</div>
-                  <div className="category-help">{c.help}</div>
-                </div>
-              ))}
+              {CATEGORY_KEYS.map((key) => {
+                const label = t(key === 'damage' ? 'mech.cat.damage' : 'mech.cat.placement');
+                const help = t(key === 'damage' ? 'mech.cat.damage.help' : 'mech.cat.placement.help');
+                return (
+                  <div
+                    key={key}
+                    className={`category-opt c-${key}${category === key ? ' selected' : ''}`}
+                    onClick={() => setCategory(key)}
+                    title={help}
+                  >
+                    <div className="category-label">{label}</div>
+                    <div className="category-help">{help}</div>
+                  </div>
+                );
+              })}
             </div>
           </div>
 
           {category === 'damage' && (
             <>
               <div className="modal-row">
-                <label className="modal-label">Damage Kind</label>
+                <label className="modal-label">{t('mech.damageKind')}</label>
                 <div className="kind-grid">
-                  {DAMAGE_KINDS.map((k) => (
+                  {DAMAGE_KINDS.map((key) => (
                     <div
-                      key={k.key}
-                      className={`kind-opt k-${k.key}${damageKind === k.key ? ' selected' : ''}`}
-                      onClick={() => setDamageKind(k.key)}
-                      title={k.key === 'pure' ? 'Cannot be mitigated' : ''}
+                      key={key}
+                      className={`kind-opt k-${key}${damageKind === key ? ' selected' : ''}`}
+                      onClick={() => setDamageKind(key)}
+                      title={key === 'pure' ? t('mech.kind.pure.help') : ''}
                     >
-                      {k.label}
+                      {t(`mech.kind.${key}` as 'mech.kind.physical' | 'mech.kind.magical' | 'mech.kind.pure')}
                     </div>
                   ))}
                 </div>
@@ -176,7 +174,7 @@ export function AddMechanicModal() {
 
               <div className="modal-row">
                 <label className="modal-label">
-                  Targets ({targets.length}/{party.length})
+                  {t('mech.targets')} ({targets.length}/{party.length})
                 </label>
                 <TargetsPicker party={party} targets={targets} onChange={setTargets} />
               </div>
@@ -190,13 +188,13 @@ export function AddMechanicModal() {
               className="modal-btn modal-btn-danger"
               onClick={deleteAndClose}
             >
-              DELETE
+              {t('btn.delete')}
             </button>
           )}
           <div style={{ flex: 1 }} />
-          <button type="button" className="modal-btn" onClick={close}>CANCEL</button>
+          <button type="button" className="modal-btn" onClick={close}>{t('btn.cancel')}</button>
           <button type="button" className="modal-btn primary" onClick={confirm}>
-            {isEdit ? 'SAVE' : 'CONFIRM'}
+            {isEdit ? t('btn.save') : t('btn.confirm')}
           </button>
         </div>
       </div>
@@ -217,6 +215,7 @@ function TargetsPicker({
   targets: string[];
   onChange: (next: string[]) => void;
 }) {
+  const t = useT();
   const tanks  = party.filter((p) => p.badge === 'MT' || p.badge === 'OT');
   const heals  = party.filter((p) => p.badge === 'H1' || p.badge === 'H2');
   const melee  = party.filter((p) => p.badge === 'M1' || p.badge === 'M2');
@@ -248,25 +247,25 @@ function TargetsPicker({
     <div className="targets-picker">
       <div className="targets-shortcuts">
         <button type="button" className="targets-shortcut" onClick={() => setIds(party.map((p) => p.id))}>
-          ALL
+          {t('mech.targetsShortcut.all')}
         </button>
         <button type="button" className="targets-shortcut" onClick={() => setIds(tanks.map((p) => p.id))}>
-          TANKS
+          {t('mech.targetsShortcut.tanks')}
         </button>
         <button type="button" className="targets-shortcut" onClick={() => setIds(heals.map((p) => p.id))}>
-          HEALS
+          {t('mech.targetsShortcut.heals')}
         </button>
         <button type="button" className="targets-shortcut" onClick={() => setIds(melee.map((p) => p.id))}>
-          MELEE
+          {t('mech.targetsShortcut.melee')}
         </button>
         <button type="button" className="targets-shortcut" onClick={() => setIds(ranged.map((p) => p.id))}>
-          RANGED
+          {t('mech.targetsShortcut.ranged')}
         </button>
         <button type="button" className="targets-shortcut" onClick={() => setIds(lp1.map((p) => p.id))} title="MT · H1 · M1 · R1">
-          LIGHT 1
+          {t('mech.targetsShortcut.lp1')}
         </button>
         <button type="button" className="targets-shortcut" onClick={() => setIds(lp2.map((p) => p.id))} title="OT · H2 · M2 · R2">
-          LIGHT 2
+          {t('mech.targetsShortcut.lp2')}
         </button>
       </div>
       <div className="targets-grid">

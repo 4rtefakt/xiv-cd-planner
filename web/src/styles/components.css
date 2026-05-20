@@ -92,6 +92,25 @@
   border-color: var(--good);
 }
 
+/* Language toggle (FR | EN). The active language renders in cyan ;
+   the other dim. Click anywhere on the pill to flip. */
+.header-lang {
+  display: inline-flex;
+  gap: 4px;
+  padding: 4px 8px;
+  border: 1px solid var(--line-bright);
+  background: rgba(0, 0, 0, 0.25);
+  color: var(--text-faint);
+  cursor: pointer;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.12em;
+  transition: border-color 0.15s;
+}
+.header-lang:hover { border-color: var(--cyan); }
+.header-lang .on { color: var(--cyan); font-weight: 600; }
+.header-lang .sep { opacity: 0.4; }
+
 /* FFLogs import modal — fight picker + mech preview */
 .fflogs-fights {
   display: flex;

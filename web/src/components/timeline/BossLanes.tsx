@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from 'react';
 import { usePlanStore } from '../../state/planStore';
 import { fmt, pct, xToTime } from '../../lib/time';
 import { computeMechSlots } from '../../lib/mitigation';
+import { useT } from '../../i18n';
 import { MechanicMarker } from './Mechanic';
 
 /**
@@ -17,6 +18,7 @@ export function BossLanesLeft() {
   const removeBossLane = usePlanStore((s) => s.removeBossLane);
   const setBossLaneName = usePlanStore((s) => s.setBossLaneName);
   const readOnly = usePlanStore((s) => s.readOnly);
+  const t = useT();
   const [editingId, setEditingId] = useState<string | null>(null);
 
   return (
@@ -49,7 +51,7 @@ export function BossLanesLeft() {
               className={`lane-name${readOnly ? '' : ' lane-name-editable'}`}
               role={readOnly ? undefined : 'button'}
               tabIndex={readOnly ? undefined : 0}
-              title={readOnly ? undefined : 'Rename lane'}
+              title={readOnly ? undefined : t('lane.rename')}
               onClick={() => {
                 if (readOnly) return;
                 setEditingId(lane.id);
@@ -63,7 +65,7 @@ export function BossLanesLeft() {
               className="lane-remove"
               role="button"
               tabIndex={0}
-              title="Remove lane"
+              title={t('lane.remove')}
               onClick={(e) => {
                 e.stopPropagation();
                 removeBossLane(lane.id);

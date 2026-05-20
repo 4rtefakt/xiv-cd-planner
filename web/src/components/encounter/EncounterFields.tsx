@@ -1,6 +1,8 @@
 import { usePlanStore } from '../../state/planStore';
+import { useT } from '../../i18n';
 
 export function EncounterFields() {
+  const t = useT();
   const encounter = usePlanStore((s) => s.encounter);
   const mechanicsCount = usePlanStore((s) => s.mechanics.length);
   const usesCount = usePlanStore((s) => s.uses.length);
@@ -12,7 +14,7 @@ export function EncounterFields() {
   return (
     <div className="enc-row">
       <div className="enc-field">
-        <div className="enc-label">FIGHT NAME</div>
+        <div className="enc-label">{t('enc.fightName')}</div>
         <input
           className="enc-input"
           type="text"
@@ -22,7 +24,7 @@ export function EncounterFields() {
         />
       </div>
       <div className="enc-field">
-        <div className="enc-label">DURATION (s)</div>
+        <div className="enc-label">{t('enc.duration')}</div>
         <input
           className="enc-input-mono"
           type="number"
@@ -38,7 +40,7 @@ export function EncounterFields() {
         />
       </div>
       <div className="enc-field">
-        <div className="enc-label">ILVL</div>
+        <div className="enc-label">{t('enc.ilvl')}</div>
         <input
           className="enc-input-mono"
           type="number"
@@ -51,11 +53,11 @@ export function EncounterFields() {
         />
       </div>
       <div className="enc-field">
-        <div className="enc-label">MECHS</div>
+        <div className="enc-label">{t('enc.mechs')}</div>
         <div className="enc-value-mono">{pad2(mechanicsCount)}</div>
       </div>
       <div className="enc-field">
-        <div className="enc-label">ASSIGNS</div>
+        <div className="enc-label">{t('enc.assigns')}</div>
         <div className="enc-value-mono">{pad2(usesCount)}</div>
       </div>
     </div>

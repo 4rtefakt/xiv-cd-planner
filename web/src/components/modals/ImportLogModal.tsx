@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from 'react';
 import { api, type FFLogsFight, type FFLogsFightData, type FFLogsReport } from '../../api/client';
 import { fmt } from '../../lib/time';
 import { usePlanStore } from '../../state/planStore';
+import { useT } from '../../i18n';
 
 interface Props {
   open: boolean;
@@ -16,6 +17,7 @@ interface Props {
  */
 export function ImportLogModal({ open, onClose }: Props) {
   const importFightFromLog = usePlanStore((s) => s.importFightFromLog);
+  const t = useT();
 
   const [url, setUrl] = useState('');
   const [report, setReport] = useState<FFLogsReport | null>(null);
@@ -99,16 +101,16 @@ export function ImportLogModal({ open, onClose }: Props) {
       }}
     >
       <div className="modal modal-wide" onClick={(e) => e.stopPropagation()}>
-        <div className="modal-header">◆ IMPORT FROM FFLOGS</div>
+        <div className="modal-header">{t('imp.log.title')}</div>
         <div className="modal-body">
           <div className="modal-row">
-            <label className="modal-label">FFLogs URL or report code</label>
+            <label className="modal-label">{t('imp.log.urlLabel')}</label>
             <div style={{ display: 'flex', gap: 6 }}>
               <input
                 ref={urlRef}
                 className="modal-input"
                 type="text"
-                placeholder="https://www.fflogs.com/reports/abcDEF123"
+                placeholder={t('imp.log.urlPlaceholder')}
                 value={url}
                 onChange={(e) => setUrl(e.target.value)}
                 onKeyDown={(e) => {
@@ -121,7 +123,7 @@ export function ImportLogModal({ open, onClose }: Props) {
                 disabled={!url.trim() || loading === 'report'}
                 onClick={loadReport}
               >
-                {loading === 'report' ? '...' : 'LOAD'}
+                {loading === 'report' ? '...' : t('btn.load')}
               </button>
             </div>
           </div>
@@ -136,7 +138,7 @@ export function ImportLogModal({ open, onClose }: Props) {
               </div>
               <div className="fflogs-fights">
                 {report.fights.length === 0 && (
-                  <div className="fflogs-empty">No encounter fights in this report.</div>
+                  <div className="fflogs-empty">{t('imp.log.noFights')}</div>
                 )}
                 {report.fights.map((f) => (
                   <button
@@ -157,15 +159,15 @@ export function ImportLogModal({ open, onClose }: Props) {
             </div>
           )}
 
-          {loading === 'fight' && <div className="modal-hint">Loading fight events…</div>}
+          {loading === 'fight' && <div className="modal-hint">{t('imp.log.loadingFight')}</div>}
 
           {preview && (
             <div className="modal-row">
               <div className="modal-label">
-                Preview · {preview.mechanics.length} mechanic{preview.mechanics.length === 1 ? '' : 's'}{' '}
-                in {fmt(preview.fightDuration)} ·{' '}
+                {t(preview.mechanics.length === 1 ? 'imp.log.previewMech' : 'imp.log.previewMechs', { n: preview.mechanics.length })}{' '}
+                {t('imp.log.in')} {fmt(preview.fightDuration)} ·{' '}
                 <span style={{ color: 'var(--cyan)' }}>
-                  {preview.bossLanes.length} lane{preview.bossLanes.length === 1 ? '' : 's'}
+                  {t(preview.bossLanes.length === 1 ? 'imp.log.previewLane' : 'imp.log.previewLanes', { n: preview.bossLanes.length })}
                 </span>
                 {preview.bossLanes.length > 0 && (
                   <span style={{ marginLeft: 8, opacity: 0.7, fontFamily: "'JetBrains Mono', monospace", fontSize: 10 }}>
@@ -187,28 +189,24 @@ export function ImportLogModal({ open, onClose }: Props) {
                   </div>
                 ))}
                 {preview.mechanics.length > 80 && (
-                  <div className="fflogs-more">… +{preview.mechanics.length - 80} more</div>
+                  <div className="fflogs-more">{t('imp.log.more', { n: preview.mechanics.length - 80 })}</div>
                 )}
               </div>
-              <div className="modal-hint">
-                Targets are mapped heuristically : full party → raidwide,
-                single hit → MT. Anything in between leaves targets empty
-                so you can fill them in by clicking the mech in the timeline.
-              </div>
+              <div className="modal-hint">{t('imp.log.targetsHint')}</div>
             </div>
           )}
         </div>
         <div className="modal-footer">
           <div style={{ flex: 1 }} />
-          <button type="button" className="modal-btn" onClick={onClose}>CANCEL</button>
+          <button type="button" className="modal-btn" onClick={onClose}>{t('btn.cancel')}</button>
           <button
             type="button"
             className="modal-btn primary"
             disabled={!preview || preview.mechanics.length === 0}
             onClick={confirm}
-            title={preview && preview.mechanics.length === 0 ? 'No mechs found in this fight (very short pull or parse miss)' : ''}
+            title={preview && preview.mechanics.length === 0 ? t('imp.log.noMechsTitle') : ''}
           >
-            IMPORT
+            {t('btn.import')}
           </button>
         </div>
       </div>

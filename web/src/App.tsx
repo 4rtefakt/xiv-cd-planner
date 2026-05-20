@@ -11,6 +11,7 @@ import { PlanLoader } from './components/PlanLoader';
 import { usePlanStore } from './state/planStore';
 import { initHistory, undo, redo } from './state/historyManager';
 import { api } from './api/client';
+import { useT } from './i18n';
 import './styles/components.css';
 
 export function App() {
@@ -68,27 +69,26 @@ export function App() {
   }, []);
 
   const readOnly = usePlanStore((s) => s.readOnly);
+  const t = useT();
 
   return (
     <div className={`app${readOnly ? ' read-only' : ''}`}>
       <Header />
 
-      {jobsLoading && <div className="app-loading">Loading jobs…</div>}
+      {jobsLoading && <div className="app-loading">{t('app.loadingJobs')}</div>}
       {jobsError && (
-        <div className="app-error">
-          Failed to load jobs: {jobsError} — did you run `npm run seed:kv -- --local`?
-        </div>
+        <div className="app-error">{t('app.failJobs', { msg: jobsError })}</div>
       )}
 
       {jobsCount > 0 && (
         <>
           <Section
             num="01"
-            title="ENCOUNTER & PARTY"
+            title={t('section.party.title')}
             meta={
               <>
-                BLIND-PROG MODE <span className="sep">/</span> 8 PLAYERS{' '}
-                <span className="sep">/</span> {jobsCount} JOBS
+                {t('section.party.meta1')} <span className="sep">/</span> {t('section.party.meta2')}{' '}
+                <span className="sep">/</span> {t('section.party.meta3', { n: jobsCount })}
               </>
             }
           >
@@ -98,12 +98,8 @@ export function App() {
 
           <Section
             num="02"
-            title="TIMELINE"
-            meta={
-              <>
-                CLICK BOSS LANE → ADD MECHANIC <span className="sep">/</span> DRAG CHIP → DROP ON ABILITY ROW
-              </>
-            }
+            title={t('section.timeline.title')}
+            meta={t('section.timeline.help')}
           >
             <TimelineShell />
           </Section>

@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import type { Player } from '../../types';
 import { usePlanStore } from '../../state/planStore';
+import { useT } from '../../i18n';
 
 const BADGES = ['MT', 'OT', 'H1', 'H2', 'M1', 'M2', 'R1', 'R2'] as const;
 type Badge = (typeof BADGES)[number];
@@ -87,6 +88,7 @@ export function ImportPartyModal({ open, onClose }: Props) {
   const [text, setText] = useState('');
   const [error, setError] = useState<string | null>(null);
   const importParty = usePlanStore((s) => s.importParty);
+  const t = useT();
 
   useEffect(() => {
     if (!open) return;
@@ -140,10 +142,10 @@ export function ImportPartyModal({ open, onClose }: Props) {
       }}
     >
       <div className="modal modal-wide" onClick={(e) => e.stopPropagation()}>
-        <div className="modal-header">◆ IMPORT PARTY</div>
+        <div className="modal-header">{t('imp.party.title')}</div>
         <div className="modal-body">
           <div className="modal-row">
-            <label className="modal-label">JSON</label>
+            <label className="modal-label">{t('imp.party.label')}</label>
             <textarea
               ref={ref}
               className="modal-input modal-textarea"
@@ -167,8 +169,8 @@ export function ImportPartyModal({ open, onClose }: Props) {
         </div>
         <div className="modal-footer">
           <div style={{ flex: 1 }} />
-          <button type="button" className="modal-btn" onClick={onClose}>CANCEL</button>
-          <button type="button" className="modal-btn primary" onClick={confirm}>IMPORT</button>
+          <button type="button" className="modal-btn" onClick={onClose}>{t('btn.cancel')}</button>
+          <button type="button" className="modal-btn primary" onClick={confirm}>{t('btn.import')}</button>
         </div>
       </div>
     </div>

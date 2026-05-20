@@ -13,6 +13,7 @@
 import { create } from 'zustand';
 import type { BossLane, DamageKind, Encounter, Job, MechCategory, MechType, Mechanic, Player, Use } from '../types';
 import { demoParty } from '../data/demoParty';
+import { loadStoredLang, storeLang, type Lang } from '../i18n';
 
 export type SaveStatus = 'idle' | 'saving' | 'saved' | 'error';
 
@@ -97,6 +98,9 @@ interface PlanState {
   /** Read-only view : URL ?view=read disables all mutation affordances
    *  (drag, click-to-place, modals, rename, …) and suspends AutoSaver. */
   readOnly: boolean;
+  /** UI language. Persisted in localStorage (see i18n.ts). Initial
+   *  value comes from localStorage or navigator.language detection. */
+  lang: Lang;
 
   // Plan content
   encounter: Encounter;
@@ -218,6 +222,7 @@ interface PlanState {
   setSlug(slug: string | null): void;
   setSaveStatus(status: SaveStatus): void;
   setReadOnly(readOnly: boolean): void;
+  setLang(lang: Lang): void;
   /** Used by historyManager to swap back to a past snapshot. */
   restoreSnapshot(snap: {
     encounter: Encounter;
@@ -258,6 +263,7 @@ export const usePlanStore = create<PlanState>((set) => ({
   saveStatus: 'idle',
   _skipNextSave: false,
   readOnly: false,
+  lang: loadStoredLang(),
   encounter: defaultEncounter,
   party: demoParty,
   bossLanes: [{ id: 'lane-1', name: 'BOSS A' }],
@@ -466,6 +472,10 @@ export const usePlanStore = create<PlanState>((set) => ({
   setSlug: (slug) => set({ slug }),
   setSaveStatus: (saveStatus) => set({ saveStatus }),
   setReadOnly: (readOnly) => set({ readOnly }),
+  setLang: (lang) => {
+    storeLang(lang);
+    set({ lang });
+  },
   restoreSnapshot: (snap) =>
     set({
       encounter: snap.encounter,

@@ -1,6 +1,7 @@
 import { useEffect, useRef } from 'react';
 import type { MechCategory } from '../../types';
 import { usePlanStore } from '../../state/planStore';
+import { useT } from '../../i18n';
 import { TimelineAxis } from './TimelineAxis';
 import { BossLanesLeft, BossLanesRight } from './BossLanes';
 import { PlayerGroupsLeft, PlayerGroupsRight } from './PlayerGroups';
@@ -10,7 +11,12 @@ import { PlayerGroupsLeft, PlayerGroupsRight } from './PlayerGroups';
  * boss lanes. Hidden mechs still exist in plan data and still count
  * for coverage — this is pure render-time filtering.
  */
-function VisibilityToggle({ category, label }: { category: MechCategory; label: string }) {
+function VisibilityToggle({ category, label, titleShow, titleHide }: {
+  category: MechCategory;
+  label: string;
+  titleShow: string;
+  titleHide: string;
+}) {
   const hidden = usePlanStore((s) => s.hiddenMechCategories.includes(category));
   const toggle = usePlanStore((s) => s.toggleMechCategoryVisibility);
   return (
@@ -18,7 +24,7 @@ function VisibilityToggle({ category, label }: { category: MechCategory; label: 
       type="button"
       className={`tl-btn tl-vis ${hidden ? 'off' : 'on'} c-${category}`}
       onClick={() => toggle(category)}
-      title={hidden ? `Show ${label.toLowerCase()} mechs` : `Hide ${label.toLowerCase()} mechs`}
+      title={hidden ? titleShow : titleHide}
     >
       <span className="tl-vis-dot">{hidden ? '○' : '●'}</span>
       {label}
@@ -54,6 +60,7 @@ export function TimelineShell() {
   // a hook subscription — the handler re-installs on mount only.
 
   const party = usePlanStore((s) => s.party);
+  const t = useT();
 
   const quickAdd = (variant: 'raidwide' | 'tankbuster' | 'autos' | 'placement') => {
     const t = Math.round(fightDuration / 2);
@@ -176,29 +183,39 @@ export function TimelineShell() {
   return (
     <>
       <div className="timeline-toolbar">
-        <span className="tl-tool-label">QUICK-ADD MECH</span>
-        <button type="button" className="tl-btn raidwide"   onClick={() => quickAdd('raidwide')}>RAIDWIDE</button>
-        <button type="button" className="tl-btn tankbuster" onClick={() => quickAdd('tankbuster')}>TANKBUSTER</button>
-        <button type="button" className="tl-btn autos"      onClick={() => quickAdd('autos')}>AUTOS</button>
-        <button type="button" className="tl-btn custom"     onClick={() => quickAdd('placement')}>PLACEMENT</button>
+        <span className="tl-tool-label">{t('tl.quickAdd')}</span>
+        <button type="button" className="tl-btn raidwide"   onClick={() => quickAdd('raidwide')}>{t('tl.raidwide')}</button>
+        <button type="button" className="tl-btn tankbuster" onClick={() => quickAdd('tankbuster')}>{t('tl.tankbuster')}</button>
+        <button type="button" className="tl-btn autos"      onClick={() => quickAdd('autos')}>{t('tl.autos')}</button>
+        <button type="button" className="tl-btn custom"     onClick={() => quickAdd('placement')}>{t('tl.placement')}</button>
         <div className="tl-divider" />
-        <span className="tl-tool-label">LANES</span>
+        <span className="tl-tool-label">{t('tl.lanes')}</span>
         <button type="button" className="tl-btn add-lane" onClick={addBossLane}>
-          ADD BOSS LANE
+          {t('tl.addLane')}
         </button>
         <button
           type="button"
           className="tl-btn reset no-plus"
           onClick={() => {
-            if (window.confirm('Reset all mechanics and assignments?')) resetEncounter();
+            if (window.confirm(t('tl.resetConfirm'))) resetEncounter();
           }}
         >
-          ◆ RESET
+          {t('tl.reset')}
         </button>
         <div className="tl-divider" />
-        <span className="tl-tool-label">VIEW</span>
-        <VisibilityToggle category="damage" label="DAMAGE" />
-        <VisibilityToggle category="placement" label="PLACEMENT" />
+        <span className="tl-tool-label">{t('tl.view')}</span>
+        <VisibilityToggle
+          category="damage"
+          label={t('tl.view.damage')}
+          titleShow={t('tl.view.showDamage')}
+          titleHide={t('tl.view.hideDamage')}
+        />
+        <VisibilityToggle
+          category="placement"
+          label={t('tl.view.placement')}
+          titleShow={t('tl.view.showPlacement')}
+          titleHide={t('tl.view.hidePlacement')}
+        />
       </div>
 
       <div className="timeline-shell">
