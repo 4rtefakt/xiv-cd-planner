@@ -65,12 +65,37 @@ export interface FFLogsFightData {
   mechanics: FFLogsMechanic[];
 }
 
+/**
+ * Extract an FFLogs report code from any form the user might paste :
+ *   - bare code       : "1bf2JXRCLvA9cgMD"
+ *   - report URL      : "https://www.fflogs.com/reports/1bf2JXRCLvA9cgMD"
+ *   - URL with query  : "…/reports/1bf2JXRCLvA9cgMD?fight=last&type=damage-done"
+ *   - URL with hash   : "…/reports/1bf2JXRCLvA9cgMD#fight=12"
+ *   - regional subdomain : "https://fr.fflogs.com/reports/abc123"
+ * Returns null when nothing report-shaped is found.
+ */
+export function extractReportCode(input: string): string | null {
+  const trimmed = input.trim();
+  if (!trimmed) return null;
+  if (/^[a-zA-Z0-9]{12,24}$/.test(trimmed)) return trimmed;
+  const m = trimmed.match(/\/reports\/([a-zA-Z0-9]{8,32})/);
+  return m ? m[1]! : null;
+}
+
 export const api = {
   health(): Promise<{ ok: boolean; env: string; time: string }> {
     return req('/health');
   },
   fflogsReport(codeOrUrl: string): Promise<FFLogsReport> {
-    return req(`/fflogs/report/${encodeURIComponent(codeOrUrl)}`);
+    const code = extractReportCode(codeOrUrl);
+    if (!code) {
+      return Promise.reject(
+        new Error(
+          'Pasted text doesn\'t look like an FFLogs URL or report code. Expected something like https://www.fflogs.com/reports/abcDEF123 or a 12-20 char code.',
+        ),
+      );
+    }
+    return req(`/fflogs/report/${code}`);
   },
   fflogsFight(code: string, fightId: number): Promise<FFLogsFightData> {
     return req('/fflogs/fight', { method: 'POST', body: JSON.stringify({ code, fightId }) });
