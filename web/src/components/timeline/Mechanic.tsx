@@ -8,9 +8,12 @@ interface MechanicProps {
   mech: MechanicT;
   uses: Use[];
   fightDuration: number;
+  /** Vertical slot for stacking labels when multiple mechs cluster in
+   *  time. 0 = baseline (default), 1+ = shifted down by 22px × slot. */
+  slot?: number;
 }
 
-export function MechanicMarker({ mech, uses, fightDuration }: MechanicProps) {
+export function MechanicMarker({ mech, uses, fightDuration, slot = 0 }: MechanicProps) {
   const jobs = usePlanStore((s) => s.jobs);
   const partySize = usePlanStore((s) => s.party.length);
   const removeMechanic = usePlanStore((s) => s.removeMechanic);
@@ -56,9 +59,10 @@ export function MechanicMarker({ mech, uses, fightDuration }: MechanicProps) {
         (isPlacement ? ' is-placement' : '') +
         (previewCovered ? ' preview-covered' : '')
       }
-      style={{ left: `${pct(mech.time, fightDuration)}%` }}
+      style={{ left: `${pct(mech.time, fightDuration)}%`, ['--mech-slot' as any]: slot }}
       data-mech-id={mech.id}
       data-category={mech.category}
+      data-slot={slot}
       data-damage-kind={damageKind}
       draggable={!readOnly}
       onDragStart={(e) => {

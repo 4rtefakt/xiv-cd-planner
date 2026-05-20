@@ -116,6 +116,30 @@ export function abilityIndex(jobs: { abilities: Ability[] }[]): Map<string, Abil
 }
 
 /**
+ * Greedy slot assignment so mech LABELS don't visually collide on the
+ * boss-lane axis. Mechs are placed in the lowest slot whose previous
+ * occupant ended (logically) more than `gapS` seconds ago. The function
+ * returns both the per-mech mapping and the slot count, so the lane
+ * height (left + right column) can grow to accommodate the deepest stack.
+ */
+export function computeMechSlots(
+  mechs: Mechanic[],
+  gapS = 14,
+): { slotOf: Map<string, number>; slotCount: number } {
+  const slotOf = new Map<string, number>();
+  const slotLastT: number[] = [];
+  const sorted = [...mechs].sort((a, b) => a.time - b.time);
+  for (const m of sorted) {
+    let slot = 0;
+    while (slot < slotLastT.length && m.time - slotLastT[slot]! < gapS) slot++;
+    if (slot === slotLastT.length) slotLastT.push(m.time);
+    else slotLastT[slot] = m.time;
+    slotOf.set(m.id, slot);
+  }
+  return { slotOf, slotCount: Math.max(1, slotLastT.length) };
+}
+
+/**
  * Two CdUse windows on the same player + ability cannot overlap their
  * recast cycles — once you cast it, you wait the full recast before the
  * next one. Returns the conflicting Use (if any) so callers can render

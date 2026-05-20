@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { usePlanStore } from '../../state/planStore';
 import { fmt, pct, xToTime } from '../../lib/time';
+import { computeMechSlots } from '../../lib/mitigation';
 import { MechanicMarker } from './Mechanic';
 
 /**
@@ -11,6 +12,7 @@ import { MechanicMarker } from './Mechanic';
  */
 export function BossLanesLeft() {
   const bossLanes = usePlanStore((s) => s.bossLanes);
+  const mechanics = usePlanStore((s) => s.mechanics);
   const removeBossLane = usePlanStore((s) => s.removeBossLane);
   const setBossLaneName = usePlanStore((s) => s.setBossLaneName);
   const readOnly = usePlanStore((s) => s.readOnly);
@@ -18,8 +20,17 @@ export function BossLanesLeft() {
 
   return (
     <div className="left-boss-lanes">
-      {bossLanes.map((lane, idx) => (
-        <div key={lane.id} className="boss-row-left boss-row-height">
+      {bossLanes.map((lane, idx) => {
+        // Match the right column's height by computing the same slot
+        // count from the same set of mechanics.
+        const laneMechs = mechanics.filter((m) => m.lane_id === lane.id);
+        const { slotCount } = computeMechSlots(laneMechs);
+        return (
+        <div
+          key={lane.id}
+          className="boss-row-left"
+          style={{ ['--mech-slots' as any]: slotCount }}
+        >
           <span className="lane-num">{String(idx + 1).padStart(2, '0')}</span>
           {editingId === lane.id ? (
             <LaneNameEditor
@@ -155,6 +166,8 @@ function BossLaneRow({
   const [hover, setHover] = useState<{ t: number } | null>(null);
   const readOnly = usePlanStore((s) => s.readOnly);
 
+  const { slotOf, slotCount } = computeMechSlots(mechanics);
+
   // Are we hovering this lane while a mechanic from THIS lane is being dragged?
   // Mechanics stay within their own lane on reposition (cross-lane moves
   // would change the mechanic's lane_id, which we don't support here yet).
@@ -166,7 +179,8 @@ function BossLaneRow({
   return (
     <div
       ref={ref}
-      className={`boss-row-right boss-row-height${draggingOurMech ? ' drop-target' : ''}`}
+      className={`boss-row-right${draggingOurMech ? ' drop-target' : ''}`}
+      style={{ ['--mech-slots' as any]: slotCount }}
       data-lane-id={laneId}
       onMouseMove={(e) => {
         if ((e.target as HTMLElement).closest('.mechanic')) {
@@ -205,7 +219,13 @@ function BossLaneRow({
         </div>
       )}
       {mechanics.map((m) => (
-        <MechanicMarker key={m.id} mech={m} uses={uses} fightDuration={fightDuration} />
+        <MechanicMarker
+          key={m.id}
+          mech={m}
+          uses={uses}
+          fightDuration={fightDuration}
+          slot={slotOf.get(m.id) ?? 0}
+        />
       ))}
     </div>
   );

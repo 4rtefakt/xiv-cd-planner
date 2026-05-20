@@ -626,6 +626,14 @@
 
 /* ===== BOSS LANE ===== */
 .boss-row-height { height: 56px; }
+
+/* Boss rows grow vertically with the deepest mech-label stack. Each
+   additional slot adds 22px of label height (matches --mech-slot
+   shifts below). Min 56px = the baseline single-slot row. */
+.boss-row-left,
+.boss-row-right {
+  min-height: calc(56px + (max(var(--mech-slots, 1), 1) - 1) * 22px);
+}
 .boss-row-left {
   display: flex;
   align-items: center;
@@ -1099,7 +1107,7 @@
 }
 .mech-label {
   position: absolute;
-  bottom: 14px;
+  bottom: calc(14px + var(--mech-slot, 0) * 22px);
   left: 50%;
   transform: translateX(-50%);
   font-family: 'Chakra Petch', sans-serif;
@@ -1115,7 +1123,7 @@
 }
 .mech-time {
   position: absolute;
-  bottom: 1px;
+  bottom: calc(1px + var(--mech-slot, 0) * 22px);
   left: 50%;
   transform: translateX(-50%);
   font-family: 'JetBrains Mono', monospace;

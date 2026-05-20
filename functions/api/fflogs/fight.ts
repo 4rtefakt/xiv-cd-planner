@@ -73,6 +73,9 @@ interface AggregatedMech {
   targetNames: string[];  // unique player names hit
   damage_kind: 'physical' | 'magical' | 'pure';
   sample_amount: number;  // for debugging — total damage in the group
+  /** xivapi action id (= FFLogs abilityGameID). Used post-aggregation to
+   *  look up the real AttackType, which gives us a reliable damage_kind. */
+  game_id?: number;
 }
 
 const FIGHT_HEADER_QUERY = `
@@ -115,22 +118,40 @@ const EVENTS_QUERY = `
 const GROUP_WINDOW_MS = 3500;
 
 /**
- * FFLogs ability.type → our damage_kind enum.
+ * xivapi AttackType.ID → our damage_kind enum.
  *
- * The numeric codes come from xivapi's "Attack Type" table :
- *   1 = slashing  2 = piercing  3 = blunt   (all physical)
- *   5 = magical   6 = breath
- *   7 = unique / limit-break (unmitigable → treat as pure)
- *   etc.
- *
- * Default to magical for unknowns since the vast majority of raid
- * damage spells are magical.
+ * Codes match the FFXIV "Attack Type" table :
+ *   1 = slashing   2 = piercing   3 = blunt   4 = shot   (all physical)
+ *   5 = magic      6 = breath    7 = sound                (magical-ish)
+ *   8 = limit-break (unmitigable → treat as pure)
+ *   null = ability doesn't have a damage type (buff/trigger) — default
+ *          to magical since named raid mechs that DO damage without a
+ *          type set are usually scripted magical AoEs.
  */
-function deriveDamageKind(abilityType: number | undefined): 'physical' | 'magical' | 'pure' {
-  if (abilityType === 1 || abilityType === 2 || abilityType === 3) return 'physical';
-  if (abilityType === 5 || abilityType === 6) return 'magical';
-  if (abilityType === 7 || abilityType === 8) return 'pure';
+function attackTypeIdToDamageKind(id: number | null | undefined): 'physical' | 'magical' | 'pure' {
+  if (id === 1 || id === 2 || id === 3 || id === 4) return 'physical';
+  if (id === 5 || id === 6 || id === 7) return 'magical';
+  if (id === 8) return 'pure';
   return 'magical';
+}
+
+/** Batch-fetch xivapi AttackType.ID for a set of action gameIDs. Fails
+ *  silently per-id (network errors map to undefined → magical default). */
+async function fetchAttackTypes(gameIds: number[]): Promise<Map<number, number | null>> {
+  const out = new Map<number, number | null>();
+  await Promise.all(
+    gameIds.map(async (id) => {
+      try {
+        const res = await fetch(`https://xivapi.com/action/${id}?columns=AttackType.ID`);
+        if (!res.ok) return;
+        const j = (await res.json()) as { AttackType?: { ID: number | null } };
+        out.set(id, j.AttackType?.ID ?? null);
+      } catch {
+        /* ignore — leaves the id unset, default kicks in */
+      }
+    }),
+  );
+  return out;
 }
 
 export const onRequestPost: PagesFunction<FFLogsEnv> = async (ctx) => {
@@ -215,11 +236,14 @@ export const onRequestPost: PagesFunction<FFLogsEnv> = async (ctx) => {
             name,
             time: Math.max(0, relSec),
             targetNames: [],
-            damage_kind: deriveDamageKind(abilityType),
+            damage_kind: 'magical', // refined below via xivapi lookup
             sample_amount: 0,
+            game_id: ev.abilityGameID,
           });
           lastGroupIdxByName.set(name, idx);
         }
+        // Track abilityType for debug only — discarded below in favour of xivapi.
+        void abilityType;
         const g = groups[idx]!;
         g.sample_amount += ev.amount ?? 0;
         if (!g.targetNames.includes(targetActor.name)) g.targetNames.push(targetActor.name);
@@ -230,6 +254,19 @@ export const onRequestPost: PagesFunction<FFLogsEnv> = async (ctx) => {
     }
 
     groups.sort((a, b) => a.time - b.time);
+
+    // Resolve damage_kind via xivapi AttackType for each unique gameID.
+    // FFLogs' own ability.type is a bitfield about behaviour (auto, AoE,
+    // DoT, ...), not damage school — so we go to the source of truth.
+    const uniqueIds = Array.from(new Set(groups.map((g) => g.game_id).filter((v): v is number => v != null)));
+    if (uniqueIds.length > 0) {
+      const typeMap = await fetchAttackTypes(uniqueIds);
+      for (const g of groups) {
+        if (g.game_id != null) {
+          g.damage_kind = attackTypeIdToDamageKind(typeMap.get(g.game_id));
+        }
+      }
+    }
 
     return jsonResp({
       fightName: fight.name,
