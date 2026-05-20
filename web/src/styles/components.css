@@ -1183,10 +1183,20 @@
   z-index: 4;
   cursor: pointer;
 }
-.mechanic.raidwide   { --mech-color: var(--raidwide);   --mech-glow: rgba(255, 159, 67, 0.55); }
-.mechanic.tankbuster { --mech-color: var(--tankbuster); --mech-glow: rgba(255, 79, 110, 0.55); }
-.mechanic.autos      { --mech-color: var(--autos);      --mech-glow: rgba(90, 100, 120, 0.35); }
-.mechanic.custom     { --mech-color: var(--custom);     --mech-glow: rgba(192, 132, 252, 0.45); }
+/* Single color scheme : damage_kind for damage mechs, 'placement' for
+   the rest. The cap, the vertical line, the label border and the
+   coverage badge all derive from --mech-color set here. */
+.mechanic[data-color="physical"]  { --mech-color: var(--phys-ranged);   --mech-glow: rgba(255, 181, 71, 0.55); }
+.mechanic[data-color="magical"]   { --mech-color: var(--magic-ranged);  --mech-glow: rgba(192, 132, 252, 0.55); }
+.mechanic[data-color="pure"]      { --mech-color: var(--text-faint);    --mech-glow: rgba(61, 74, 102, 0.3); }
+.mechanic[data-color="placement"] { --mech-color: var(--cyan);          --mech-glow: rgba(0, 229, 255, 0.45); }
+/* Legacy visualType classes kept as no-ops — old plans in storage may
+   still carry a raidwide / tankbuster / autos / custom tag in their
+   class string, but the color now always comes from data-color. */
+.mechanic.raidwide,
+.mechanic.tankbuster,
+.mechanic.autos,
+.mechanic.custom { /* intentionally empty */ }
 
 .mech-cap {
   position: absolute;
@@ -1198,12 +1208,8 @@
   transform: translateX(-50%) rotate(45deg);
   box-shadow: 0 0 8px var(--mech-glow);
 }
-/* Damage-kind drives the cap color too — phys=amber, magic=violet,
-   pure=grey. Keeps the line + label at the visualType color so
-   raidwide/tankbuster shape stays readable. */
-.mechanic[data-damage-kind="physical"] .mech-cap { background: var(--phys-ranged); box-shadow: 0 0 8px rgba(255, 181, 71, 0.55); }
-.mechanic[data-damage-kind="magical"]  .mech-cap { background: var(--magic-ranged); box-shadow: 0 0 8px rgba(192, 132, 252, 0.45); }
-.mechanic[data-damage-kind="pure"]     .mech-cap { background: var(--text-faint);   box-shadow: none; }
+/* (cap color is now inherited via --mech-color from data-color above —
+   no separate damage-kind override needed.) */
 
 /* ×N superscript over the cap when the mech aggregates multi-hit
    FFLogs damage events. Counter-rotated so the text reads upright
@@ -1259,7 +1265,15 @@
   background: var(--panel-3);
   padding: 0 4px;
   white-space: nowrap;
+  /* Hidden by default — only shown on hover (see .mechanic:hover rule
+     below). The timestamp is already discoverable via the label's
+     `title` tooltip "NAME · 0:27", but the inline hover gives a
+     bigger / faster readable version when needed. */
+  opacity: 0;
+  transition: opacity 0.12s;
+  pointer-events: none;
 }
+.mechanic:hover .mech-time { opacity: 1; }
 .mech-coverage {
   position: absolute;
   top: 4px;

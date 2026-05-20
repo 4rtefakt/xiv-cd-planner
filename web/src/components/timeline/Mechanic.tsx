@@ -44,13 +44,10 @@ export function MechanicMarker({ mech, uses, fightDuration, slot = 0 }: Mechanic
   const previewCovered = !!previewCov && previewCov.pct > coverage.pct;
   const showingPreview = previewCov && previewCov.pct !== coverage.pct;
 
-  // Placement gets a ◇ glyph in the label since the cap color is the
-  // same grey as "no damage" — without the glyph the user couldn't
-  // tell a placement marker apart from a barely-visible mech. Damage
-  // mechs OMIT the kind glyph since the cap is already colored
-  // (phys=amber, magic=violet, pure=grey) — redundant info.
-  const kindGlyph = isPlacement ? '◇' : null;
-  const kindClass = isPlacement ? 'k-placement' : `k-${damageKind}`;
+  // The "color key" drives the whole mech's color (line, label, cap,
+  // coverage badge). One scheme for both : damage_kind for damage
+  // mechs (phys/magic/pure), 'placement' for non-damaging cues.
+  const colorKey = isPlacement ? 'placement' : damageKind;
 
   return (
     <div
@@ -64,6 +61,7 @@ export function MechanicMarker({ mech, uses, fightDuration, slot = 0 }: Mechanic
       data-category={mech.category}
       data-slot={slot}
       data-damage-kind={damageKind}
+      data-color={colorKey}
       draggable={!readOnly}
       onDragStart={(e) => {
         if (readOnly) { e.preventDefault(); return; }
@@ -92,9 +90,8 @@ export function MechanicMarker({ mech, uses, fightDuration, slot = 0 }: Mechanic
             bloat the label below. */}
         {hitCount > 1 && <span className="mech-hitcount">×{hitCount}</span>}
       </div>
-      <div className="mech-label" title={displayLabel}>
+      <div className="mech-label" title={`${displayLabel} · ${fmt(mech.time)}`}>
         <span className="mech-label-text">{displayLabel}</span>
-        {kindGlyph && <span className={`mech-kind ${kindClass}`}>{kindGlyph}</span>}
       </div>
       <div className="mech-time">{fmt(mech.time)}</div>
       {/* Coverage badge : skipped when there's nothing meaningful to

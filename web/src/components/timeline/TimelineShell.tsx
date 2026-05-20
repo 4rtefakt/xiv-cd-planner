@@ -304,10 +304,10 @@ export function TimelineShell() {
       </div>
 
       <div className="legend">
-        <div className="legend-item"><div className="legend-line" style={{ '--sw': 'var(--raidwide)' } as React.CSSProperties} />RAIDWIDE</div>
-        <div className="legend-item"><div className="legend-line" style={{ '--sw': 'var(--tankbuster)' } as React.CSSProperties} />TANKBUSTER</div>
-        <div className="legend-item"><div className="legend-line" style={{ '--sw': 'var(--autos)' } as React.CSSProperties} />AUTOS</div>
-        <div className="legend-item"><div className="legend-line" style={{ '--sw': 'var(--custom)' } as React.CSSProperties} />CUSTOM</div>
+        <div className="legend-item"><div className="legend-line" style={{ '--sw': 'var(--phys-ranged)' } as React.CSSProperties} />PHYSICAL</div>
+        <div className="legend-item"><div className="legend-line" style={{ '--sw': 'var(--magic-ranged)' } as React.CSSProperties} />MAGICAL</div>
+        <div className="legend-item"><div className="legend-line" style={{ '--sw': 'var(--text-faint)' } as React.CSSProperties} />PURE</div>
+        <div className="legend-item"><div className="legend-line" style={{ '--sw': 'var(--cyan)' } as React.CSSProperties} />PLACEMENT</div>
         <div className="legend-item"><div className="legend-swatch" style={{ '--sw': 'var(--cyan)' } as React.CSSProperties} />PERSONAL</div>
         <div className="legend-item"><div className="legend-swatch" style={{ '--sw': 'var(--pink)' } as React.CSSProperties} />PARTY</div>
         <div className="legend-item"><div className="legend-swatch" style={{ '--sw': 'var(--heal)' } as React.CSSProperties} />HEAL</div>
