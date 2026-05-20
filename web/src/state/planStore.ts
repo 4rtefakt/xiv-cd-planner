@@ -119,6 +119,10 @@ interface PlanState {
    *  view-state — mechs in this set still exist in plan data and still
    *  count for coverage, they just don't render. */
   hiddenMechCategories: MechCategory[];
+  /** Compact rendering mode for the boss timeline : labels are hidden,
+   *  only the cap diamonds + damage_kind badges remain. Hover surfaces
+   *  the full label as a tooltip. Toggleable from the VIEW toolbar. */
+  compactMechs: boolean;
 
   // Actions — reference
   setJobs(jobs: Job[]): void;
@@ -214,6 +218,7 @@ interface PlanState {
   expandPlayer(playerId: string): void;
   setZoom(zoom: number): void;
   toggleMechCategoryVisibility(cat: MechCategory): void;
+  toggleCompactMechs(): void;
 
   // Actions — reset
   resetEncounter(): void;
@@ -272,6 +277,7 @@ export const usePlanStore = create<PlanState>((set) => ({
   collapsed: {},
   zoom: 2,
   hiddenMechCategories: [],
+  compactMechs: false,
 
   setJobs: (jobs) => set({ jobs, jobsLoading: false, jobsError: null }),
   setJobsError: (jobsError) => set({ jobsError, jobsLoading: false }),
@@ -309,17 +315,17 @@ export const usePlanStore = create<PlanState>((set) => ({
         else if (seenCount === 1) targets = tankId ? [tankId] : [];
         else targets = []; // user to assign
         const laneId = (m.source_name && nameToLane.get(m.source_name)) ?? fallbackLaneId;
-        // Append the hit count when > 1 so multi-hit casts (Akh Morn ×5,
-        // Electrocution ×3 ticks) read clearly in the timeline.
-        const hitSuffix = m.hit_count && m.hit_count > 1 ? ` ×${m.hit_count}` : '';
         return {
           id: `mech-fflogs-${Date.now()}-${i}`,
           lane_id: laneId,
-          name: m.name.toUpperCase() + hitSuffix,
+          name: m.name.toUpperCase(),
           time: m.time,
           category: 'damage' as const,
           targets,
           damage_kind: m.damage_kind,
+          // hit_count stored separately ; rendered as a ×N superscript
+          // over the cap instead of glued to the name.
+          hit_count: m.hit_count && m.hit_count > 1 ? m.hit_count : undefined,
         };
       });
       return {
@@ -461,6 +467,7 @@ export const usePlanStore = create<PlanState>((set) => ({
         ? s.hiddenMechCategories.filter((c) => c !== cat)
         : [...s.hiddenMechCategories, cat],
     })),
+  toggleCompactMechs: () => set((s) => ({ compactMechs: !s.compactMechs })),
 
   resetEncounter: () =>
     set({

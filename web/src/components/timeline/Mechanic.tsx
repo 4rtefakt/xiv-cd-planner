@@ -1,6 +1,7 @@
 import type { Mechanic as MechanicT, Use } from '../../types';
 import { fmt, pct } from '../../lib/time';
 import { abilityIndex, computeCoverage, deriveMechType } from '../../lib/mitigation';
+import { splitMechName } from '../../lib/mechRender';
 import { usePlanStore } from '../../state/planStore';
 import { useMemo } from 'react';
 
@@ -27,6 +28,7 @@ export function MechanicMarker({ mech, uses, fightDuration, slot = 0 }: Mechanic
   const visualType = deriveMechType(mech, partySize);
   const damageKind = mech.damage_kind ?? 'magical';
   const isPlacement = mech.category === 'placement';
+  const { label: displayLabel, hitCount } = splitMechName(mech);
 
   // Hypothetical coverage if the user committed the currently-previewed
   // placement. We compute it ONLY when a meaningful preview exists, so
@@ -86,32 +88,45 @@ export function MechanicMarker({ mech, uses, fightDuration, slot = 0 }: Mechanic
         openEditMechanic(mech);
       }}
     >
-      <div className="mech-cap" />
-      <div className="mech-label">
-        {mech.name}
+      <div className="mech-cap">
+        {/* ×N as a superscript over the cap when the mech aggregates
+            multiple FFLogs damage events. Kept compact so it doesn't
+            bloat the label below. */}
+        {hitCount > 1 && <span className="mech-hitcount">×{hitCount}</span>}
+      </div>
+      <div className="mech-label" title={displayLabel}>
+        <span className="mech-label-text">{displayLabel}</span>
         <span className={`mech-kind ${kindClass}`}>{kindGlyph}</span>
       </div>
       <div className="mech-time">{fmt(mech.time)}</div>
-      <div
-        className={
-          `mech-coverage cov-${showingPreview ? previewCov!.tier : coverage.tier}` +
-          (showingPreview ? ' is-preview' : '')
-        }
-      >
-        {coverage.placement
-          ? '·'
-          : coverage.pure
-            ? '—'
-            : showingPreview
-              ? (
-                <>
-                  <span className="cov-from">{coverage.pct}</span>
-                  <span className="cov-arrow">→</span>
-                  <span className="cov-to">{previewCov!.pct}%</span>
-                </>
-              )
-              : `${coverage.pct}%`}
-      </div>
+      {/* Coverage badge : skipped when there's nothing meaningful to
+          show (damage mech at 0% with no preview) to reduce visual
+          noise on freshly-imported timelines. */}
+      {(coverage.placement
+        || coverage.pure
+        || coverage.pct > 0
+        || showingPreview) && (
+        <div
+          className={
+            `mech-coverage cov-${showingPreview ? previewCov!.tier : coverage.tier}` +
+            (showingPreview ? ' is-preview' : '')
+          }
+        >
+          {coverage.placement
+            ? '·'
+            : coverage.pure
+              ? '—'
+              : showingPreview
+                ? (
+                  <>
+                    <span className="cov-from">{coverage.pct}</span>
+                    <span className="cov-arrow">→</span>
+                    <span className="cov-to">{previewCov!.pct}%</span>
+                  </>
+                )
+                : `${coverage.pct}%`}
+        </div>
+      )}
       {!readOnly && (
         <span
           className="mech-remove"

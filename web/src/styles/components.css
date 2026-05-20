@@ -174,6 +174,19 @@
 .ff-mech-targets { color: var(--text-faint); font-size: 9px; }
 .fflogs-more { text-align: center; padding: 4px; color: var(--text-faint); font-style: italic; }
 
+/* Compact mode : keep only the cap + the ×N badge + the damage-kind
+   pip ; hide the label, time and coverage to give the timeline lots
+   of breathing room. The full info is still discoverable via the
+   native title tooltip on the cap. */
+.app.compact-mechs .mech-label,
+.app.compact-mechs .mech-time,
+.app.compact-mechs .mech-coverage { display: none; }
+.app.compact-mechs .mechanic { width: 1px; }
+.app.compact-mechs .mech-cap { top: 4px; width: 14px; height: 14px; }
+.app.compact-mechs .mech-hitcount { top: -8px; font-size: 7px; }
+
+.tl-btn.tl-vis.c-compact { --vis-color: var(--cyan); }
+
 /* Hide all edit-only affordances under .app.read-only. JS guards also
    early-return in handlers, so this is mostly visual deduping. */
 .app.read-only .timeline-toolbar { display: none; }
@@ -1177,29 +1190,63 @@
 
 .mech-cap {
   position: absolute;
-  top: 4px;
+  top: 2px;
   left: 50%;
-  width: 10px;
-  height: 10px;
+  width: 12px;
+  height: 12px;
   background: var(--mech-color);
   transform: translateX(-50%) rotate(45deg);
   box-shadow: 0 0 8px var(--mech-glow);
+}
+/* Damage-kind drives the cap color too — phys=amber, magic=violet,
+   pure=grey. Keeps the line + label at the visualType color so
+   raidwide/tankbuster shape stays readable. */
+.mechanic[data-damage-kind="physical"] .mech-cap { background: var(--phys-ranged); box-shadow: 0 0 8px rgba(255, 181, 71, 0.55); }
+.mechanic[data-damage-kind="magical"]  .mech-cap { background: var(--magic-ranged); box-shadow: 0 0 8px rgba(192, 132, 252, 0.45); }
+.mechanic[data-damage-kind="pure"]     .mech-cap { background: var(--text-faint);   box-shadow: none; }
+
+/* ×N superscript over the cap when the mech aggregates multi-hit
+   FFLogs damage events. Counter-rotated so the text reads upright
+   even though the cap is rotated 45deg. */
+.mech-hitcount {
+  position: absolute;
+  top: -10px;
+  left: 50%;
+  transform: translateX(-50%) rotate(-45deg);
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 8px;
+  font-weight: 600;
+  letter-spacing: 0;
+  color: var(--cyan);
+  background: var(--bg);
+  padding: 0 2px;
+  white-space: nowrap;
+  pointer-events: none;
 }
 .mech-label {
   position: absolute;
   bottom: calc(14px + var(--mech-slot, 0) * 22px);
   left: 50%;
   transform: translateX(-50%);
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  max-width: 160px;
   font-family: 'Chakra Petch', sans-serif;
-  font-size: 10px;
+  font-size: 9px;
   font-weight: 600;
   color: var(--mech-color);
-  letter-spacing: 0.12em;
+  letter-spacing: 0.1em;
   text-transform: uppercase;
   white-space: nowrap;
   padding: 2px 6px;
   background: var(--panel-3);
   border: 1px solid var(--mech-color);
+}
+.mech-label-text {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 130px;
 }
 .mech-time {
   position: absolute;

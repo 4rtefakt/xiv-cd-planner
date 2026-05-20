@@ -56,6 +56,7 @@ export interface Mechanic {
   category: MechCategory;
   targets: string[];
   damage_kind?: DamageKind;
+  hit_count?: number;
   type?: MechType;
 }
 

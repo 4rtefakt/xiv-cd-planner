@@ -68,6 +68,10 @@ export interface Mechanic {
    *  picked targets yet). Length === party.length means raidwide. */
   targets: string[];
   damage_kind?: DamageKind;   // only meaningful when category === 'damage'
+  /** Number of FFLogs damage events aggregated into this mech (multi-hit
+   *  AoEs and DoT ticks). 1 or undefined = single hit. Rendered as a
+   *  superscript ×N badge over the cap when > 1. */
+  hit_count?: number;
   /** Legacy field kept for migration ; new mechs derive their visual
    *  type from category + targets via deriveMechType(). */
   type?: MechType;

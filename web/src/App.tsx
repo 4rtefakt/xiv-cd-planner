@@ -69,10 +69,11 @@ export function App() {
   }, []);
 
   const readOnly = usePlanStore((s) => s.readOnly);
+  const compactMechs = usePlanStore((s) => s.compactMechs);
   const t = useT();
 
   return (
-    <div className={`app${readOnly ? ' read-only' : ''}`}>
+    <div className={`app${readOnly ? ' read-only' : ''}${compactMechs ? ' compact-mechs' : ''}`}>
       <Header />
 
       {jobsLoading && <div className="app-loading">{t('app.loadingJobs')}</div>}

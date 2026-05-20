@@ -6,6 +6,24 @@ import { TimelineAxis } from './TimelineAxis';
 import { BossLanesLeft, BossLanesRight } from './BossLanes';
 import { PlayerGroupsLeft, PlayerGroupsRight } from './PlayerGroups';
 
+/** Compact-mode pill — shrinks every boss mech to its diamond cap. */
+function CompactToggle() {
+  const compact = usePlanStore((s) => s.compactMechs);
+  const toggle = usePlanStore((s) => s.toggleCompactMechs);
+  const t = useT();
+  return (
+    <button
+      type="button"
+      className={`tl-btn tl-vis ${compact ? 'on' : 'off'} c-compact`}
+      onClick={toggle}
+      title={compact ? t('tl.view.compact.off') : t('tl.view.compact.on')}
+    >
+      <span className="tl-vis-dot">{compact ? '◆' : '◇'}</span>
+      {t('tl.view.compact')}
+    </button>
+  );
+}
+
 /**
  * Eye-toggle pill : click flips the category's visibility on the
  * boss lanes. Hidden mechs still exist in plan data and still count
@@ -251,6 +269,7 @@ export function TimelineShell() {
           titleShow={t('tl.view.showPlacement')}
           titleHide={t('tl.view.hidePlacement')}
         />
+        <CompactToggle />
       </div>
 
       <div className="timeline-shell">
