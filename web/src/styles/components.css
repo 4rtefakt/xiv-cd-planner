@@ -624,7 +624,12 @@
 }
 .tl-right {
   overflow-x: auto;
-  overflow-y: hidden;
+  /* `clip` (not `hidden`) is critical : it clips the vertical overflow
+     without establishing a scroll container, so position:sticky on
+     children can relate to the document scroll and freeze the boss
+     lanes at the top of the viewport. `hidden` would trap sticky
+     inside .tl-right and break the freeze. */
+  overflow-y: clip;
   position: relative;
 }
 .tl-canvas {
