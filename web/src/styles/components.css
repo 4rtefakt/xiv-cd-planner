@@ -1010,6 +1010,29 @@
 .mech-coverage.cov-bad  { --cov-color: var(--bad);  box-shadow: 0 0 6px rgba(255, 79, 110, 0.5); }
 .mech-coverage.cov-warn { --cov-color: var(--warn); }
 .mech-coverage.cov-good { --cov-color: var(--good); box-shadow: 0 0 6px rgba(74, 222, 128, 0.4); }
+.mech-coverage.cov-pure { --cov-color: var(--text-faint); font-weight: 500; }
+
+/* Small kind badge inside the mechanic label : P / M / ✕ */
+.mech-kind {
+  display: inline-block;
+  margin-left: 6px;
+  padding: 0 3px;
+  border: 1px solid currentColor;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 8px;
+  line-height: 1.3;
+  opacity: 0.85;
+}
+.mech-kind.k-physical { color: var(--phys-ranged); }
+.mech-kind.k-magical  { color: var(--magic-ranged); }
+.mech-kind.k-pure     { color: var(--text-faint); }
+
+/* Pure mechanics get a more "dead" cap : less glow, hatched feel */
+.mechanic.kind-pure .mech-cap {
+  background: transparent;
+  border: 1px solid var(--mech-color);
+  box-shadow: none;
+}
 .mech-remove {
   position: absolute;
   top: 4px;
@@ -1163,6 +1186,34 @@
 .type-opt.t-tankbuster { --type-color: var(--tankbuster); }
 .type-opt.t-autos      { --type-color: var(--autos); }
 .type-opt.t-custom     { --type-color: var(--custom); }
+
+/* Damage-kind grid (3 columns) re-uses the type-opt look */
+.kind-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 6px;
+}
+.kind-opt {
+  padding: 7px 9px;
+  border: 1px solid var(--type-color);
+  color: var(--type-color);
+  background: rgba(0, 0, 0, 0.2);
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  cursor: pointer;
+  text-align: center;
+  transition: all 0.15s;
+}
+.kind-opt.selected {
+  background: var(--type-color);
+  color: var(--bg);
+  box-shadow: 0 0 10px var(--type-color);
+}
+.kind-opt.k-physical { --type-color: var(--phys-ranged); }
+.kind-opt.k-magical  { --type-color: var(--magic-ranged); }
+.kind-opt.k-pure     { --type-color: var(--text-faint); }
 .modal-footer {
   padding: 14px 20px;
   border-top: 1px solid var(--line);

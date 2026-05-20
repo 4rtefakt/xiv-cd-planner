@@ -7,6 +7,8 @@
 export type Role = 'tank' | 'heal' | 'dps';
 export type MitType = 'personal' | 'party' | 'heal';
 export type MechType = 'raidwide' | 'tankbuster' | 'autos' | 'custom';
+export type DamageKind = 'physical' | 'magical' | 'pure';
+export type MitKind = 'all' | 'physical' | 'magical';
 
 export interface Ability {
   id: string;
@@ -15,6 +17,7 @@ export interface Ability {
   effect: number;
   mit_type: MitType;
   mit_potency: number;
+  mit_kind?: MitKind;
   icon: string;
   level_unlocked: number;
   verified?: boolean;
@@ -49,6 +52,7 @@ export interface Mechanic {
   name: string;
   time: number;
   type: MechType;
+  damage_kind?: DamageKind;
 }
 
 export interface Use {

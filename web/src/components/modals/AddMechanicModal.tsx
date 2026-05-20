@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
-import type { MechType } from '../../types';
+import type { DamageKind, MechType } from '../../types';
 import { fmt, parseTime } from '../../lib/time';
 import { usePlanStore } from '../../state/planStore';
 
@@ -8,6 +8,12 @@ const TYPES: { key: MechType; label: string }[] = [
   { key: 'tankbuster', label: 'TANKBUSTER' },
   { key: 'autos',      label: 'AUTOS' },
   { key: 'custom',     label: 'CUSTOM' },
+];
+
+const DAMAGE_KINDS: { key: DamageKind; label: string }[] = [
+  { key: 'physical', label: 'PHYSICAL' },
+  { key: 'magical',  label: 'MAGICAL' },
+  { key: 'pure',     label: 'PURE' },
 ];
 
 let mechSeq = 0;
@@ -21,6 +27,7 @@ export function AddMechanicModal() {
   const [name, setName] = useState('');
   const [timeStr, setTimeStr] = useState('');
   const [type, setType] = useState<MechType>('raidwide');
+  const [damageKind, setDamageKind] = useState<DamageKind>('magical');
   const nameRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
@@ -28,6 +35,7 @@ export function AddMechanicModal() {
     setName('');
     setTimeStr(fmt(modal.time));
     setType(modal.type);
+    setDamageKind(modal.damage_kind);
     const t = setTimeout(() => nameRef.current?.focus(), 50);
     return () => clearTimeout(t);
   }, [modal]);
@@ -41,7 +49,7 @@ export function AddMechanicModal() {
     window.addEventListener('keydown', onKey);
     return () => window.removeEventListener('keydown', onKey);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [modal, name, timeStr, type]);
+  }, [modal, name, timeStr, type, damageKind]);
 
   if (!modal) return null;
 
@@ -55,6 +63,7 @@ export function AddMechanicModal() {
       name: finalName,
       time: t,
       type,
+      damage_kind: damageKind,
     });
     close();
   }
@@ -87,7 +96,7 @@ export function AddMechanicModal() {
             />
           </div>
           <div className="modal-row">
-            <label className="modal-label">Damage Type</label>
+            <label className="modal-label">Mechanic Type</label>
             <div className="type-grid">
               {TYPES.map((t) => (
                 <div
@@ -96,6 +105,21 @@ export function AddMechanicModal() {
                   onClick={() => setType(t.key)}
                 >
                   {t.label}
+                </div>
+              ))}
+            </div>
+          </div>
+          <div className="modal-row">
+            <label className="modal-label">Damage Kind</label>
+            <div className="kind-grid">
+              {DAMAGE_KINDS.map((k) => (
+                <div
+                  key={k.key}
+                  className={`kind-opt k-${k.key}${damageKind === k.key ? ' selected' : ''}`}
+                  onClick={() => setDamageKind(k.key)}
+                  title={k.key === 'pure' ? 'Cannot be mitigated' : ''}
+                >
+                  {k.label}
                 </div>
               ))}
             </div>

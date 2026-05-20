@@ -6,6 +6,14 @@
 export type Role = 'tank' | 'heal' | 'dps';
 export type MitType = 'personal' | 'party' | 'heal';
 export type MechType = 'raidwide' | 'tankbuster' | 'autos' | 'custom';
+export type DamageKind = 'physical' | 'magical' | 'pure';
+/**
+ * Which damage kinds an ability mitigates. 'all' = both physical and
+ * magical (the default for almost every defensive). Magic-only and
+ * phys-only abilities (Dark Mind, Magick Barrier, Bulwark…) set the
+ * narrower value so the coverage calc ignores them on the wrong kind.
+ */
+export type MitKind = 'all' | 'physical' | 'magical';
 
 export interface Ability {
   id: string;                 // e.g. 'PLD.HallowedGround'
@@ -14,6 +22,7 @@ export interface Ability {
   effect: number;             // seconds
   mit_type: MitType;
   mit_potency: number;        // realistic % per ability (e.g. Reprisal=10, Holmgang=100)
+  mit_kind?: MitKind;         // default 'all' when omitted
   icon: string;               // absolute URL (xivapi /i/folder/id.png)
   icon_glyph?: string;        // symbolic name for SVG fallback ('shield', 'aegis', …)
   icon_id?: number;           // raw xivapi icon id, for debugging
@@ -50,6 +59,7 @@ export interface Mechanic {
   name: string;
   time: number;               // seconds
   type: MechType;
+  damage_kind?: DamageKind;   // default 'magical' when omitted
 }
 
 export interface Use {

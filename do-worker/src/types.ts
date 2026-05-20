@@ -9,6 +9,7 @@
 export type Role = 'tank' | 'heal' | 'dps';
 export type MitType = 'personal' | 'party' | 'heal';
 export type MechType = 'raidwide' | 'tankbuster' | 'autos' | 'custom';
+export type DamageKind = 'physical' | 'magical' | 'pure';
 
 export interface Player {
   id: string;
@@ -28,6 +29,7 @@ export interface Mechanic {
   name: string;
   time: number;
   type: MechType;
+  damage_kind?: DamageKind;
 }
 
 export interface Use {

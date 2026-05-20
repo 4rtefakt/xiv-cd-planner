@@ -11,7 +11,7 @@
  */
 
 import { create } from 'zustand';
-import type { BossLane, Encounter, Job, MechType, Mechanic, Player, Use } from '../types';
+import type { BossLane, DamageKind, Encounter, Job, MechType, Mechanic, Player, Use } from '../types';
 import { demoParty } from '../data/demoParty';
 
 export type SaveStatus = 'idle' | 'saving' | 'saved' | 'error';
@@ -20,6 +20,7 @@ export interface MechanicModalState {
   laneId: string;
   time: number;
   type: MechType;
+  damage_kind: DamageKind;
 }
 
 /**
@@ -109,7 +110,7 @@ interface PlanState {
   removeBossLane(id: string): void;
 
   // Actions — modal
-  openMechanicModal(laneId: string, time: number, type?: MechType): void;
+  openMechanicModal(laneId: string, time: number, type?: MechType, damage_kind?: DamageKind): void;
   setMechanicModal(patch: Partial<MechanicModalState>): void;
   closeMechanicModal(): void;
 
@@ -210,8 +211,8 @@ export const usePlanStore = create<PlanState>((set) => ({
       mechanics: s.mechanics.filter((m) => m.lane_id !== id),
     })),
 
-  openMechanicModal: (laneId, time, type = 'raidwide') =>
-    set({ mechanicModal: { laneId, time, type } }),
+  openMechanicModal: (laneId, time, type = 'raidwide', damage_kind = 'magical') =>
+    set({ mechanicModal: { laneId, time, type, damage_kind } }),
   setMechanicModal: (patch) =>
     set((s) => (s.mechanicModal ? { mechanicModal: { ...s.mechanicModal, ...patch } } : {})),
   closeMechanicModal: () => set({ mechanicModal: null }),

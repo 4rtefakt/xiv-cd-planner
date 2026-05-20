@@ -19,21 +19,27 @@ export function MechanicMarker({ mech, uses, fightDuration }: MechanicProps) {
 
   const abilities = useMemo(() => abilityIndex(jobs), [jobs]);
   const coverage = computeCoverage(mech, uses, abilities);
+  const damageKind = mech.damage_kind ?? 'magical';
 
   // Would this mechanic be covered by the previewed (hovered) placement?
+  // Pure damage can't be covered — skip the highlight.
   let previewCovered = false;
-  if (previewUse && !previewUse.conflict) {
+  if (previewUse && !previewUse.conflict && damageKind !== 'pure') {
     const ab = abilities.get(previewUse.ability_id);
     if (ab && mech.time >= previewUse.time && mech.time < previewUse.time + ab.effect) {
-      previewCovered = true;
+      // Honour mit_kind: a magic-only Manaward shouldn't preview-cover a
+      // physical raidwide.
+      const mk = ab.mit_kind ?? 'all';
+      if (mk === 'all' || mk === damageKind) previewCovered = true;
     }
   }
 
   return (
     <div
-      className={`mechanic ${mech.type}${previewCovered ? ' preview-covered' : ''}`}
+      className={`mechanic ${mech.type} kind-${damageKind}${previewCovered ? ' preview-covered' : ''}`}
       style={{ left: `${pct(mech.time, fightDuration)}%` }}
       data-mech-id={mech.id}
+      data-damage-kind={damageKind}
       draggable
       onDragStart={(e) => {
         e.stopPropagation();
@@ -48,9 +54,16 @@ export function MechanicMarker({ mech, uses, fightDuration }: MechanicProps) {
       }}
     >
       <div className="mech-cap" />
-      <div className="mech-label">{mech.name}</div>
+      <div className="mech-label">
+        {mech.name}
+        <span className={`mech-kind k-${damageKind}`}>
+          {damageKind === 'physical' ? 'P' : damageKind === 'magical' ? 'M' : '✕'}
+        </span>
+      </div>
       <div className="mech-time">{fmt(mech.time)}</div>
-      <div className={`mech-coverage cov-${coverage.tier}`}>{coverage.pct}%</div>
+      <div className={`mech-coverage cov-${coverage.tier}`}>
+        {coverage.pure ? '—' : `${coverage.pct}%`}
+      </div>
       <span
         className="mech-remove"
         role="button"

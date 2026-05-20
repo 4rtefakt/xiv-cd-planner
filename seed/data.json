@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updated_at": "2026-05-20T16:54:52.325Z",
+  "updated_at": "2026-05-20T17:23:40.928Z",
   "_patch": "FFXIV 7.5 (Dawntrail)",
   "_sources": [
     "https://ffxiv.consolegameswiki.com/wiki/ (per-ability and per-job pages)",
@@ -108,7 +108,8 @@
           "_source_url": "https://ffxiv.consolegameswiki.com/wiki/Bulwark",
           "_note": "100% block rate for 10s — full mit only against physical attacks. Modelled as 100% personal for raidwide planning approximation",
           "icon_glyph": "shield",
-          "icon_id": 167
+          "icon_id": 167,
+          "mit_kind": "physical"
         },
         {
           "id": "PLD.DivineVeil",
@@ -596,7 +597,8 @@
           "_source_url": "https://ffxiv.consolegameswiki.com/wiki/Fey_Illumination",
           "_note": "5% MAGIC damage reduction + 10% heal-up. Magic-only mit.",
           "icon_glyph": "star",
-          "icon_id": 2853
+          "icon_id": 2853,
+          "mit_kind": "magical"
         },
         {
           "id": "SCH.DeploymentTactics",
@@ -1127,7 +1129,8 @@
           "_note": "20% magic / 10% phys mit. Modelled as 20% personal mit (magic emphasis)",
           "_source_url": "https://ffxiv.consolegameswiki.com/wiki/Dark_Knight",
           "icon_glyph": "hex",
-          "icon_id": 3076
+          "icon_id": 3076,
+          "mit_kind": "magical"
         },
         {
           "id": "DRK.DarkMissionary",
@@ -1142,7 +1145,8 @@
           "_note": "10% magic / 5% phys party mit. Modelled as 10% party mit",
           "_source_url": "https://ffxiv.consolegameswiki.com/wiki/Dark_Knight",
           "icon_glyph": "aegis",
-          "icon_id": 3087
+          "icon_id": 3087,
+          "mit_kind": "magical"
         },
         {
           "id": "DRK.Oblation",
@@ -1284,7 +1288,8 @@
           "_note": "10% magic / 5% phys party mit. Modelled as 10% party mit",
           "_source_url": "https://ffxiv.consolegameswiki.com/wiki/Gunbreaker",
           "icon_glyph": "aegis",
-          "icon_id": 3424
+          "icon_id": 3424,
+          "mit_kind": "magical"
         },
         {
           "id": "GNB.HeartOfCorundum",
@@ -2299,7 +2304,8 @@
           "_note": "10% magic mit + 5% heal-up party. Modelled as 10% party mit equivalent.",
           "_source_url": "https://ffxiv.consolegameswiki.com/wiki/Red_Mage",
           "icon_glyph": "aegis",
-          "icon_id": 3237
+          "icon_id": 3237,
+          "mit_kind": "magical"
         }
       ]
     },
