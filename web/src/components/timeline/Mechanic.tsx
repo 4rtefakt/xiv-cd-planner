@@ -24,16 +24,19 @@ export function MechanicMarker({ mech, uses, fightDuration }: MechanicProps) {
   const damageKind = mech.damage_kind ?? 'magical';
   const isPlacement = mech.category === 'placement';
 
-  // Would this mechanic be covered by the previewed (hovered) placement?
-  // Pure damage and placement can't be covered — skip the highlight.
-  let previewCovered = false;
-  if (previewUse && !previewUse.conflict && !isPlacement && damageKind !== 'pure') {
-    const ab = abilities.get(previewUse.ability_id);
-    if (ab && mech.time >= previewUse.time && mech.time < previewUse.time + ab.effect) {
-      const mk = ab.mit_kind ?? 'all';
-      if (mk === 'all' || mk === damageKind) previewCovered = true;
-    }
-  }
+  // Hypothetical coverage if the user committed the currently-previewed
+  // placement. We compute it ONLY when a meaningful preview exists, so
+  // the comparison stays cheap.
+  const previewCov =
+    previewUse && !previewUse.conflict && !isPlacement && damageKind !== 'pure'
+      ? computeCoverage(mech, uses, abilities, partySize, {
+          ability_id: previewUse.ability_id,
+          time: previewUse.time,
+          exclude_use_id: previewUse.excludeUseId,
+        })
+      : null;
+  const previewCovered = !!previewCov && previewCov.pct > coverage.pct;
+  const showingPreview = previewCov && previewCov.pct !== coverage.pct;
 
   // The badge after the name : P/M/✕ for damage, ◇ for placement.
   const kindGlyph = isPlacement
@@ -82,8 +85,25 @@ export function MechanicMarker({ mech, uses, fightDuration }: MechanicProps) {
         <span className={`mech-kind ${kindClass}`}>{kindGlyph}</span>
       </div>
       <div className="mech-time">{fmt(mech.time)}</div>
-      <div className={`mech-coverage cov-${coverage.tier}`}>
-        {coverage.placement ? '·' : coverage.pure ? '—' : `${coverage.pct}%`}
+      <div
+        className={
+          `mech-coverage cov-${showingPreview ? previewCov!.tier : coverage.tier}` +
+          (showingPreview ? ' is-preview' : '')
+        }
+      >
+        {coverage.placement
+          ? '·'
+          : coverage.pure
+            ? '—'
+            : showingPreview
+              ? (
+                <>
+                  <span className="cov-from">{coverage.pct}</span>
+                  <span className="cov-arrow">→</span>
+                  <span className="cov-to">{previewCov!.pct}%</span>
+                </>
+              )
+              : `${coverage.pct}%`}
       </div>
       <span
         className="mech-remove"

@@ -217,10 +217,15 @@ function TargetsPicker({
   targets: string[];
   onChange: (next: string[]) => void;
 }) {
-  const tanks = party.filter((p) => p.badge === 'MT' || p.badge === 'OT');
-  const heals = party.filter((p) => p.badge === 'H1' || p.badge === 'H2');
-  const melee = party.filter((p) => p.badge === 'M1' || p.badge === 'M2');
+  const tanks  = party.filter((p) => p.badge === 'MT' || p.badge === 'OT');
+  const heals  = party.filter((p) => p.badge === 'H1' || p.badge === 'H2');
+  const melee  = party.filter((p) => p.badge === 'M1' || p.badge === 'M2');
   const ranged = party.filter((p) => p.badge === 'R1' || p.badge === 'R2');
+  // Light parties — the canonical 4-4 split for stack/spread mechs.
+  const LP1_BADGES = ['MT', 'H1', 'M1', 'R1'];
+  const LP2_BADGES = ['OT', 'H2', 'M2', 'R2'];
+  const lp1 = party.filter((p) => LP1_BADGES.includes(p.badge));
+  const lp2 = party.filter((p) => LP2_BADGES.includes(p.badge));
 
   function setIds(ids: string[]) {
     onChange(ids);
@@ -235,9 +240,6 @@ function TargetsPicker({
         <button type="button" className="targets-shortcut" onClick={() => setIds(party.map((p) => p.id))}>
           ALL
         </button>
-        <button type="button" className="targets-shortcut" onClick={() => setIds([])}>
-          NONE
-        </button>
         <button type="button" className="targets-shortcut" onClick={() => setIds(tanks.map((p) => p.id))}>
           TANKS
         </button>
@@ -249,6 +251,12 @@ function TargetsPicker({
         </button>
         <button type="button" className="targets-shortcut" onClick={() => setIds(ranged.map((p) => p.id))}>
           RANGED
+        </button>
+        <button type="button" className="targets-shortcut" onClick={() => setIds(lp1.map((p) => p.id))} title="MT · H1 · M1 · R1">
+          LIGHT 1
+        </button>
+        <button type="button" className="targets-shortcut" onClick={() => setIds(lp2.map((p) => p.id))} title="OT · H2 · M2 · R2">
+          LIGHT 2
         </button>
       </div>
       <div className="targets-grid">

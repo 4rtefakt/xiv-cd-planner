@@ -57,12 +57,18 @@ export interface DragCtx {
  * AbilityRow at (player_id, ability_id) shows a ghost CdUse at `time`,
  * Mechanic markers that would be covered render with .preview-covered,
  * and a click anywhere on the same row commits the Use.
+ *
+ * `excludeUseId` is set when the hover represents a REPOSITION drag (the
+ * use is already in uses[] — for the simulated-coverage calc we skip it
+ * at its current time and re-add it at the preview time, so the badge
+ * shows the future value not double-counted).
  */
 export interface PreviewUse {
   player_id: string;
   ability_id: string;
   time: number;
   conflict: boolean;
+  excludeUseId?: string;
 }
 
 interface PlanState {

@@ -1030,6 +1030,22 @@
 .mech-coverage.cov-warn { --cov-color: var(--warn); }
 .mech-coverage.cov-good { --cov-color: var(--good); box-shadow: 0 0 6px rgba(74, 222, 128, 0.4); }
 .mech-coverage.cov-pure { --cov-color: var(--text-faint); font-weight: 500; }
+.mech-coverage.is-preview {
+  /* Stronger glow + "from→to" layout when previewing a placement */
+  box-shadow: 0 0 10px var(--cov-color), 0 0 4px var(--cov-color);
+}
+.mech-coverage .cov-from {
+  opacity: 0.55;
+  margin-right: 2px;
+}
+.mech-coverage .cov-arrow {
+  margin: 0 2px;
+  color: var(--cyan);
+  opacity: 0.9;
+}
+.mech-coverage .cov-to {
+  font-weight: 600;
+}
 
 /* Small kind badge inside the mechanic label : P / M / ✕ */
 .mech-kind {

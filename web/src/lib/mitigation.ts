@@ -54,11 +54,26 @@ function abilityMitigates(ab: Ability, kind: DamageKind): boolean {
   return mk === kind;
 }
 
+/**
+ * Hypothetical use, supplied to computeCoverage to simulate placing or
+ * moving a CdUse without mutating the real uses[] yet. Used for the
+ * live "→ NEW%" badge the user sees while hovering a placement.
+ */
+export interface SimulatedUse {
+  ability_id: string;
+  time: number;
+  /** When set, exclude this use from the base set before adding the
+   *  simulated one. Used for reposition drags so the user doesn't
+   *  double-count their own contribution at the old timestamp. */
+  exclude_use_id?: string;
+}
+
 export function computeCoverage(
   mech: Mechanic,
   uses: Use[],
   abilities: Map<string, Ability>,
   partySize: number,
+  simulated?: SimulatedUse,
 ): Coverage {
   // Placement mechs are informational only — no damage to mitigate.
   if (mech.category === 'placement') {
@@ -70,11 +85,18 @@ export function computeCoverage(
   }
   let total = 0;
   for (const u of uses) {
+    if (simulated?.exclude_use_id === u.id) continue;
     const ab = abilities.get(u.ability_id);
     if (!ab) continue;
     if (mech.time < u.time || mech.time >= u.time + ab.effect) continue;
     if (!abilityMitigates(ab, kind)) continue;
     total += ab.mit_potency;
+  }
+  if (simulated) {
+    const ab = abilities.get(simulated.ability_id);
+    if (ab && mech.time >= simulated.time && mech.time < simulated.time + ab.effect && abilityMitigates(ab, kind)) {
+      total += ab.mit_potency;
+    }
   }
   const pct = Math.min(COVERAGE_CAP, total);
   const visualType = deriveMechType(mech, partySize);

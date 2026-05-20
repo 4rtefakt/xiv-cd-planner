@@ -57,7 +57,13 @@ export function AbilityRow({ playerId, ability, uses, alt, fightDuration }: Abil
     const time = xToTime(clientX - offsetPx, ref.current, fightDuration);
     const conflict =
       findUseConflict(playerId, ability.id, time, ability.recast, rowUses, excludeUseId) !== null;
-    return { player_id: playerId, ability_id: ability.id, time, conflict };
+    return {
+      player_id: playerId,
+      ability_id: ability.id,
+      time,
+      conflict,
+      excludeUseId,
+    };
   }
 
   return (
@@ -94,9 +100,11 @@ export function AbilityRow({ playerId, ability, uses, alt, fightDuration }: Abil
           ability_id: ability.id,
           time: p.time,
         });
-        // Refresh preview at same spot so the user sees the new CdUse
-        // immediately replacing the ghost.
-        setPreviewUse(computePreviewAt(e.clientX));
+        // Clear the preview so the just-placed use replaces the ghost
+        // cleanly. The next mousemove will re-establish a fresh preview
+        // (typically a conflict, since the user's cursor is now over
+        // the new CdUse's recast window).
+        setPreviewUse(null);
       }}
       // --- Drag-to-reposition existing CdUse (C.3 + E.B preview) ---
       onDragOver={(e) => {
