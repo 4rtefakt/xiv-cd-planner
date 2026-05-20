@@ -227,6 +227,16 @@ function TargetsPicker({
   const lp1 = party.filter((p) => LP1_BADGES.includes(p.badge));
   const lp2 = party.filter((p) => LP2_BADGES.includes(p.badge));
 
+  // Render the grid as LP1 on top, LP2 on bottom :
+  //   [MT] [H1] [M1] [R1]
+  //   [OT] [H2] [M2] [R2]
+  // This mirrors the standard FFXIV party-split convention and makes
+  // toggling per-role pairs (MT+OT, H1+H2…) a column-wise gesture.
+  const GRID_ORDER = [...LP1_BADGES, ...LP2_BADGES];
+  const ordered = [...party].sort(
+    (a, b) => GRID_ORDER.indexOf(a.badge) - GRID_ORDER.indexOf(b.badge),
+  );
+
   function setIds(ids: string[]) {
     onChange(ids);
   }
@@ -260,7 +270,7 @@ function TargetsPicker({
         </button>
       </div>
       <div className="targets-grid">
-        {party.map((p) => {
+        {ordered.map((p) => {
           const on = targets.includes(p.id);
           return (
             <button
