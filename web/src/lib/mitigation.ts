@@ -124,7 +124,9 @@ export function abilityIndex(jobs: { abilities: Ability[] }[]): Map<string, Abil
  */
 export function computeMechSlots(
   mechs: Mechanic[],
-  gapS = 14,
+  // 18s default : at zoom 2× (≈ 5.3 px/s), a 9px label fits in ~15s
+  // of canvas + a 3s margin so successive labels don't crash.
+  gapS = 18,
 ): { slotOf: Map<string, number>; slotCount: number } {
   const slotOf = new Map<string, number>();
   const slotLastT: number[] = [];

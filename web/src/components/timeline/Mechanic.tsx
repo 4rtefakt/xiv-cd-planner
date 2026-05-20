@@ -44,14 +44,12 @@ export function MechanicMarker({ mech, uses, fightDuration, slot = 0 }: Mechanic
   const previewCovered = !!previewCov && previewCov.pct > coverage.pct;
   const showingPreview = previewCov && previewCov.pct !== coverage.pct;
 
-  // The badge after the name : P/M/✕ for damage, ◇ for placement.
-  const kindGlyph = isPlacement
-    ? '◇'
-    : damageKind === 'physical'
-      ? 'P'
-      : damageKind === 'magical'
-        ? 'M'
-        : '✕';
+  // Placement gets a ◇ glyph in the label since the cap color is the
+  // same grey as "no damage" — without the glyph the user couldn't
+  // tell a placement marker apart from a barely-visible mech. Damage
+  // mechs OMIT the kind glyph since the cap is already colored
+  // (phys=amber, magic=violet, pure=grey) — redundant info.
+  const kindGlyph = isPlacement ? '◇' : null;
   const kindClass = isPlacement ? 'k-placement' : `k-${damageKind}`;
 
   return (
@@ -96,7 +94,7 @@ export function MechanicMarker({ mech, uses, fightDuration, slot = 0 }: Mechanic
       </div>
       <div className="mech-label" title={displayLabel}>
         <span className="mech-label-text">{displayLabel}</span>
-        <span className={`mech-kind ${kindClass}`}>{kindGlyph}</span>
+        {kindGlyph && <span className={`mech-kind ${kindClass}`}>{kindGlyph}</span>}
       </div>
       <div className="mech-time">{fmt(mech.time)}</div>
       {/* Coverage badge : skipped when there's nothing meaningful to
