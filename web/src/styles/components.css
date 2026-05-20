@@ -620,7 +620,9 @@
 .tl-left {
   border-right: 1px solid var(--line-bright);
   background: var(--panel-2);
-  overflow: hidden;
+  /* Same reason as .tl-right : `clip` instead of `hidden` so the
+     boss lanes' position:sticky keeps escaping up to the document. */
+  overflow: clip;
 }
 .tl-right {
   overflow-x: auto;
