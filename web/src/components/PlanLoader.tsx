@@ -1,0 +1,53 @@
+import { useEffect } from 'react';
+import { api } from '../api/client';
+import { usePlanStore } from '../state/planStore';
+
+const SLUG_RE = /^\/p\/([\w-]+)$/;
+
+/**
+ * On mount, parse window.location.pathname. If it matches /p/:slug,
+ * fetch the plan and hydrate the store. Otherwise leave the default
+ * empty state in place — the first user edit will POST a fresh plan
+ * via AutoSaver and rewrite the URL.
+ *
+ * Renders nothing.
+ */
+export function PlanLoader() {
+  const hydratePlan = usePlanStore((s) => s.hydratePlan);
+  const setSaveStatus = usePlanStore((s) => s.setSaveStatus);
+
+  useEffect(() => {
+    const match = window.location.pathname.match(SLUG_RE);
+    if (!match) return;
+    const slug = match[1]!;
+
+    let cancelled = false;
+    setSaveStatus('saving'); // suppress AutoSaver during hydrate
+    api
+      .getPlan(slug)
+      .then((plan) => {
+        if (cancelled) return;
+        hydratePlan({
+          meta: { slug },
+          encounter: plan.encounter,
+          party: plan.party,
+          boss_lanes: plan.boss_lanes,
+          mechanics: plan.mechanics,
+          uses: plan.uses,
+        });
+      })
+      .catch((err) => {
+        if (cancelled) return;
+        console.error('[PlanLoader] failed to load', slug, err);
+        // 404 or transport error — strip the bad path so AutoSaver can
+        // POST a fresh plan after the user's first edit.
+        window.history.replaceState({}, '', '/');
+        setSaveStatus('idle');
+      });
+    return () => {
+      cancelled = true;
+    };
+  }, [hydratePlan, setSaveStatus]);
+
+  return null;
+}

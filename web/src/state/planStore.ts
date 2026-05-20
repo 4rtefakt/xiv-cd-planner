@@ -86,6 +86,10 @@ interface PlanState {
   // Plan identity
   slug: string | null;
   saveStatus: SaveStatus;
+  /** Transient flag : tells AutoSaver to skip the next effect run.
+   *  Set by hydratePlan so the slice changes from a server fetch don't
+   *  trigger a redundant PATCH back to the same data. */
+  _skipNextSave: boolean;
 
   // Plan content
   encounter: Encounter;
@@ -164,6 +168,23 @@ interface PlanState {
 
   // Actions — reset
   resetEncounter(): void;
+
+  // Actions — persistence (C.5)
+  setSlug(slug: string | null): void;
+  setSaveStatus(status: SaveStatus): void;
+  /**
+   * Replace the entire plan content from a server payload. Used by
+   * PlanLoader on initial /p/:slug fetch. Resets transient UI state so
+   * a stale collapsed/modal doesn't leak across plan loads.
+   */
+  hydratePlan(plan: {
+    meta?: { slug?: string };
+    encounter?: Encounter;
+    party?: Player[];
+    boss_lanes?: BossLane[];
+    mechanics?: Mechanic[];
+    uses?: Use[];
+  }): void;
 }
 
 const defaultEncounter: Encounter = {
@@ -181,6 +202,7 @@ export const usePlanStore = create<PlanState>((set) => ({
   jobsError: null,
   slug: null,
   saveStatus: 'idle',
+  _skipNextSave: false,
   encounter: defaultEncounter,
   party: demoParty,
   bossLanes: [{ id: 'lane-1', name: 'BOSS A' }],
@@ -303,6 +325,24 @@ export const usePlanStore = create<PlanState>((set) => ({
       uses: [],
       bossLanes: [{ id: 'lane-1', name: 'BOSS A' }],
     }),
+
+  setSlug: (slug) => set({ slug }),
+  setSaveStatus: (saveStatus) => set({ saveStatus }),
+  hydratePlan: (plan) =>
+    set((s) => ({
+      slug: plan.meta?.slug ?? s.slug,
+      encounter: plan.encounter ?? s.encounter,
+      party: plan.party ?? s.party,
+      bossLanes: plan.boss_lanes ?? s.bossLanes,
+      mechanics: plan.mechanics ?? s.mechanics,
+      uses: plan.uses ?? s.uses,
+      // Reset transient UI so a stale modal/preview doesn't leak across loads
+      mechanicModal: null,
+      dragCtx: null,
+      previewUse: null,
+      saveStatus: 'saved',
+      _skipNextSave: true,
+    })),
 }));
 
 /** Convenience selector: find an ability across all jobs (O(jobs+abilities), fine at ~150). */

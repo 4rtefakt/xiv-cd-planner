@@ -6,6 +6,8 @@ import { EncounterFields } from './components/encounter/EncounterFields';
 import { PartyRow } from './components/party/PartyRow';
 import { TimelineShell } from './components/timeline/TimelineShell';
 import { AddMechanicModal } from './components/modals/AddMechanicModal';
+import { AutoSaver } from './components/AutoSaver';
+import { PlanLoader } from './components/PlanLoader';
 import { usePlanStore } from './state/planStore';
 import { api } from './api/client';
 import './styles/components.css';
@@ -77,6 +79,12 @@ export function App() {
 
       <Footer />
       <AddMechanicModal />
+      {jobsCount > 0 && (
+        <>
+          <PlanLoader />
+          <AutoSaver />
+        </>
+      )}
     </div>
   );
 }

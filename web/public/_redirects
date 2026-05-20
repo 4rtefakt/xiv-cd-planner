@@ -1,0 +1,6 @@
+# SPA fallback for client-side routing.
+# /api/* always falls through to Pages Functions (handled before this).
+# Static assets (/, /assets/*, /icons/*) match files in dist/ first.
+# Anything else under /p/<slug> serves the React shell which then reads
+# the slug from window.location and hydrates the plan from the API.
+/p/* /index.html 200
