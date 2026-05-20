@@ -22,9 +22,23 @@ export interface MechanicModalState {
   type: MechType;
 }
 
+/**
+ * Shared drag state used by AbilityRow.onDragOver to decide whether to
+ * accept a drop. dataTransfer.getData() is unavailable during dragover
+ * (only at drop), so we mirror the source's identity here.
+ */
+export interface DragCtx {
+  kind: 'chip' | 'use';
+  playerId: string;
+  abilityId: string;
+  useId?: string;
+}
+
 interface PlanState {
   // Modal
   mechanicModal: MechanicModalState | null;
+  // Drag
+  dragCtx: DragCtx | null;
   // Reference data
   jobs: Job[];
   jobsLoading: boolean;
@@ -64,6 +78,9 @@ interface PlanState {
   setMechanicModal(patch: Partial<MechanicModalState>): void;
   closeMechanicModal(): void;
 
+  // Actions — drag
+  setDragCtx(ctx: DragCtx | null): void;
+
   // Actions — mechanics
   addMechanic(m: Mechanic): void;
   removeMechanic(id: string): void;
@@ -89,6 +106,7 @@ const defaultEncounter: Encounter = {
 
 export const usePlanStore = create<PlanState>((set) => ({
   mechanicModal: null,
+  dragCtx: null,
   jobs: [],
   jobsLoading: false,
   jobsError: null,
@@ -127,6 +145,8 @@ export const usePlanStore = create<PlanState>((set) => ({
   setMechanicModal: (patch) =>
     set((s) => (s.mechanicModal ? { mechanicModal: { ...s.mechanicModal, ...patch } } : {})),
   closeMechanicModal: () => set({ mechanicModal: null }),
+
+  setDragCtx: (dragCtx) => set({ dragCtx }),
 
   addMechanic: (m) => set((s) => ({ mechanics: [...s.mechanics, m] })),
   removeMechanic: (id) => set((s) => ({ mechanics: s.mechanics.filter((m) => m.id !== id) })),

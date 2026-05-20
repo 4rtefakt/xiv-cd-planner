@@ -439,6 +439,313 @@
   cursor: crosshair;
 }
 
+/* ===== PLAYER GROUPS (left + right) ===== */
+.player-group { /* container; layout handled by row heights */ }
+
+.player-header-row-height { height: 36px; }
+
+.player-header-left {
+  display: grid;
+  grid-template-columns: 28px 1fr auto;
+  gap: 8px;
+  align-items: center;
+  padding: 0 10px 0 8px;
+  height: 36px;
+  background: var(--panel-4);
+  border-bottom: 1px solid var(--line-bright);
+  border-top: 1px solid var(--line-bright);
+  cursor: pointer;
+}
+.player-header-left.role-tank { --role-color: var(--tank); }
+.player-header-left.role-heal { --role-color: var(--heal); }
+.player-header-left.role-dps  { --role-color: var(--dps); }
+
+.ph-job-icon {
+  width: 24px;
+  height: 24px;
+  border: 1px solid var(--role-color);
+  background: linear-gradient(135deg, rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.15));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 0 4px rgba(0, 0, 0, 0.4);
+  padding: 2px;
+}
+.ph-name-block {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-width: 0;
+}
+.ph-name {
+  font-family: 'Chakra Petch', sans-serif;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text);
+  letter-spacing: 0.04em;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.ph-badge {
+  display: inline-block;
+  padding: 1px 5px;
+  border: 1px solid var(--role-color);
+  color: var(--role-color);
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 9px;
+  font-weight: 500;
+  letter-spacing: 0.12em;
+  line-height: 1.3;
+}
+.ph-collapse {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  color: var(--text-dim);
+  width: 14px;
+  text-align: center;
+}
+
+.player-header-right {
+  height: 36px;
+  background: var(--panel-4);
+  border-bottom: 1px solid var(--line-bright);
+  border-top: 1px solid var(--line-bright);
+  position: relative;
+}
+.player-header-right.role-tank { --role-color: var(--tank); }
+.player-header-right.role-heal { --role-color: var(--heal); }
+.player-header-right.role-dps  { --role-color: var(--dps); }
+.player-header-right::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: var(--role-color);
+  opacity: 0.6;
+}
+
+/* ===== CD ROW (one per ability) ===== */
+.cd-row-height { height: 30px; }
+
+.cd-row-left {
+  display: grid;
+  grid-template-columns: 24px 22px 1fr auto;
+  gap: 7px;
+  align-items: center;
+  padding: 0 10px 0 14px;
+  height: 30px;
+  border-bottom: 1px solid var(--line);
+  background: var(--panel-2);
+}
+.cd-row-left.alt { background: rgba(255, 255, 255, 0.012); }
+.cd-row-left.type-personal { --ability-color: var(--cyan); }
+.cd-row-left.type-party    { --ability-color: var(--pink); }
+.cd-row-left.type-heal     { --ability-color: var(--heal); }
+
+.cd-indent {
+  width: 24px;
+  height: 1px;
+  border-top: 1px dashed var(--line-bright);
+  align-self: center;
+  opacity: 0.7;
+}
+.cd-ability-icon {
+  width: 22px;
+  height: 22px;
+  border: 1px solid var(--ability-color);
+  background: linear-gradient(135deg, rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.15));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 0 4px rgba(0, 0, 0, 0.4);
+  padding: 2px;
+}
+.cd-row-name {
+  font-family: 'Chakra Petch', sans-serif;
+  font-size: 12px;
+  color: var(--text);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  letter-spacing: 0.02em;
+}
+.cd-row-cd {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  color: var(--text-dim);
+}
+
+.cd-row-right {
+  position: relative;
+  height: 30px;
+  border-bottom: 1px solid var(--line);
+  background: var(--panel-2);
+}
+.cd-row-right.alt { background: rgba(255, 255, 255, 0.012); }
+.cd-row-right.type-personal { --cd-color: var(--cyan); --cd-glow: rgba(0, 229, 255, 0.45); }
+.cd-row-right.type-party    { --cd-color: var(--pink); --cd-glow: rgba(255, 46, 154, 0.45); }
+.cd-row-right.type-heal     { --cd-color: var(--heal); --cd-glow: rgba(74, 222, 128, 0.45); }
+.cd-row-right.drop-target {
+  background: rgba(0, 229, 255, 0.05);
+  box-shadow: inset 0 0 0 1px var(--cyan);
+}
+
+/* ===== CD USE (placed cooldown) ===== */
+.cd-use {
+  position: absolute;
+  top: 3px;
+  height: 24px;
+  cursor: grab;
+  z-index: 3;
+  display: flex;
+  align-items: stretch;
+}
+.cd-use.dragging-use { opacity: 0.55; cursor: grabbing; z-index: 6; }
+
+.cd-use-active-block {
+  position: relative;
+  background: var(--cd-color);
+  height: 24px;
+  box-shadow: 0 0 8px var(--cd-glow);
+  border: 1px solid var(--cd-color);
+  display: flex;
+  align-items: stretch;
+  flex-shrink: 0;
+}
+.cd-use-active-block::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  width: 3px;
+  background: rgba(255, 255, 255, 0.4);
+}
+.cd-use-icon {
+  width: 22px;
+  height: 22px;
+  margin: 1px;
+  background: var(--bg);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+.cd-use-active-extend {
+  flex: 1;
+  background: linear-gradient(90deg, rgba(255, 255, 255, 0.18), rgba(255, 255, 255, 0.06));
+  border-left: 1px solid rgba(255, 255, 255, 0.15);
+}
+
+.cd-use-cooldown {
+  flex: 1;
+  background: var(--cd-color);
+  opacity: 0.18;
+  border-top: 1px solid var(--cd-color);
+  border-bottom: 1px solid var(--cd-color);
+  border-right: 1px solid var(--cd-color);
+  position: relative;
+}
+.cd-use-cooldown::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image: repeating-linear-gradient(
+    45deg,
+    transparent 0,
+    transparent 4px,
+    rgba(0, 0, 0, 0.25) 4px,
+    rgba(0, 0, 0, 0.25) 5px
+  );
+  opacity: 0.7;
+}
+
+.cd-use-start-time {
+  position: absolute;
+  bottom: -1px;
+  left: 0;
+  transform: translateY(100%) translateX(-2px);
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 8px;
+  color: var(--cd-color);
+  background: var(--panel-2);
+  padding: 0 3px;
+  line-height: 1.3;
+  border: 1px solid var(--cd-color);
+  opacity: 0;
+  pointer-events: none;
+  z-index: 5;
+}
+.cd-use:hover .cd-use-start-time { opacity: 1; }
+
+.cd-use-tip {
+  position: absolute;
+  bottom: 100%;
+  left: 0;
+  transform: translateY(-6px);
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  color: var(--cd-color);
+  background: var(--panel-2);
+  border: 1px solid var(--cd-color);
+  padding: 2px 6px;
+  white-space: nowrap;
+  z-index: 7;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.15s;
+}
+.cd-use:hover .cd-use-tip { opacity: 1; }
+
+.cd-use-remove {
+  position: absolute;
+  top: -3px;
+  right: -10px;
+  width: 14px;
+  height: 14px;
+  background: var(--bad);
+  color: var(--bg);
+  border: 1px solid var(--bad);
+  font-size: 10px;
+  line-height: 1.2;
+  text-align: center;
+  cursor: pointer;
+  opacity: 0;
+  z-index: 7;
+  font-family: 'JetBrains Mono', monospace;
+  font-weight: 700;
+}
+.cd-use:hover .cd-use-remove { opacity: 1; }
+
+/* Drop indicator (vertical dashed line on hover with chip/use being dragged) */
+.cd-drop {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 0;
+  border-left: 1px dashed var(--cyan);
+  pointer-events: none;
+  display: none;
+  z-index: 5;
+}
+.cd-drop.show { display: block; }
+.cd-drop-time {
+  position: absolute;
+  top: -18px;
+  left: 0;
+  transform: translateX(-50%);
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 9px;
+  color: var(--cyan);
+  background: var(--panel-2);
+  border: 1px solid var(--cyan);
+  padding: 1px 4px;
+}
+
 /* ===== MECHANIC MARKER (inside boss lane) ===== */
 .mechanic {
   position: absolute;

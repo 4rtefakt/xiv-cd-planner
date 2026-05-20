@@ -1,6 +1,7 @@
 import { usePlanStore } from '../../state/planStore';
 import { TimelineAxis } from './TimelineAxis';
 import { BossLanesLeft, BossLanesRight } from './BossLanes';
+import { PlayerGroupsLeft, PlayerGroupsRight } from './PlayerGroups';
 
 /**
  * Section 02 main grid. C.1 ships:
@@ -53,13 +54,13 @@ export function TimelineShell() {
             PLAYER <span className="sep" style={{ color: 'var(--text-faint)', margin: '0 6px' }}>/</span> ABILITY
           </div>
           <BossLanesLeft />
-          {/* Player groups land in Phase C.4 */}
+          <PlayerGroupsLeft />
         </div>
         <div className="tl-right">
           <div className="tl-canvas">
             <TimelineAxis fightDuration={fightDuration} />
             <BossLanesRight />
-            {/* Player rows + cd-use blocks land in Phase C.3+ */}
+            <PlayerGroupsRight />
           </div>
         </div>
       </div>

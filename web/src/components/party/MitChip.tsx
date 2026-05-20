@@ -1,13 +1,16 @@
 import type { Ability } from '../../types';
 import { abilityGlyph } from '../../data/glyphFallbacks';
+import { usePlanStore } from '../../state/planStore';
 
 interface MitChipProps {
   playerId: string;
   ability: Ability;
-  onDragStart?: (e: React.DragEvent<HTMLDivElement>) => void;
 }
 
-export function MitChip({ playerId, ability, onDragStart }: MitChipProps) {
+export function MitChip({ playerId, ability }: MitChipProps) {
+  const setDragCtx = usePlanStore((s) => s.setDragCtx);
+  const expandPlayer = usePlanStore((s) => s.expandPlayer);
+
   return (
     <div
       className={`pcm-chip type-${ability.mit_type}`}
@@ -17,14 +20,15 @@ export function MitChip({ playerId, ability, onDragStart }: MitChipProps) {
       title={`${ability.name} · ${ability.recast}s · ${ability.mit_potency}%`}
       onDragStart={(e) => {
         e.dataTransfer.effectAllowed = 'copy';
-        e.dataTransfer.setData(
-          'application/x-cooldown-chip',
-          JSON.stringify({ kind: 'chip', playerId, abilityId: ability.id }),
-        );
+        e.dataTransfer.setData('text/plain', `${playerId}:${ability.id}`);
+        setDragCtx({ kind: 'chip', playerId, abilityId: ability.id });
+        expandPlayer(playerId);
         e.currentTarget.classList.add('dragging');
-        onDragStart?.(e);
       }}
-      onDragEnd={(e) => e.currentTarget.classList.remove('dragging')}
+      onDragEnd={(e) => {
+        e.currentTarget.classList.remove('dragging');
+        setDragCtx(null);
+      }}
     >
       <div className="chip-icon" style={{ color: 'var(--chip-color)' }}>
         {abilityGlyph(ability.icon)}
