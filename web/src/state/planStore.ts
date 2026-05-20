@@ -157,6 +157,7 @@ interface PlanState {
       targetNames: string[];
       damage_kind: 'physical' | 'magical' | 'pure';
       source_name?: string;
+      hit_count?: number;
     }>;
   }): void;
   /**
