@@ -50,6 +50,8 @@ export interface FFLogsMechanic {
   /** Display name of the source NPC that cast the mech (Shinryu, Right
    *  Wing, Adds, …). Used to assign mechs to the right boss lane. */
   source_name?: string;
+  /** Number of FFLogs damage events that collapsed into this mech. */
+  hit_count?: number;
 }
 
 export interface FFLogsFightData {

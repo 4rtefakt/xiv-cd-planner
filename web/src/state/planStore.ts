@@ -302,10 +302,13 @@ export const usePlanStore = create<PlanState>((set) => ({
         else if (seenCount === 1) targets = tankId ? [tankId] : [];
         else targets = []; // user to assign
         const laneId = (m.source_name && nameToLane.get(m.source_name)) ?? fallbackLaneId;
+        // Append the hit count when > 1 so multi-hit casts (Akh Morn ×5,
+        // Electrocution ×3 ticks) read clearly in the timeline.
+        const hitSuffix = m.hit_count && m.hit_count > 1 ? ` ×${m.hit_count}` : '';
         return {
           id: `mech-fflogs-${Date.now()}-${i}`,
           lane_id: laneId,
-          name: m.name.toUpperCase(),
+          name: m.name.toUpperCase() + hitSuffix,
           time: m.time,
           category: 'damage' as const,
           targets,

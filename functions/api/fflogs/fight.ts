@@ -80,6 +80,10 @@ interface AggregatedMech {
    *  spawn one boss lane per concurrent enemy (Shinryu + Wings, M3S
    *  Brute body + adds, …). */
   source_name?: string;
+  /** Number of damage events merged into this group. Helps the user
+   *  see "ELECTROCUTION ×3" vs "ELECTROCUTION ×1" without us having to
+   *  show every hit separately on the timeline. */
+  hit_count: number;
 }
 
 const FIGHT_HEADER_QUERY = `
@@ -116,10 +120,12 @@ const EVENTS_QUERY = `
   }
 `;
 
-/** Multi-hit raidwides ("Earthen Fury" hitting at 20.8/22.9/23.3s
- *  share one cast) collapse into a single mech if the same name fires
- *  again within this window. */
-const GROUP_WINDOW_MS = 3500;
+/** Multi-hit boss abilities (Akh Morn = 5 hits over ~5s, Earthen Fury
+ *  multi-tick raidwide, Tidal Wave double-cast) collapse into a single
+ *  mech if the same name fires again within this window. 6s catches
+ *  the longest known multi-hit patterns while keeping genuinely
+ *  separate casts at >6s apart distinct. */
+const GROUP_WINDOW_MS = 6000;
 
 /**
  * xivapi AttackType.ID → our damage_kind enum.
@@ -255,6 +261,7 @@ export const onRequestPost: PagesFunction<FFLogsEnv> = async (ctx) => {
             sample_amount: 0,
             game_id: ev.abilityGameID,
             source_name: sourceName,
+            hit_count: 0,
           });
           lastGroupIdxByName.set(name, idx);
         }
@@ -262,6 +269,7 @@ export const onRequestPost: PagesFunction<FFLogsEnv> = async (ctx) => {
         void abilityType;
         const g = groups[idx]!;
         g.sample_amount += ev.amount ?? 0;
+        g.hit_count++;
         if (!g.targetNames.includes(targetActor.name)) g.targetNames.push(targetActor.name);
       }
       cursor = evResp.reportData.report.events.nextPageTimestamp;
