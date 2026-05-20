@@ -37,8 +37,13 @@ export function AbilityRow({ playerId, ability, uses, alt, fightDuration }: Abil
   const setPreviewUse = usePlanStore((s) => s.setPreviewUse);
   const addUse = usePlanStore((s) => s.addUse);
   const moveUse = usePlanStore((s) => s.moveUse);
-  const mechanics = usePlanStore((s) => s.mechanics);
+  const mechanicsAll = usePlanStore((s) => s.mechanics);
+  const hiddenCats = usePlanStore((s) => s.hiddenMechCategories);
   const readOnly = usePlanStore((s) => s.readOnly);
+
+  // Apply the same category filter as the boss lane so guidelines
+  // disappear in lockstep with the mech markers above.
+  const mechanics = mechanicsAll.filter((m) => !hiddenCats.includes(m.category));
 
   const ref = useRef<HTMLDivElement | null>(null);
   const rowUses = uses.filter((u) => u.player_id === playerId && u.ability_id === ability.id);

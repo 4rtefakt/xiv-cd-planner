@@ -111,6 +111,10 @@ interface PlanState {
    *  canvas). Default 2 starts users zoomed-in so 5-ish minutes fill the
    *  viewport, which is more precise for placement. Range [0.5, 8]. */
   zoom: number;
+  /** Mech categories the user has chosen to hide on the timeline. Pure
+   *  view-state — mechs in this set still exist in plan data and still
+   *  count for coverage, they just don't render. */
+  hiddenMechCategories: MechCategory[];
 
   // Actions — reference
   setJobs(jobs: Job[]): void;
@@ -198,6 +202,7 @@ interface PlanState {
   toggleCollapsed(playerId: string): void;
   expandPlayer(playerId: string): void;
   setZoom(zoom: number): void;
+  toggleMechCategoryVisibility(cat: MechCategory): void;
 
   // Actions — reset
   resetEncounter(): void;
@@ -253,6 +258,7 @@ export const usePlanStore = create<PlanState>((set) => ({
   uses: [],
   collapsed: {},
   zoom: 2,
+  hiddenMechCategories: [],
 
   setJobs: (jobs) => set({ jobs, jobsLoading: false, jobsError: null }),
   setJobsError: (jobsError) => set({ jobsError, jobsLoading: false }),
@@ -417,6 +423,12 @@ export const usePlanStore = create<PlanState>((set) => ({
   expandPlayer: (playerId) =>
     set((s) => ({ collapsed: { ...s.collapsed, [playerId]: false } })),
   setZoom: (zoom) => set({ zoom: Math.max(0.5, Math.min(8, zoom)) }),
+  toggleMechCategoryVisibility: (cat) =>
+    set((s) => ({
+      hiddenMechCategories: s.hiddenMechCategories.includes(cat)
+        ? s.hiddenMechCategories.filter((c) => c !== cat)
+        : [...s.hiddenMechCategories, cat],
+    })),
 
   resetEncounter: () =>
     set({

@@ -1,8 +1,30 @@
 import { useEffect, useRef } from 'react';
+import type { MechCategory } from '../../types';
 import { usePlanStore } from '../../state/planStore';
 import { TimelineAxis } from './TimelineAxis';
 import { BossLanesLeft, BossLanesRight } from './BossLanes';
 import { PlayerGroupsLeft, PlayerGroupsRight } from './PlayerGroups';
+
+/**
+ * Eye-toggle pill : click flips the category's visibility on the
+ * boss lanes. Hidden mechs still exist in plan data and still count
+ * for coverage — this is pure render-time filtering.
+ */
+function VisibilityToggle({ category, label }: { category: MechCategory; label: string }) {
+  const hidden = usePlanStore((s) => s.hiddenMechCategories.includes(category));
+  const toggle = usePlanStore((s) => s.toggleMechCategoryVisibility);
+  return (
+    <button
+      type="button"
+      className={`tl-btn tl-vis ${hidden ? 'off' : 'on'} c-${category}`}
+      onClick={() => toggle(category)}
+      title={hidden ? `Show ${label.toLowerCase()} mechs` : `Hide ${label.toLowerCase()} mechs`}
+    >
+      <span className="tl-vis-dot">{hidden ? '○' : '●'}</span>
+      {label}
+    </button>
+  );
+}
 
 /** Base pixels-per-second at zoom 1.0. The default zoom is 2× so the
  *  initial canvas fits ~5 min of action in a 1600px viewport. */
@@ -173,6 +195,10 @@ export function TimelineShell() {
         >
           ◆ RESET
         </button>
+        <div className="tl-divider" />
+        <span className="tl-tool-label">VIEW</span>
+        <VisibilityToggle category="damage" label="DAMAGE" />
+        <VisibilityToggle category="placement" label="PLACEMENT" />
       </div>
 
       <div className="timeline-shell">

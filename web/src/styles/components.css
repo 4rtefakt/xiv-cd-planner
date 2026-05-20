@@ -558,6 +558,32 @@
 .tl-btn.custom     { --btn-color: var(--custom); }
 .tl-btn.add-lane   { --btn-color: var(--cyan); }
 .tl-btn.reset      { --btn-color: var(--pink); margin-left: auto; }
+/* Visibility toggle pills (VIEW: DAMAGE / PLACEMENT) */
+.tl-btn.tl-vis {
+  padding: 4px 8px 4px 7px;
+  font-family: 'JetBrains Mono', monospace;
+  letter-spacing: 0.1em;
+}
+.tl-btn.tl-vis .tl-vis-dot {
+  display: inline-block;
+  margin-right: 4px;
+  font-size: 9px;
+}
+.tl-btn.tl-vis.c-damage    { --vis-color: var(--tankbuster); }
+.tl-btn.tl-vis.c-placement { --vis-color: var(--custom); }
+.tl-btn.tl-vis.on {
+  color: var(--vis-color);
+  border-color: var(--vis-color);
+  background: rgba(0, 0, 0, 0.25);
+}
+.tl-btn.tl-vis.off {
+  color: var(--text-faint);
+  border-color: var(--line);
+  background: transparent;
+  text-decoration: line-through;
+  text-decoration-color: var(--text-faint);
+}
+
 .tl-divider {
   width: 1px;
   height: 20px;

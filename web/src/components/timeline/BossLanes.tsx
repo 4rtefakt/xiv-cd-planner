@@ -13,6 +13,7 @@ import { MechanicMarker } from './Mechanic';
 export function BossLanesLeft() {
   const bossLanes = usePlanStore((s) => s.bossLanes);
   const mechanics = usePlanStore((s) => s.mechanics);
+  const hiddenCats = usePlanStore((s) => s.hiddenMechCategories);
   const removeBossLane = usePlanStore((s) => s.removeBossLane);
   const setBossLaneName = usePlanStore((s) => s.setBossLaneName);
   const readOnly = usePlanStore((s) => s.readOnly);
@@ -22,8 +23,10 @@ export function BossLanesLeft() {
     <div className="left-boss-lanes">
       {bossLanes.map((lane, idx) => {
         // Match the right column's height by computing the same slot
-        // count from the same set of mechanics.
-        const laneMechs = mechanics.filter((m) => m.lane_id === lane.id);
+        // count from the same (filtered) set of mechanics.
+        const laneMechs = mechanics.filter(
+          (m) => m.lane_id === lane.id && !hiddenCats.includes(m.category),
+        );
         const { slotCount } = computeMechSlots(laneMechs);
         return (
         <div
@@ -117,11 +120,16 @@ function LaneNameEditor({
 export function BossLanesRight() {
   const bossLanes = usePlanStore((s) => s.bossLanes);
   const mechanics = usePlanStore((s) => s.mechanics);
+  const hiddenCats = usePlanStore((s) => s.hiddenMechCategories);
   const uses = usePlanStore((s) => s.uses);
   const fightDuration = usePlanStore((s) => s.encounter.fight_duration);
   const openModal = usePlanStore((s) => s.openMechanicModal);
   const dragCtx = usePlanStore((s) => s.dragCtx);
   const moveMechanic = usePlanStore((s) => s.moveMechanic);
+
+  // Filter once — the result feeds both per-lane rendering and slot
+  // computation, so they stay in sync.
+  const visibleMechs = mechanics.filter((m) => !hiddenCats.includes(m.category));
 
   return (
     <div className="right-boss-lanes">
@@ -129,8 +137,8 @@ export function BossLanesRight() {
         <BossLaneRow
           key={lane.id}
           laneId={lane.id}
-          mechanics={mechanics.filter((m) => m.lane_id === lane.id)}
-          allMechanics={mechanics}
+          mechanics={visibleMechs.filter((m) => m.lane_id === lane.id)}
+          allMechanics={visibleMechs}
           uses={uses}
           fightDuration={fightDuration}
           dragCtx={dragCtx}
