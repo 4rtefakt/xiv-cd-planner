@@ -326,15 +326,15 @@
 }
 .job-picker-grid {
   display: grid;
-  /* 4 cols : tanks (4) fit on one row, DPS (13) wraps to 4 rows. */
-  grid-template-columns: repeat(4, 1fr);
-  gap: 3px;
+  /* 7 cols : tanks (4) + heals (4) fit comfortably ; 13 DPS take 2 rows. */
+  grid-template-columns: repeat(7, 1fr);
+  gap: 2px;
 }
 .job-picker-opt {
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 2px;
+  padding: 1px;
   width: 100%;
   aspect-ratio: 1 / 1;
   border: 1px solid var(--line-bright);
@@ -342,10 +342,10 @@
   cursor: pointer;
   transition: all 0.12s;
 }
-/* Picker icon ≈ card icon (30px). aspect-ratio keeps the option square. */
+/* Picker icon ~half the card icon size — readable thumbnail, name in title. */
 .job-picker-opt > * {
-  width: 28px;
-  height: 28px;
+  width: 14px;
+  height: 14px;
 }
 .job-picker-opt:hover {
   border-color: var(--cyan);
@@ -550,7 +550,9 @@
   position: relative;
   border-bottom: 1px solid var(--line);
   background: var(--panel-3);
-  cursor: crosshair;
+  /* "grab" hints the pan-by-drag affordance ; crosshair returns on the
+     mechanic markers since clicking them is a precise action. */
+  cursor: grab;
 }
 
 /* ===== PLAYER GROUPS (left + right) ===== */

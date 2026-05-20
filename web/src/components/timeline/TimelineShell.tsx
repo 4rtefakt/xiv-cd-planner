@@ -77,6 +77,64 @@ export function TimelineShell() {
     return () => el.removeEventListener('wheel', onWheel);
   }, []);
 
+  // Pan-by-drag on empty boss-lane areas. The user grabs a section of
+  // the boss row that doesn't have a mechanic on it and drags
+  // horizontally to scroll the timeline. If the mouse moved more than
+  // PAN_THRESHOLD before release we also swallow the trailing click,
+  // so the AddMechanicModal doesn't open at the release position.
+  useEffect(() => {
+    const el = rightRef.current;
+    if (!el) return;
+    const PAN_THRESHOLD = 4; // px
+
+    const onMouseDown = (e: MouseEvent) => {
+      if (e.button !== 0) return; // left mouse only
+      const target = e.target as HTMLElement;
+      const bossRow = target.closest('.boss-row-right');
+      if (!bossRow) return;
+      // Don't pan when the press starts on a mechanic marker — that's
+      // either a click-to-remove, a drag-reposition, or a hover hit.
+      if (target.closest('.mechanic')) return;
+
+      const startX = e.clientX;
+      const startScroll = el.scrollLeft;
+      let moved = false;
+      const prevCursor = el.style.cursor;
+      el.style.cursor = 'grabbing';
+
+      const onMove = (mv: MouseEvent) => {
+        const dx = mv.clientX - startX;
+        if (!moved && Math.abs(dx) > PAN_THRESHOLD) moved = true;
+        if (moved) {
+          el.scrollLeft = startScroll - dx;
+          mv.preventDefault();
+        }
+      };
+      const onUp = () => {
+        document.removeEventListener('mousemove', onMove);
+        document.removeEventListener('mouseup', onUp);
+        el.style.cursor = prevCursor;
+        if (moved) {
+          // Swallow the click that follows the drag release, so the
+          // boss-row's onClick (open mech modal) doesn't fire.
+          const suppress = (cl: MouseEvent) => {
+            cl.stopPropagation();
+            cl.preventDefault();
+            document.removeEventListener('click', suppress, true);
+          };
+          document.addEventListener('click', suppress, true);
+          // Safety net: clear the suppressor if no click follows.
+          setTimeout(() => document.removeEventListener('click', suppress, true), 300);
+        }
+      };
+      document.addEventListener('mousemove', onMove);
+      document.addEventListener('mouseup', onUp);
+    };
+
+    el.addEventListener('mousedown', onMouseDown);
+    return () => el.removeEventListener('mousedown', onMouseDown);
+  }, []);
+
   return (
     <>
       <div className="timeline-toolbar">
