@@ -88,6 +88,7 @@ export function ImportLogModal({ open, onClose }: Props) {
       fightName: preview.fightName,
       fightDuration: preview.fightDuration,
       bossLanes: preview.bossLanes,
+      players: preview.players,
       mechanics: preview.mechanics,
     });
     onClose();
