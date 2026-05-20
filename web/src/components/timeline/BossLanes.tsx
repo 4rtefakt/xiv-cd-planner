@@ -70,7 +70,8 @@ export function BossLanesLeft() {
             </span>
           )}
         </div>
-      ))}
+        );
+      })}
     </div>
   );
 }
