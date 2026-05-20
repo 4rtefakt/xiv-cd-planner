@@ -1,7 +1,10 @@
 name = "cooldown-planner"
 compatibility_date = "2025-12-01"
 compatibility_flags = ["nodejs_compat"]
-pages_build_output_dir = "web/dist"
+# pages_build_output_dir intentionally omitted: passing it here makes
+# `wrangler pages dev -- <vite-cmd>` error out ("specify either a directory
+# OR a proxy command, not both"). The output dir is passed at deploy time
+# via the `deploy:pages` npm script instead.
 
 # ---------------------------------------------------------------------------
 # Bindings exposed to Pages Functions (functions/**)
