@@ -85,6 +85,7 @@ export function ImportLogModal({ open, onClose }: Props) {
     importFightFromLog({
       fightName: preview.fightName,
       fightDuration: preview.fightDuration,
+      bossLanes: preview.bossLanes,
       mechanics: preview.mechanics,
     });
     onClose();
@@ -162,7 +163,15 @@ export function ImportLogModal({ open, onClose }: Props) {
             <div className="modal-row">
               <div className="modal-label">
                 Preview · {preview.mechanics.length} mechanic{preview.mechanics.length === 1 ? '' : 's'}{' '}
-                in {fmt(preview.fightDuration)}
+                in {fmt(preview.fightDuration)} ·{' '}
+                <span style={{ color: 'var(--cyan)' }}>
+                  {preview.bossLanes.length} lane{preview.bossLanes.length === 1 ? '' : 's'}
+                </span>
+                {preview.bossLanes.length > 0 && (
+                  <span style={{ marginLeft: 8, opacity: 0.7, fontFamily: "'JetBrains Mono', monospace", fontSize: 10 }}>
+                    {preview.bossLanes.join(' · ')}
+                  </span>
+                )}
               </div>
               <div className="fflogs-preview">
                 {preview.mechanics.slice(0, 80).map((m, i) => (

@@ -146,11 +146,17 @@ interface PlanState {
   importFightFromLog(payload: {
     fightName: string;
     fightDuration: number;
+    /** Ordered boss lane names from the FFLogs source analysis. One
+     *  BossLane is created per entry (e.g. ["Shinryu", "Right Wing",
+     *  "Left Wing", "Adds"]). If the array is empty, falls back to a
+     *  single "BOSS A" lane. */
+    bossLanes?: string[];
     mechanics: Array<{
       name: string;
       time: number;
       targetNames: string[];
       damage_kind: 'physical' | 'magical' | 'pure';
+      source_name?: string;
     }>;
   }): void;
   /**
@@ -271,18 +277,34 @@ export const usePlanStore = create<PlanState>((set) => ({
     set((s) => ({ party: s.party.map((p) => (p.id === playerId ? { ...p, name } : p)) })),
   importFightFromLog: (payload) =>
     set((s) => {
-      const lane = { id: 'lane-1', name: 'BOSS A' };
+      // Build one lane per detected source ; fall back to a single
+      // "BOSS A" if FFLogs didn't surface any (e.g. older API path).
+      const laneNames =
+        payload.bossLanes && payload.bossLanes.length > 0 ? payload.bossLanes : ['BOSS A'];
+      const lanes = laneNames.map((name, i) => ({
+        id: `lane-${i + 1}`,
+        name: name.toUpperCase(),
+      }));
+      // name → lane_id map. Mechs whose source_name doesn't match any
+      // lane (shouldn't happen if the server emitted consistent data)
+      // fall back to the last lane (typically "Adds" or the only lane).
+      const nameToLane = new Map<string, string>();
+      for (let i = 0; i < lanes.length; i++) nameToLane.set(laneNames[i]!, lanes[i]!.id);
+      const fallbackLaneId = lanes[lanes.length - 1]!.id;
+
       const partyIds = s.party.map((p) => p.id);
       const tankId = s.party.find((p) => p.badge === 'MT' || p.badge === 'OT')?.id;
+
       const importedMechs = payload.mechanics.map((m, i) => {
         const seenCount = m.targetNames.length;
         let targets: string[];
         if (seenCount >= s.party.length - 1) targets = partyIds; // raidwide-ish
         else if (seenCount === 1) targets = tankId ? [tankId] : [];
         else targets = []; // user to assign
+        const laneId = (m.source_name && nameToLane.get(m.source_name)) ?? fallbackLaneId;
         return {
           id: `mech-fflogs-${Date.now()}-${i}`,
-          lane_id: lane.id,
+          lane_id: laneId,
           name: m.name.toUpperCase(),
           time: m.time,
           category: 'damage' as const,
@@ -296,7 +318,7 @@ export const usePlanStore = create<PlanState>((set) => ({
           fight_name: payload.fightName,
           fight_duration: Math.max(60, Math.min(900, payload.fightDuration)),
         },
-        bossLanes: [lane],
+        bossLanes: lanes,
         mechanics: importedMechs,
         uses: [], // can't auto-place ; clear to start from scratch
       };

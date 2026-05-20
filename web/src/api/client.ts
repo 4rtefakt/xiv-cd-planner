@@ -47,6 +47,9 @@ export interface FFLogsMechanic {
   targetNames: string[];
   damage_kind: 'physical' | 'magical' | 'pure';
   sample_amount: number;
+  /** Display name of the source NPC that cast the mech (Shinryu, Right
+   *  Wing, Adds, …). Used to assign mechs to the right boss lane. */
+  source_name?: string;
 }
 
 export interface FFLogsFightData {
@@ -54,6 +57,9 @@ export interface FFLogsFightData {
   fightStart: number;
   fightEnd: number;
   fightDuration: number;
+  /** Ordered list of boss lane names — Boss subtype first, then by
+   *  event count desc. Frontend creates one BossLane per entry. */
+  bossLanes: string[];
   mechanics: FFLogsMechanic[];
 }
 

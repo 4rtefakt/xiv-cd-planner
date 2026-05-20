@@ -76,6 +76,10 @@ interface AggregatedMech {
   /** xivapi action id (= FFLogs abilityGameID). Used post-aggregation to
    *  look up the real AttackType, which gives us a reliable damage_kind. */
   game_id?: number;
+  /** Display name of the NPC that cast this mech. Lets the frontend
+   *  spawn one boss lane per concurrent enemy (Shinryu + Wings, M3S
+   *  Brute body + adds, …). */
+  source_name?: string;
 }
 
 const FIGHT_HEADER_QUERY = `
@@ -170,6 +174,11 @@ export const onRequestPost: PagesFunction<FFLogsEnv> = async (ctx) => {
       (header.reportData.report.masterData.abilities ?? []).map((a) => [a.gameID, a]),
     );
 
+    /** name → { eventCount, isBoss } for every NPC that did a tracked
+     *  damage event. Used to decide which sources deserve their own
+     *  boss lane (vs being dumped into a catch-all "Adds" lane). */
+    const sourceStats = new Map<string, { eventCount: number; isBoss: boolean }>();
+
     // 2. Paginate damage events
     const groups: AggregatedMech[] = [];
     /** Index of the most-recent group per ability name. Lets us merge
@@ -219,6 +228,12 @@ export const onRequestPost: PagesFunction<FFLogsEnv> = async (ctx) => {
         if (!targetActor || targetActor.type !== 'Player') { skipNonPlayerTarget++; continue; }
 
         if (sampleAbilityNames.length < 5) sampleAbilityNames.push(name);
+        // Track source NPC for lane assignment later.
+        const sourceActor = actors.get(ev.sourceID);
+        const sourceName = sourceActor?.name || 'Unknown';
+        const stats = sourceStats.get(sourceName);
+        if (stats) stats.eventCount++;
+        else sourceStats.set(sourceName, { eventCount: 1, isBoss: sourceActor?.subType === 'Boss' });
         const relSec = Math.round((ev.timestamp - fight.startTime) / 100) / 10;
         // Sliding window : if there's already a group for this ability
         // within GROUP_WINDOW_MS of THIS event, merge. Otherwise start
@@ -239,6 +254,7 @@ export const onRequestPost: PagesFunction<FFLogsEnv> = async (ctx) => {
             damage_kind: 'magical', // refined below via xivapi lookup
             sample_amount: 0,
             game_id: ev.abilityGameID,
+            source_name: sourceName,
           });
           lastGroupIdxByName.set(name, idx);
         }
@@ -268,11 +284,40 @@ export const onRequestPost: PagesFunction<FFLogsEnv> = async (ctx) => {
       }
     }
 
+    // Decide which sources deserve a dedicated boss lane :
+    //   - explicit Boss subType  → always
+    //   - other NPCs with >= MIN_EVENTS damage events on players → yes
+    //   - smaller adds (1-2 hits) get merged under "Adds"
+    const MIN_EVENTS = 5;
+    const bossNames: string[] = [];
+    const addsName = 'Adds';
+    let hasAdds = false;
+    for (const [name, st] of sourceStats) {
+      if (st.isBoss || st.eventCount >= MIN_EVENTS) bossNames.push(name);
+      else hasAdds = true;
+    }
+    // Sort : Boss subtype first, then by event count desc, stable by name.
+    bossNames.sort((a, b) => {
+      const sa = sourceStats.get(a)!;
+      const sb = sourceStats.get(b)!;
+      if (sa.isBoss !== sb.isBoss) return sa.isBoss ? -1 : 1;
+      return sb.eventCount - sa.eventCount;
+    });
+    const lanes = [...bossNames];
+    if (hasAdds) lanes.push(addsName);
+
+    // Rewrite source_name on groups so any mech from a "minor" NPC
+    // lands in the "Adds" bucket and doesn't trail a phantom lane.
+    for (const g of groups) {
+      if (g.source_name && !bossNames.includes(g.source_name)) g.source_name = addsName;
+    }
+
     return jsonResp({
       fightName: fight.name,
       fightStart: fight.startTime,
       fightEnd: fight.endTime,
       fightDuration: Math.round((fight.endTime - fight.startTime) / 1000),
+      bossLanes: lanes,
       mechanics: groups,
       _debug: {
         pages,
@@ -285,6 +330,7 @@ export const onRequestPost: PagesFunction<FFLogsEnv> = async (ctx) => {
         sampleAbilityNames,
         actorsTotal: header.reportData.report.masterData.actors.length,
         actorTypes: Array.from(new Set(header.reportData.report.masterData.actors.map((a) => a.type))),
+        sourceStats: Object.fromEntries(sourceStats),
       },
     });
   } catch (err) {
