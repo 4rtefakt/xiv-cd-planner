@@ -70,6 +70,34 @@
   background: rgba(0, 229, 255, 0.1);
   box-shadow: 0 0 12px rgba(0, 229, 255, 0.3);
 }
+/* Save status pill + share-link button (M.1) */
+.header-save {
+  padding: 4px 10px;
+  border: 1px solid var(--cov-color, var(--text-faint));
+  color: var(--cov-color, var(--text-faint));
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 0.18em;
+  background: rgba(0, 0, 0, 0.25);
+  transition: color 0.2s, border-color 0.2s;
+}
+.header-save.save-saving { --cov-color: var(--cyan); }
+.header-save.save-saved  { --cov-color: var(--good); }
+.header-save.save-error  { --cov-color: var(--bad); }
+.header-save.save-idle   { --cov-color: var(--text-faint); }
+
+.header-btn-share {
+  color: var(--cyan);
+  border-color: var(--cyan);
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.1em;
+}
+.header-btn-share.is-copied {
+  color: var(--good);
+  border-color: var(--good);
+}
+
 .header-tag {
   font-family: 'JetBrains Mono', monospace;
   font-size: 11px;
@@ -901,6 +929,15 @@
 .cd-use.cd-use-preview.is-conflict .cd-use-preview-tip {
   color: var(--bad);
   border-color: var(--bad);
+}
+/* Snapped-to-mech preview — brighter cyan glow to confirm the lock */
+.cd-use.cd-use-preview.is-snapped .cd-use-active-block {
+  border-color: var(--cyan);
+  box-shadow: 0 0 6px var(--cyan);
+}
+.cd-use.cd-use-preview.is-snapped .cd-use-preview-tip {
+  color: var(--cyan);
+  border-color: var(--cyan);
 }
 
 /* Row in click-to-place preview mode */

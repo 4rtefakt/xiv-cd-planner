@@ -15,6 +15,11 @@ interface AbilityRowProps {
 
 let useSeq = 0;
 
+/** When the cursor is within this many seconds of a mech, snap the
+ *  preview time to that mech. Small enough that the user can still
+ *  drop a CD a few seconds before/after a mech if they really want. */
+const SNAP_THRESHOLD_S = 3;
+
 /**
  * Right-side ability row.
  *
@@ -54,7 +59,21 @@ export function AbilityRow({ playerId, ability, uses, alt, fightDuration }: Abil
     // use to LAND such that its left edge is 25px to the LEFT of the
     // current cursor — preserve the visual grab anchor.
     const offsetPx = matchesUseDrag ? dragCtx?.grabOffsetPx ?? 0 : 0;
-    const time = xToTime(clientX - offsetPx, ref.current, fightDuration);
+    const rawTime = xToTime(clientX - offsetPx, ref.current, fightDuration);
+    // Snap to a nearby mech if one is within SNAP_THRESHOLD_S — saves
+    // the user from pixel-perfect aim when they want the CD to start
+    // exactly when the mech fires.
+    let time = rawTime;
+    let snapped = false;
+    let bestDelta = SNAP_THRESHOLD_S + 1;
+    for (const m of mechanics) {
+      const d = Math.abs(m.time - rawTime);
+      if (d <= SNAP_THRESHOLD_S && d < bestDelta) {
+        bestDelta = d;
+        time = m.time;
+        snapped = true;
+      }
+    }
     const conflict =
       findUseConflict(playerId, ability.id, time, ability.recast, rowUses, excludeUseId) !== null;
     return {
@@ -63,6 +82,7 @@ export function AbilityRow({ playerId, ability, uses, alt, fightDuration }: Abil
       time,
       conflict,
       excludeUseId,
+      snapped,
     };
   }
 
@@ -147,6 +167,7 @@ export function AbilityRow({ playerId, ability, uses, alt, fightDuration }: Abil
         <PreviewGhost
           time={previewUse!.time}
           conflict={previewUse!.conflict}
+          snapped={previewUse!.snapped ?? false}
           ability={ability}
           fightDuration={fightDuration}
         />
@@ -162,11 +183,13 @@ export function AbilityRow({ playerId, ability, uses, alt, fightDuration }: Abil
 function PreviewGhost({
   time,
   conflict,
+  snapped,
   ability,
   fightDuration,
 }: {
   time: number;
   conflict: boolean;
+  snapped: boolean;
   ability: Ability;
   fightDuration: number;
 }) {
@@ -174,7 +197,11 @@ function PreviewGhost({
   const activeWidthPct = Math.min(1, ability.effect / ability.recast) * 100;
   return (
     <div
-      className={`cd-use cd-use-preview type-${ability.mit_type} ${conflict ? 'is-conflict' : ''}`}
+      className={
+        `cd-use cd-use-preview type-${ability.mit_type}` +
+        (conflict ? ' is-conflict' : '') +
+        (snapped ? ' is-snapped' : '')
+      }
       style={{ left: `${pct(time, fightDuration)}%`, width: `${totalPct}%`, pointerEvents: 'none' }}
       aria-hidden
     >
@@ -183,7 +210,9 @@ function PreviewGhost({
       </div>
       <div className="cd-use-cooldown" />
       <div className="cd-use-preview-tip">
-        {conflict ? `CONFLICT · ${fmt(time)}` : `${ability.name.toUpperCase()} · ${fmt(time)} → ${fmt(time + ability.effect)}`}
+        {conflict
+          ? `CONFLICT · ${fmt(time)}`
+          : `${ability.name.toUpperCase()}${snapped ? ' ⟁' : ''} · ${fmt(time)} → ${fmt(time + ability.effect)}`}
       </div>
     </div>
   );

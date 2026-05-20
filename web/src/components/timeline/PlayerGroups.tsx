@@ -51,7 +51,11 @@ export function PlayerGroupsLeft() {
               sortedAbilities.map((ab) => {
                 const altClass = alt++ % 2 === 1 ? 'alt' : '';
                 return (
-                  <div key={ab.id} className={`cd-row-left type-${ab.mit_type} cd-row-height ${altClass}`}>
+                  <div
+                    key={ab.id}
+                    className={`cd-row-left type-${ab.mit_type} cd-row-height ${altClass}`}
+                    title={`${ab.name} · ${ab.recast}s recast · ${ab.effect}s effect · ${ab.mit_potency}% ${ab.mit_type}${ab.mit_kind && ab.mit_kind !== 'all' ? ` (${ab.mit_kind} only)` : ''}`}
+                  >
                     <span className="cd-indent" />
                     <span className="cd-ability-icon" style={{ color: 'var(--ability-color)' }}>
                       <AbilityIcon src={ab.icon} fallbackGlyph={ab.icon_glyph} alt={ab.name} />

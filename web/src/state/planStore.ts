@@ -69,6 +69,10 @@ export interface PreviewUse {
   time: number;
   conflict: boolean;
   excludeUseId?: string;
+  /** True when computePreviewAt snapped the cursor time to a nearby
+   *  mechanic's time (within SNAP_THRESHOLD_S). Used to render a small
+   *  visual cue on the ghost. */
+  snapped?: boolean;
 }
 
 interface PlanState {
