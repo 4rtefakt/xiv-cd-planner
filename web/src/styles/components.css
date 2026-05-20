@@ -85,6 +85,21 @@
 .header-save.save-saved  { --cov-color: var(--good); }
 .header-save.save-error  { --cov-color: var(--bad); }
 .header-save.save-idle   { --cov-color: var(--text-faint); }
+.header-save.save-readonly { --cov-color: var(--custom); }
+
+.header-btn-edit {
+  color: var(--good);
+  border-color: var(--good);
+}
+
+/* Hide all edit-only affordances under .app.read-only. JS guards also
+   early-return in handlers, so this is mostly visual deduping. */
+.app.read-only .timeline-toolbar { display: none; }
+.app.read-only .mech-remove,
+.app.read-only .lane-remove,
+.app.read-only .cd-use-remove,
+.app.read-only .lane-add { display: none; }
+.app.read-only .modal-backdrop { display: none; }
 
 .header-btn-share {
   color: var(--cyan);
@@ -576,10 +591,10 @@
 .boss-row-left .lane-remove:hover { opacity: 1; }
 
 .lane-name {
-  cursor: pointer;
   padding: 1px 2px;
 }
-.lane-name:hover { color: var(--text); }
+.lane-name-editable { cursor: pointer; }
+.lane-name-editable:hover { color: var(--text); }
 .lane-name-input {
   flex: 1;
   min-width: 0;

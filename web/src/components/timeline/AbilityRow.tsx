@@ -38,6 +38,7 @@ export function AbilityRow({ playerId, ability, uses, alt, fightDuration }: Abil
   const addUse = usePlanStore((s) => s.addUse);
   const moveUse = usePlanStore((s) => s.moveUse);
   const mechanics = usePlanStore((s) => s.mechanics);
+  const readOnly = usePlanStore((s) => s.readOnly);
 
   const ref = useRef<HTMLDivElement | null>(null);
   const rowUses = uses.filter((u) => u.player_id === playerId && u.ability_id === ability.id);
@@ -99,6 +100,7 @@ export function AbilityRow({ playerId, ability, uses, alt, fightDuration }: Abil
       data-ability-id={ability.id}
       // --- Click-to-place hover ---
       onMouseMove={(e) => {
+        if (readOnly) return;
         // Suppress preview while a CdUse drag is in progress.
         if (dragCtx) return;
         const p = computePreviewAt(e.clientX);
@@ -106,6 +108,7 @@ export function AbilityRow({ playerId, ability, uses, alt, fightDuration }: Abil
       }}
       onMouseLeave={() => setPreviewUse(null)}
       onClick={(e) => {
+        if (readOnly) return;
         // Ignore clicks landing on an existing CdUse (its own handlers run).
         // The preview ghost is pointer-events:none in CSS, but we also
         // gate via class name in case that ever changes.

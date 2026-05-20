@@ -32,13 +32,14 @@ export function CdUse({ use, ability, fightDuration }: CdUseProps) {
   return (
     <div
       className={`cd-use type-${ability.mit_type}`}
-      draggable
+      draggable={!usePlanStore.getState().readOnly}
       style={{
         left: `${pct(use.time, fightDuration)}%`,
         width: `${totalPct}%`,
       }}
       data-use-id={use.id}
       onDragStart={(e) => {
+        if (usePlanStore.getState().readOnly) { e.preventDefault(); return; }
         e.stopPropagation();
         e.dataTransfer.effectAllowed = 'move';
         e.dataTransfer.setData('text/plain', `use:${use.id}`);
@@ -67,6 +68,7 @@ export function CdUse({ use, ability, fightDuration }: CdUseProps) {
       onContextMenu={(e) => {
         e.preventDefault();
         e.stopPropagation();
+        if (usePlanStore.getState().readOnly) return;
         removeUse(use.id);
       }}
     >
@@ -82,18 +84,20 @@ export function CdUse({ use, ability, fightDuration }: CdUseProps) {
       <div className="cd-use-cooldown" />
       <div className="cd-use-tip">{tipText}</div>
       <div className="cd-use-start-time">{fmt(use.time)}</div>
-      <span
-        className="cd-use-remove"
-        role="button"
-        tabIndex={0}
-        title="Remove"
-        onClick={(e) => {
-          e.stopPropagation();
-          removeUse(use.id);
-        }}
-      >
-        ×
-      </span>
+      {!usePlanStore.getState().readOnly && (
+        <span
+          className="cd-use-remove"
+          role="button"
+          tabIndex={0}
+          title="Remove"
+          onClick={(e) => {
+            e.stopPropagation();
+            removeUse(use.id);
+          }}
+        >
+          ×
+        </span>
+      )}
     </div>
   );
 }

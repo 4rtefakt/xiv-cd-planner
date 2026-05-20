@@ -13,6 +13,7 @@ export function BossLanesLeft() {
   const bossLanes = usePlanStore((s) => s.bossLanes);
   const removeBossLane = usePlanStore((s) => s.removeBossLane);
   const setBossLaneName = usePlanStore((s) => s.setBossLaneName);
+  const readOnly = usePlanStore((s) => s.readOnly);
   const [editingId, setEditingId] = useState<string | null>(null);
 
   return (
@@ -31,16 +32,19 @@ export function BossLanesLeft() {
             />
           ) : (
             <span
-              className="lane-name"
-              role="button"
-              tabIndex={0}
-              title="Rename lane"
-              onClick={() => setEditingId(lane.id)}
+              className={`lane-name${readOnly ? '' : ' lane-name-editable'}`}
+              role={readOnly ? undefined : 'button'}
+              tabIndex={readOnly ? undefined : 0}
+              title={readOnly ? undefined : 'Rename lane'}
+              onClick={() => {
+                if (readOnly) return;
+                setEditingId(lane.id);
+              }}
             >
               {lane.name}
             </span>
           )}
-          {bossLanes.length > 1 && (
+          {!readOnly && bossLanes.length > 1 && (
             <span
               className="lane-remove"
               role="button"
@@ -149,6 +153,7 @@ function BossLaneRow({
 }: BossLaneRowProps) {
   const ref = useRef<HTMLDivElement | null>(null);
   const [hover, setHover] = useState<{ t: number } | null>(null);
+  const readOnly = usePlanStore((s) => s.readOnly);
 
   // Are we hovering this lane while a mechanic from THIS lane is being dragged?
   // Mechanics stay within their own lane on reposition (cross-lane moves
@@ -173,6 +178,7 @@ function BossLaneRow({
       }}
       onMouseLeave={() => setHover(null)}
       onClick={(e) => {
+        if (readOnly) return;
         if ((e.target as HTMLElement).closest('.mechanic')) return;
         if (!ref.current) return;
         onAddAt(xToTime(e.clientX, ref.current, fightDuration));

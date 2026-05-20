@@ -5,6 +5,7 @@ export function EncounterFields() {
   const mechanicsCount = usePlanStore((s) => s.mechanics.length);
   const usesCount = usePlanStore((s) => s.uses.length);
   const setEncounter = usePlanStore((s) => s.setEncounter);
+  const readOnly = usePlanStore((s) => s.readOnly);
 
   const pad2 = (n: number) => String(n).padStart(2, '0');
 
@@ -16,6 +17,7 @@ export function EncounterFields() {
           className="enc-input"
           type="text"
           value={encounter.fight_name}
+          readOnly={readOnly}
           onChange={(e) => setEncounter({ fight_name: e.target.value })}
         />
       </div>
@@ -27,6 +29,7 @@ export function EncounterFields() {
           min={60}
           max={900}
           value={encounter.fight_duration}
+          readOnly={readOnly}
           onChange={(e) => {
             const v = parseInt(e.target.value, 10);
             const next = Number.isFinite(v) ? Math.max(60, Math.min(900, v)) : 600;
@@ -40,6 +43,7 @@ export function EncounterFields() {
           className="enc-input-mono"
           type="number"
           value={encounter.party_ilvl ?? ''}
+          readOnly={readOnly}
           onChange={(e) => {
             const v = parseInt(e.target.value, 10);
             setEncounter({ party_ilvl: Number.isFinite(v) ? v : null });

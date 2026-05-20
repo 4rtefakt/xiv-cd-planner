@@ -54,6 +54,8 @@ export function AutoSaver() {
       // server — the slice mutations during hydrate would otherwise
       // bounce back as a needless PATCH.
       if (state.saveStatus === 'saving') return;
+      // Read-only view : never POST or PATCH.
+      if (state.readOnly) return;
       state.setSaveStatus('saving');
 
       const body = {

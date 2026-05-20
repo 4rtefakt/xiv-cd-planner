@@ -94,6 +94,9 @@ interface PlanState {
    *  Set by hydratePlan so the slice changes from a server fetch don't
    *  trigger a redundant PATCH back to the same data. */
   _skipNextSave: boolean;
+  /** Read-only view : URL ?view=read disables all mutation affordances
+   *  (drag, click-to-place, modals, rename, …) and suspends AutoSaver. */
+  readOnly: boolean;
 
   // Plan content
   encounter: Encounter;
@@ -181,9 +184,10 @@ interface PlanState {
   // Actions — reset
   resetEncounter(): void;
 
-  // Actions — persistence (C.5) + history (M.3)
+  // Actions — persistence (C.5) + history (M.3) + view mode (M.4)
   setSlug(slug: string | null): void;
   setSaveStatus(status: SaveStatus): void;
+  setReadOnly(readOnly: boolean): void;
   /** Used by historyManager to swap back to a past snapshot. */
   restoreSnapshot(snap: {
     encounter: Encounter;
@@ -223,6 +227,7 @@ export const usePlanStore = create<PlanState>((set) => ({
   slug: null,
   saveStatus: 'idle',
   _skipNextSave: false,
+  readOnly: false,
   encounter: defaultEncounter,
   party: demoParty,
   bossLanes: [{ id: 'lane-1', name: 'BOSS A' }],
@@ -372,6 +377,7 @@ export const usePlanStore = create<PlanState>((set) => ({
 
   setSlug: (slug) => set({ slug }),
   setSaveStatus: (saveStatus) => set({ saveStatus }),
+  setReadOnly: (readOnly) => set({ readOnly }),
   restoreSnapshot: (snap) =>
     set({
       encounter: snap.encounter,

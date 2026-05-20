@@ -25,6 +25,7 @@ export function PlayerCard({ player, job }: PlayerCardProps) {
   const jobs = usePlanStore((s) => s.jobs);
   const setPlayerName = usePlanStore((s) => s.setPlayerName);
   const switchPlayerJob = usePlanStore((s) => s.switchPlayerJob);
+  const readOnly = usePlanStore((s) => s.readOnly);
 
   const [editingName, setEditingName] = useState(false);
   const [draft, setDraft] = useState(player.name);
@@ -38,11 +39,12 @@ export function PlayerCard({ player, job }: PlayerCardProps) {
     <div className={`player-card-mini role-${role}${subClass}`}>
       <div className="pcm-head">
         <div
-          className="pcm-job-icon pcm-job-icon-editable"
-          role="button"
-          tabIndex={0}
-          title="Change job"
+          className={`pcm-job-icon${readOnly ? '' : ' pcm-job-icon-editable'}`}
+          role={readOnly ? undefined : 'button'}
+          tabIndex={readOnly ? undefined : 0}
+          title={readOnly ? job?.name : 'Change job'}
           onClick={(e) => {
+            if (readOnly) return;
             e.stopPropagation();
             setPicking((v) => !v);
           }}
@@ -66,11 +68,12 @@ export function PlayerCard({ player, job }: PlayerCardProps) {
             />
           ) : (
             <div
-              className="pcm-name pcm-name-editable"
-              role="button"
-              tabIndex={0}
-              title="Click to rename"
+              className={`pcm-name${readOnly ? '' : ' pcm-name-editable'}`}
+              role={readOnly ? undefined : 'button'}
+              tabIndex={readOnly ? undefined : 0}
+              title={readOnly ? undefined : 'Click to rename'}
               onClick={() => {
+                if (readOnly) return;
                 setDraft(player.name);
                 setEditingName(true);
               }}

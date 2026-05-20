@@ -17,6 +17,7 @@ export function MechanicMarker({ mech, uses, fightDuration }: MechanicProps) {
   const setDragCtx = usePlanStore((s) => s.setDragCtx);
   const openEditMechanic = usePlanStore((s) => s.openEditMechanic);
   const previewUse = usePlanStore((s) => s.previewUse);
+  const readOnly = usePlanStore((s) => s.readOnly);
 
   const abilities = useMemo(() => abilityIndex(jobs), [jobs]);
   const coverage = computeCoverage(mech, uses, abilities, partySize);
@@ -59,8 +60,9 @@ export function MechanicMarker({ mech, uses, fightDuration }: MechanicProps) {
       data-mech-id={mech.id}
       data-category={mech.category}
       data-damage-kind={damageKind}
-      draggable
+      draggable={!readOnly}
       onDragStart={(e) => {
+        if (readOnly) { e.preventDefault(); return; }
         e.stopPropagation();
         e.dataTransfer.effectAllowed = 'move';
         e.dataTransfer.setData('text/plain', `mech:${mech.id}`);
@@ -76,6 +78,7 @@ export function MechanicMarker({ mech, uses, fightDuration }: MechanicProps) {
         // own handler with stopPropagation). Drag also doesn't fire a
         // click in practice, so this is safe.
         e.stopPropagation();
+        if (readOnly) return;
         openEditMechanic(mech);
       }}
     >
@@ -105,18 +108,20 @@ export function MechanicMarker({ mech, uses, fightDuration }: MechanicProps) {
               )
               : `${coverage.pct}%`}
       </div>
-      <span
-        className="mech-remove"
-        role="button"
-        tabIndex={0}
-        title="Remove"
-        onClick={(e) => {
-          e.stopPropagation();
-          removeMechanic(mech.id);
-        }}
-      >
-        ×
-      </span>
+      {!readOnly && (
+        <span
+          className="mech-remove"
+          role="button"
+          tabIndex={0}
+          title="Remove"
+          onClick={(e) => {
+            e.stopPropagation();
+            removeMechanic(mech.id);
+          }}
+        >
+          ×
+        </span>
+      )}
     </div>
   );
 }

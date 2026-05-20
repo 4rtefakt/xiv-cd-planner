@@ -16,8 +16,14 @@ const SLUG_RE = /^\/p\/([\w-]+)$/;
 export function PlanLoader() {
   const hydratePlan = usePlanStore((s) => s.hydratePlan);
   const setSaveStatus = usePlanStore((s) => s.setSaveStatus);
+  const setReadOnly = usePlanStore((s) => s.setReadOnly);
 
   useEffect(() => {
+    // Read-only mode is opt-in via the query string : /p/<slug>?view=read
+    // applies BEFORE the fetch so AutoSaver never wakes up for this load.
+    const params = new URLSearchParams(window.location.search);
+    if (params.get('view') === 'read') setReadOnly(true);
+
     const match = window.location.pathname.match(SLUG_RE);
     if (!match) return;
     const slug = match[1]!;
@@ -51,7 +57,7 @@ export function PlanLoader() {
     return () => {
       cancelled = true;
     };
-  }, [hydratePlan, setSaveStatus]);
+  }, [hydratePlan, setSaveStatus, setReadOnly]);
 
   return null;
 }

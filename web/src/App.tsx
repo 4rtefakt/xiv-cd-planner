@@ -47,6 +47,8 @@ export function App() {
       if (tag === 'INPUT' || tag === 'TEXTAREA' || target?.isContentEditable) return;
       const meta = e.ctrlKey || e.metaKey;
       if (!meta) return;
+      // No undo/redo in read-only view.
+      if (usePlanStore.getState().readOnly) return;
       const k = e.key.toLowerCase();
       const isUndo = k === 'z' && !e.shiftKey;
       const isRedo = k === 'y' || (k === 'z' && e.shiftKey);
@@ -65,8 +67,10 @@ export function App() {
     };
   }, []);
 
+  const readOnly = usePlanStore((s) => s.readOnly);
+
   return (
-    <div className="app">
+    <div className={`app${readOnly ? ' read-only' : ''}`}>
       <Header />
 
       {jobsLoading && <div className="app-loading">Loading jobs…</div>}
