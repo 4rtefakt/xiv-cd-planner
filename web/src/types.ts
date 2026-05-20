@@ -18,6 +18,7 @@ export type MitKind = 'all' | 'physical' | 'magical';
 export interface Ability {
   id: string;                 // e.g. 'PLD.HallowedGround'
   name: string;
+  name_fr?: string;           // French in-game name (Sol consacré, …)
   recast: number;             // seconds
   effect: number;             // seconds
   mit_type: MitType;
@@ -34,6 +35,7 @@ export interface Ability {
 export interface Job {
   code: string;               // 'PLD'
   name: string;
+  name_fr?: string;
   role: Role;
   sub_role: string;
   position_order: number;

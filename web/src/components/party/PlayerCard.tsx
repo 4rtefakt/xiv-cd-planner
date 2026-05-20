@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from 'react';
 import type { Job, Player } from '../../types';
 import { JobIcon } from '../Icon';
 import { usePlanStore } from '../../state/planStore';
-import { useT } from '../../i18n';
+import { useT, jobName } from '../../i18n';
 
 interface PlayerCardProps {
   player: Player;
@@ -27,6 +27,7 @@ export function PlayerCard({ player, job }: PlayerCardProps) {
   const setPlayerName = usePlanStore((s) => s.setPlayerName);
   const switchPlayerJob = usePlanStore((s) => s.switchPlayerJob);
   const readOnly = usePlanStore((s) => s.readOnly);
+  const lang = usePlanStore((s) => s.lang);
   const t = useT();
 
   const [editingName, setEditingName] = useState(false);
@@ -44,14 +45,14 @@ export function PlayerCard({ player, job }: PlayerCardProps) {
           className={`pcm-job-icon${readOnly ? '' : ' pcm-job-icon-editable'}`}
           role={readOnly ? undefined : 'button'}
           tabIndex={readOnly ? undefined : 0}
-          title={readOnly ? job?.name : t('player.changeJob')}
+          title={readOnly ? (job ? jobName(job, lang) : undefined) : t('player.changeJob')}
           onClick={(e) => {
             if (readOnly) return;
             e.stopPropagation();
             setPicking((v) => !v);
           }}
         >
-          {job ? <JobIcon src={job.icon} fallbackCode={job.code} alt={job.name} /> : null}
+          {job ? <JobIcon src={job.icon} fallbackCode={job.code} alt={jobName(job, lang)} /> : null}
         </div>
         <div className="pcm-info">
           {editingName ? (
@@ -147,6 +148,7 @@ function JobPickerPopover({
 }) {
   const ref = useRef<HTMLDivElement>(null);
   const t = useT();
+  const lang = usePlanStore((s) => s.lang);
 
   // Tank↔tank, heal↔heal. DPS slots can swap to ANY DPS sub-role —
   // a raid roster routinely flexes a melee slot to a caster or vice
@@ -186,9 +188,9 @@ function JobPickerPopover({
             type="button"
             className={`job-picker-opt${j.code === currentJob.code ? ' selected' : ''}`}
             onClick={() => onPick(j.code)}
-            title={`${j.name} (${j.code})`}
+            title={`${jobName(j, lang)} (${j.code})`}
           >
-            <JobIcon src={j.icon} fallbackCode={j.code} alt={j.name} />
+            <JobIcon src={j.icon} fallbackCode={j.code} alt={jobName(j, lang)} />
           </button>
         ))}
       </div>

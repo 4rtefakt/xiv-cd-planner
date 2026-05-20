@@ -285,3 +285,46 @@ export function storeLang(lang: Lang): void {
     /* ignore */
   }
 }
+
+/**
+ * Pick the localized name of an ability or a job. Falls back to the
+ * English `name` field if `name_fr` isn't set on the entry (which
+ * shouldn't happen on a fresh seed — scripts/fetch-fr-names.mjs fills
+ * them all in).
+ */
+export function abilityName(ab: { name: string; name_fr?: string }, lang: Lang): string {
+  return lang === 'fr' && ab.name_fr ? ab.name_fr : ab.name;
+}
+export function jobName(job: { name: string; name_fr?: string }, lang: Lang): string {
+  return lang === 'fr' && job.name_fr ? job.name_fr : job.name;
+}
+
+/**
+ * Build the player-row tooltip string with the right localization for
+ * both the ability label and the descriptors ("recast", "effect",
+ * "personal", "magic only", …). Centralised so PlayerGroups and any
+ * other consumer stay in sync.
+ */
+export function abilityTooltip(ab: {
+  name: string;
+  name_fr?: string;
+  recast: number;
+  effect: number;
+  mit_type: string;
+  mit_potency: number;
+  mit_kind?: string;
+}, lang: Lang): string {
+  const name = abilityName(ab, lang);
+  const recast = lang === 'fr' ? 'récupé' : 'recast';
+  const effect = lang === 'fr' ? 'durée' : 'effect';
+  const type =
+    lang === 'fr'
+      ? { personal: 'personnel', party: 'équipe', heal: 'soin' }[ab.mit_type] ?? ab.mit_type
+      : ab.mit_type;
+  const kindSuffix = ab.mit_kind && ab.mit_kind !== 'all'
+    ? (lang === 'fr'
+        ? ` (${ab.mit_kind === 'physical' ? 'physique' : 'magique'} uniquement)`
+        : ` (${ab.mit_kind} only)`)
+    : '';
+  return `${name} · ${ab.recast}s ${recast} · ${ab.effect}s ${effect} · ${ab.mit_potency}% ${type}${kindSuffix}`;
+}

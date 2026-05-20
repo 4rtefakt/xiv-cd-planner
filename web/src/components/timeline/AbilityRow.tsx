@@ -3,6 +3,7 @@ import type { Ability, Use } from '../../types';
 import { fmt, pct, xToTime } from '../../lib/time';
 import { findUseConflict } from '../../lib/mitigation';
 import { usePlanStore } from '../../state/planStore';
+import { abilityName } from '../../i18n';
 import { CdUse } from './CdUse';
 
 interface AbilityRowProps {
@@ -201,6 +202,7 @@ function PreviewGhost({
   ability: Ability;
   fightDuration: number;
 }) {
+  const lang = usePlanStore((s) => s.lang);
   const totalPct = (ability.recast / fightDuration) * 100;
   const activeWidthPct = Math.min(1, ability.effect / ability.recast) * 100;
   return (
@@ -219,8 +221,8 @@ function PreviewGhost({
       <div className="cd-use-cooldown" />
       <div className="cd-use-preview-tip">
         {conflict
-          ? `CONFLICT · ${fmt(time)}`
-          : `${ability.name.toUpperCase()}${snapped ? ' ⟁' : ''} · ${fmt(time)} → ${fmt(time + ability.effect)}`}
+          ? `${lang === 'fr' ? 'CONFLIT' : 'CONFLICT'} · ${fmt(time)}`
+          : `${abilityName(ability, lang).toUpperCase()}${snapped ? ' ⟁' : ''} · ${fmt(time)} → ${fmt(time + ability.effect)}`}
       </div>
     </div>
   );

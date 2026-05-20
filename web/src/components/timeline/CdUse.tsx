@@ -2,6 +2,7 @@ import type { Ability, Use } from '../../types';
 import { fmt, pct } from '../../lib/time';
 import { AbilityIcon } from '../Icon';
 import { usePlanStore } from '../../state/planStore';
+import { abilityName } from '../../i18n';
 
 interface CdUseProps {
   use: Use;
@@ -25,8 +26,11 @@ export function CdUse({ use, ability, fightDuration }: CdUseProps) {
   const totalPct = (ability.recast / fightDuration) * 100;
   const activeRatio = Math.min(1, ability.effect / ability.recast);
   const activeWidthPct = activeRatio * 100;
+  const lang = usePlanStore((s) => s.lang);
+  const localName = abilityName(ability, lang);
+  const activeLabel = lang === 'fr' ? 'ACTIVE' : 'ACTIVE';
   const tipText =
-    `${ability.name.toUpperCase()} · ACTIVE ${fmt(use.time)} → ${fmt(use.time + ability.effect)}` +
+    `${localName.toUpperCase()} · ${activeLabel} ${fmt(use.time)} → ${fmt(use.time + ability.effect)}` +
     ` · CD UNTIL ${fmt(use.time + ability.recast)}`;
 
   return (
@@ -77,7 +81,7 @@ export function CdUse({ use, ability, fightDuration }: CdUseProps) {
         style={{ width: `${activeWidthPct}%`, color: 'var(--cd-color)' }}
       >
         <div className="cd-use-icon" style={{ color: 'var(--cd-color)' }}>
-          <AbilityIcon src={ability.icon} fallbackGlyph={ability.icon_glyph} alt={ability.name} />
+          <AbilityIcon src={ability.icon} fallbackGlyph={ability.icon_glyph} alt={localName} />
         </div>
         <div className="cd-use-active-extend" />
       </div>

@@ -2,6 +2,7 @@ import { useMemo } from 'react';
 import type { Job } from '../../types';
 import { AbilityIcon, JobIcon } from '../Icon';
 import { usePlanStore } from '../../state/planStore';
+import { abilityName, abilityTooltip, jobName } from '../../i18n';
 import { AbilityRow } from './AbilityRow';
 
 /**
@@ -16,6 +17,7 @@ export function PlayerGroupsLeft() {
   const jobs = usePlanStore((s) => s.jobs);
   const collapsed = usePlanStore((s) => s.collapsed);
   const toggleCollapsed = usePlanStore((s) => s.toggleCollapsed);
+  const lang = usePlanStore((s) => s.lang);
 
   const jobByCode = useMemo(() => {
     const m = new Map<string, Job>();
@@ -39,7 +41,7 @@ export function PlayerGroupsLeft() {
               onClick={() => toggleCollapsed(p.id)}
             >
               <div className="ph-job-icon">
-                {job ? <JobIcon src={job.icon} fallbackCode={job.code} alt={job.name} /> : null}
+                {job ? <JobIcon src={job.icon} fallbackCode={job.code} alt={jobName(job, lang)} /> : null}
               </div>
               <div className="ph-name-block">
                 <span className="ph-name">{p.name}</span>
@@ -54,13 +56,13 @@ export function PlayerGroupsLeft() {
                   <div
                     key={ab.id}
                     className={`cd-row-left type-${ab.mit_type} cd-row-height ${altClass}`}
-                    title={`${ab.name} · ${ab.recast}s recast · ${ab.effect}s effect · ${ab.mit_potency}% ${ab.mit_type}${ab.mit_kind && ab.mit_kind !== 'all' ? ` (${ab.mit_kind} only)` : ''}`}
+                    title={abilityTooltip(ab, lang)}
                   >
                     <span className="cd-indent" />
                     <span className="cd-ability-icon" style={{ color: 'var(--ability-color)' }}>
-                      <AbilityIcon src={ab.icon} fallbackGlyph={ab.icon_glyph} alt={ab.name} />
+                      <AbilityIcon src={ab.icon} fallbackGlyph={ab.icon_glyph} alt={abilityName(ab, lang)} />
                     </span>
-                    <span className="cd-row-name">{ab.name}</span>
+                    <span className="cd-row-name">{abilityName(ab, lang)}</span>
                     <span className="cd-row-cd">{ab.recast}s</span>
                   </div>
                 );
