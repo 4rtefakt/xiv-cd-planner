@@ -62,6 +62,13 @@ export function CdUse({ use, ability, fightDuration }: CdUseProps) {
         // a matching ability row (onDrop in the row clears it normally).
         usePlanStore.getState().setPreviewUse(null);
       }}
+      // Right-click anywhere on the use removes it. preventDefault stops
+      // the native context menu — there's no other use for it here.
+      onContextMenu={(e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        removeUse(use.id);
+      }}
     >
       <div
         className="cd-use-active-block"
