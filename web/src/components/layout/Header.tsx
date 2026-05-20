@@ -1,10 +1,12 @@
 import { useState } from 'react';
 import { usePlanStore } from '../../state/planStore';
+import { ImportPartyModal } from '../modals/ImportPartyModal';
 
 export function Header() {
   const slug = usePlanStore((s) => s.slug);
   const saveStatus = usePlanStore((s) => s.saveStatus);
   const [copied, setCopied] = useState(false);
+  const [importOpen, setImportOpen] = useState(false);
 
   const pillLabel = (() => {
     switch (saveStatus) {
@@ -52,7 +54,7 @@ export function Header() {
       </div>
       <div className="header-right">
         <button className="header-btn" type="button" onClick={newPlan} title="Start a fresh plan">+ NEW</button>
-        <button className="header-btn" type="button">+ IMPORT PARTY</button>
+        <button className="header-btn" type="button" onClick={() => setImportOpen(true)} title="Paste a JSON party">+ IMPORT PARTY</button>
         {slug && (
           <button
             className={`header-btn header-btn-share${copied ? ' is-copied' : ''}`}
@@ -67,6 +69,7 @@ export function Header() {
         <div className="header-tag">S9.NET</div>
         <div className="header-tag">V0.1</div>
       </div>
+      <ImportPartyModal open={importOpen} onClose={() => setImportOpen(false)} />
     </header>
   );
 }

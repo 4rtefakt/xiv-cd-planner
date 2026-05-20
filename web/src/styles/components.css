@@ -1395,6 +1395,45 @@
   flex: 1;
 }
 
+/* Import-party textarea + inline error/hint */
+.modal-textarea {
+  width: 100%;
+  resize: vertical;
+  min-height: 180px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  line-height: 1.45;
+  white-space: pre;
+  overflow-wrap: normal;
+  overflow-x: auto;
+}
+.modal-error {
+  margin-top: 8px;
+  padding: 6px 9px;
+  border: 1px solid var(--bad);
+  color: var(--bad);
+  background: rgba(255, 79, 110, 0.08);
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.05em;
+}
+.modal-hint {
+  margin-top: 10px;
+  padding: 6px 9px;
+  border-left: 2px solid var(--line-bright);
+  color: var(--text-dim);
+  font-family: 'Chakra Petch', sans-serif;
+  font-size: 11px;
+  line-height: 1.45;
+}
+.modal-hint code {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  color: var(--cyan);
+  background: rgba(0, 0, 0, 0.4);
+  padding: 1px 4px;
+}
+
 /* Edit-mode DELETE button */
 .modal-btn-danger {
   border-color: var(--bad);

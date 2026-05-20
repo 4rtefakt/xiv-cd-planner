@@ -121,6 +121,14 @@ interface PlanState {
   setParty(party: Player[]): void;
   setPlayerName(playerId: string, name: string): void;
   /**
+   * Replace the entire party. Uses are remapped per slot (p1..p8) by
+   * ability name : if the slot's new job has an ability with the same
+   * name as the old use's ability, the use survives with the new id.
+   * Otherwise it's dropped. Same logic as switchPlayerJob but applied
+   * to all 8 slots at once.
+   */
+  importParty(newParty: Player[]): void;
+  /**
    * Switch a player to a new job. Uses are remapped by ability NAME:
    * shared abilities (Reprisal, Rampart, Arm's Length, ...) survive
    * because every job has its own copy under the same name. Job-specific
@@ -224,6 +232,30 @@ export const usePlanStore = create<PlanState>((set) => ({
   setParty: (party) => set({ party }),
   setPlayerName: (playerId, name) =>
     set((s) => ({ party: s.party.map((p) => (p.id === playerId ? { ...p, name } : p)) })),
+  importParty: (newParty) =>
+    set((s) => {
+      // Map slot-id → old job + new job. Slots that didn't change job
+      // skip the remap and keep their uses as-is.
+      const newById = new Map(newParty.map((p) => [p.id, p]));
+      const remappedUses: Use[] = [];
+      for (const u of s.uses) {
+        const oldPlayer = s.party.find((p) => p.id === u.player_id);
+        const newPlayer = newById.get(u.player_id);
+        if (!newPlayer) continue; // slot disappeared (unlikely with 8 fixed slots)
+        if (oldPlayer && oldPlayer.job === newPlayer.job) {
+          remappedUses.push(u);
+          continue;
+        }
+        const oldJob = s.jobs.find((j) => j.code === oldPlayer?.job);
+        const newJob = s.jobs.find((j) => j.code === newPlayer.job);
+        if (!oldJob || !newJob) continue;
+        const oldAb = oldJob.abilities.find((a) => a.id === u.ability_id);
+        if (!oldAb) continue;
+        const matchAb = newJob.abilities.find((a) => a.name === oldAb.name);
+        if (matchAb) remappedUses.push({ ...u, ability_id: matchAb.id });
+      }
+      return { party: newParty, uses: remappedUses };
+    }),
   switchPlayerJob: (playerId, newJobCode) =>
     set((s) => {
       const player = s.party.find((p) => p.id === playerId);
