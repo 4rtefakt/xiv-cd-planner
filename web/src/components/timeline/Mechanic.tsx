@@ -14,15 +14,38 @@ interface MechanicProps {
 export function MechanicMarker({ mech, uses, fightDuration }: MechanicProps) {
   const jobs = usePlanStore((s) => s.jobs);
   const removeMechanic = usePlanStore((s) => s.removeMechanic);
+  const setDragCtx = usePlanStore((s) => s.setDragCtx);
+  const previewUse = usePlanStore((s) => s.previewUse);
 
   const abilities = useMemo(() => abilityIndex(jobs), [jobs]);
   const coverage = computeCoverage(mech, uses, abilities);
 
+  // Would this mechanic be covered by the previewed (hovered) placement?
+  let previewCovered = false;
+  if (previewUse && !previewUse.conflict) {
+    const ab = abilities.get(previewUse.ability_id);
+    if (ab && mech.time >= previewUse.time && mech.time < previewUse.time + ab.effect) {
+      previewCovered = true;
+    }
+  }
+
   return (
     <div
-      className={`mechanic ${mech.type}`}
+      className={`mechanic ${mech.type}${previewCovered ? ' preview-covered' : ''}`}
       style={{ left: `${pct(mech.time, fightDuration)}%` }}
       data-mech-id={mech.id}
+      draggable
+      onDragStart={(e) => {
+        e.stopPropagation();
+        e.dataTransfer.effectAllowed = 'move';
+        e.dataTransfer.setData('text/plain', `mech:${mech.id}`);
+        setDragCtx({ kind: 'mech', mechId: mech.id });
+        e.currentTarget.classList.add('dragging-mech');
+      }}
+      onDragEnd={(e) => {
+        e.currentTarget.classList.remove('dragging-mech');
+        setDragCtx(null);
+      }}
     >
       <div className="mech-cap" />
       <div className="mech-label">{mech.name}</div>

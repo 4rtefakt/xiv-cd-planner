@@ -1,6 +1,7 @@
-import { useRef, useState } from 'react';
+import { useRef } from 'react';
 import type { Ability, Use } from '../../types';
 import { fmt, pct, xToTime } from '../../lib/time';
+import { findUseConflict } from '../../lib/mitigation';
 import { usePlanStore } from '../../state/planStore';
 import { CdUse } from './CdUse';
 
@@ -15,56 +16,91 @@ interface AbilityRowProps {
 let useSeq = 0;
 
 /**
- * Right-side ability row — accepts drops from MitChips (creates a Use) or
- * from existing CdUses on this same row (moves the Use). Drops from a
- * mismatched playerId/abilityId pair are rejected (dragover doesn't
- * preventDefault).
+ * Right-side ability row.
  *
- * Mechanic guidelines rendered here so they cross every ability row.
+ * Click-to-place pipeline (Phase D.2): hovering shows a ghost CdUse +
+ * highlights covered mechanics; clicking commits the Use (rejected if
+ * the recast window would overlap an existing use on the same row).
+ *
+ * Drag-to-reposition (Phase C.3) still works on existing CdUses — drop
+ * within the same row moves the use. Drops onto a different row are
+ * rejected by the dragover preventDefault gate.
  */
 export function AbilityRow({ playerId, ability, uses, alt, fightDuration }: AbilityRowProps) {
   const dragCtx = usePlanStore((s) => s.dragCtx);
+  const previewUse = usePlanStore((s) => s.previewUse);
+  const setPreviewUse = usePlanStore((s) => s.setPreviewUse);
   const addUse = usePlanStore((s) => s.addUse);
   const moveUse = usePlanStore((s) => s.moveUse);
   const mechanics = usePlanStore((s) => s.mechanics);
 
   const ref = useRef<HTMLDivElement | null>(null);
-  const [drop, setDrop] = useState<{ t: number } | null>(null);
+  const rowUses = uses.filter((u) => u.player_id === playerId && u.ability_id === ability.id);
 
-  const matches = dragCtx && dragCtx.playerId === playerId && dragCtx.abilityId === ability.id;
+  const matchesUseDrag =
+    dragCtx?.kind === 'use' &&
+    dragCtx.playerId === playerId &&
+    dragCtx.abilityId === ability.id;
+
+  const previewMatchesThisRow =
+    previewUse && previewUse.player_id === playerId && previewUse.ability_id === ability.id;
+
+  function computePreviewAt(clientX: number) {
+    if (!ref.current) return null;
+    const time = xToTime(clientX, ref.current, fightDuration);
+    const conflict = findUseConflict(playerId, ability.id, time, ability.recast, rowUses) !== null;
+    return { player_id: playerId, ability_id: ability.id, time, conflict };
+  }
 
   return (
     <div
       ref={ref}
-      className={`cd-row-right type-${ability.mit_type} ${alt ? 'alt' : ''} ${drop ? 'drop-target' : ''}`}
+      className={
+        `cd-row-right type-${ability.mit_type} ${alt ? 'alt' : ''}` +
+        (matchesUseDrag ? ' drop-target' : '') +
+        (previewMatchesThisRow ? ' preview-target' : '') +
+        (previewMatchesThisRow && previewUse?.conflict ? ' preview-conflict' : '')
+      }
       data-player-id={playerId}
       data-ability-id={ability.id}
-      onDragOver={(e) => {
-        if (!matches || !ref.current) return;
-        e.preventDefault(); // accept the drop
-        e.dataTransfer.dropEffect = dragCtx!.kind === 'chip' ? 'copy' : 'move';
-        setDrop({ t: xToTime(e.clientX, ref.current, fightDuration) });
+      // --- Click-to-place hover ---
+      onMouseMove={(e) => {
+        // Suppress preview while a CdUse drag is in progress.
+        if (dragCtx) return;
+        const p = computePreviewAt(e.clientX);
+        if (p) setPreviewUse(p);
       }}
-      onDragLeave={(e) => {
-        if (ref.current && !ref.current.contains(e.relatedTarget as Node | null)) {
-          setDrop(null);
-        }
+      onMouseLeave={() => setPreviewUse(null)}
+      onClick={(e) => {
+        // Ignore clicks landing on an existing CdUse (its own handlers run).
+        // The preview ghost is pointer-events:none in CSS, but we also
+        // gate via class name in case that ever changes.
+        const inUse = (e.target as HTMLElement).closest('.cd-use');
+        if (inUse && !inUse.classList.contains('cd-use-preview')) return;
+        const p = computePreviewAt(e.clientX);
+        if (!p) return;
+        if (p.conflict) return; // visual rejection only; no use added
+        addUse({
+          id: `use-${Date.now()}-${++useSeq}`,
+          player_id: playerId,
+          ability_id: ability.id,
+          time: p.time,
+        });
+        // Refresh preview at same spot so the user sees the new CdUse
+        // immediately replacing the ghost.
+        setPreviewUse(computePreviewAt(e.clientX));
+      }}
+      // --- Drag-to-reposition existing CdUse (kept from C.3) ---
+      onDragOver={(e) => {
+        if (!matchesUseDrag || !ref.current) return;
+        e.preventDefault();
+        e.dataTransfer.dropEffect = 'move';
       }}
       onDrop={(e) => {
-        if (!matches || !ref.current) return;
+        if (!matchesUseDrag || !ref.current) return;
         e.preventDefault();
         const t = xToTime(e.clientX, ref.current, fightDuration);
-        setDrop(null);
-        if (dragCtx!.kind === 'chip') {
-          addUse({
-            id: `use-${Date.now()}-${++useSeq}`,
-            player_id: playerId,
-            ability_id: ability.id,
-            time: t,
-          });
-        } else if (dragCtx!.kind === 'use' && dragCtx!.useId) {
-          moveUse(dragCtx!.useId, t);
-        }
+        if (dragCtx?.useId) moveUse(dragCtx.useId, t);
       }}
     >
       {mechanics.map((m) => (
@@ -75,17 +111,48 @@ export function AbilityRow({ playerId, ability, uses, alt, fightDuration }: Abil
         />
       ))}
 
-      {drop && (
-        <div className="cd-drop show" style={{ left: `${pct(drop.t, fightDuration)}%` }}>
-          <span className="cd-drop-time">{fmt(drop.t)}</span>
-        </div>
+      {previewMatchesThisRow && (
+        <PreviewGhost
+          time={previewUse!.time}
+          conflict={previewUse!.conflict}
+          ability={ability}
+          fightDuration={fightDuration}
+        />
       )}
 
-      {uses
-        .filter((u) => u.player_id === playerId && u.ability_id === ability.id)
-        .map((u) => (
-          <CdUse key={u.id} use={u} ability={ability} fightDuration={fightDuration} />
-        ))}
+      {rowUses.map((u) => (
+        <CdUse key={u.id} use={u} ability={ability} fightDuration={fightDuration} />
+      ))}
+    </div>
+  );
+}
+
+function PreviewGhost({
+  time,
+  conflict,
+  ability,
+  fightDuration,
+}: {
+  time: number;
+  conflict: boolean;
+  ability: Ability;
+  fightDuration: number;
+}) {
+  const totalPct = (ability.recast / fightDuration) * 100;
+  const activeWidthPct = Math.min(1, ability.effect / ability.recast) * 100;
+  return (
+    <div
+      className={`cd-use cd-use-preview type-${ability.mit_type} ${conflict ? 'is-conflict' : ''}`}
+      style={{ left: `${pct(time, fightDuration)}%`, width: `${totalPct}%`, pointerEvents: 'none' }}
+      aria-hidden
+    >
+      <div className="cd-use-active-block" style={{ width: `${activeWidthPct}%` }}>
+        <div className="cd-use-active-extend" />
+      </div>
+      <div className="cd-use-cooldown" />
+      <div className="cd-use-preview-tip">
+        {conflict ? `CONFLICT · ${fmt(time)}` : `${ability.name.toUpperCase()} · ${fmt(time)} → ${fmt(time + ability.effect)}`}
+      </div>
     </div>
   );
 }

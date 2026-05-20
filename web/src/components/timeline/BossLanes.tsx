@@ -48,6 +48,8 @@ export function BossLanesRight() {
   const uses = usePlanStore((s) => s.uses);
   const fightDuration = usePlanStore((s) => s.encounter.fight_duration);
   const openModal = usePlanStore((s) => s.openMechanicModal);
+  const dragCtx = usePlanStore((s) => s.dragCtx);
+  const moveMechanic = usePlanStore((s) => s.moveMechanic);
 
   return (
     <div className="right-boss-lanes">
@@ -56,9 +58,12 @@ export function BossLanesRight() {
           key={lane.id}
           laneId={lane.id}
           mechanics={mechanics.filter((m) => m.lane_id === lane.id)}
+          allMechanics={mechanics}
           uses={uses}
           fightDuration={fightDuration}
+          dragCtx={dragCtx}
           onAddAt={(t) => openModal(lane.id, t)}
+          onMoveMech={(id, t) => moveMechanic(id, t)}
         />
       ))}
     </div>
@@ -68,19 +73,39 @@ export function BossLanesRight() {
 interface BossLaneRowProps {
   laneId: string;
   mechanics: ReturnType<typeof usePlanStore.getState>['mechanics'];
+  allMechanics: ReturnType<typeof usePlanStore.getState>['mechanics'];
   uses: ReturnType<typeof usePlanStore.getState>['uses'];
   fightDuration: number;
+  dragCtx: ReturnType<typeof usePlanStore.getState>['dragCtx'];
   onAddAt: (t: number) => void;
+  onMoveMech: (id: string, t: number) => void;
 }
 
-function BossLaneRow({ laneId, mechanics, uses, fightDuration, onAddAt }: BossLaneRowProps) {
+function BossLaneRow({
+  laneId,
+  mechanics,
+  allMechanics,
+  uses,
+  fightDuration,
+  dragCtx,
+  onAddAt,
+  onMoveMech,
+}: BossLaneRowProps) {
   const ref = useRef<HTMLDivElement | null>(null);
   const [hover, setHover] = useState<{ t: number } | null>(null);
+
+  // Are we hovering this lane while a mechanic from THIS lane is being dragged?
+  // Mechanics stay within their own lane on reposition (cross-lane moves
+  // would change the mechanic's lane_id, which we don't support here yet).
+  const draggingOurMech =
+    dragCtx?.kind === 'mech' &&
+    dragCtx.mechId != null &&
+    allMechanics.find((m) => m.id === dragCtx.mechId)?.lane_id === laneId;
 
   return (
     <div
       ref={ref}
-      className="boss-row-right boss-row-height"
+      className={`boss-row-right boss-row-height${draggingOurMech ? ' drop-target' : ''}`}
       data-lane-id={laneId}
       onMouseMove={(e) => {
         if ((e.target as HTMLElement).closest('.mechanic')) {
@@ -95,6 +120,21 @@ function BossLaneRow({ laneId, mechanics, uses, fightDuration, onAddAt }: BossLa
         if ((e.target as HTMLElement).closest('.mechanic')) return;
         if (!ref.current) return;
         onAddAt(xToTime(e.clientX, ref.current, fightDuration));
+      }}
+      // Accept dropped mechanics being repositioned within this lane.
+      onDragOver={(e) => {
+        if (!draggingOurMech || !ref.current) return;
+        e.preventDefault();
+        e.dataTransfer.dropEffect = 'move';
+        setHover({ t: xToTime(e.clientX, ref.current, fightDuration) });
+      }}
+      onDragLeave={() => setHover(null)}
+      onDrop={(e) => {
+        if (!draggingOurMech || !ref.current || !dragCtx?.mechId) return;
+        e.preventDefault();
+        const t = xToTime(e.clientX, ref.current, fightDuration);
+        onMoveMech(dragCtx.mechId, t);
+        setHover(null);
       }}
     >
       {hover && (

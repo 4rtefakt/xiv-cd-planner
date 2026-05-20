@@ -23,22 +23,41 @@ export interface MechanicModalState {
 }
 
 /**
- * Shared drag state used by AbilityRow.onDragOver to decide whether to
- * accept a drop. dataTransfer.getData() is unavailable during dragover
- * (only at drop), so we mirror the source's identity here.
+ * Drag context used by:
+ *   - kind: 'use'  → repositioning an existing CdUse within its row.
+ *   - kind: 'mech' → repositioning a Mechanic within its boss lane.
+ *
+ * (D.1 removed the 'chip' drag pipeline; placement is now a click on
+ * the AbilityRow, see usePlanStore.previewUse.)
  */
 export interface DragCtx {
-  kind: 'chip' | 'use';
-  playerId: string;
-  abilityId: string;
+  kind: 'use' | 'mech';
+  playerId?: string;
+  abilityId?: string;
   useId?: string;
+  mechId?: string;
+}
+
+/**
+ * Hover-state for the click-to-place pipeline. When non-null, the
+ * AbilityRow at (player_id, ability_id) shows a ghost CdUse at `time`,
+ * Mechanic markers that would be covered render with .preview-covered,
+ * and a click anywhere on the same row commits the Use.
+ */
+export interface PreviewUse {
+  player_id: string;
+  ability_id: string;
+  time: number;
+  conflict: boolean;
 }
 
 interface PlanState {
   // Modal
   mechanicModal: MechanicModalState | null;
-  // Drag
+  // Drag (CdUse + Mechanic repositioning)
   dragCtx: DragCtx | null;
+  // Hover preview for click-to-place
+  previewUse: PreviewUse | null;
   // Reference data
   jobs: Job[];
   jobsLoading: boolean;
@@ -81,9 +100,13 @@ interface PlanState {
   // Actions — drag
   setDragCtx(ctx: DragCtx | null): void;
 
+  // Actions — preview (click-to-place hover)
+  setPreviewUse(p: PreviewUse | null): void;
+
   // Actions — mechanics
   addMechanic(m: Mechanic): void;
   removeMechanic(id: string): void;
+  moveMechanic(id: string, time: number): void;
 
   // Actions — uses
   addUse(u: Use): void;
@@ -107,6 +130,7 @@ const defaultEncounter: Encounter = {
 export const usePlanStore = create<PlanState>((set) => ({
   mechanicModal: null,
   dragCtx: null,
+  previewUse: null,
   jobs: [],
   jobsLoading: false,
   jobsError: null,
@@ -148,8 +172,12 @@ export const usePlanStore = create<PlanState>((set) => ({
 
   setDragCtx: (dragCtx) => set({ dragCtx }),
 
+  setPreviewUse: (previewUse) => set({ previewUse }),
+
   addMechanic: (m) => set((s) => ({ mechanics: [...s.mechanics, m] })),
   removeMechanic: (id) => set((s) => ({ mechanics: s.mechanics.filter((m) => m.id !== id) })),
+  moveMechanic: (id, time) =>
+    set((s) => ({ mechanics: s.mechanics.map((m) => (m.id === id ? { ...m, time } : m)) })),
 
   addUse: (u) => set((s) => ({ uses: [...s.uses, u] })),
   removeUse: (id) => set((s) => ({ uses: s.uses.filter((u) => u.id !== id) })),

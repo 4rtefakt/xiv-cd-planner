@@ -56,3 +56,31 @@ export function abilityIndex(jobs: { abilities: Ability[] }[]): Map<string, Abil
   }
   return map;
 }
+
+/**
+ * Two CdUse windows on the same player + ability cannot overlap their
+ * recast cycles — once you cast it, you wait the full recast before the
+ * next one. Returns the conflicting Use (if any) so callers can render
+ * a specific rejection hint.
+ *
+ * `excludeUseId` lets callers skip the use being moved (so dragging a
+ * use slightly doesn't self-conflict).
+ */
+export function findUseConflict(
+  playerId: string,
+  abilityId: string,
+  time: number,
+  recast: number,
+  uses: Use[],
+  excludeUseId?: string,
+): Use | null {
+  const start = time;
+  const end = time + recast;
+  for (const u of uses) {
+    if (excludeUseId && u.id === excludeUseId) continue;
+    if (u.player_id !== playerId || u.ability_id !== abilityId) continue;
+    const uEnd = u.time + recast;
+    if (start < uEnd && u.time < end) return u;
+  }
+  return null;
+}

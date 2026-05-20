@@ -721,6 +721,75 @@
 }
 .cd-use:hover .cd-use-remove { opacity: 1; }
 
+/* Click-to-place preview ghost */
+.cd-use.cd-use-preview {
+  opacity: 0.5;
+  cursor: pointer;
+  z-index: 2;
+}
+.cd-use.cd-use-preview .cd-use-active-block {
+  border-style: dashed;
+  background: transparent;
+  box-shadow: none;
+}
+.cd-use.cd-use-preview .cd-use-cooldown {
+  opacity: 0.1;
+}
+.cd-use.cd-use-preview.is-conflict .cd-use-active-block {
+  border-color: var(--bad);
+}
+.cd-use.cd-use-preview.is-conflict .cd-use-cooldown {
+  background: var(--bad);
+  border-color: var(--bad);
+}
+.cd-use-preview-tip {
+  position: absolute;
+  bottom: 100%;
+  left: 0;
+  transform: translateY(-4px);
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 9px;
+  color: var(--cd-color);
+  background: var(--panel-2);
+  border: 1px solid var(--cd-color);
+  padding: 2px 6px;
+  white-space: nowrap;
+  z-index: 8;
+  pointer-events: none;
+}
+.cd-use.cd-use-preview.is-conflict .cd-use-preview-tip {
+  color: var(--bad);
+  border-color: var(--bad);
+}
+
+/* Row in click-to-place preview mode */
+.cd-row-right.preview-target {
+  background: rgba(0, 229, 255, 0.04);
+  cursor: pointer;
+}
+.cd-row-right.preview-target.preview-conflict {
+  background: rgba(255, 79, 110, 0.06);
+  cursor: not-allowed;
+}
+
+/* Mechanic highlighted by a hovered placement preview */
+.mechanic.preview-covered .mech-cap,
+.mechanic.preview-covered {
+  box-shadow: 0 0 14px var(--cyan), 0 0 6px var(--mech-glow);
+}
+.mechanic.preview-covered .mech-label {
+  border-color: var(--cyan);
+  color: var(--cyan);
+}
+.mechanic.preview-covered .mech-coverage {
+  border-color: var(--cyan);
+  color: var(--cyan);
+}
+
+/* Mechanic drag (D.3) */
+.mechanic { cursor: grab; }
+.mechanic.dragging-mech { opacity: 0.55; cursor: grabbing; z-index: 6; }
+
 /* Drop indicator (vertical dashed line on hover with chip/use being dragged) */
 .cd-drop {
   position: absolute;
