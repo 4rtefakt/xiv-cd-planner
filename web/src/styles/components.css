@@ -625,28 +625,42 @@
   overflow: clip;
 }
 .tl-right {
-  overflow-x: auto;
-  /* `clip` (not `hidden`) is critical : it clips the vertical overflow
-     without establishing a scroll container, so position:sticky on
-     children can relate to the document scroll and freeze the boss
-     lanes at the top of the viewport. `hidden` would trap sticky
-     inside .tl-right and break the freeze. */
-  overflow-y: clip;
+  /* No overflow here — .tl-right is only a layout box. Horizontal
+     scrolling and sticky live in the child scrollers below. */
   position: relative;
+  /* Clip horizontally so the wide canvas doesn't bleed past the
+     column edge ; vertical stays free for sticky to escape. */
+  overflow-x: clip;
 }
+
+/* Two stacked scrollers inside .tl-right :
+   - tl-head-scroller : axis + boss lanes (sticky at viewport top)
+   - tl-body-scroller : player rows
+   Both share the same canvas width ; scrollLeft is JS-synced. */
+.tl-head-scroller,
+.tl-body-scroller {
+  overflow-x: auto;
+  overflow-y: clip;
+}
+.tl-head-scroller {
+  position: sticky;
+  top: 0;
+  z-index: 6;
+  background: var(--bg);
+}
+/* Hide the head's horizontal scrollbar so the user only sees the
+   body's — they sync to the same position anyway. */
+.tl-head-scroller::-webkit-scrollbar { display: none; }
+.tl-head-scroller { scrollbar-width: none; }
 .tl-canvas {
   /* min-width is set inline by TimelineShell based on zoom × fight duration */
   position: relative;
 }
 
-/* Sticky header block per column — axis (or PLAYER/ABILITY label on
-   the left) + all boss lanes. As the user scrolls down into the
-   player groups, this block sticks to the top of the viewport so the
-   mech timeline is always in sight.
-
-   z-index keeps it above the player rows ; background covers the
-   content that scrolls under it. */
-.tl-head {
+/* Sticky header block — applies only to the LEFT column now ; the
+   right column uses .tl-head-scroller (separate scroll container,
+   see .tl-right block). */
+.tl-left > .tl-head {
   position: sticky;
   top: 0;
   z-index: 6;

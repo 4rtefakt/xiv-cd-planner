@@ -81,26 +81,60 @@ export function TimelineShell() {
 
   const canvasWidth = Math.max(800, Math.round(fightDuration * BASE_PX_PER_SEC * zoom));
 
+  // The right column is split into two stacked horizontal scrollers :
+  //   - tl-head-scroller : axis + boss lanes (position:sticky top:0)
+  //   - tl-body-scroller : player groups
+  // They share the same canvas width and their scrollLeft is mirrored
+  // by the syncScroll effect below. This split is mandatory because a
+  // single scroller with overflow-x:auto becomes the scroll container
+  // for sticky inside it, which traps the freeze behaviour.
+  const rightRef = useRef<HTMLDivElement>(null);
+  const headRef = useRef<HTMLDivElement>(null);
+  const bodyRef = useRef<HTMLDivElement>(null);
+
+  // Mirror scrollLeft between head and body so they always show the
+  // same horizontal slice of the canvas.
+  useEffect(() => {
+    const head = headRef.current;
+    const body = bodyRef.current;
+    if (!head || !body) return;
+    let syncing = false;
+    const mirror = (from: HTMLDivElement, to: HTMLDivElement) => () => {
+      if (syncing) return;
+      syncing = true;
+      to.scrollLeft = from.scrollLeft;
+      requestAnimationFrame(() => {
+        syncing = false;
+      });
+    };
+    const onHead = mirror(head, body);
+    const onBody = mirror(body, head);
+    head.addEventListener('scroll', onHead, { passive: true });
+    body.addEventListener('scroll', onBody, { passive: true });
+    return () => {
+      head.removeEventListener('scroll', onHead);
+      body.removeEventListener('scroll', onBody);
+    };
+  }, []);
+
   // Wheel zoom anchored on the cursor: the timestamp under the mouse
   // stays under the mouse after the zoom step. React's onWheel is
   // passive by default (preventDefault is a no-op), so we attach a
   // non-passive listener manually.
-  const rightRef = useRef<HTMLDivElement>(null);
   useEffect(() => {
-    const el = rightRef.current;
-    if (!el) return;
+    const outer = rightRef.current;
+    if (!outer) return;
     const onWheel = (e: WheelEvent) => {
-      // Plain wheel = zoom in/out. Shift+wheel keeps the native horizontal
-      // scroll for users who don't want zoom.
       if (e.shiftKey) return;
       e.preventDefault();
-      const canvas = el.querySelector('.tl-canvas') as HTMLDivElement | null;
+      const scroller = bodyRef.current;
+      if (!scroller) return;
+      const canvas = scroller.querySelector('.tl-canvas') as HTMLDivElement | null;
       if (!canvas) return;
       const canvasRect = canvas.getBoundingClientRect();
       const oldWidth = canvas.offsetWidth;
       if (oldWidth <= 0) return;
 
-      // Time fraction under cursor before zoom.
       const cursorXInCanvas = e.clientX - canvasRect.left;
       const timeFraction = Math.max(0, Math.min(1, cursorXInCanvas / oldWidth));
 
@@ -109,17 +143,17 @@ export function TimelineShell() {
       if (Math.abs(newZoom - state.zoom) < 0.001) return;
       state.setZoom(newZoom);
 
-      // After re-render, restore the cursor anchor.
       requestAnimationFrame(() => {
-        const newCanvas = el.querySelector('.tl-canvas') as HTMLDivElement | null;
+        const newCanvas = scroller.querySelector('.tl-canvas') as HTMLDivElement | null;
         if (!newCanvas) return;
         const newWidth = newCanvas.offsetWidth;
-        const cursorOffsetInViewport = e.clientX - el.getBoundingClientRect().left;
-        el.scrollLeft = timeFraction * newWidth - cursorOffsetInViewport;
+        const cursorOffsetInViewport = e.clientX - scroller.getBoundingClientRect().left;
+        // Only set bodyRef ; the sync effect mirrors to headRef.
+        scroller.scrollLeft = timeFraction * newWidth - cursorOffsetInViewport;
       });
     };
-    el.addEventListener('wheel', onWheel, { passive: false });
-    return () => el.removeEventListener('wheel', onWheel);
+    outer.addEventListener('wheel', onWheel, { passive: false });
+    return () => outer.removeEventListener('wheel', onWheel);
   }, []);
 
   // Pan-by-drag on empty boss-lane areas. The user grabs a section of
@@ -137,12 +171,12 @@ export function TimelineShell() {
       const target = e.target as HTMLElement;
       const bossRow = target.closest('.boss-row-right');
       if (!bossRow) return;
-      // Don't pan when the press starts on a mechanic marker — that's
-      // either a click-to-remove, a drag-reposition, or a hover hit.
       if (target.closest('.mechanic')) return;
 
+      const headEl = headRef.current;
+      if (!headEl) return;
       const startX = e.clientX;
-      const startScroll = el.scrollLeft;
+      const startScroll = headEl.scrollLeft;
       let moved = false;
       const prevCursor = el.style.cursor;
       el.style.cursor = 'grabbing';
@@ -151,7 +185,8 @@ export function TimelineShell() {
         const dx = mv.clientX - startX;
         if (!moved && Math.abs(dx) > PAN_THRESHOLD) moved = true;
         if (moved) {
-          el.scrollLeft = startScroll - dx;
+          headEl.scrollLeft = startScroll - dx;
+          // Sync effect mirrors to bodyRef.
           mv.preventDefault();
         }
       };
@@ -232,12 +267,19 @@ export function TimelineShell() {
           <PlayerGroupsLeft />
         </div>
         <div className="tl-right" ref={rightRef}>
-          <div className="tl-canvas" style={{ minWidth: `${canvasWidth}px` }}>
-            <div className="tl-head">
+          {/* Two stacked horizontal scrollers — head is sticky vertical,
+              body is the regular scroller. scrollLeft is mirrored between
+              them by the syncScroll effect above. */}
+          <div className="tl-head-scroller" ref={headRef}>
+            <div className="tl-canvas" style={{ minWidth: `${canvasWidth}px` }}>
               <TimelineAxis fightDuration={fightDuration} />
               <BossLanesRight />
             </div>
-            <PlayerGroupsRight />
+          </div>
+          <div className="tl-body-scroller" ref={bodyRef}>
+            <div className="tl-canvas" style={{ minWidth: `${canvasWidth}px` }}>
+              <PlayerGroupsRight />
+            </div>
           </div>
         </div>
       </div>
