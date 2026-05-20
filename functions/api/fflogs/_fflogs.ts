@@ -1,23 +1,30 @@
 /**
  * Shared FFLogs v2 GraphQL helpers used by the two endpoints below.
  *
- * Auth uses a single account-level Personal Access Token stored in the
- * Cloudflare secret FFLOGS_API_TOKEN. The token is sent as a Bearer
- * header on every call. The free FFLogs tier allows ~500 points/hour
- * which is plenty for a planner that fetches one report per import.
+ * Auth uses the OAuth2 client-credentials flow :
+ *   - FFLOGS_CLIENT_ID + FFLOGS_CLIENT_SECRET stored as Cloudflare secrets
+ *   - POST to /oauth/token → access_token (expires in 1h)
+ *   - Bearer that access_token on subsequent GraphQL calls
+ *   - Cache the access_token in a module-level variable so the OAuth
+ *     dance only happens once per Worker isolate cold start
  *
  * Setup once :
- *   1. Create a PAT at https://www.fflogs.com/api/clients/ (Client section
- *      → Generate). The "v2 API" page shows a "Personal Access Token"
- *      button that takes 2 clicks.
- *   2. `wrangler pages secret put FFLOGS_API_TOKEN`
- *      (paste the token at the prompt). Same for preview env if you use one.
+ *   1. Register at https://www.fflogs.com/api/clients/ — keep "Public
+ *      Client" UNCHECKED (we have a secure backend, the secret is safe
+ *      in Cloudflare's secrets store).
+ *   2. Redirect URLs can be left empty (only used for the auth-code
+ *      flow, not for client-credentials).
+ *   3. After Create you get a Client ID + Client Secret. Set both :
+ *        wrangler pages secret put FFLOGS_CLIENT_ID --project-name=cooldown-planner
+ *        wrangler pages secret put FFLOGS_CLIENT_SECRET --project-name=cooldown-planner
  */
 
-const ENDPOINT = 'https://www.fflogs.com/api/v2/client';
+const TOKEN_ENDPOINT = 'https://www.fflogs.com/oauth/token';
+const GRAPHQL_ENDPOINT = 'https://www.fflogs.com/api/v2/client';
 
 export interface FFLogsEnv {
-  FFLOGS_API_TOKEN?: string;
+  FFLOGS_CLIENT_ID?: string;
+  FFLOGS_CLIENT_SECRET?: string;
 }
 
 export class FFLogsError extends Error {
@@ -26,27 +33,66 @@ export class FFLogsError extends Error {
   }
 }
 
+interface TokenCache {
+  token: string;
+  expiresAt: number; // ms epoch
+}
+
+let cachedToken: TokenCache | null = null;
+
+/**
+ * Get a valid access token, exchanging client credentials if the cache
+ * is empty or within 60s of expiry. Refreshes are O(1) per hour.
+ */
+async function getAccessToken(env: FFLogsEnv): Promise<string> {
+  if (!env.FFLOGS_CLIENT_ID || !env.FFLOGS_CLIENT_SECRET) {
+    throw new FFLogsError(
+      'FFLOGS_CLIENT_ID / FFLOGS_CLIENT_SECRET are not configured. See README → "Activer l\'import FFLogs".',
+      503,
+    );
+  }
+  const now = Date.now();
+  if (cachedToken && cachedToken.expiresAt - 60_000 > now) return cachedToken.token;
+
+  const credentials = btoa(`${env.FFLOGS_CLIENT_ID}:${env.FFLOGS_CLIENT_SECRET}`);
+  const res = await fetch(TOKEN_ENDPOINT, {
+    method: 'POST',
+    headers: {
+      authorization: `Basic ${credentials}`,
+      'content-type': 'application/x-www-form-urlencoded',
+    },
+    body: 'grant_type=client_credentials',
+  });
+  if (!res.ok) {
+    const body = await res.text().catch(() => '');
+    throw new FFLogsError(`FFLogs OAuth ${res.status}: ${body.slice(0, 200)}`, res.status);
+  }
+  const json = (await res.json()) as { access_token: string; expires_in: number };
+  cachedToken = {
+    token: json.access_token,
+    expiresAt: Date.now() + (json.expires_in ?? 3600) * 1000,
+  };
+  return cachedToken.token;
+}
+
 /**
  * Run a GraphQL query against the FFLogs v2 client API. Throws
  * FFLogsError with an HTTP status on failure so the calling Function
  * can return a structured error to the frontend.
  */
 export async function fflogsQuery<T>(env: FFLogsEnv, query: string, variables?: Record<string, unknown>): Promise<T> {
-  if (!env.FFLOGS_API_TOKEN) {
-    throw new FFLogsError(
-      'FFLOGS_API_TOKEN is not configured. Run `wrangler pages secret put FFLOGS_API_TOKEN` (paste a PAT from https://www.fflogs.com/api/clients/).',
-      503,
-    );
-  }
-  const res = await fetch(ENDPOINT, {
+  const token = await getAccessToken(env);
+  const res = await fetch(GRAPHQL_ENDPOINT, {
     method: 'POST',
     headers: {
-      authorization: `Bearer ${env.FFLOGS_API_TOKEN}`,
+      authorization: `Bearer ${token}`,
       'content-type': 'application/json',
     },
     body: JSON.stringify({ query, variables: variables ?? {} }),
   });
   if (!res.ok) {
+    // If the token went stale mid-call, drop it so the next call re-fetches.
+    if (res.status === 401) cachedToken = null;
     const body = await res.text().catch(() => '');
     throw new FFLogsError(`FFLogs HTTP ${res.status}: ${body.slice(0, 200)}`, res.status);
   }

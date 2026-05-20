@@ -48,21 +48,28 @@ Voir [CLAUDE.md](CLAUDE.md) pour les conventions et points d'attention.
 
 ## Activer l'import FFLogs
 
-Une seule étape, à faire une fois :
+À faire une fois :
 
 1. Va sur https://www.fflogs.com/api/clients/ (connecté à ton compte FFLogs)
-2. Section "Personal Access Token" → génère un token (24h validity n'a pas
-   d'incidence ici, le token PAT est permanent)
-3. Pose-le comme secret Cloudflare Pages :
+2. "Create a Client" :
+   - **Application name** : `COOLDOWN//PLANNER`
+   - **Redirect URLs** : laisser vide (uniquement pour le auth-code flow)
+   - **Public Client** : laisser décoché (le secret est stocké côté Cloudflare)
+3. Récupère le `Client ID` + `Client Secret` affichés après Create.
+4. Pose-les comme secrets Cloudflare Pages :
 
    ```sh
-   wrangler pages secret put FFLOGS_API_TOKEN --project-name=cooldown-planner
-   # colle le token au prompt
+   wrangler pages secret put FFLOGS_CLIENT_ID --project-name=cooldown-planner
+   # colle le Client ID au prompt
+   wrangler pages secret put FFLOGS_CLIENT_SECRET --project-name=cooldown-planner
+   # colle le Client Secret au prompt
    ```
 
 Après ça, le bouton "+ IMPORT LOG" du Header marche : colle une URL
 FFLogs (e.g. `https://www.fflogs.com/reports/abcDEF123`), pick une
-fight, importe les mechanics.
+fight, importe les mechanics. Le Worker fait le OAuth2
+client-credentials dance, cache l'access_token 1h, et bearer-auth
+les requêtes GraphQL.
 
-Tant que le secret n'est pas posé, l'endpoint `/api/fflogs/*` renvoie
-un 503 avec un message d'erreur explicite côté UI.
+Tant que les secrets ne sont pas posés, `/api/fflogs/*` renvoie un 503
+avec un message d'erreur explicite côté UI.
