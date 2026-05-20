@@ -21,6 +21,7 @@ interface PlayerCardProps {
  */
 export function PlayerCard({ player, job }: PlayerCardProps) {
   const role = job?.role ?? 'dps';
+  const subRole = job?.sub_role;
   const jobs = usePlanStore((s) => s.jobs);
   const setPlayerName = usePlanStore((s) => s.setPlayerName);
   const switchPlayerJob = usePlanStore((s) => s.switchPlayerJob);
@@ -29,8 +30,12 @@ export function PlayerCard({ player, job }: PlayerCardProps) {
   const [draft, setDraft] = useState(player.name);
   const [picking, setPicking] = useState(false);
 
+  // DPS sub-role drives the accent color via .sub-melee/.sub-phys_ranged/
+  // .sub-magic_ranged classes. Tanks and heals don't need sub-role discrimination.
+  const subClass = role === 'dps' && subRole ? ` sub-${subRole}` : '';
+
   return (
-    <div className={`player-card-mini role-${role}`}>
+    <div className={`player-card-mini role-${role}${subClass}`}>
       <div className="pcm-head">
         <div
           className="pcm-job-icon pcm-job-icon-editable"
@@ -137,12 +142,13 @@ function JobPickerPopover({
 }) {
   const ref = useRef<HTMLDivElement>(null);
 
-  // Filter: tank↔tank and heal↔heal use the broad role. DPS splits into
-  // melee / phys_ranged / magic_ranged via sub_role, since a Samurai
-  // raid slot can't be filled by a Bard or a Black Mage.
+  // Tank↔tank, heal↔heal. DPS slots can swap to ANY DPS sub-role —
+  // a raid roster routinely flexes a melee slot to a caster or vice
+  // versa, and the border color (set on the card via sub_role) makes
+  // the type still readable at a glance.
   const options =
     currentJob.role === 'dps'
-      ? allJobs.filter((j) => j.role === 'dps' && j.sub_role === currentJob.sub_role)
+      ? allJobs.filter((j) => j.role === 'dps')
       : allJobs.filter((j) => j.role === currentJob.role);
 
   // Dismiss on outside click + Escape.
@@ -174,18 +180,12 @@ function JobPickerPopover({
             type="button"
             className={`job-picker-opt${j.code === currentJob.code ? ' selected' : ''}`}
             onClick={() => onPick(j.code)}
-            title={j.name}
+            title={`${j.name} (${j.code})`}
           >
             <JobIcon src={j.icon} fallbackCode={j.code} alt={j.name} />
-            <span className="job-picker-code">{j.code}</span>
           </button>
         ))}
       </div>
-      {options.length === 1 && (
-        <div className="job-picker-empty">
-          No other {currentJob.role} jobs in the seed yet.
-        </div>
-      )}
     </div>
   );
 }

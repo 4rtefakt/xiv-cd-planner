@@ -210,6 +210,11 @@
 .player-card-mini.role-tank { --role-color: var(--tank); }
 .player-card-mini.role-heal { --role-color: var(--heal); }
 .player-card-mini.role-dps  { --role-color: var(--dps); }
+/* DPS sub-role accents override the generic --dps red so
+   melee/phys-ranged/magic-ranged stay visually distinct. */
+.player-card-mini.sub-melee         { --role-color: var(--melee); }
+.player-card-mini.sub-phys_ranged   { --role-color: var(--phys-ranged); }
+.player-card-mini.sub-magic_ranged  { --role-color: var(--magic-ranged); }
 
 .pcm-head {
   display: flex;
@@ -321,23 +326,26 @@
 }
 .job-picker-grid {
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 4px;
+  /* 4 cols : tanks (4) fit on one row, DPS (13) wraps to 4 rows. */
+  grid-template-columns: repeat(4, 1fr);
+  gap: 3px;
 }
 .job-picker-opt {
   display: flex;
-  flex-direction: column;
   align-items: center;
-  gap: 2px;
-  padding: 4px;
+  justify-content: center;
+  padding: 2px;
+  width: 100%;
+  aspect-ratio: 1 / 1;
   border: 1px solid var(--line-bright);
   background: rgba(0, 0, 0, 0.25);
   cursor: pointer;
   transition: all 0.12s;
 }
-.job-picker-opt > :first-child {
-  width: 26px;
-  height: 26px;
+/* Picker icon ≈ card icon (30px). aspect-ratio keeps the option square. */
+.job-picker-opt > * {
+  width: 28px;
+  height: 28px;
 }
 .job-picker-opt:hover {
   border-color: var(--cyan);
@@ -348,13 +356,6 @@
   background: rgba(0, 229, 255, 0.15);
   box-shadow: 0 0 8px rgba(0, 229, 255, 0.4);
 }
-.job-picker-code {
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 9px;
-  color: var(--text-dim);
-  letter-spacing: 0.1em;
-}
-.job-picker-opt.selected .job-picker-code { color: var(--cyan); }
 .job-picker-empty {
   font-family: 'JetBrains Mono', monospace;
   font-size: 9px;
@@ -476,7 +477,7 @@
   position: relative;
 }
 .tl-canvas {
-  min-width: 1600px;
+  /* min-width is set inline by TimelineShell based on zoom × fight duration */
   position: relative;
 }
 .tl-axis-spacer {
@@ -572,6 +573,9 @@
 .player-header-left.role-tank { --role-color: var(--tank); }
 .player-header-left.role-heal { --role-color: var(--heal); }
 .player-header-left.role-dps  { --role-color: var(--dps); }
+.player-header-left.sub-melee         { --role-color: var(--melee); }
+.player-header-left.sub-phys_ranged   { --role-color: var(--phys-ranged); }
+.player-header-left.sub-magic_ranged  { --role-color: var(--magic-ranged); }
 
 .ph-job-icon {
   width: 24px;
@@ -629,6 +633,9 @@
 .player-header-right.role-tank { --role-color: var(--tank); }
 .player-header-right.role-heal { --role-color: var(--heal); }
 .player-header-right.role-dps  { --role-color: var(--dps); }
+.player-header-right.sub-melee         { --role-color: var(--melee); }
+.player-header-right.sub-phys_ranged   { --role-color: var(--phys-ranged); }
+.player-header-right.sub-magic_ranged  { --role-color: var(--magic-ranged); }
 .player-header-right::before {
   content: '';
   position: absolute;

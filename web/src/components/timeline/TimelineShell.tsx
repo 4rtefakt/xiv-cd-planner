@@ -1,7 +1,13 @@
+import { useEffect, useRef } from 'react';
 import { usePlanStore } from '../../state/planStore';
 import { TimelineAxis } from './TimelineAxis';
 import { BossLanesLeft, BossLanesRight } from './BossLanes';
 import { PlayerGroupsLeft, PlayerGroupsRight } from './PlayerGroups';
+
+/** Base pixels-per-second at zoom 1.0. The default zoom is 2× so the
+ *  initial canvas fits ~5 min of action in a 1600px viewport. */
+const BASE_PX_PER_SEC = 2.667;
+const ZOOM_STEP = 0.15;
 
 /**
  * Section 02 main grid. C.1 ships:
@@ -20,9 +26,56 @@ export function TimelineShell() {
   const resetEncounter = usePlanStore((s) => s.resetEncounter);
   const openModal = usePlanStore((s) => s.openMechanicModal);
   const firstLaneId = usePlanStore((s) => s.bossLanes[0]?.id ?? 'lane-1');
+  const zoom = usePlanStore((s) => s.zoom);
+  // setZoom is read from usePlanStore.getState() inside the wheel
+  // handler (which needs the latest store-reading function), not via
+  // a hook subscription — the handler re-installs on mount only.
 
   const quickAdd = (type: 'raidwide' | 'tankbuster' | 'autos' | 'custom') =>
     openModal(firstLaneId, Math.round(fightDuration / 2), type);
+
+  const canvasWidth = Math.max(800, Math.round(fightDuration * BASE_PX_PER_SEC * zoom));
+
+  // Wheel zoom anchored on the cursor: the timestamp under the mouse
+  // stays under the mouse after the zoom step. React's onWheel is
+  // passive by default (preventDefault is a no-op), so we attach a
+  // non-passive listener manually.
+  const rightRef = useRef<HTMLDivElement>(null);
+  useEffect(() => {
+    const el = rightRef.current;
+    if (!el) return;
+    const onWheel = (e: WheelEvent) => {
+      // Plain wheel = zoom in/out. Shift+wheel keeps the native horizontal
+      // scroll for users who don't want zoom.
+      if (e.shiftKey) return;
+      e.preventDefault();
+      const canvas = el.querySelector('.tl-canvas') as HTMLDivElement | null;
+      if (!canvas) return;
+      const canvasRect = canvas.getBoundingClientRect();
+      const oldWidth = canvas.offsetWidth;
+      if (oldWidth <= 0) return;
+
+      // Time fraction under cursor before zoom.
+      const cursorXInCanvas = e.clientX - canvasRect.left;
+      const timeFraction = Math.max(0, Math.min(1, cursorXInCanvas / oldWidth));
+
+      const state = usePlanStore.getState();
+      const newZoom = Math.max(0.5, Math.min(8, state.zoom - Math.sign(e.deltaY) * ZOOM_STEP));
+      if (Math.abs(newZoom - state.zoom) < 0.001) return;
+      state.setZoom(newZoom);
+
+      // After re-render, restore the cursor anchor.
+      requestAnimationFrame(() => {
+        const newCanvas = el.querySelector('.tl-canvas') as HTMLDivElement | null;
+        if (!newCanvas) return;
+        const newWidth = newCanvas.offsetWidth;
+        const cursorOffsetInViewport = e.clientX - el.getBoundingClientRect().left;
+        el.scrollLeft = timeFraction * newWidth - cursorOffsetInViewport;
+      });
+    };
+    el.addEventListener('wheel', onWheel, { passive: false });
+    return () => el.removeEventListener('wheel', onWheel);
+  }, []);
 
   return (
     <>
@@ -56,8 +109,8 @@ export function TimelineShell() {
           <BossLanesLeft />
           <PlayerGroupsLeft />
         </div>
-        <div className="tl-right">
-          <div className="tl-canvas">
+        <div className="tl-right" ref={rightRef}>
+          <div className="tl-canvas" style={{ minWidth: `${canvasWidth}px` }}>
             <TimelineAxis fightDuration={fightDuration} />
             <BossLanesRight />
             <PlayerGroupsRight />

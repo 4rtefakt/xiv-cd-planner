@@ -80,6 +80,10 @@ interface PlanState {
 
   // UI
   collapsed: Record<string, boolean>;
+  /** Timeline horizontal zoom. 1 = "base" (≈ all 600s fit a 1600px-wide
+   *  canvas). Default 2 starts users zoomed-in so 5-ish minutes fill the
+   *  viewport, which is more precise for placement. Range [0.5, 8]. */
+  zoom: number;
 
   // Actions — reference
   setJobs(jobs: Job[]): void;
@@ -128,6 +132,7 @@ interface PlanState {
   // Actions — UI
   toggleCollapsed(playerId: string): void;
   expandPlayer(playerId: string): void;
+  setZoom(zoom: number): void;
 
   // Actions — reset
   resetEncounter(): void;
@@ -154,6 +159,7 @@ export const usePlanStore = create<PlanState>((set) => ({
   mechanics: [],
   uses: [],
   collapsed: {},
+  zoom: 2,
 
   setJobs: (jobs) => set({ jobs, jobsLoading: false, jobsError: null }),
   setJobsError: (jobsError) => set({ jobsError, jobsLoading: false }),
@@ -230,6 +236,7 @@ export const usePlanStore = create<PlanState>((set) => ({
     set((s) => ({ collapsed: { ...s.collapsed, [playerId]: !s.collapsed[playerId] } })),
   expandPlayer: (playerId) =>
     set((s) => ({ collapsed: { ...s.collapsed, [playerId]: false } })),
+  setZoom: (zoom) => set({ zoom: Math.max(0.5, Math.min(8, zoom)) }),
 
   resetEncounter: () =>
     set({

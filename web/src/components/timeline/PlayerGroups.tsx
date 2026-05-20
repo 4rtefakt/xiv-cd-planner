@@ -35,7 +35,7 @@ export function PlayerGroupsLeft() {
         return (
           <div key={p.id} className="player-group">
             <div
-              className={`player-header-left player-header-row-height role-${role}`}
+              className={`player-header-left player-header-row-height role-${role}${role === 'dps' && job?.sub_role ? ` sub-${job.sub_role}` : ''}`}
               onClick={() => toggleCollapsed(p.id)}
             >
               <div className="ph-job-icon">
@@ -97,7 +97,7 @@ export function PlayerGroupsRight() {
         const role = job?.role ?? 'dps';
         return (
           <div key={p.id} className="player-group">
-            <div className={`player-header-right player-header-row-height role-${role}`} />
+            <div className={`player-header-right player-header-row-height role-${role}${role === 'dps' && job?.sub_role ? ` sub-${job.sub_role}` : ''}`} />
             {!isCollapsed &&
               sortedAbilities.map((ab) => {
                 const isAlt = alt++ % 2 === 1;

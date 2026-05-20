@@ -16,6 +16,10 @@
   --tank: #2b9eff;
   --heal: #4ade80;
   --dps: #ff4f6e;
+  /* Sub-role accents (used on DPS cards + timeline player headers) */
+  --melee: #ff4f6e;        /* same as --dps : red */
+  --phys-ranged: #ffb547;  /* amber */
+  --magic-ranged: #c084fc; /* purple */
   --raidwide: #ff9f43;
   --tankbuster: #ff4f6e;
   --autos: #5a6478;
