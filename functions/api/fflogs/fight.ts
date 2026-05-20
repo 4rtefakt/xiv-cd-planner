@@ -40,6 +40,10 @@ interface FightHeaderResp {
         actors: { id: number; name: string; type: string; subType: string }[];
         abilities: { gameID: number; name: string; type: number; icon: string }[];
       };
+      /** FFLogs returns this as a JSON scalar — the shape is either
+       *  `{ data: { playerDetails: { tanks, healers, dps } } }` or
+       *  the unwrapped variant. We handle both at parse time. */
+      playerDetails: unknown;
     };
   };
 }
@@ -93,7 +97,7 @@ interface AggregatedMech {
 }
 
 const FIGHT_HEADER_QUERY = `
-  query FightHeader($code: String!) {
+  query FightHeader($code: String!, $fightId: Int!) {
     reportData {
       report(code: $code) {
         fights { id name startTime endTime }
@@ -101,6 +105,7 @@ const FIGHT_HEADER_QUERY = `
           actors { id name type subType }
           abilities { gameID name type icon }
         }
+        playerDetails(fightIDs: [$fightId])
       }
     }
   }
@@ -177,20 +182,50 @@ export const onRequestPost: PagesFunction<FFLogsEnv> = async (ctx) => {
   }
 
   try {
-    // 1. Fight header (start/end + actor catalog for resolving names)
-    const header = await fflogsQuery<FightHeaderResp>(ctx.env, FIGHT_HEADER_QUERY, { code: body.code });
+    // 1. Fight header (start/end + actor catalog + per-fight roster)
+    const header = await fflogsQuery<FightHeaderResp>(ctx.env, FIGHT_HEADER_QUERY, {
+      code: body.code,
+      fightId: body.fightId,
+    });
     const fight = header.reportData.report.fights.find((f) => f.id === body.fightId);
     if (!fight) return jsonResp({ error: 'Fight not in report' }, 404);
     const actors = new Map(header.reportData.report.masterData.actors.map((a) => [a.id, a]));
     const abilities = new Map(
       (header.reportData.report.masterData.abilities ?? []).map((a) => [a.gameID, a]),
     );
-    // Player roster from the master data — names + raw FFLogs subType
-    // (Paladin/WhiteMage/...). The frontend maps subType to our job
-    // codes (PLD/WHM/...) and assigns badges by role.
-    const players = header.reportData.report.masterData.actors
-      .filter((a) => a.type === 'Player')
-      .map((a) => ({ name: a.name, subType: a.subType }));
+
+    // Build the player roster from playerDetails (per-fight, ~8
+    // players) rather than masterData.actors (whole report,
+    // potentially 50+ across all pulls). Falls back to the actors
+    // filter if FFLogs returned an unexpected shape.
+    type PdPlayer = { name?: string; type?: string };
+    let pdRoot: { tanks?: PdPlayer[]; healers?: PdPlayer[]; dps?: PdPlayer[] } | null = null;
+    const raw = header.reportData.report.playerDetails as
+      | { data?: { playerDetails?: { tanks?: PdPlayer[]; healers?: PdPlayer[]; dps?: PdPlayer[] } } }
+      | { tanks?: PdPlayer[]; healers?: PdPlayer[]; dps?: PdPlayer[] }
+      | null
+      | undefined;
+    if (raw && typeof raw === 'object') {
+      // Two known shapes — try the wrapped one first.
+      const wrapped = (raw as { data?: { playerDetails?: PdPlayer } }).data?.playerDetails;
+      pdRoot =
+        (wrapped as typeof pdRoot) ??
+        (raw as typeof pdRoot);
+    }
+    const pdPlayers = [
+      ...(pdRoot?.tanks ?? []),
+      ...(pdRoot?.healers ?? []),
+      ...(pdRoot?.dps ?? []),
+    ]
+      .filter((p) => p.name && p.type)
+      .map((p) => ({ name: p.name!, subType: p.type! }));
+
+    const players =
+      pdPlayers.length > 0
+        ? pdPlayers
+        : header.reportData.report.masterData.actors
+            .filter((a) => a.type === 'Player')
+            .map((a) => ({ name: a.name, subType: a.subType }));
 
     /** name → { eventCount, isBoss } for every NPC that did a tracked
      *  damage event. Used to decide which sources deserve their own

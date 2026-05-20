@@ -29,7 +29,6 @@ const SUBTYPE_TO_JOB: Record<string, string> = {
 };
 
 const SLOT_BADGES = ['MT', 'OT', 'H1', 'H2', 'M1', 'M2', 'R1', 'R2'] as const;
-type Badge = (typeof SLOT_BADGES)[number];
 
 /**
  * Build an 8-slot Player[] from a FFLogs roster. Greedy slot allocator :
