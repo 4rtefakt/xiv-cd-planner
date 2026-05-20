@@ -220,16 +220,23 @@ export function TimelineShell() {
 
       <div className="timeline-shell">
         <div className="tl-left">
-          <div className="tl-axis-spacer">
-            PLAYER <span className="sep" style={{ color: 'var(--text-faint)', margin: '0 6px' }}>/</span> ABILITY
+          {/* The header block (axis spacer + boss lanes) sticks to the
+              top of the viewport while the player groups below scroll
+              past — see .tl-head sticky rule. */}
+          <div className="tl-head">
+            <div className="tl-axis-spacer">
+              PLAYER <span className="sep" style={{ color: 'var(--text-faint)', margin: '0 6px' }}>/</span> ABILITY
+            </div>
+            <BossLanesLeft />
           </div>
-          <BossLanesLeft />
           <PlayerGroupsLeft />
         </div>
         <div className="tl-right" ref={rightRef}>
           <div className="tl-canvas" style={{ minWidth: `${canvasWidth}px` }}>
-            <TimelineAxis fightDuration={fightDuration} />
-            <BossLanesRight />
+            <div className="tl-head">
+              <TimelineAxis fightDuration={fightDuration} />
+              <BossLanesRight />
+            </div>
             <PlayerGroupsRight />
           </div>
         </div>
