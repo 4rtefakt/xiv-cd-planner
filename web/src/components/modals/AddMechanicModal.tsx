@@ -30,6 +30,7 @@ export function AddMechanicModal() {
 
   const [name, setName] = useState('');
   const [timeStr, setTimeStr] = useState('');
+  const [castTimeStr, setCastTimeStr] = useState('0');
   const [category, setCategory] = useState<MechCategory>('damage');
   const [damageKind, setDamageKind] = useState<DamageKind>('magical');
   const [targets, setTargets] = useState<string[]>([]);
@@ -40,6 +41,7 @@ export function AddMechanicModal() {
     if (!modal) return;
     setName(modal.name);
     setTimeStr(fmt(modal.time));
+    setCastTimeStr(String(modal.cast_time ?? 0));
     setCategory(modal.category);
     setDamageKind(modal.damage_kind);
     setTargets(modal.targets);
@@ -56,7 +58,7 @@ export function AddMechanicModal() {
     window.addEventListener('keydown', onKey);
     return () => window.removeEventListener('keydown', onKey);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [modal, name, timeStr, category, damageKind, targets]);
+  }, [modal, name, timeStr, castTimeStr, category, damageKind, targets]);
 
   if (!modal) return null;
 
@@ -67,6 +69,12 @@ export function AddMechanicModal() {
     const t = Math.max(0, Math.min(fightDuration, parseTime(timeStr)));
     const finalName = (name.trim() || 'UNNAMED').toUpperCase();
     const effectiveTargets = category === 'placement' ? [] : targets;
+    // Cast time : parsed as a positive float, clamped to [0, time] so
+    // the cast bar can't start before the fight does. 0 → undefined to
+    // keep the stored mechanic small for instant casts.
+    const parsedCast = parseFloat(castTimeStr.replace(',', '.'));
+    const castClamped = Number.isFinite(parsedCast) ? Math.max(0, Math.min(t, parsedCast)) : 0;
+    const finalCastTime = castClamped > 0 ? castClamped : undefined;
 
     if (isEdit && modal.mechanicId) {
       updateMechanic(modal.mechanicId, {
@@ -76,6 +84,7 @@ export function AddMechanicModal() {
         category,
         targets: effectiveTargets,
         damage_kind: category === 'damage' ? damageKind : undefined,
+        cast_time: finalCastTime,
       });
     } else {
       addMechanic({
@@ -86,6 +95,7 @@ export function AddMechanicModal() {
         category,
         targets: effectiveTargets,
         damage_kind: category === 'damage' ? damageKind : undefined,
+        cast_time: finalCastTime,
       });
     }
     close();
@@ -130,6 +140,23 @@ export function AddMechanicModal() {
               style={{ fontFamily: "'JetBrains Mono', monospace" }}
               value={timeStr}
               onChange={(e) => setTimeStr(e.target.value)}
+            />
+          </div>
+
+          <div className="modal-row">
+            <label className="modal-label" title={t('mech.castTime.hint')}>
+              {t('mech.castTime')}
+            </label>
+            <input
+              className="modal-input"
+              type="number"
+              min={0}
+              step={0.1}
+              placeholder="0"
+              style={{ fontFamily: "'JetBrains Mono', monospace", width: 100 }}
+              value={castTimeStr}
+              onChange={(e) => setCastTimeStr(e.target.value)}
+              title={t('mech.castTime.hint')}
             />
           </div>
 

@@ -88,7 +88,7 @@ export interface Mechanic {
   id: string;
   lane_id: string;
   name: string;
-  time: number;               // seconds
+  time: number;               // seconds — impact time (end of cast)
   category: MechCategory;
   /** Player IDs hit by this mech. Empty array means "no one" (a pure
    *  placement mechanic, but also a damage mech where the user hasn't
@@ -99,6 +99,12 @@ export interface Mechanic {
    *  AoEs and DoT ticks). 1 or undefined = single hit. Rendered as a
    *  superscript ×N badge over the cap when > 1. */
   hit_count?: number;
+  /** Boss cast time, in seconds. The cast bar visualises from
+   *  (time - cast_time) to time. Coverage math is unchanged — the
+   *  impact still lands at `time`, the bar is purely a visual cue so
+   *  the planner can align mitigations with the cast bar. 0 / undefined
+   *  = instant mech (no cast bar shown). */
+  cast_time?: number;
   /** Legacy field kept for migration ; new mechs derive their visual
    *  type from category + targets via deriveMechType(). */
   type?: MechType;

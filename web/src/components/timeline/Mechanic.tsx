@@ -146,3 +146,29 @@ export function MechanicMarker({ mech, uses, fightDuration, slot = 0 }: Mechanic
     </div>
   );
 }
+
+/**
+ * Translucent cast bar shown UNDER the lane, anchored from the impact
+ * time backwards by `cast_time` seconds. Rendered as a sibling of
+ * <MechanicMarker> because the marker is 2px wide and % values inside
+ * wouldn't resolve to the canvas. Coverage math is untouched — the
+ * bar is purely visual.
+ */
+export function MechanicCastBar({ mech, fightDuration }: { mech: MechanicT; fightDuration: number }) {
+  const damageKind = mech.damage_kind ?? 'magical';
+  const isPlacement = mech.category === 'placement';
+  const colorKey = isPlacement ? 'placement' : damageKind;
+  if (!mech.cast_time || mech.cast_time <= 0) return null;
+  const startPct = pct(Math.max(0, mech.time - mech.cast_time), fightDuration);
+  const widthPct = (mech.cast_time / fightDuration) * 100;
+  return (
+    <div
+      className="mech-cast-bar"
+      data-color={colorKey}
+      style={{ left: `${startPct}%`, width: `${widthPct}%` }}
+      title={`${mech.cast_time}s cast → ${fmt(mech.time)}`}
+    >
+      <span className="mech-cast-bar-label">{mech.cast_time}s</span>
+    </div>
+  );
+}

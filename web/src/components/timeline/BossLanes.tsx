@@ -3,7 +3,7 @@ import { usePlanStore } from '../../state/planStore';
 import { fmt, pct, xToTime } from '../../lib/time';
 import { computeMechSlots } from '../../lib/mitigation';
 import { useT } from '../../i18n';
-import { MechanicMarker } from './Mechanic';
+import { MechanicMarker, MechanicCastBar } from './Mechanic';
 
 /**
  * Left labels column — one row per boss lane.
@@ -229,6 +229,11 @@ function BossLaneRow({
           <span className="boss-hover-time">{fmt(hover.t)}</span>
         </div>
       )}
+      {/* Cast bars are rendered FIRST so they sit visually behind the
+          marker cap + label. Mechs without cast_time render nothing. */}
+      {mechanics.map((m) => (
+        <MechanicCastBar key={`cast-${m.id}`} mech={m} fightDuration={fightDuration} />
+      ))}
       {mechanics.map((m) => (
         <MechanicMarker
           key={m.id}

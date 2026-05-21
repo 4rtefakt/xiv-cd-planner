@@ -95,6 +95,7 @@ export interface MechanicModalState {
   category: MechCategory;
   targets: string[];
   damage_kind: DamageKind;
+  cast_time: number;          // 0 = instant, visualised as a cast bar before `time`
   /** Legacy visual flavour — kept for the modal's color-flavor picker
    *  if we re-add it later. Unused for now ; derived from targets. */
   type?: MechType;
@@ -275,6 +276,7 @@ interface PlanState {
       targets?: string[];
       damage_kind?: DamageKind;
       name?: string;
+      cast_time?: number;
     },
   ): void;
   openEditMechanic(mech: Mechanic): void;
@@ -565,6 +567,7 @@ export const usePlanStore = create<PlanState>((set) => ({
         // planner's level are raidwides, and unchecking is fast.
         targets: init?.targets ?? s.party.map((p) => p.id),
         damage_kind: init?.damage_kind ?? 'magical',
+        cast_time: init?.cast_time ?? 0,
       },
     })),
   openEditMechanic: (m) =>
@@ -578,6 +581,7 @@ export const usePlanStore = create<PlanState>((set) => ({
         category: m.category,
         targets: [...m.targets],
         damage_kind: m.damage_kind ?? 'magical',
+        cast_time: m.cast_time ?? 0,
       },
     }),
   setMechanicModal: (patch) =>

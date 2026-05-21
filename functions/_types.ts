@@ -67,6 +67,7 @@ export interface Mechanic {
   targets: string[];
   damage_kind?: DamageKind;
   hit_count?: number;
+  cast_time?: number;
   type?: MechType;
 }
 

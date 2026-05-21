@@ -1265,6 +1265,52 @@
   z-index: 4;
   cursor: pointer;
 }
+
+/* Boss cast bar — translucent shaded block extending backwards from
+ * the impact line (mech.time - cast_time → mech.time). Rendered as a
+ * sibling of .mechanic at the boss lane level so its % widths resolve
+ * against the canvas, not the marker's 2px line. Coverage math is
+ * unchanged ; this is a pure visual cue for aligning mitigations with
+ * the cast bar timing. */
+.mech-cast-bar {
+  position: absolute;
+  top: 18px;
+  height: 14px;
+  z-index: 2;
+  pointer-events: none;
+  background: repeating-linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 0.04),
+    rgba(255, 255, 255, 0.04) 4px,
+    transparent 4px,
+    transparent 8px
+  ),
+  linear-gradient(90deg,
+    color-mix(in srgb, var(--cast-color, var(--magic-ranged)) 12%, transparent),
+    color-mix(in srgb, var(--cast-color, var(--magic-ranged)) 28%, transparent)
+  );
+  border-left: 1px dashed color-mix(in srgb, var(--cast-color, var(--magic-ranged)) 60%, transparent);
+  border-right: 1px solid var(--cast-color, var(--magic-ranged));
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  padding-right: 4px;
+  overflow: hidden;
+}
+.mech-cast-bar[data-color="physical"]  { --cast-color: var(--phys-ranged); }
+.mech-cast-bar[data-color="magical"]   { --cast-color: var(--magic-ranged); }
+.mech-cast-bar[data-color="pure"]      { --cast-color: var(--text-faint); }
+.mech-cast-bar[data-color="placement"] { --cast-color: var(--cyan); }
+.mech-cast-bar-label {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 9px;
+  color: var(--cast-color, var(--magic-ranged));
+  letter-spacing: 0.08em;
+  white-space: nowrap;
+  text-shadow: 0 0 4px rgba(0, 0, 0, 0.8);
+}
+.app.compact-mechs .mech-cast-bar { top: 12px; height: 10px; }
+.app.compact-mechs .mech-cast-bar-label { font-size: 8px; }
 /* Single color scheme : damage_kind for damage mechs, 'placement' for
    the rest. The cap, the vertical line, the label border and the
    coverage badge all derive from --mech-color set here. */
