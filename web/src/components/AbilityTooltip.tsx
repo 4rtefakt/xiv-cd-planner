@@ -17,7 +17,7 @@
  * placement to keep the popup on screen.
  */
 
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useLayoutEffect, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
 import type { Ability } from '../types';
 import { AbilityIcon } from './Icon';
@@ -100,14 +100,27 @@ function AbilityTooltipPopup({ ability, anchor }: PopupProps) {
   const desc = lang === 'fr' ? ability.description_fr ?? ability.description : ability.description;
 
   // Position : prefer the right side of the anchor ; flip to the left if
-  // we'd overflow the viewport. Tooltip is ~280px wide, ~200px tall.
+  // we'd overflow the viewport. The vertical clamp uses the tooltip's
+  // measured height (long descriptions can run 400px+, so the previous
+  // hardcoded 220 was letting them spill off the bottom).
   const W = 320;
   const margin = 8;
   const willOverflowRight = anchor.right + margin + W > window.innerWidth;
   const left = willOverflowRight
     ? Math.max(margin, anchor.left - W - margin)
     : anchor.right + margin;
-  const top = Math.max(margin, Math.min(window.innerHeight - 220, anchor.top - 4));
+
+  const popupRef = useRef<HTMLDivElement | null>(null);
+  const [top, setTop] = useState<number>(() =>
+    Math.max(margin, anchor.top - 4),
+  );
+
+  useLayoutEffect(() => {
+    const h = popupRef.current?.offsetHeight ?? 0;
+    const maxTop = window.innerHeight - h - margin;
+    const desired = anchor.top - 4;
+    setTop(Math.max(margin, Math.min(maxTop, desired)));
+  }, [anchor.top, ability.id]);
 
   const mitTypeLabel = (() => {
     if (lang === 'fr') {
@@ -124,6 +137,7 @@ function AbilityTooltipPopup({ ability, anchor }: PopupProps) {
 
   return createPortal(
     <div
+      ref={popupRef}
       className={`ab-tt mit-${ability.mit_type}`}
       style={{ left, top, width: W }}
       role="tooltip"
