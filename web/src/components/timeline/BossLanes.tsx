@@ -17,9 +17,11 @@ export function BossLanesLeft() {
   const hiddenCats = usePlanStore((s) => s.hiddenMechCategories);
   const removeBossLane = usePlanStore((s) => s.removeBossLane);
   const setBossLaneName = usePlanStore((s) => s.setBossLaneName);
+  const mergeBossLanes = usePlanStore((s) => s.mergeBossLanes);
   const readOnly = usePlanStore((s) => s.readOnly);
   const t = useT();
   const [editingId, setEditingId] = useState<string | null>(null);
+  const [mergingId, setMergingId] = useState<string | null>(null);
 
   return (
     <div className="left-boss-lanes">
@@ -62,6 +64,31 @@ export function BossLanesLeft() {
           )}
           {!readOnly && bossLanes.length > 1 && (
             <span
+              className="lane-merge"
+              role="button"
+              tabIndex={0}
+              title={t('lane.merge')}
+              onClick={(e) => {
+                e.stopPropagation();
+                setMergingId(mergingId === lane.id ? null : lane.id);
+              }}
+            >
+              ⤴
+              {mergingId === lane.id && (
+                <LaneMergePopover
+                  sourceLane={lane}
+                  allLanes={bossLanes}
+                  onPick={(targetId) => {
+                    mergeBossLanes(lane.id, targetId);
+                    setMergingId(null);
+                  }}
+                  onClose={() => setMergingId(null)}
+                />
+              )}
+            </span>
+          )}
+          {!readOnly && bossLanes.length > 1 && (
+            <span
               className="lane-remove"
               role="button"
               tabIndex={0}
@@ -77,6 +104,64 @@ export function BossLanesLeft() {
         </div>
         );
       })}
+    </div>
+  );
+}
+
+/** Popover anchored to the merge button — lists every OTHER lane as a
+ *  click target ; picking one calls mergeBossLanes(source, target) and
+ *  closes. Dismissed on outside click / Esc. */
+function LaneMergePopover({
+  sourceLane,
+  allLanes,
+  onPick,
+  onClose,
+}: {
+  sourceLane: { id: string; name: string };
+  allLanes: { id: string; name: string }[];
+  onPick: (targetId: string) => void;
+  onClose: () => void;
+}) {
+  const ref = useRef<HTMLDivElement>(null);
+  const t = useT();
+  const targets = allLanes.filter((l) => l.id !== sourceLane.id);
+
+  useEffect(() => {
+    const onDoc = (e: MouseEvent) => {
+      if (!ref.current) return;
+      if (!ref.current.contains(e.target as Node)) onClose();
+    };
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') onClose();
+    };
+    // Defer so the opening click doesn't immediately close.
+    const tm = setTimeout(() => document.addEventListener('click', onDoc), 0);
+    document.addEventListener('keydown', onKey);
+    return () => {
+      clearTimeout(tm);
+      document.removeEventListener('click', onDoc);
+      document.removeEventListener('keydown', onKey);
+    };
+  }, [onClose]);
+
+  return (
+    <div ref={ref} className="lane-merge-pop" onClick={(e) => e.stopPropagation()}>
+      <div className="lane-merge-pop-label">{t('lane.mergePicker')}</div>
+      {targets.length === 0 ? (
+        <div className="lane-merge-pop-empty">{t('lane.mergeNoTargets')}</div>
+      ) : (
+        targets.map((target) => (
+          <button
+            key={target.id}
+            type="button"
+            className="lane-merge-pop-opt"
+            onClick={() => onPick(target.id)}
+            title={target.name}
+          >
+            {target.name}
+          </button>
+        ))
+      )}
     </div>
   );
 }

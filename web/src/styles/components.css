@@ -772,6 +772,65 @@
 }
 .boss-row-left .lane-remove:hover { opacity: 1; }
 
+/* Merge button — same minimalist treatment as lane-remove but cyan and
+ * with a popover anchored under it for picking the destination lane. */
+.boss-row-left .lane-merge {
+  position: relative;
+  color: var(--cyan);
+  cursor: pointer;
+  opacity: 0.4;
+  font-size: 12px;
+  line-height: 1;
+  user-select: none;
+}
+.boss-row-left .lane-merge:hover { opacity: 1; }
+.lane-merge-pop {
+  position: absolute;
+  top: calc(100% + 6px);
+  right: 0;
+  z-index: 60;
+  background: var(--panel-2);
+  border: 1px solid var(--line-bright);
+  box-shadow: 0 8px 22px rgba(0, 0, 0, 0.55);
+  padding: 6px;
+  min-width: 160px;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.lane-merge-pop-label {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 0.14em;
+  color: var(--text-dim);
+  padding: 2px 6px 4px;
+  border-bottom: 1px dashed rgba(255, 255, 255, 0.08);
+  margin-bottom: 2px;
+}
+.lane-merge-pop-empty {
+  font-family: 'Chakra Petch', sans-serif;
+  font-size: 11px;
+  color: var(--text-faint);
+  padding: 6px;
+  font-style: italic;
+}
+.lane-merge-pop-opt {
+  text-align: left;
+  background: transparent;
+  border: 1px solid transparent;
+  color: var(--text);
+  font-family: 'Chakra Petch', sans-serif;
+  font-size: 11px;
+  padding: 4px 8px;
+  cursor: pointer;
+  letter-spacing: 0.02em;
+}
+.lane-merge-pop-opt:hover {
+  border-color: var(--cyan);
+  color: var(--cyan);
+  background: rgba(0, 229, 255, 0.06);
+}
+
 .lane-name {
   padding: 1px 2px;
 }

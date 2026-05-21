@@ -267,6 +267,10 @@ interface PlanState {
   addBossLane(): void;
   removeBossLane(id: string): void;
   setBossLaneName(id: string, name: string): void;
+  /** Merge `fromId` into `toId` : every mech belonging to `fromId` is
+   *  reassigned to `toId`, then `fromId` is removed. No-ops if the
+   *  source or destination doesn't exist or both ids are the same. */
+  mergeBossLanes(fromId: string, toId: string): void;
 
   // Actions — modal
   openMechanicModal(
@@ -556,6 +560,19 @@ export const usePlanStore = create<PlanState>((set) => ({
     })),
   setBossLaneName: (id, name) =>
     set((s) => ({ bossLanes: s.bossLanes.map((l) => (l.id === id ? { ...l, name } : l)) })),
+  mergeBossLanes: (fromId, toId) =>
+    set((s) => {
+      if (fromId === toId) return {};
+      const from = s.bossLanes.find((l) => l.id === fromId);
+      const to = s.bossLanes.find((l) => l.id === toId);
+      if (!from || !to) return {};
+      return {
+        bossLanes: s.bossLanes.filter((l) => l.id !== fromId),
+        mechanics: s.mechanics.map((m) =>
+          m.lane_id === fromId ? { ...m, lane_id: toId } : m,
+        ),
+      };
+    }),
 
   openMechanicModal: (laneId, time, init) =>
     set((s) => ({

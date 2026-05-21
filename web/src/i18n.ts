@@ -136,6 +136,9 @@ const messages = {
     // Boss lane
     'lane.rename':          'Rename lane',
     'lane.remove':          'Remove lane',
+    'lane.merge':           'Merge into another lane',
+    'lane.mergePicker':     'MERGE INTO',
+    'lane.mergeNoTargets':  'No other lane to merge with',
     // Mech marker
     'mech.remove':          'Remove',
     'mech.removeUse':       'Remove',
@@ -250,6 +253,9 @@ const messages = {
     'player.pickerLabel':   'CHANGER DE JOB',
     'lane.rename':          'Renommer la lane',
     'lane.remove':          'Supprimer la lane',
+    'lane.merge':           'Fusionner dans une autre lane',
+    'lane.mergePicker':     'FUSIONNER DANS',
+    'lane.mergeNoTargets':  'Pas d\'autre lane à fusionner',
     'mech.remove':          'Supprimer',
     'mech.removeUse':       'Supprimer',
     'app.loadingJobs':      'Chargement des jobs…',
