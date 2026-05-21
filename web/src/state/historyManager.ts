@@ -26,6 +26,7 @@ interface Snapshot {
   bossLanes: BossLane[];
   mechanics: Mechanic[];
   uses: Use[];
+  hiddenAbilityIds: string[];
 }
 
 const HISTORY_CAP = 100;
@@ -47,6 +48,7 @@ function capture(): Snapshot {
     bossLanes: s.bossLanes.map((l) => ({ ...l })),
     mechanics: s.mechanics.map((m) => ({ ...m, targets: [...m.targets] })),
     uses: s.uses.map((u) => ({ ...u })),
+    hiddenAbilityIds: [...s.hiddenAbilityIds],
   };
 }
 
@@ -67,7 +69,8 @@ export function initHistory(): () => void {
       state.party !== prevState.party ||
       state.bossLanes !== prevState.bossLanes ||
       state.mechanics !== prevState.mechanics ||
-      state.uses !== prevState.uses;
+      state.uses !== prevState.uses ||
+      state.hiddenAbilityIds !== prevState.hiddenAbilityIds;
     if (!changed) return;
     if (suppressNext) {
       suppressNext = false;

@@ -81,6 +81,9 @@ export interface Encounter {
   fight_name: string;
   fight_duration: number;
   party_ilvl: number | null;
+  /** Player level (50, 60, 70, 80, 90, 100). Defaults to 100 — see
+   *  web/src/types.ts for the rationale. */
+  level: number;
 }
 
 export interface Plan {
@@ -90,6 +93,8 @@ export interface Plan {
   boss_lanes: BossLane[];
   mechanics: Mechanic[];
   uses: Use[];
+  /** Per-plan blacklist of ability ids to hide from the player rows. */
+  hidden_ability_ids: string[];
 }
 
 export interface Env {

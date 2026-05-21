@@ -24,11 +24,13 @@ export const onRequestPost: PagesFunction<Env> = async (ctx) => {
       fight_name: body.encounter?.fight_name ?? '',
       fight_duration: body.encounter?.fight_duration ?? 600,
       party_ilvl: body.encounter?.party_ilvl ?? null,
+      level: body.encounter?.level ?? 100,
     },
     party: body.party ?? [],
     boss_lanes: [{ id: 'lane-1', name: 'BOSS A' }],
     mechanics: [],
     uses: [],
+    hidden_ability_ids: [],
   };
 
   const res = await stub.fetch('https://do/', {

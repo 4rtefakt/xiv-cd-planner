@@ -323,6 +323,18 @@
   text-align: center;
 }
 .enc-input-mono:focus { outline: none; border-color: var(--cyan); }
+.enc-select {
+  appearance: none;
+  -webkit-appearance: none;
+  cursor: pointer;
+  padding-right: 22px;
+  background-image: linear-gradient(45deg, transparent 50%, var(--cyan) 50%),
+                    linear-gradient(135deg, var(--cyan) 50%, transparent 50%);
+  background-position: calc(100% - 12px) 50%, calc(100% - 7px) 50%;
+  background-size: 5px 5px, 5px 5px;
+  background-repeat: no-repeat;
+}
+.enc-select:disabled { opacity: 0.55; cursor: not-allowed; }
 .enc-value-mono {
   font-family: 'JetBrains Mono', monospace;
   font-size: 16px;
@@ -924,6 +936,70 @@
   font-family: 'JetBrains Mono', monospace;
   font-size: 10px;
   color: var(--text-dim);
+}
+
+/* "+ N hidden" footer at the bottom of each player's ability list — only
+ *  rendered when the user has hidden at least one of this job's CDs for
+ *  the current room. Each chip = one hidden ability ; click to restore. */
+.cd-row-hidden-footer {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 4px;
+  padding: 4px 10px 4px 14px;
+  min-height: 22px;
+  background: rgba(255, 255, 255, 0.015);
+  border-bottom: 1px solid var(--line);
+}
+.cd-row-hidden-footer .cd-indent {
+  /* Override the grid-cell sizing — the footer is a flex container. */
+  width: 24px;
+}
+.cd-hidden-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 2px 6px 2px 4px;
+  border: 1px dashed var(--line-bright);
+  background: rgba(0, 0, 0, 0.25);
+  color: var(--text-dim);
+  font-family: 'Chakra Petch', sans-serif;
+  font-size: 10px;
+  letter-spacing: 0.04em;
+  cursor: pointer;
+  opacity: 0.6;
+  transition: opacity 0.1s ease, border-color 0.1s ease, color 0.1s ease;
+}
+.cd-hidden-chip:hover {
+  opacity: 1;
+  border-color: var(--cyan);
+  color: var(--cyan);
+}
+.cd-hidden-chip-icon {
+  width: 14px;
+  height: 14px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  filter: grayscale(0.6);
+}
+.cd-hidden-chip-icon img { width: 100%; height: 100%; object-fit: contain; }
+.cd-hidden-chip-x {
+  font-weight: bold;
+  margin-left: 2px;
+}
+/* Right-column spacer that matches the left-column footer height so the
+ * two scroll regions stay row-aligned. Height tracks .cd-row-hidden-footer
+ * (min-height 22 + padding 4+4 = 30px ; flex wrap adds rows of ~22px
+ * each, so the spacer auto-grows via the natural content of nothing —
+ * we compute via min-height + use vertical padding to match). */
+.cd-row-hidden-footer-spacer {
+  /* Mirror the min content height of the footer ; if the user has many
+   * hidden CDs and the footer wraps to 2 rows, the right side will
+   * still be 1 row tall — minor cosmetic, acceptable for now. */
+  min-height: 30px;
+  background: rgba(255, 255, 255, 0.015);
+  border-bottom: 1px solid var(--line);
 }
 
 .cd-row-right {

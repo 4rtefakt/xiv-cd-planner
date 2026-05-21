@@ -87,6 +87,7 @@ export function ImportLogModal({ open, onClose }: Props) {
     importFightFromLog({
       fightName: preview.fightName,
       fightDuration: preview.fightDuration,
+      gameLevel: preview.gameLevel ?? undefined,
       bossLanes: preview.bossLanes,
       players: preview.players,
       mechanics: preview.mechanics,

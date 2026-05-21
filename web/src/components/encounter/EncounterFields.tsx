@@ -53,6 +53,19 @@ export function EncounterFields() {
         />
       </div>
       <div className="enc-field">
+        <div className="enc-label">{t('enc.level')}</div>
+        <select
+          className="enc-input-mono enc-select"
+          value={encounter.level}
+          disabled={readOnly}
+          onChange={(e) => setEncounter({ level: parseInt(e.target.value, 10) })}
+        >
+          {[50, 60, 70, 80, 90, 100].map((lv) => (
+            <option key={lv} value={lv}>{lv}</option>
+          ))}
+        </select>
+      </div>
+      <div className="enc-field">
         <div className="enc-label">{t('enc.mechs')}</div>
         <div className="enc-value-mono">{pad2(mechanicsCount)}</div>
       </div>

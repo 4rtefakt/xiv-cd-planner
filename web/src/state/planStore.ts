@@ -175,6 +175,9 @@ interface PlanState {
   bossLanes: BossLane[];
   mechanics: Mechanic[];
   uses: Use[];
+  /** Per-plan blacklist of ability ids hidden from the player rows.
+   *  Stored in the Plan blob so it travels with the slug. */
+  hiddenAbilityIds: string[];
 
   // UI
   collapsed: Record<string, boolean>;
@@ -221,6 +224,9 @@ interface PlanState {
   importFightFromLog(payload: {
     fightName: string;
     fightDuration: number;
+    /** Synced/max player level inferred from the report's expansion or
+     *  zone. Falls back to the current encounter.level if not provided. */
+    gameLevel?: number;
     /** Ordered boss lane names from the FFLogs source analysis. One
      *  BossLane is created per entry (e.g. ["Shinryu", "Right Wing",
      *  "Left Wing", "Adds"]). If the array is empty, falls back to a
@@ -292,6 +298,10 @@ interface PlanState {
   removeUse(id: string): void;
   moveUse(id: string, time: number): void;
 
+  // Actions — hidden abilities (per-plan blacklist)
+  toggleAbilityHidden(abilityId: string): void;
+  setHiddenAbilityIds(ids: string[]): void;
+
   // Actions — UI
   toggleCollapsed(playerId: string): void;
   expandPlayer(playerId: string): void;
@@ -314,6 +324,7 @@ interface PlanState {
     bossLanes: BossLane[];
     mechanics: Mechanic[];
     uses: Use[];
+    hiddenAbilityIds: string[];
   }): void;
   /**
    * Replace the entire plan content from a server payload. Used by
@@ -327,6 +338,7 @@ interface PlanState {
     boss_lanes?: BossLane[];
     mechanics?: Mechanic[];
     uses?: Use[];
+    hidden_ability_ids?: string[];
   }): void;
 }
 
@@ -334,6 +346,7 @@ const defaultEncounter: Encounter = {
   fight_name: 'M3S — Brute Abominator',
   fight_duration: 600,
   party_ilvl: 735,
+  level: 100,
 };
 
 export const usePlanStore = create<PlanState>((set) => ({
@@ -353,6 +366,7 @@ export const usePlanStore = create<PlanState>((set) => ({
   bossLanes: [{ id: 'lane-1', name: 'BOSS A' }],
   mechanics: [],
   uses: [],
+  hiddenAbilityIds: [],
   collapsed: {},
   zoom: 2,
   hiddenMechCategories: [],
@@ -453,11 +467,19 @@ export const usePlanStore = create<PlanState>((set) => ({
         }
       }
 
+      // Clamp imported level to the brackets we support : 50, 60, 70,
+      // 80, 90, 100. Anything outside that range falls back to 100.
+      const VALID_LEVELS = [50, 60, 70, 80, 90, 100];
+      const importedLevel =
+        payload.gameLevel && VALID_LEVELS.includes(payload.gameLevel)
+          ? payload.gameLevel
+          : s.encounter.level;
       return {
         encounter: {
           ...s.encounter,
           fight_name: payload.fightName,
           fight_duration: Math.max(60, Math.min(900, payload.fightDuration)),
+          level: importedLevel,
         },
         party: newParty,
         bossLanes: lanes,
@@ -582,6 +604,20 @@ export const usePlanStore = create<PlanState>((set) => ({
       uses: s.uses.map((u) => (u.id === id ? { ...u, time } : u)),
     })),
 
+  toggleAbilityHidden: (abilityId) =>
+    set((s) => {
+      const has = s.hiddenAbilityIds.includes(abilityId);
+      return {
+        hiddenAbilityIds: has
+          ? s.hiddenAbilityIds.filter((id) => id !== abilityId)
+          : [...s.hiddenAbilityIds, abilityId],
+        // Drop any existing uses for the now-hidden ability so they
+        // don't keep counting toward coverage from an invisible row.
+        uses: has ? s.uses : s.uses.filter((u) => u.ability_id !== abilityId),
+      };
+    }),
+  setHiddenAbilityIds: (ids) => set({ hiddenAbilityIds: ids }),
+
   toggleCollapsed: (playerId) =>
     set((s) => ({ collapsed: { ...s.collapsed, [playerId]: !s.collapsed[playerId] } })),
   expandPlayer: (playerId) =>
@@ -616,16 +652,24 @@ export const usePlanStore = create<PlanState>((set) => ({
       bossLanes: snap.bossLanes,
       mechanics: snap.mechanics,
       uses: snap.uses,
+      hiddenAbilityIds: snap.hiddenAbilityIds,
       // Don't touch transient UI ; undo a placement shouldn't reopen a modal.
     }),
   hydratePlan: (plan) =>
     set((s) => ({
       slug: plan.meta?.slug ?? s.slug,
-      encounter: plan.encounter ?? s.encounter,
+      // Backfill defaults for any field a legacy server-stored plan
+      // might lack (added later than the field's existence in code) —
+      // the runtime payload can have an undefined `level` even though
+      // the TS type marks it required.
+      encounter: plan.encounter
+        ? { ...plan.encounter, level: plan.encounter.level ?? 100 }
+        : s.encounter,
       party: plan.party ?? s.party,
       bossLanes: plan.boss_lanes ?? s.bossLanes,
       mechanics: plan.mechanics ?? s.mechanics,
       uses: plan.uses ?? s.uses,
+      hiddenAbilityIds: plan.hidden_ability_ids ?? [],
       // Reset transient UI so a stale modal/preview doesn't leak across loads
       mechanicModal: null,
       dragCtx: null,

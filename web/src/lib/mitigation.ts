@@ -74,6 +74,11 @@ export function computeCoverage(
   abilities: Map<string, Ability>,
   partySize: number,
   simulated?: SimulatedUse,
+  /** Encounter level — abilities not unlocked yet (level_unlocked >
+   *  level) and abilities the user explicitly hid for this room are
+   *  skipped. Both default to "no filter" so older callers keep working. */
+  level: number = 100,
+  hiddenAbilityIds: Set<string> = new Set(),
 ): Coverage {
   // Placement mechs are informational only — no damage to mitigate.
   if (mech.category === 'placement') {
@@ -83,18 +88,23 @@ export function computeCoverage(
   if (kind === 'pure') {
     return { pct: 0, tier: 'pure', expected: 0, pure: true, placement: false };
   }
+  function abilityActive(ab: Ability): boolean {
+    if (ab.level_unlocked > level) return false;
+    if (hiddenAbilityIds.has(ab.id)) return false;
+    return abilityMitigates(ab, kind);
+  }
   let total = 0;
   for (const u of uses) {
     if (simulated?.exclude_use_id === u.id) continue;
     const ab = abilities.get(u.ability_id);
     if (!ab) continue;
     if (mech.time < u.time || mech.time >= u.time + ab.effect) continue;
-    if (!abilityMitigates(ab, kind)) continue;
+    if (!abilityActive(ab)) continue;
     total += ab.mit_potency;
   }
   if (simulated) {
     const ab = abilities.get(simulated.ability_id);
-    if (ab && mech.time >= simulated.time && mech.time < simulated.time + ab.effect && abilityMitigates(ab, kind)) {
+    if (ab && mech.time >= simulated.time && mech.time < simulated.time + ab.effect && abilityActive(ab)) {
       total += ab.mit_potency;
     }
   }

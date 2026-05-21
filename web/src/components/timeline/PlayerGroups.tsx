@@ -1,9 +1,30 @@
 import { useMemo } from 'react';
-import type { Job } from '../../types';
+import type { Ability, Job } from '../../types';
 import { AbilityIcon, JobIcon } from '../Icon';
 import { usePlanStore } from '../../state/planStore';
-import { abilityName, abilityTooltip, jobName } from '../../i18n';
+import { abilityName, abilityTooltip, jobName, useT } from '../../i18n';
 import { AbilityRow } from './AbilityRow';
+
+/**
+ * Filter + sort an ability list for display :
+ *   - drop abilities not unlocked at the encounter's level
+ *   - drop abilities the user has manually hidden for this room
+ *   - sort by recast desc (long CDs at the top, instants at the bottom)
+ *
+ * Hidden abilities stay in the seed (their uses can be restored if the
+ * user un-hides them later in the same plan), but disappear from the UI.
+ */
+function filterAndSortAbilities(
+  job: Job | undefined,
+  level: number,
+  hiddenIds: string[],
+): Ability[] {
+  if (!job) return [];
+  const hiddenSet = new Set(hiddenIds);
+  return job.abilities
+    .filter((ab) => ab.level_unlocked <= level && !hiddenSet.has(ab.id))
+    .sort((a, b) => b.recast - a.recast);
+}
 
 /**
  * Left labels column for the player groups. Each player has:
@@ -18,6 +39,11 @@ export function PlayerGroupsLeft() {
   const collapsed = usePlanStore((s) => s.collapsed);
   const toggleCollapsed = usePlanStore((s) => s.toggleCollapsed);
   const lang = usePlanStore((s) => s.lang);
+  const level = usePlanStore((s) => s.encounter.level);
+  const hiddenAbilityIds = usePlanStore((s) => s.hiddenAbilityIds);
+  const toggleAbilityHidden = usePlanStore((s) => s.toggleAbilityHidden);
+  const readOnly = usePlanStore((s) => s.readOnly);
+  const t = useT();
 
   const jobByCode = useMemo(() => {
     const m = new Map<string, Job>();
@@ -31,7 +57,14 @@ export function PlayerGroupsLeft() {
     <div className="left-player-groups">
       {party.map((p) => {
         const job = jobByCode.get(p.job);
-        const sortedAbilities = job ? [...job.abilities].sort((a, b) => b.recast - a.recast) : [];
+        const sortedAbilities = filterAndSortAbilities(job, level, hiddenAbilityIds);
+        // Abilities the user hid for this room AND that this job actually
+        // has (so a hidden BRD ability doesn't surface as "hidden" on PLD).
+        const hiddenForThisJob = job
+          ? job.abilities.filter(
+              (ab) => hiddenAbilityIds.includes(ab.id) && ab.level_unlocked <= level,
+            )
+          : [];
         const isCollapsed = !!collapsed[p.id];
         const role = job?.role ?? 'dps';
         return (
@@ -56,7 +89,12 @@ export function PlayerGroupsLeft() {
                   <div
                     key={ab.id}
                     className={`cd-row-left type-${ab.mit_type} cd-row-height ${altClass}`}
-                    title={abilityTooltip(ab, lang)}
+                    title={`${abilityTooltip(ab, lang)}\n— ${t('ability.hiddenHint')}`}
+                    onContextMenu={(e) => {
+                      if (readOnly) return;
+                      e.preventDefault();
+                      toggleAbilityHidden(ab.id);
+                    }}
                   >
                     <span className="cd-indent" />
                     <span className="cd-ability-icon" style={{ color: 'var(--ability-color)' }}>
@@ -67,6 +105,26 @@ export function PlayerGroupsLeft() {
                   </div>
                 );
               })}
+            {!isCollapsed && hiddenForThisJob.length > 0 && (
+              <div className="cd-row-hidden-footer">
+                <span className="cd-indent" />
+                {hiddenForThisJob.map((ab) => (
+                  <button
+                    key={ab.id}
+                    type="button"
+                    className="cd-hidden-chip"
+                    onClick={() => toggleAbilityHidden(ab.id)}
+                    title={abilityName(ab, lang)}
+                  >
+                    <span className="cd-hidden-chip-icon">
+                      <AbilityIcon src={ab.icon} fallbackGlyph={ab.icon_glyph} alt={abilityName(ab, lang)} />
+                    </span>
+                    <span className="cd-hidden-chip-name">{abilityName(ab, lang)}</span>
+                    <span className="cd-hidden-chip-x">+</span>
+                  </button>
+                ))}
+              </div>
+            )}
           </div>
         );
       })}
@@ -85,6 +143,8 @@ export function PlayerGroupsRight() {
   const collapsed = usePlanStore((s) => s.collapsed);
   const uses = usePlanStore((s) => s.uses);
   const fightDuration = usePlanStore((s) => s.encounter.fight_duration);
+  const level = usePlanStore((s) => s.encounter.level);
+  const hiddenAbilityIds = usePlanStore((s) => s.hiddenAbilityIds);
 
   const jobByCode = useMemo(() => {
     const m = new Map<string, Job>();
@@ -98,7 +158,12 @@ export function PlayerGroupsRight() {
     <div className="right-player-groups">
       {party.map((p) => {
         const job = jobByCode.get(p.job);
-        const sortedAbilities = job ? [...job.abilities].sort((a, b) => b.recast - a.recast) : [];
+        const sortedAbilities = filterAndSortAbilities(job, level, hiddenAbilityIds);
+        const hiddenForThisJob = job
+          ? job.abilities.filter(
+              (ab) => hiddenAbilityIds.includes(ab.id) && ab.level_unlocked <= level,
+            )
+          : [];
         const isCollapsed = !!collapsed[p.id];
         const role = job?.role ?? 'dps';
         return (
@@ -118,6 +183,11 @@ export function PlayerGroupsRight() {
                   />
                 );
               })}
+            {/* Empty spacer matching the .cd-row-hidden-footer on the left
+                column so the two scroll regions stay vertically aligned. */}
+            {!isCollapsed && hiddenForThisJob.length > 0 && (
+              <div className="cd-row-hidden-footer-spacer" aria-hidden />
+            )}
           </div>
         );
       })}

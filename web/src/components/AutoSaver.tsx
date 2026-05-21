@@ -29,6 +29,7 @@ export function AutoSaver() {
   const bossLanes = usePlanStore((s) => s.bossLanes);
   const mechanics = usePlanStore((s) => s.mechanics);
   const uses = usePlanStore((s) => s.uses);
+  const hiddenAbilityIds = usePlanStore((s) => s.hiddenAbilityIds);
 
   // Refs that don't trigger re-renders.
   const isFirstEffect = useRef(true);
@@ -64,6 +65,7 @@ export function AutoSaver() {
         boss_lanes: state.bossLanes,
         mechanics: state.mechanics,
         uses: state.uses,
+        hidden_ability_ids: state.hiddenAbilityIds,
       };
       try {
         if (!state.slug) {
@@ -83,7 +85,7 @@ export function AutoSaver() {
     return () => {
       if (inFlight.current) window.clearTimeout(inFlight.current);
     };
-  }, [encounter, party, bossLanes, mechanics, uses]);
+  }, [encounter, party, bossLanes, mechanics, uses, hiddenAbilityIds]);
 
   return null;
 }

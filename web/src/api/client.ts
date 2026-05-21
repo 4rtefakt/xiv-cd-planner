@@ -77,6 +77,10 @@ export interface FFLogsFightData {
   fightStart: number;
   fightEnd: number;
   fightDuration: number;
+  /** Synced/max player level inferred from the report's expansion id.
+   *  null = couldn't determine (older expansions or unknown zone) ; the
+   *  client falls back to its current encounter.level. */
+  gameLevel: number | null;
   /** Ordered list of boss lane names — Boss subtype first, then by
    *  event count desc. Frontend creates one BossLane per entry. */
   bossLanes: string[];

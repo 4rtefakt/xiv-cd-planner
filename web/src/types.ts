@@ -99,6 +99,11 @@ export interface Encounter {
   fight_name: string;
   fight_duration: number;     // seconds
   party_ilvl: number | null;
+  /** Player level for this fight — 50, 60, 70, 80, 90, 100. Used to
+   *  hide abilities that aren't unlocked yet (level_unlocked > level)
+   *  and, later, to pick level-scaled potency/recast values. Defaults
+   *  to 100 so legacy plans without the field behave as max-level. */
+  level: number;
 }
 
 export interface Plan {
@@ -108,4 +113,8 @@ export interface Plan {
   boss_lanes: BossLane[];
   mechanics: Mechanic[];
   uses: Use[];
+  /** Per-plan blacklist : ability ids hidden from the player rows for
+   *  this room (e.g. a CD that the team decided not to use, or a job
+   *  variant that's irrelevant). Coverage calc ignores them. */
+  hidden_ability_ids: string[];
 }

@@ -22,9 +22,12 @@ export function MechanicMarker({ mech, uses, fightDuration, slot = 0 }: Mechanic
   const openEditMechanic = usePlanStore((s) => s.openEditMechanic);
   const previewUse = usePlanStore((s) => s.previewUse);
   const readOnly = usePlanStore((s) => s.readOnly);
+  const level = usePlanStore((s) => s.encounter.level);
+  const hiddenAbilityIds = usePlanStore((s) => s.hiddenAbilityIds);
+  const hiddenSet = useMemo(() => new Set(hiddenAbilityIds), [hiddenAbilityIds]);
 
   const abilities = useMemo(() => abilityIndex(jobs), [jobs]);
-  const coverage = computeCoverage(mech, uses, abilities, partySize);
+  const coverage = computeCoverage(mech, uses, abilities, partySize, undefined, level, hiddenSet);
   const visualType = deriveMechType(mech, partySize);
   const damageKind = mech.damage_kind ?? 'magical';
   const isPlacement = mech.category === 'placement';
@@ -39,7 +42,7 @@ export function MechanicMarker({ mech, uses, fightDuration, slot = 0 }: Mechanic
           ability_id: previewUse.ability_id,
           time: previewUse.time,
           exclude_use_id: previewUse.excludeUseId,
-        })
+        }, level, hiddenSet)
       : null;
   const previewCovered = !!previewCov && previewCov.pct > coverage.pct;
   const showingPreview = previewCov && previewCov.pct !== coverage.pct;

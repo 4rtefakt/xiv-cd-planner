@@ -44,6 +44,12 @@ interface FightHeaderResp {
        *  `{ data: { playerDetails: { tanks, healers, dps } } }` or
        *  the unwrapped variant. We handle both at parse time. */
       playerDetails: unknown;
+      /** Expansion the report's content belongs to. Used to infer the
+       *  fight's gameLevel — FFLogs doesn't expose level directly so we
+       *  derive it from expansion.id (4=Stormblood/70, 5=ShB/80, 6=EW/90,
+       *  7=DT/100). Lower expansions (Heavensward and earlier) map to
+       *  null → client falls back to its current level. */
+      zone: { id: number; name: string; expansion: { id: number; name: string } } | null;
     };
   };
 }
@@ -106,10 +112,28 @@ const FIGHT_HEADER_QUERY = `
           abilities { gameID name type icon }
         }
         playerDetails(fightIDs: [$fightId])
+        zone {
+          id
+          name
+          expansion { id name }
+        }
       }
     }
   }
 `;
+
+/** FFLogs expansion.id → max player level for that expansion. Old
+ *  content (HW and earlier) returns null → client keeps its current
+ *  level setting (typically 100). */
+function expansionIdToLevel(expansionId: number | undefined): number | null {
+  switch (expansionId) {
+    case 4: return 70;  // Stormblood
+    case 5: return 80;  // Shadowbringers
+    case 6: return 90;  // Endwalker
+    case 7: return 100; // Dawntrail
+    default: return null;
+  }
+}
 
 const EVENTS_QUERY = `
   query Events($code: String!, $fightId: Int!, $start: Float, $end: Float) {
@@ -445,11 +469,17 @@ export const onRequestPost: PagesFunction<FFLogsEnv> = async (ctx) => {
       delete (g as Partial<AggregatedMech>)._lastEventTime;
     }
 
+    // Derive the synced player level from the report's expansion.
+    const gameLevel = expansionIdToLevel(
+      header.reportData.report.zone?.expansion?.id,
+    );
+
     return jsonResp({
       fightName: fight.name,
       fightStart: fight.startTime,
       fightEnd: fight.endTime,
       fightDuration: Math.round((fight.endTime - fight.startTime) / 1000),
+      gameLevel,
       bossLanes: lanes,
       players,
       mechanics: groups,
