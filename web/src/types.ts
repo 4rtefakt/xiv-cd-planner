@@ -32,6 +32,29 @@ export interface Ability {
    *  rows haven't all been backfilled. */
   action_id?: number;
   level_unlocked: number;
+  /** In-game description text (EN + FR). Scraped from xivapi by
+   *  scripts/fetch-tooltip-data.mjs. Wrapped in the tooltip body as-is. */
+  description?: string;
+  description_fr?: string;
+  /** Number of charges the ability can hold simultaneously (Bloodwhetting:
+   *  2, Aetherflow stacks: 3, …). Absent or 1 = no charge system. */
+  max_charges?: number;
+  /** When set, this ability's recast timer is shared with the listed
+   *  ability names (display strings, not ids — quick for the user to
+   *  parse). e.g. Drill shares with Bioblaster + Air Anchor. */
+  shares_recast_with?: string[];
+  /** Job affinity carried over from FFXIV's "Affinity" field — the
+   *  pre-joined display string ("GLA PGL MRD … VPR"). Stored verbatim
+   *  from xivapi.ClassJobCategory.Name / Name_fr. EN + FR variants
+   *  because the FR client uses different abbreviations (HAS, SUR…). */
+  affinity?: string;
+  affinity_fr?: string;
+  /** Per-level overrides. Key = max level bracket (50, 60, 70, 80, 90,
+   *  100). resolveAbilityAtLevel(ab, level) picks the highest bracket
+   *  ≤ level whose entry exists and merges its keys over the base. So
+   *  `{ 70: { mit_potency: 25 }, 90: { mit_potency: 30 } }` means base
+   *  value applies at 100, 30% applies at 90, 25% at 70 and 80. */
+  level_variants?: Record<number, Partial<Omit<Ability, 'id' | 'level_variants'>>>;
   verified?: boolean;
   _source_url?: string;
 }

@@ -23,6 +23,13 @@ export interface Ability {
    *  abilities when importing a log. */
   action_id?: number;
   level_unlocked: number;
+  description?: string;
+  description_fr?: string;
+  max_charges?: number;
+  shares_recast_with?: string[];
+  affinity?: string;
+  affinity_fr?: string;
+  level_variants?: Record<number, Partial<Omit<Ability, 'id' | 'level_variants'>>>;
   verified?: boolean;
   _source_url?: string;
 }

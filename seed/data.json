@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updated_at": "2026-05-20T23:13:14.225Z",
+  "updated_at": "2026-05-21T16:13:31.047Z",
   "_patch": "FFXIV 7.5 (Dawntrail)",
   "_sources": [
     "https://ffxiv.consolegameswiki.com/wiki/ (per-ability and per-job pages)",
@@ -36,7 +36,11 @@
           "icon_glyph": "shield",
           "icon_id": 801,
           "name_fr": "Rempart",
-          "action_id": 7531
+          "action_id": 7531,
+          "description": "Reduces damage taken by 20%. Additional Effect: Increases HP recovery via healing actions on self by 15%\n\n Duration: 20s",
+          "description_fr": "Réduit de 20% vos dégâts subis. Augmente de 15% les effets curatifs sur vous.\n\n Durée: 20s",
+          "affinity": "GLA MRD PLD WAR DRK GNB",
+          "affinity_fr": "GLA MRD PLD GUE CHN PSB"
         },
         {
           "id": "PLD.ArmsLength",
@@ -53,7 +57,11 @@
           "icon_glyph": "triangle",
           "icon_id": 822,
           "name_fr": "Portée de bras",
-          "action_id": 7548
+          "action_id": 7548,
+          "description": "Creates a barrier nullifying most knockback and draw-in effects.\n\nDuration: 6s\n\nAdditional Effect: Slow +20% when barrier is struck\n\nDuration: 15s",
+          "description_fr": "Crée sur vous une barrière annulant la plupart des projections et attractions.\n\nDurée: 6s\n\nEffet additionnel: 100% de chances que Lenteur 20% soit infligée à l'assaillant à chaque attaque physique portée contre vous.\n\nDurée: 15s",
+          "affinity": "GLA PGL MRD LNC ARC PLD MNK WAR DRG BRD ROG NIN MCH DRK SAM GNB DNC RPR VPR",
+          "affinity_fr": "GLA PGL MRD HAS ARC PLD MOI GUE DRG BRD SUR NIN MCH CHN SAM PSB DNS FCH VPR"
         },
         {
           "id": "PLD.Reprisal",
@@ -69,7 +77,11 @@
           "icon_glyph": "diamond",
           "icon_id": 806,
           "name_fr": "Rétorsion",
-          "action_id": 7535
+          "action_id": 7535,
+          "description": "Reduces damage dealt by nearby enemies by 10%.\n\nDuration:  15 s",
+          "description_fr": "Réduit de 10% les dégâts infligés par les ennemis alentour.\n\nDurée: 15 s",
+          "affinity": "GLA MRD PLD WAR DRK GNB",
+          "affinity_fr": "GLA MRD PLD GUE CHN PSB"
         },
         {
           "id": "PLD.Sheltron",
@@ -86,7 +98,11 @@
           "icon_glyph": "aegis",
           "icon_id": 2950,
           "name_fr": "Schiltron sacré",
-          "action_id": 25746
+          "action_id": 25746,
+          "description": "Reduces damage taken by 15%.\n\nDuration: 8s\n\nAdditional Effect: Grants Knight's Resolve\n\nKnight's Resolve Effect: Reduces damage taken by 15%\n\nDuration: 4s\n\nAdditional Effect: Grants Knight's Benediction\n\nKnight's Benediction Effect: Gradually restores HP\n\nCure Potency: 250\n\nDuration: 12s\n\nOath Gauge Cost: 50",
+          "description_fr": "Réduit de 15% vos dégâts subis.\n\nDurée: 8s\n\nEffet additionnel: vous octroie Égide du paladin.\n\nDurée: 4s\n\nÉgide du paladin: réduit de 15% les dégâts subis.\n\nEffet additionnel: vous octroie Bénédiction du paladin.\n\nDurée: 12s\n\nBénédiction du paladin: restaure périodiquement les PV.\n\nPuissance: 250\n\nCoût Jauge du serment: 50",
+          "affinity": "PLD",
+          "affinity_fr": "PLD"
         },
         {
           "id": "PLD.Sentinel",
@@ -103,7 +119,11 @@
           "icon_glyph": "shield",
           "icon_id": 2524,
           "name_fr": "Garde extrême",
-          "action_id": 36920
+          "action_id": 36920,
+          "description": "Reduces damage taken by 40%.\n\nDuration: 15s\n\nAdditional Effect: Erects a magicked barrier which nullifies damage equivalent to a heal of 1,000 potency\n\nDuration: 15s",
+          "description_fr": "Réduit de 40% vos dégâts subis.\n\nDurée: 15s\n\nEffet additionnel: vous octroie une barrière absorbant un certain montant de dégâts.\n\nPuissance: 1000 Durée: 15s",
+          "affinity": "PLD",
+          "affinity_fr": "PLD"
         },
         {
           "id": "PLD.Bulwark",
@@ -121,7 +141,11 @@
           "icon_id": 167,
           "mit_kind": "physical",
           "name_fr": "Forteresse",
-          "action_id": 22
+          "action_id": 22,
+          "description": "Block incoming attacks.\n\nDuration: 10s",
+          "description_fr": "Bloque toutes les attaques dirigées contre vous.\n\nDurée: 10s",
+          "affinity": "PLD",
+          "affinity_fr": "PLD"
         },
         {
           "id": "PLD.DivineVeil",
@@ -138,7 +162,11 @@
           "icon_glyph": "wing",
           "icon_id": 2508,
           "name_fr": "Voile divin",
-          "action_id": 3540
+          "action_id": 3540,
+          "description": "Creates a barrier around self and all party members near you that absorbs damage equivalent to 10% of your maximum HP.\n\nDuration: 30s\nAdditional Effect: Restores target's HP\n\nCure Potency: 400",
+          "description_fr": "Crée une barrière sur vous et les équipiers alentour, absorbant les dégâts subis pour un total de 10% de vos PV maximums.\n\nDurée: 30s Effet additionnel: restaure les PV de la cible.\n\nPuissance: 400",
+          "affinity": "PLD",
+          "affinity_fr": "PLD"
         },
         {
           "id": "PLD.DivineCaress",
@@ -155,7 +183,11 @@
           "icon_glyph": "wing",
           "icon_id": 2128,
           "name_fr": "Caresse divine",
-          "action_id": 37011
+          "action_id": 37011,
+          "description": "Creates a barrier around self and all party members near you that absorbs damage equivalent to a heal of 400 potency.\n\nDuration: 10s\n\nAdditional Effect: Grants Divine Aura when barrier effect expires\n\nDivine Aura Effect: Healing over time\n\nCure Potency: 200\n\nDuration: 15s\n\nCan only be executed while Divine Grace is active.",
+          "description_fr": "Crée une barrière sur vous et les équipiers alentour, absorbant un certain montant de dégâts.\n\nPuissance: 400 Durée: 10s\n\nEffet additionnel: octroie Caresse divine une fois la barrière dissipée.\n\nCaresse divine: restaure périodiquement vos PV et ceux des équipiers alentour.\n\nPuissance: 200 Durée: 15s\n\nCondition: Caresse divine préparée.",
+          "affinity": "WHM",
+          "affinity_fr": "MBL"
         },
         {
           "id": "PLD.PassageOfArms",
@@ -172,7 +204,11 @@
           "icon_glyph": "aegis",
           "icon_id": 2515,
           "name_fr": "Passe d'armes",
-          "action_id": 7385
+          "action_id": 7385,
+          "description": "Increases block rate to 100% and creates a designated area in a cone behind you in which party members will only suffer 85% of all damage inflicted.\n\nDuration: 18s\n\nEffect ends upon using another action or moving (including facing a different direction).\n\nCancels auto-attack upon execution.",
+          "description_fr": "Crée un bouclier protecteur dans une zone en éventail derrière vous, réduisant de 15% les dégâts subis des équipiers à l'intérieur.\n\nAugmente à 100% votre taux de blocage.\n\nDurée: 18s\n\nL'effet prend fin si vous effectuez une action, un déplacement ou une rotation.\n\nInterrompt vos attaques automatiques.",
+          "affinity": "PLD",
+          "affinity_fr": "PLD"
         },
         {
           "id": "PLD.Intervention",
@@ -189,7 +225,11 @@
           "icon_glyph": "shield",
           "icon_id": 2512,
           "name_fr": "Intervention",
-          "action_id": 7382
+          "action_id": 7382,
+          "description": "Reduces target party member's damage taken by 10%.\n\nDuration:  8 s\n\nAdditional Effect: Increases damage reduction by an additional 10% if Rampart or Guardian are active Additional Effect: Grants Knight's Resolve to target\n\nKnight's Resolve Effect: Reduces damage taken by 10%\n\nDuration: 4s\n\nAdditional Effect: Grants Knight's Benediction to target\n\nKnight's Benediction Effect: Gradually restores HP\n\nCure Potency: 250\n\nDuration: 12s\n\n Oath Gauge Cost: 50",
+          "description_fr": "Réduit de 10% les dégâts subis par l'équipier ciblé.\n\nDurée: 8 s\n\nEffet additionnel: l'effet est augmenté de 10% si vous bénéficiez de Rempart ou de  Garde extrême . Effet additionnel: octroie Égide du paladin à la cible.\n\nDurée: 4s\n\nÉgide du paladin: réduit de 10% les dégâts subis par la cible.\n\nEffet additionnel: octroie Bénédiction du paladin à la cible.\n\nBénédiction du paladin: restaure périodiquement les PV de la cible.\n\nPuissance: 250 Durée: 12s\n\n Coût Jauge du serment: 50",
+          "affinity": "PLD",
+          "affinity_fr": "PLD"
         },
         {
           "id": "PLD.Cover",
@@ -206,7 +246,11 @@
           "icon_glyph": "aegis",
           "icon_id": 2501,
           "name_fr": "Couverture",
-          "action_id": 27
+          "action_id": 27,
+          "description": "Take all damage intended for another party member as long as said member remains within 10 yalms.\n\nDoes not activate with certain attacks.\n\nDuration: 12s\n\nOath Gauge Cost: 50",
+          "description_fr": "Détourne vers vous les attaques dirigées vers l'équipier ciblé.\n\nSans effet sur certaines attaques.\n\nCondition: cible à 10 yalms ou moins.\n\nDurée: 12s\n\nCoût Jauge du serment: 50",
+          "affinity": "PLD",
+          "affinity_fr": "PLD"
         },
         {
           "id": "PLD.HallowedGround",
@@ -223,7 +267,11 @@
           "icon_glyph": "shield",
           "icon_id": 2502,
           "name_fr": "Invincible",
-          "action_id": 30
+          "action_id": 30,
+          "description": "Renders you impervious to most attacks.\n\nDuration: 10s",
+          "description_fr": "Annule les dégâts de la plupart des attaques contre vous.\n\nDurée: 10s",
+          "affinity": "PLD",
+          "affinity_fr": "PLD"
         }
       ],
       "name_fr": "Paladin"
@@ -250,7 +298,11 @@
           "icon_glyph": "shield",
           "icon_id": 801,
           "name_fr": "Rempart",
-          "action_id": 7531
+          "action_id": 7531,
+          "description": "Reduces damage taken by 20%. Additional Effect: Increases HP recovery via healing actions on self by 15%\n\n Duration: 20s",
+          "description_fr": "Réduit de 20% vos dégâts subis. Augmente de 15% les effets curatifs sur vous.\n\n Durée: 20s",
+          "affinity": "GLA MRD PLD WAR DRK GNB",
+          "affinity_fr": "GLA MRD PLD GUE CHN PSB"
         },
         {
           "id": "WAR.ArmsLength",
@@ -266,7 +318,11 @@
           "icon_glyph": "triangle",
           "icon_id": 822,
           "name_fr": "Portée de bras",
-          "action_id": 7548
+          "action_id": 7548,
+          "description": "Creates a barrier nullifying most knockback and draw-in effects.\n\nDuration: 6s\n\nAdditional Effect: Slow +20% when barrier is struck\n\nDuration: 15s",
+          "description_fr": "Crée sur vous une barrière annulant la plupart des projections et attractions.\n\nDurée: 6s\n\nEffet additionnel: 100% de chances que Lenteur 20% soit infligée à l'assaillant à chaque attaque physique portée contre vous.\n\nDurée: 15s",
+          "affinity": "GLA PGL MRD LNC ARC PLD MNK WAR DRG BRD ROG NIN MCH DRK SAM GNB DNC RPR VPR",
+          "affinity_fr": "GLA PGL MRD HAS ARC PLD MOI GUE DRG BRD SUR NIN MCH CHN SAM PSB DNS FCH VPR"
         },
         {
           "id": "WAR.Reprisal",
@@ -282,7 +338,11 @@
           "icon_glyph": "diamond",
           "icon_id": 806,
           "name_fr": "Rétorsion",
-          "action_id": 7535
+          "action_id": 7535,
+          "description": "Reduces damage dealt by nearby enemies by 10%.\n\nDuration:  15 s",
+          "description_fr": "Réduit de 10% les dégâts infligés par les ennemis alentour.\n\nDurée: 15 s",
+          "affinity": "GLA MRD PLD WAR DRK GNB",
+          "affinity_fr": "GLA MRD PLD GUE CHN PSB"
         },
         {
           "id": "WAR.ThrillOfBattle",
@@ -299,7 +359,11 @@
           "icon_glyph": "heart",
           "icon_id": 263,
           "name_fr": "Frisson de la bataille",
-          "action_id": 40
+          "action_id": 40,
+          "description": "Increases maximum HP by 20% and restores the amount increased. Additional Effect: Increases HP recovery via healing actions on self by 20%\n\n Duration: 10s",
+          "description_fr": "Augmente de 20% vos PV maximums et restaure l'équivalent du montant augmenté. Augmente de 20% les effets de récupération de PV sur vous.\n\n Durée: 10s",
+          "affinity": "MRD WAR",
+          "affinity_fr": "MRD GUE"
         },
         {
           "id": "WAR.Bloodwhetting",
@@ -316,7 +380,11 @@
           "icon_glyph": "heart",
           "icon_id": 2569,
           "name_fr": "Intuition fougueuse",
-          "action_id": 25751
+          "action_id": 25751,
+          "description": "Reduces damage taken by 10%.\n\nDuration: 8s\n\nAdditional Effect: Restores HP with each weaponskill successfully delivered\n\nCure Potency: 400\n\nAdditional Effect: Grants Stem the Flow\n\nStem the Flow Effect: Reduces damage taken by 10%\n\nDuration: 4s\n\nAdditional Effect: Grants Stem the Tide\n\nStem the Tide Effect: Creates a barrier around self that absorbs damage equivalent to a heal of 400 potency\n\nDuration: 20s\n\nShares a recast timer with Nascent Flash.",
+          "description_fr": "Réduit de 10% vos dégâts subis.\n\nDurée: 8s\n\nEffet additionnel: absorbe des PV quand vous infligez des dégâts avec une technique d'arme.\n\nPuissance: 400\n\nEffet additionnel: vous octroie Barrage au sang.\n\nDurée: 4s\n\nBarrage au sang: réduit de 10% les dégâts subis.\n\nEffet additionnel: vous octroie Digue au sang, une barrière annulant un certain montant de dégâts.\n\nPuissance: 400 Durée: 20s\n\nPartage le même temps de recharge que Exaltation naissante.",
+          "affinity": "WAR",
+          "affinity_fr": "GUE"
         },
         {
           "id": "WAR.NascentFlash",
@@ -333,7 +401,11 @@
           "icon_glyph": "heart",
           "icon_id": 2567,
           "name_fr": "Exaltation naissante",
-          "action_id": 16464
+          "action_id": 16464,
+          "description": "Grants Nascent Flash to self and Nascent Glint to target party member.\n\nNascent Flash Effect: Restores HP with each weaponskill successfully delivered\n\nCure Potency: 400\n\nNascent Glint Effect: Restores HP equaling 100% of that recovered by Nascent Flash while also reducing damage taken by 10%\n\nDuration:  8 s Additional Effect: Grants Stem the Flow to target, reducing damage taken by 10%\n\nDuration: 4s\n\nAdditional Effect: Grants Stem the Tide to target, nullifying damage equivalent to a heal of 400 potency\n\nDuration: 20s\n\n Shares a recast timer with Bloodwhetting .",
+          "description_fr": "Vous octroie Exaltation naissante et octroie Exaltation communicative à un équipier ciblé.\n\nDurée: 8 s\n\nExaltation naissante: absorbe des PV quand des dégâts sont infligés avec des techniques d'arme.\n\nPuissance: 400\n\nExaltation communicative: restaure les PV de la cible à hauteur de 100% des soins générés par Exaltation naissante et réduit de 10% ses dégâts subis. Effet additionnel: octroie Barrage au sang à la cible.\n\nDurée: 4s\n\nBarrage au sang: réduit de 10% les dégâts subis.\n\nEffet additionnel: octroie Digue au sang à la cible, une barrière annulant un certain montant de dégâts.\n\nPuissance: 400 Durée: 20s\n\n Partage le même temps de recharge que  Intuition fougueuse .",
+          "affinity": "WAR",
+          "affinity_fr": "GUE"
         },
         {
           "id": "WAR.ShakeItOff",
@@ -350,7 +422,11 @@
           "icon_glyph": "aegis",
           "icon_id": 2563,
           "name_fr": "Débarrassage",
-          "action_id": 7388
+          "action_id": 7388,
+          "description": "Creates a barrier around self and all nearby party members that absorbs damage totaling 15% of maximum HP.\n\nDispels Thrill of Battle,  Damnation , and Bloodwhetting , increasing damage absorbed by 2% for each effect removed.\n\nDuration: 30s\n\nAdditional Effect: Gradually restores HP\n\nCure Potency: 100\n\nDuration: 15s\nAdditional Effect: Restores target's HP\n\nCure Potency: 300",
+          "description_fr": "Crée une barrière sur vous et les équipiers alentour, absorbant les dégâts subis pour un total de 15% des PV maximums.\n\nSi Frisson de la bataille, Damnation et/ou  Intuition fougueuse  sont octroyés, dissipe ces effets et augmente de 2% celui de la barrière pour chacun d'entre eux.\n\nDurée: 30s\n\nEffet additionnel: restaure périodiquement vos PV et ceux des équipiers alentour.\n\nPuissance: 100 Durée: 15s\nEffet additionnel: restaure vos PV et ceux des équipiers alentour.\n\nPuissance: 300",
+          "affinity": "WAR",
+          "affinity_fr": "GUE"
         },
         {
           "id": "WAR.Equilibrium",
@@ -367,7 +443,11 @@
           "icon_glyph": "cross",
           "icon_id": 2560,
           "name_fr": "Équilibre",
-          "action_id": 3552
+          "action_id": 3552,
+          "description": "Restores own HP.\n\nCure Potency: 1,200\nAdditional Effect: Gradually restores HP\n\nCure Potency: 200\n\nDuration: 15s",
+          "description_fr": "Restaure vos PV.\n\nPuissance: 1200\nEffet additionnel: restaure périodiquement vos PV.\n\nPuissance: 200 Durée: 15s",
+          "affinity": "WAR",
+          "affinity_fr": "GUE"
         },
         {
           "id": "WAR.Vengeance",
@@ -384,7 +464,11 @@
           "icon_glyph": "sword",
           "icon_id": 2573,
           "name_fr": "Damnation",
-          "action_id": 36923
+          "action_id": 36923,
+          "description_fr": "Réduit de 40% vos dégâts subis et inflige des dégâts pour chaque attaque physique que vous recevez.\n\nPuissance: 55 Durée: 15s\n\nEffet additionnel: vous octroie Damné à la première attaque subie ou à la fin de l'effet.\n\nDamné: restaure périodiquement des PV.\n\nPuissance: 400 Durée: 15s",
+          "description": "Reduces damage taken by 40% and delivers an attack with a potency of 55 every time you suffer physical damage.\n\nDuration: 15s\n\nAdditional Effect: Grants Primeval Impulse when the effect expires or damage is taken\n\nPrimeval Impulse Effect: Healing over time\n\nCure Potency: 400\n\nDuration: 15s",
+          "affinity": "WAR",
+          "affinity_fr": "GUE"
         },
         {
           "id": "WAR.Holmgang",
@@ -401,7 +485,11 @@
           "icon_glyph": "sword",
           "icon_id": 266,
           "name_fr": "Holmgang",
-          "action_id": 43
+          "action_id": 43,
+          "description": "Brace yourself for an enemy onslaught, preventing most attacks from reducing your HP to less than 1.\n\nDuration: 10s\n\nWhen a target is selected, halts their movement with chains.",
+          "description_fr": "La plupart des attaques ne peuvent pas réduire vos PV à moins de 1.\n\nSi un ennemi était ciblé, entrave ses déplacements.\n\nDurée: 10s",
+          "affinity": "MRD WAR",
+          "affinity_fr": "MRD GUE"
         }
       ],
       "name_fr": "Guerrier"
@@ -428,7 +516,11 @@
           "icon_glyph": "triangle",
           "icon_id": 866,
           "name_fr": "Magie prompte",
-          "action_id": 7561
+          "action_id": 7561,
+          "description": "Next spell is cast immediately.\n\nDuration: 10s",
+          "description_fr": "Permet à votre prochain sort d'être instantané.\n\nDurée: 10s",
+          "affinity": "CNJ THM ACN WHM BLM SMN SCH AST RDM BLU SGE PCT",
+          "affinity_fr": "ÉLM OCC MBL MNO ACN INV ÉRU AST MRG MBU SAG PIC"
         },
         {
           "id": "WHM.Surecast",
@@ -444,7 +536,11 @@
           "icon_glyph": "triangle",
           "icon_id": 869,
           "name_fr": "Stoïcisme",
-          "action_id": 7559
+          "action_id": 7559,
+          "description": "Spells can be cast without interruption.\n\nAdditional Effect: Nullifies most knockback and draw-in effects\n\nDuration: 6s",
+          "description_fr": "Vous permet de lancer vos sorts sans risque d'interruption.\n\nAnnule la plupart des projections et attractions.\n\nDurée: 6s",
+          "affinity": "CNJ THM ACN WHM BLM SMN SCH AST RDM BLU SGE PCT",
+          "affinity_fr": "ÉLM OCC MBL MNO ACN INV ÉRU AST MRG MBU SAG PIC"
         },
         {
           "id": "WHM.DivineBenison",
@@ -461,7 +557,11 @@
           "icon_glyph": "aegis",
           "icon_id": 2638,
           "name_fr": "Faveur divine",
-          "action_id": 7432
+          "action_id": 7432,
+          "description": "Creates a barrier around self or target party member that absorbs damage equivalent to a heal of 500 potency.\n\nDuration: 15s\nMaximum Charges: 2",
+          "description_fr": "Crée une barrière sur vous ou l'équipier ciblé, absorbant un certain montant de dégâts.\n\nPuissance: 500 Durée: 15s\nMaximum de charges: 2",
+          "affinity": "WHM",
+          "affinity_fr": "MBL"
         },
         {
           "id": "WHM.Aquaveil",
@@ -478,7 +578,11 @@
           "icon_glyph": "shield",
           "icon_id": 2648,
           "name_fr": "Aquavoile",
-          "action_id": 25861
+          "action_id": 25861,
+          "description": "Reduces damage taken by a party member or self by 15%.\n\nDuration: 8s",
+          "description_fr": "Réduit de 15% les dégâts subis par vous ou l'équipier ciblé.\n\nDurée: 8s",
+          "affinity": "WHM",
+          "affinity_fr": "MBL"
         },
         {
           "id": "WHM.PlenaryIndulgence",
@@ -495,7 +599,11 @@
           "icon_glyph": "spark",
           "icon_id": 2639,
           "name_fr": "Indulgence plénière",
-          "action_id": 7433
+          "action_id": 7433,
+          "description": "Grants Confession to self and nearby party members.\n\nDuration: 10s\n\nParty members under the effect of Confession will receive additional healing upon receiving HP recovery via Medica,  Medica III , Cure III, or Afflatus Rapture .\n\nCure Potency: 200",
+          "description_fr": "Vous octroie ainsi qu'aux équipiers alentour l'effet Indulgence plénière.\n\nDurée: 10s\n\nPendant la durée de l'effet, les PV des personnes en bénéficiant sont restaurés à chaque fois que vous utilisez Médica, Méga Soin , Méga Médica .\n\nPuissance: 200",
+          "affinity": "WHM",
+          "affinity_fr": "MBL"
         },
         {
           "id": "WHM.Asylum",
@@ -512,7 +620,11 @@
           "icon_glyph": "cross",
           "icon_id": 2632,
           "name_fr": "Asile",
-          "action_id": 3569
+          "action_id": 3569,
+          "description": "Envelops a designated area in a veil of succor, granting healing over time to self and any party members who enter.\n\nCure Potency: 100\n\nDuration: 24s\nAdditional Effect: Increases HP recovery via healing actions on party members in the designated area by 10%",
+          "description_fr": "Crée une aura bénéfique dans l'aire ciblée, restaurant périodiquement vos PV et ceux des équipiers alentour.\n\nPuissance: 100 Durée: 24s\nEffet additionnel: augmente de 10% les effets curatifs reçus par vous et les équipiers dans l'aire d'effet.",
+          "affinity": "WHM",
+          "affinity_fr": "MBL"
         },
         {
           "id": "WHM.Temperance",
@@ -529,7 +641,11 @@
           "icon_glyph": "aegis",
           "icon_id": 2645,
           "name_fr": "Tempérance",
-          "action_id": 16536
+          "action_id": 16536,
+          "description": "Increases healing magic potency by 20%, while reducing damage taken by self and all party members within a radius of 50 yalms by 10%.\n\nDuration: 20s\nAdditional Effect: Grants Divine Grace\n\nDuration: 30s",
+          "description_fr": "Augmente de 20% la puissance de vos sorts curatifs et réduit de 10% les dégâts subis par vous et vos équipiers dans un rayon de 50 yalms autour de vous.\n\nDurée: 20s\nEffet additionnel: vous octroie Caresse divine préparée.\n\nDurée: 30s",
+          "affinity": "WHM",
+          "affinity_fr": "MBL"
         },
         {
           "id": "WHM.LiturgyOfTheBell",
@@ -546,7 +662,11 @@
           "icon_glyph": "cross",
           "icon_id": 2649,
           "name_fr": "Tintinnabule",
-          "action_id": 25862
+          "action_id": 25862,
+          "description": "Places a healing blossom at the designated location and grants 5 stacks of Liturgy of the Bell to self.\n\nDuration: 20s\n\nTaking damage will expend 1 stack of Liturgy of the Bell to heal self and all party members within a radius of 20 yalms.\n\nCure Potency: 400\n\nThe effect of this action can only be triggered once per second.\n\nAny remaining stacks of Liturgy of the Bell will trigger an additional healing effect when time expires or upon executing this action a second time.\n\nCure Potency: 200 for every remaining stack of Liturgy of the Bell\n\nThis action does not share a recast timer with any other actions.",
+          "description_fr": "Place un tintinnabule à l'endroit ciblé et vous octroie 5 degrés de Tintinnabule.\n\nDurée: 20s\n\nChaque fois que vous recevez des dégâts, un degré est consommé, et le tintinnabule vous soigne vous ainsi que tous vos équipiers dans un rayon de 20 yalms.\n\nPuissance: 400\n\nPas plus d'un degré ne peut être consommé par seconde.\n\nLorsque le tintinnabule disparaît ou qu'il est relancé une seconde fois, il consomme tous les degrés restants et vous soigne, ainsi que les équipiers alentour.\n\nPuissance: 200 par degré restant.",
+          "affinity": "WHM",
+          "affinity_fr": "MBL"
         },
         {
           "id": "WHM.DivineCaress",
@@ -563,7 +683,11 @@
           "icon_glyph": "wing",
           "icon_id": 2128,
           "name_fr": "Caresse divine",
-          "action_id": 37011
+          "action_id": 37011,
+          "description": "Creates a barrier around self and all party members near you that absorbs damage equivalent to a heal of 400 potency.\n\nDuration: 10s\n\nAdditional Effect: Grants Divine Aura when barrier effect expires\n\nDivine Aura Effect: Healing over time\n\nCure Potency: 200\n\nDuration: 15s\n\nCan only be executed while Divine Grace is active.",
+          "description_fr": "Crée une barrière sur vous et les équipiers alentour, absorbant un certain montant de dégâts.\n\nPuissance: 400 Durée: 10s\n\nEffet additionnel: octroie Caresse divine une fois la barrière dissipée.\n\nCaresse divine: restaure périodiquement vos PV et ceux des équipiers alentour.\n\nPuissance: 200 Durée: 15s\n\nCondition: Caresse divine préparée.",
+          "affinity": "WHM",
+          "affinity_fr": "MBL"
         },
         {
           "id": "WHM.Benediction",
@@ -580,7 +704,11 @@
           "icon_glyph": "cross",
           "icon_id": 2627,
           "name_fr": "Bénédiction",
-          "action_id": 140
+          "action_id": 140,
+          "description": "Restores all of a target's HP.",
+          "description_fr": "Restaure tous les PV de la cible.",
+          "affinity": "WHM",
+          "affinity_fr": "MBL"
         }
       ],
       "name_fr": "Mage blanc"
@@ -607,7 +735,11 @@
           "icon_glyph": "triangle",
           "icon_id": 866,
           "name_fr": "Magie prompte",
-          "action_id": 7561
+          "action_id": 7561,
+          "description": "Next spell is cast immediately.\n\nDuration: 10s",
+          "description_fr": "Permet à votre prochain sort d'être instantané.\n\nDurée: 10s",
+          "affinity": "CNJ THM ACN WHM BLM SMN SCH AST RDM BLU SGE PCT",
+          "affinity_fr": "ÉLM OCC MBL MNO ACN INV ÉRU AST MRG MBU SAG PIC"
         },
         {
           "id": "SCH.Surecast",
@@ -623,7 +755,11 @@
           "icon_glyph": "triangle",
           "icon_id": 869,
           "name_fr": "Stoïcisme",
-          "action_id": 7559
+          "action_id": 7559,
+          "description": "Spells can be cast without interruption.\n\nAdditional Effect: Nullifies most knockback and draw-in effects\n\nDuration: 6s",
+          "description_fr": "Vous permet de lancer vos sorts sans risque d'interruption.\n\nAnnule la plupart des projections et attractions.\n\nDurée: 6s",
+          "affinity": "CNJ THM ACN WHM BLM SMN SCH AST RDM BLU SGE PCT",
+          "affinity_fr": "ÉLM OCC MBL MNO ACN INV ÉRU AST MRG MBU SAG PIC"
         },
         {
           "id": "SCH.WhisperingDawn",
@@ -640,7 +776,11 @@
           "icon_glyph": "cross",
           "icon_id": 2852,
           "name_fr": "Murmure de l'aurore",
-          "action_id": 16537
+          "action_id": 16537,
+          "description_fr": "Ordonne à votre fée d'exécuter Murmure de l'aurore.  Si Séraphin est invoqué, lui ordonne d'exécuter Murmure des anges. Restaure périodiquement les PV des équipiers alentour.\n\nPuissance: 80 Durée: 21s",
+          "description": "Orders faerie to execute Whispering Dawn.  If Seraph is summoned, orders her to execute Angel's Whisper. Whispering Dawn /Angel's Whisper Effect: Gradually restores the HP of all nearby party members\n\nCure Potency: 80\n\nDuration: 21s",
+          "affinity": "SCH",
+          "affinity_fr": "ÉRU"
         },
         {
           "id": "SCH.SacredSoil",
@@ -657,7 +797,11 @@
           "icon_glyph": "soil",
           "icon_id": 2804,
           "name_fr": "Dogme de survie",
-          "action_id": 188
+          "action_id": 188,
+          "description": "Creates a designated area in which party members will only suffer 90% of all damage inflicted.\n\nDuration: 15s Additional Effect: Regen\n\nCure Potency: 100\n\n Additional Effect: Increases Faerie Gauge by 10\n\n Aetherflow Gauge Cost: 1",
+          "description_fr": "Crée un bouclier protecteur dans l'aire ciblée, réduisant de 10% les dégâts subis des équipiers à l'intérieur  et restaurant périodiquement leurs PV.\n\nPuissance: 100 Durée: 15s Effet additionnel: remplit la jauge d'éther féerique de 10.\n\n Condition: consomme un Flux d'éther.",
+          "affinity": "SCH",
+          "affinity_fr": "ÉRU"
         },
         {
           "id": "SCH.FeyIllumination",
@@ -675,7 +819,11 @@
           "icon_id": 2853,
           "mit_kind": "magical",
           "name_fr": "Illumination féérique",
-          "action_id": 16538
+          "action_id": 16538,
+          "description": "Orders faerie to execute Fey Illumination.  If Seraph is summoned, orders her to execute Seraphic Illumination. Fey Illumination /Seraphic Illumination Effect: Increases healing magic potency of all nearby party members by 10%, while reducing magic damage taken by all nearby party members by 5%\n\nDuration: 20s\nEffect cannot be stacked with Seraphic Illumination.",
+          "description_fr": "Ordonne à votre fée d'exécuter Illumination féérique.  Si Séraphin est invoqué, lui ordonne d'exécuter Illumination séraphique. Augmente de 10% les PV restaurés par les sorts curatifs des équipiers alentour et réduit de 5% leurs dégâts magiques subis.\n\nDurée: 20s\n\nNe peut être cumulé avec l'effet Illumination séraphique.",
+          "affinity": "SCH",
+          "affinity_fr": "ÉRU"
         },
         {
           "id": "SCH.DeploymentTactics",
@@ -692,7 +840,11 @@
           "icon_glyph": "wing",
           "icon_id": 2808,
           "name_fr": "Stratagème du déploiement",
-          "action_id": 3585
+          "action_id": 3585,
+          "description": "Extends Galvanize effect cast on self or target party member to other nearby party members.\n\nDuration: Time remaining on original effect\n\nNo effect when target is not under the effect of Galvanize.",
+          "description_fr": "Octroie votre effet Réconfort dont vous ou la cible bénéficiez aux équipiers autour.\n\nDurée: temps restant de l'effet initial.",
+          "affinity": "SCH",
+          "affinity_fr": "ÉRU"
         },
         {
           "id": "SCH.Excogitation",
@@ -709,7 +861,11 @@
           "icon_glyph": "cross",
           "icon_id": 2813,
           "name_fr": "Traité de l'excogitation",
-          "action_id": 7434
+          "action_id": 7434,
+          "description": "Grants self or target party member the effect of Excogitation, restoring HP when member's HP falls below 50% or upon effect duration expiration.\n\nCure Potency: 800\n\nDuration: 45s Additional Effect: Increases Faerie Gauge by 10\n\n Aetherflow Gauge Cost: 1",
+          "description_fr": "Octroie à vous ou à l'équipier ciblé l'effet Traité de l'excogitation, restaurant les PV de la cible s'ils tombent sous 50% ou à la fin de l'effet.\n\nPuissance: 800\n\nDurée: 45s Effet additionnel: remplit la jauge d'éther féerique de 10.\n\n Condition: consomme un Flux d'éther.",
+          "affinity": "SCH",
+          "affinity_fr": "ÉRU"
         },
         {
           "id": "SCH.Indomitability",
@@ -726,7 +882,11 @@
           "icon_glyph": "cross",
           "icon_id": 2806,
           "name_fr": "Traité de la persévérance",
-          "action_id": 3583
+          "action_id": 3583,
+          "description": "Restores own HP and the HP of all nearby party members.\n\nCure Potency: 400 Additional Effect: Increases Faerie Gauge by 10\n\n Aetherflow Gauge Cost: 1",
+          "description_fr": "Restaure vos PV et ceux des équipiers alentour.\n\nPuissance: 400 Effet additionnel: remplit la jauge d'éther féerique de 10.\n\n Condition: consomme un Flux d'éther.",
+          "affinity": "SCH",
+          "affinity_fr": "ÉRU"
         },
         {
           "id": "SCH.Dissipation",
@@ -743,7 +903,11 @@
           "icon_glyph": "triangle",
           "icon_id": 2810,
           "name_fr": "Dissipation",
-          "action_id": 3587
+          "action_id": 3587,
+          "description": "Orders your faerie away while granting you a full Aetherflow stack. Also increases healing magic potency by 20%.\n\nDuration: 30s\n\nCurrent faerie will return once the effect expires.\n\nSummon Eos cannot be executed while under the effect of Dissipation.\n\nCan only be executed while a faerie is summoned and you are in combat.",
+          "description_fr": "Renvoie votre fée afin de vous octroyer le plus haut degré de Flux d'éther.\n\nAugmente de 20% les effets de vos sorts de magie curative.\n\nDurée: 30s\n\nVous ne pouvez pas utiliser Invocation Eos pendant la durée de l'effet.\n\nVotre fée réapparaît à la fin de l'effet.\n\nCondition: en combat.",
+          "affinity": "SCH",
+          "affinity_fr": "ÉRU"
         },
         {
           "id": "SCH.Recitation",
@@ -760,7 +924,11 @@
           "icon_glyph": "triangle",
           "icon_id": 2822,
           "name_fr": "Récitation",
-          "action_id": 16542
+          "action_id": 16542,
+          "description": "Allows the execution of Adloquium, Concitation , Indomitability, or Excogitation without consuming resources while also ensuring critical HP is restored.\n\nDuration: 15s",
+          "description_fr": "Votre prochain Traité du réconfort,  Traité de l'exultation , Traité de la persévérance ou Traité de l'excogitation est critique et ne consomme ni PM ni Flux d'éther.\n\nDurée: 15s",
+          "affinity": "SCH",
+          "affinity_fr": "ÉRU"
         },
         {
           "id": "SCH.FeyBlessing",
@@ -777,7 +945,11 @@
           "icon_glyph": "cross",
           "icon_id": 2854,
           "name_fr": "Bénédiction féérique",
-          "action_id": 16543
+          "action_id": 16543,
+          "description": "Orders faerie to execute Fey Blessing.\n\nFey Blessing Effect: Restores the HP of all nearby party members\n\nCure Potency: 320",
+          "description_fr": "Ordonne à votre fée d'exécuter Bénédiction féérique.\n\n\n\nRestaure les PV des équipiers alentour.\n\nPuissance: 320",
+          "affinity": "SCH",
+          "affinity_fr": "ÉRU"
         },
         {
           "id": "SCH.Consolation",
@@ -794,7 +966,12 @@
           "icon_glyph": "aegis",
           "icon_id": 2851,
           "name_fr": "Dictame",
-          "action_id": 16546
+          "action_id": 16546,
+          "description": "Orders Seraph to execute Consolation.\n\nConsolation Effect: Restores the HP of all nearby party members\n\nCure Potency: 250\n\nAdditional Effect: Erects a magicked barrier which nullifies damage equaling the amount of HP restored\n\nDuration: 30s\n\nMaximum Charges: 2",
+          "max_charges": 2,
+          "description_fr": "Ordonne à Séraphin d'exécuter Dictame.\n\n\n\nRestaure les PV des équipiers alentour.\n\nPuissance: 250\n\nEffet additionnel: crée une barrière annulant un montant de dégâts égal à 100% des PV restaurés sur les cibles soignées.\n\nDurée: 30s\n\nMaximum de charges: 2",
+          "affinity": "SCH",
+          "affinity_fr": "ÉRU"
         },
         {
           "id": "SCH.Protraction",
@@ -811,7 +988,11 @@
           "icon_glyph": "heart",
           "icon_id": 2877,
           "name_fr": "Loi de la protraction",
-          "action_id": 25867
+          "action_id": 25867,
+          "description": "Increases maximum HP of a party member or self by 10% and restores the amount increased.\n\nAdditional Effect: Increases HP recovery via healing actions by 10%\n\nDuration: 10s",
+          "description_fr": "Augmente de 10% les PV maximums et les soins reçus par vous ou l'équipier ciblé.\n\nRestaure 10% des PV maximums de la cible au lancement.\n\nDurée: 10s",
+          "affinity": "SCH",
+          "affinity_fr": "ÉRU"
         },
         {
           "id": "SCH.Expedient",
@@ -828,7 +1009,11 @@
           "icon_glyph": "aegis",
           "icon_id": 2878,
           "name_fr": "Thèse fluidique",
-          "action_id": 25868
+          "action_id": 25868,
+          "description": "Grants Expedience and Desperate Measures to all nearby party members.\n\nExpedience Effect: Increases movement speed\n\nDuration: 10s\n\nDesperate Measures Effect: Reduces damage taken by 10%\n\nDuration: 20s",
+          "description_fr": "Vous octroie ainsi qu'aux équipiers alentour les effets Thèse des rafales hurlantes et Thèse des flots impétueux.\n\nThèse des rafales hurlantes: augmente la vitesse de déplacement.\n\nDurée: 10s\n\nThèse des flots impétueux: réduit de 10% les dégâts subis.\n\nDurée: 20s",
+          "affinity": "SCH",
+          "affinity_fr": "ÉRU"
         },
         {
           "id": "SCH.Seraphism",
@@ -845,7 +1030,11 @@
           "icon_glyph": "cross",
           "icon_id": 2881,
           "name_fr": "Séraphisme",
-          "action_id": 37014
+          "action_id": 37014,
+          "description": "Gradually restores the HP of self and all party members within a radius of 50 yalms.\n\nCure Potency: 100\n\nAdditional Effect: Changes Adloquium to Manifestation and Concitation to Accession\n\nAdditional Effect: Resets Emergency Tactics recast timer and reduces its recast timer to 1s\n\nDuration: 20s\n\nEffect cannot be stacked with Dissipation.\n\nCan only be executed while a faerie is summoned and you are in combat.",
+          "description_fr": "Restaure périodiquement vos PV et ceux des équipiers dans un rayon de 50 yalms.\n\nPuissance: 100 Durée: 20s\n\nEffet additionnel: Traité du réconfort devient Manifestation et Traité de l'exultation devient Accession.\n\nEn outre, réinitialise le temps de recharge de Stratagème de l'urgence et le réduit à 1s.\n\nCondition: en combat et fée invoquée.\n\nNe peut être cumulé avec Dissipation.",
+          "affinity": "SCH",
+          "affinity_fr": "ÉRU"
         }
       ],
       "name_fr": "Érudit"
@@ -873,7 +1062,11 @@
           "icon_glyph": "cross",
           "icon_id": 821,
           "name_fr": "Second souffle",
-          "action_id": 7541
+          "action_id": 7541,
+          "description": "Instantly restores own HP.\n\nCure Potency:  800",
+          "description_fr": "Restaure vos PV.\n\nPuissance: 800",
+          "affinity": "PGL LNC ARC ROG MNK DRG BRD NIN MCH SAM DNC RPR VPR",
+          "affinity_fr": "PGL HAS ARC MOI DRG BRD SUR NIN MCH SAM DNS FCH VPR"
         },
         {
           "id": "SAM.Bloodbath",
@@ -890,7 +1083,11 @@
           "icon_glyph": "heart",
           "icon_id": 823,
           "name_fr": "Bain de sang",
-          "action_id": 7542
+          "action_id": 7542,
+          "description": "Converts a portion of physical damage dealt into HP.\n\nDuration: 20s",
+          "description_fr": "Convertit une partie des dégâts infligés par vos attaques physiques en PV.\n\nDurée: 20s",
+          "affinity": "PGL LNC ROG MNK DRG NIN SAM RPR VPR",
+          "affinity_fr": "PGL HAS MOI DRG SUR NIN SAM FCH VPR"
         },
         {
           "id": "SAM.Feint",
@@ -907,7 +1104,11 @@
           "icon_glyph": "diamond",
           "icon_id": 828,
           "name_fr": "Restreinte",
-          "action_id": 7549
+          "action_id": 7549,
+          "description": "Lowers target's physical damage dealt by 10% and magic damage dealt by 5%.\n\nDuration:  15 s",
+          "description_fr": "Réduit respectivement de 10% et 5% les dégâts physiques et magiques infligés par la cible.\n\nDurée: 15 s",
+          "affinity": "PGL LNC ROG MNK DRG NIN SAM RPR VPR",
+          "affinity_fr": "PGL HAS MOI DRG SUR NIN SAM FCH VPR"
         },
         {
           "id": "SAM.ArmsLength",
@@ -923,7 +1124,11 @@
           "icon_glyph": "triangle",
           "icon_id": 822,
           "name_fr": "Portée de bras",
-          "action_id": 7548
+          "action_id": 7548,
+          "description": "Creates a barrier nullifying most knockback and draw-in effects.\n\nDuration: 6s\n\nAdditional Effect: Slow +20% when barrier is struck\n\nDuration: 15s",
+          "description_fr": "Crée sur vous une barrière annulant la plupart des projections et attractions.\n\nDurée: 6s\n\nEffet additionnel: 100% de chances que Lenteur 20% soit infligée à l'assaillant à chaque attaque physique portée contre vous.\n\nDurée: 15s",
+          "affinity": "GLA PGL MRD LNC ARC PLD MNK WAR DRG BRD ROG NIN MCH DRK SAM GNB DNC RPR VPR",
+          "affinity_fr": "GLA PGL MRD HAS ARC PLD MOI GUE DRG BRD SUR NIN MCH CHN SAM PSB DNS FCH VPR"
         },
         {
           "id": "SAM.ThirdEye",
@@ -940,7 +1145,11 @@
           "icon_glyph": "eye",
           "icon_id": 3190,
           "name_fr": "Tengentsû",
-          "action_id": 36962
+          "action_id": 36962,
+          "description": "Reduces the amount of damage taken by the next attack by 10%.\n\nDuration: 4s\n\nAdditional Effect: Grants Tengentsu's Foresight and increases Kenki Gauge by 10 when hit\n\nTengentsu's Foresight Effect: Gradually restores your HP and reduces damage taken by 10%\n\nDuration: 9s\n\nCure Potency: 200",
+          "description_fr": "Réduit de 10% les dégâts de la prochaine attaque subie.\n\nDurée: 4s\n\nEffet additionnel: remplit la Jauge de Kenki de 10 si des dégâts sont subis et devient Tengentsû: Sei.\n\nDurée: 9s\n\nTengentsû: Sei: réduit de 10% vos dégâts subis et restaure périodiquement vos PV.\n\nPuissance: 200",
+          "affinity": "SAM",
+          "affinity_fr": "SAM"
         }
       ],
       "name_fr": "Samouraï"
@@ -967,7 +1176,11 @@
           "icon_glyph": "cross",
           "icon_id": 821,
           "name_fr": "Second souffle",
-          "action_id": 7541
+          "action_id": 7541,
+          "description": "Instantly restores own HP.\n\nCure Potency:  800",
+          "description_fr": "Restaure vos PV.\n\nPuissance: 800",
+          "affinity": "PGL LNC ARC ROG MNK DRG BRD NIN MCH SAM DNC RPR VPR",
+          "affinity_fr": "PGL HAS ARC MOI DRG BRD SUR NIN MCH SAM DNS FCH VPR"
         },
         {
           "id": "DRG.Bloodbath",
@@ -983,7 +1196,11 @@
           "icon_glyph": "heart",
           "icon_id": 823,
           "name_fr": "Bain de sang",
-          "action_id": 7542
+          "action_id": 7542,
+          "description": "Converts a portion of physical damage dealt into HP.\n\nDuration: 20s",
+          "description_fr": "Convertit une partie des dégâts infligés par vos attaques physiques en PV.\n\nDurée: 20s",
+          "affinity": "PGL LNC ROG MNK DRG NIN SAM RPR VPR",
+          "affinity_fr": "PGL HAS MOI DRG SUR NIN SAM FCH VPR"
         },
         {
           "id": "DRG.Feint",
@@ -999,7 +1216,11 @@
           "icon_glyph": "diamond",
           "icon_id": 828,
           "name_fr": "Restreinte",
-          "action_id": 7549
+          "action_id": 7549,
+          "description": "Lowers target's physical damage dealt by 10% and magic damage dealt by 5%.\n\nDuration:  15 s",
+          "description_fr": "Réduit respectivement de 10% et 5% les dégâts physiques et magiques infligés par la cible.\n\nDurée: 15 s",
+          "affinity": "PGL LNC ROG MNK DRG NIN SAM RPR VPR",
+          "affinity_fr": "PGL HAS MOI DRG SUR NIN SAM FCH VPR"
         },
         {
           "id": "DRG.ArmsLength",
@@ -1015,7 +1236,11 @@
           "icon_glyph": "triangle",
           "icon_id": 822,
           "name_fr": "Portée de bras",
-          "action_id": 7548
+          "action_id": 7548,
+          "description": "Creates a barrier nullifying most knockback and draw-in effects.\n\nDuration: 6s\n\nAdditional Effect: Slow +20% when barrier is struck\n\nDuration: 15s",
+          "description_fr": "Crée sur vous une barrière annulant la plupart des projections et attractions.\n\nDurée: 6s\n\nEffet additionnel: 100% de chances que Lenteur 20% soit infligée à l'assaillant à chaque attaque physique portée contre vous.\n\nDurée: 15s",
+          "affinity": "GLA PGL MRD LNC ARC PLD MNK WAR DRG BRD ROG NIN MCH DRK SAM GNB DNC RPR VPR",
+          "affinity_fr": "GLA PGL MRD HAS ARC PLD MOI GUE DRG BRD SUR NIN MCH CHN SAM PSB DNS FCH VPR"
         }
       ],
       "name_fr": "Chevalier dragon"
@@ -1042,7 +1267,11 @@
           "icon_glyph": "cross",
           "icon_id": 821,
           "name_fr": "Second souffle",
-          "action_id": 7541
+          "action_id": 7541,
+          "description": "Instantly restores own HP.\n\nCure Potency:  800",
+          "description_fr": "Restaure vos PV.\n\nPuissance: 800",
+          "affinity": "PGL LNC ARC ROG MNK DRG BRD NIN MCH SAM DNC RPR VPR",
+          "affinity_fr": "PGL HAS ARC MOI DRG BRD SUR NIN MCH SAM DNS FCH VPR"
         },
         {
           "id": "BRD.ArmsLength",
@@ -1058,7 +1287,11 @@
           "icon_glyph": "triangle",
           "icon_id": 822,
           "name_fr": "Portée de bras",
-          "action_id": 7548
+          "action_id": 7548,
+          "description_fr": "Crée sur vous une barrière annulant la plupart des projections et attractions.\n\nDurée: 6s\n\nEffet additionnel: 100% de chances que Lenteur 20% soit infligée à l'assaillant à chaque attaque physique portée contre vous.\n\nDurée: 15s",
+          "description": "Creates a barrier nullifying most knockback and draw-in effects.\n\nDuration: 6s\n\nAdditional Effect: Slow +20% when barrier is struck\n\nDuration: 15s",
+          "affinity": "GLA PGL MRD LNC ARC PLD MNK WAR DRG BRD ROG NIN MCH DRK SAM GNB DNC RPR VPR",
+          "affinity_fr": "GLA PGL MRD HAS ARC PLD MOI GUE DRG BRD SUR NIN MCH CHN SAM PSB DNS FCH VPR"
         },
         {
           "id": "BRD.WardensPaean",
@@ -1074,7 +1307,11 @@
           "_note": "Esuna OR pre-emptive status-block (single ally)",
           "icon_glyph": "diamond",
           "name_fr": "Hymne du gardien",
-          "action_id": 3561
+          "action_id": 3561,
+          "description": "Removes one select detrimental effect from self or target party member. If the target is not enfeebled, a barrier is created nullifying the target's next detrimental effect suffered.\n\nDuration: 30s",
+          "description_fr": "Soigne une altération d'état sur vous ou l'équipier ciblé.\n\nSi cet effet ne s'est pas déclenché, crée une barrière qui protège de la prochaine altération d'état.\n\nDurée: 30s",
+          "affinity": "BRD",
+          "affinity_fr": "BRD"
         },
         {
           "id": "BRD.Troubadour",
@@ -1090,7 +1327,11 @@
           "icon_glyph": "note",
           "icon_id": 2612,
           "name_fr": "Troubadour",
-          "action_id": 7405
+          "action_id": 7405,
+          "description": "Reduces damage taken by self and nearby party members by 15 %.\n\nDuration: 15s\n\nEffect cannot be stacked with machinist's Tactician or dancer's Shield Samba.",
+          "description_fr": "Réduit de 15 % les dégâts reçus par vous et les équipiers alentour.\n\nDurée: 15s\n\nNe peut être cumulé ni avec l'effet Tacticien des machinistes ni avec l'effet Samba protectrice des danseurs.",
+          "affinity": "BRD",
+          "affinity_fr": "BRD"
         },
         {
           "id": "BRD.NaturesMinne",
@@ -1107,7 +1348,11 @@
           "icon_glyph": "note",
           "icon_id": 2615,
           "name_fr": "Minne de la nature",
-          "action_id": 7408
+          "action_id": 7408,
+          "description": "Increases HP recovery via healing actions by 15% for self and nearby party members.\n\nDuration: 15s",
+          "description_fr": "Augmente de 15% les effets curatifs sur vous et les équipiers alentour.\n\nDurée: 15s",
+          "affinity": "BRD",
+          "affinity_fr": "BRD"
         }
       ],
       "name_fr": "Barde"
@@ -1135,7 +1380,11 @@
           "icon_glyph": "diamond",
           "icon_id": 861,
           "name_fr": "Embrouillement",
-          "action_id": 7560
+          "action_id": 7560,
+          "description": "Lowers target's physical damage dealt by 5% and magic damage dealt by 10%.\n\nDuration:  15 s",
+          "description_fr": "Réduit respectivement de 5% et 10% les dégâts physiques et magiques infligés par la cible.\n\nDurée: 15 s",
+          "affinity": "THM ACN BLM SMN RDM BLU PCT",
+          "affinity_fr": "OCC MNO ACN INV MRG MBU PIC"
         },
         {
           "id": "BLM.Swiftcast",
@@ -1151,7 +1400,11 @@
           "icon_glyph": "triangle",
           "icon_id": 866,
           "name_fr": "Magie prompte",
-          "action_id": 7561
+          "action_id": 7561,
+          "description": "Next spell is cast immediately.\n\nDuration: 10s",
+          "description_fr": "Permet à votre prochain sort d'être instantané.\n\nDurée: 10s",
+          "affinity": "CNJ THM ACN WHM BLM SMN SCH AST RDM BLU SGE PCT",
+          "affinity_fr": "ÉLM OCC MBL MNO ACN INV ÉRU AST MRG MBU SAG PIC"
         },
         {
           "id": "BLM.Manaward",
@@ -1168,7 +1421,11 @@
           "icon_glyph": "hex",
           "icon_id": 463,
           "name_fr": "Barrière de mana",
-          "action_id": 157
+          "action_id": 157,
+          "description_fr": "Crée sur vous une barrière annulant les dégâts subis, pour un total de 30% de vos PV maximums.\n\nDurée: 20s",
+          "description": "Creates a barrier that nullifies damage totaling up to 30% of maximum HP.\n\nDuration: 20s",
+          "affinity": "THM BLM",
+          "affinity_fr": "OCC MNO"
         },
         {
           "id": "BLM.Surecast",
@@ -1184,7 +1441,11 @@
           "icon_glyph": "triangle",
           "icon_id": 869,
           "name_fr": "Stoïcisme",
-          "action_id": 7559
+          "action_id": 7559,
+          "description": "Spells can be cast without interruption.\n\nAdditional Effect: Nullifies most knockback and draw-in effects\n\nDuration: 6s",
+          "description_fr": "Vous permet de lancer vos sorts sans risque d'interruption.\n\nAnnule la plupart des projections et attractions.\n\nDurée: 6s",
+          "affinity": "CNJ THM ACN WHM BLM SMN SCH AST RDM BLU SGE PCT",
+          "affinity_fr": "ÉLM OCC MBL MNO ACN INV ÉRU AST MRG MBU SAG PIC"
         }
       ],
       "name_fr": "Mage noir"
@@ -1211,7 +1472,11 @@
           "icon_glyph": "shield",
           "icon_id": 801,
           "name_fr": "Rempart",
-          "action_id": 7531
+          "action_id": 7531,
+          "description_fr": "Réduit de 20% vos dégâts subis. Augmente de 15% les effets curatifs sur vous.\n\n Durée: 20s",
+          "description": "Reduces damage taken by 20%. Additional Effect: Increases HP recovery via healing actions on self by 15%\n\n Duration: 20s",
+          "affinity": "GLA MRD PLD WAR DRK GNB",
+          "affinity_fr": "GLA MRD PLD GUE CHN PSB"
         },
         {
           "id": "DRK.ArmsLength",
@@ -1227,7 +1492,11 @@
           "icon_glyph": "triangle",
           "icon_id": 822,
           "name_fr": "Portée de bras",
-          "action_id": 7548
+          "action_id": 7548,
+          "description": "Creates a barrier nullifying most knockback and draw-in effects.\n\nDuration: 6s\n\nAdditional Effect: Slow +20% when barrier is struck\n\nDuration: 15s",
+          "description_fr": "Crée sur vous une barrière annulant la plupart des projections et attractions.\n\nDurée: 6s\n\nEffet additionnel: 100% de chances que Lenteur 20% soit infligée à l'assaillant à chaque attaque physique portée contre vous.\n\nDurée: 15s",
+          "affinity": "GLA PGL MRD LNC ARC PLD MNK WAR DRG BRD ROG NIN MCH DRK SAM GNB DNC RPR VPR",
+          "affinity_fr": "GLA PGL MRD HAS ARC PLD MOI GUE DRG BRD SUR NIN MCH CHN SAM PSB DNS FCH VPR"
         },
         {
           "id": "DRK.Reprisal",
@@ -1243,7 +1512,11 @@
           "icon_glyph": "diamond",
           "icon_id": 806,
           "name_fr": "Rétorsion",
-          "action_id": 7535
+          "action_id": 7535,
+          "description": "Reduces damage dealt by nearby enemies by 10%.\n\nDuration:  15 s",
+          "description_fr": "Réduit de 10% les dégâts infligés par les ennemis alentour.\n\nDurée: 15 s",
+          "affinity": "GLA MRD PLD WAR DRK GNB",
+          "affinity_fr": "GLA MRD PLD GUE CHN PSB"
         },
         {
           "id": "DRK.ShadowedVigil",
@@ -1260,7 +1533,11 @@
           "icon_glyph": "shield",
           "icon_id": 3094,
           "name_fr": "Vigile ténébreux",
-          "action_id": 36927
+          "action_id": 36927,
+          "description": "Reduces damage taken by 40%.\n\nDuration: 15s\n\nAdditional Effect: Grants Vigilant\n\nDuration: 20s\n\nVigilant Effect: Restores HP when HP falls below 50% or upon effect duration expiration\n\nCure Potency: 1,200",
+          "description_fr": "Réduit de 40% vos dégâts subis.\n\nDurée: 15s\n\nEffet additionnel: vous octroie Garde ténébreuse.\n\nDurée: 20s\n\nGarde ténébreuse: restaure les PV s'ils tombent sous 50% ou à la fin de l'effet.\n\nPuissance: 1200",
+          "affinity": "DRK",
+          "affinity_fr": "CHN"
         },
         {
           "id": "DRK.DarkMind",
@@ -1278,7 +1555,11 @@
           "icon_id": 3076,
           "mit_kind": "magical",
           "name_fr": "Esprit ténébreux",
-          "action_id": 3634
+          "action_id": 3634,
+          "description": "Reduces magic vulnerability by 20%.\n\nDuration: 10s",
+          "description_fr": "Réduit de 20% les dégâts magiques subis.\n\nDurée: 10s",
+          "affinity": "DRK",
+          "affinity_fr": "CHN"
         },
         {
           "id": "DRK.DarkMissionary",
@@ -1296,7 +1577,11 @@
           "icon_id": 3087,
           "mit_kind": "magical",
           "name_fr": "Missionnaire des Ténèbres",
-          "action_id": 16471
+          "action_id": 16471,
+          "description": "Reduces magic damage taken by self and nearby party members by 10%.\n\nDuration: 15s",
+          "description_fr": "Réduit de 10% les dégâts magiques reçus par vous et les équipiers alentour.\n\nDurée: 15s",
+          "affinity": "DRK",
+          "affinity_fr": "CHN"
         },
         {
           "id": "DRK.Oblation",
@@ -1313,7 +1598,12 @@
           "icon_glyph": "shield",
           "icon_id": 3089,
           "name_fr": "Oblation",
-          "action_id": 25754
+          "action_id": 25754,
+          "description": "Reduces damage taken by target party member or self by 10%.\n\nDuration: 10s\n\nMaximum Charges: 2",
+          "description_fr": "Réduit de 10% vos dégâts subis ou ceux de l'équipier ciblé.\n\nDurée: 10s\n\nMaximum de charges: 2",
+          "max_charges": 2,
+          "affinity": "DRK",
+          "affinity_fr": "CHN"
         },
         {
           "id": "DRK.TheBlackestNight",
@@ -1330,7 +1620,11 @@
           "icon_glyph": "hex",
           "icon_id": 3081,
           "name_fr": "Nuit noirissime",
-          "action_id": 7393
+          "action_id": 7393,
+          "description": "Creates a barrier around self or target party member that absorbs damage totaling 25% of target's maximum HP.\n\nDuration: 7s\n\nGrants Dark Arts when barrier is completely absorbed.\n\nDark Arts Effect: Consume Dark Arts instead of MP to execute Edge of Shadow or Flood of Shadow",
+          "description_fr": "Crée une barrière sur vous ou l'équipier ciblé, absorbant les dégâts subis pour un montant égal à 25% des PV maximums de la cible.\n\nDurée: 7s\n\nVous octroie Arts ténébreux quand la barrière a absorbé son montant de dégâts.\n\nArts ténébreux: le prochain Déluge d'ombre ou Tranchant d'ombre ne consomme aucun PM.",
+          "affinity": "DRK",
+          "affinity_fr": "CHN"
         },
         {
           "id": "DRK.LivingDead",
@@ -1347,7 +1641,11 @@
           "icon_glyph": "sword",
           "icon_id": 3077,
           "name_fr": "Mort-vivant",
-          "action_id": 3638
+          "action_id": 3638,
+          "description": "Grants the effect of Living Dead.\n\nWhen HP is reduced to 0 while under the effect of Living Dead, instead of becoming KO'd, your status will change to Walking Dead.\n\nLiving Dead Duration: 10s\n\nAdditional Effect: Restores HP with each weaponskill successfully delivered or spell cast\n\nCure Potency: 1500\n\nWhile under the effect of Walking Dead, most attacks will not lower your HP below 1. If, before the Walking Dead timer runs out, an amount of HP totaling your maximum HP is restored, the effect will change to Undead Rebirth. If this amount is not restored, you will be KO'd.\n\nWalking Dead Duration: 10s\n\nWhile under the effect of Undead Rebirth, most attacks will not lower your HP below 1.\n\nUndead Rebirth Duration: Time remaining on Walking Dead",
+          "description_fr": "Vous accorde avec le monde des morts et vous octroie Mort-vivant.\n\nDurée: 10s\n\nSi vous subissez des dégâts suffisants pour vous mettre K.O., vos PV sont réduits à 1 et vous obtenez à la place l'effet Marcheur des limbes.\n\nDurée: 10s\n\nMarcheur des limbes: les attaques ne peuvent pas réduire vos PV à moins de 1, et vous absorbez des PV quand vous infligez des dégâts avec une technique d'arme.\n\nPuissance: 1500\n\nVous tomberez inconscient si un montant égal à 100% de vos PV maximums n'est pas restauré avant la fin de la durée de l'effet.\n\nDevient Sur le fil si un montant égal à 100% de vos PV maximums est restauré avant la fin de la durée de l'effet.\n\nSur le fil: Les PV ne peuvent pas être réduits en dessous de 1.\n\nL'effet Sur le fil prendra fin à la fin de la durée originale de l'effet Marcheur des limbes.\n\nCertaines attaques annulent les effets Mort-vivant, Marcheur des limbes, et Sur le fil.",
+          "affinity": "DRK",
+          "affinity_fr": "CHN"
         }
       ],
       "name_fr": "Chevalier noir"
@@ -1374,7 +1672,11 @@
           "icon_glyph": "shield",
           "icon_id": 801,
           "name_fr": "Rempart",
-          "action_id": 7531
+          "action_id": 7531,
+          "description_fr": "Réduit de 20% vos dégâts subis. Augmente de 15% les effets curatifs sur vous.\n\n Durée: 20s",
+          "description": "Reduces damage taken by 20%. Additional Effect: Increases HP recovery via healing actions on self by 15%\n\n Duration: 20s",
+          "affinity": "GLA MRD PLD WAR DRK GNB",
+          "affinity_fr": "GLA MRD PLD GUE CHN PSB"
         },
         {
           "id": "GNB.ArmsLength",
@@ -1390,7 +1692,11 @@
           "icon_glyph": "triangle",
           "icon_id": 822,
           "name_fr": "Portée de bras",
-          "action_id": 7548
+          "action_id": 7548,
+          "description_fr": "Crée sur vous une barrière annulant la plupart des projections et attractions.\n\nDurée: 6s\n\nEffet additionnel: 100% de chances que Lenteur 20% soit infligée à l'assaillant à chaque attaque physique portée contre vous.\n\nDurée: 15s",
+          "description": "Creates a barrier nullifying most knockback and draw-in effects.\n\nDuration: 6s\n\nAdditional Effect: Slow +20% when barrier is struck\n\nDuration: 15s",
+          "affinity": "GLA PGL MRD LNC ARC PLD MNK WAR DRG BRD ROG NIN MCH DRK SAM GNB DNC RPR VPR",
+          "affinity_fr": "GLA PGL MRD HAS ARC PLD MOI GUE DRG BRD SUR NIN MCH CHN SAM PSB DNS FCH VPR"
         },
         {
           "id": "GNB.Reprisal",
@@ -1406,7 +1712,11 @@
           "icon_glyph": "diamond",
           "icon_id": 806,
           "name_fr": "Rétorsion",
-          "action_id": 7535
+          "action_id": 7535,
+          "description": "Reduces damage dealt by nearby enemies by 10%.\n\nDuration:  15 s",
+          "description_fr": "Réduit de 10% les dégâts infligés par les ennemis alentour.\n\nDurée: 15 s",
+          "affinity": "GLA MRD PLD WAR DRK GNB",
+          "affinity_fr": "GLA MRD PLD GUE CHN PSB"
         },
         {
           "id": "GNB.Camouflage",
@@ -1423,7 +1733,11 @@
           "icon_glyph": "shield",
           "icon_id": 3404,
           "name_fr": "Camouflage",
-          "action_id": 16140
+          "action_id": 16140,
+          "description_fr": "Augmente de 50% vos chances de parade et réduit de 10% vos dégâts subis.\n\nDurée: 20s",
+          "description": "Increases parry rate by 50% while reducing damage taken by 10%.\n\nDuration: 20s",
+          "affinity": "GNB",
+          "affinity_fr": "PSB"
         },
         {
           "id": "GNB.GreatNebula",
@@ -1440,7 +1754,11 @@
           "icon_glyph": "shield",
           "icon_id": 3435,
           "name_fr": "Grande nébuleuse",
-          "action_id": 36935
+          "action_id": 36935,
+          "description_fr": "Réduit de 40% vos dégâts subis.\n\nEffet additionnel: augmente de 20% vos PV maximums et restaure l'équivalent du montant augmenté.\n\nDurée: 15s",
+          "description": "Reduces damage taken by 40%.\n\nAdditional Effect: Increases maximum HP by 20% and restores the amount increased.\n\nDuration: 15s",
+          "affinity": "GNB",
+          "affinity_fr": "PSB"
         },
         {
           "id": "GNB.HeartOfLight",
@@ -1458,7 +1776,11 @@
           "icon_id": 3424,
           "mit_kind": "magical",
           "name_fr": "Cœur de Lumière",
-          "action_id": 16160
+          "action_id": 16160,
+          "description": "Reduces magic damage taken by self and nearby party members by 10%.\n\nDuration: 15s",
+          "description_fr": "Réduit de 10% les dégâts magiques reçus par vous et les équipiers alentour.\n\nDurée: 15s",
+          "affinity": "GNB",
+          "affinity_fr": "PSB"
         },
         {
           "id": "GNB.HeartOfCorundum",
@@ -1475,7 +1797,11 @@
           "icon_glyph": "aegis",
           "icon_id": 3430,
           "name_fr": "Cœur de corindon",
-          "action_id": 25758
+          "action_id": 25758,
+          "description": "Reduces damage taken by target party member or self by 15%.\n\nDuration: 8s\n\nAdditional Effect: When targeting a party member while under the effect of Brutal Shell, that effect is also granted to the target\n\nDuration: 30s\n\nAdditional Effect: Grants Clarity of Corundum to target\n\nClarity of Corundum Effect: Reduces damage taken by 15%\n\nDuration: 4s\n\nAdditional Effect: Grants Catharsis of Corundum to target\n\nCatharsis of Corundum Effect: Restores HP when HP falls below 50% or upon effect duration expiration\n\nCure Potency: 900\n\nDuration: 20s",
+          "description_fr": "Réduit de 15% vos dégâts subis ou ceux de l'équipier ciblé.\n\nDurée: 8s\n\nEffet additionnel: si vous bénéficiez de l'effet Impact brutal et que la cible est un équipier, octroie également cet effet à la cible.\n\nDurée: 30s\n\nEffet additionnel: octroie Clarté de corindon à la cible.\n\nDurée: 4s\n\nClarté de corindon: réduit de 15% les dégâts subis.\n\nEffet additionnel: octroie Catharsis de corindon à la cible.\n\nDurée: 20s\n\nCatharsis de corindon: restaure les PV s'ils tombent sous 50% ou à la fin de l'effet.\n\nPuissance: 900",
+          "affinity": "GNB",
+          "affinity_fr": "PSB"
         },
         {
           "id": "GNB.Aurora",
@@ -1492,7 +1818,11 @@
           "icon_glyph": "cross",
           "icon_id": 3415,
           "name_fr": "Aurore",
-          "action_id": 16151
+          "action_id": 16151,
+          "description": "Grants Regen to target.\n\nCure Potency: 200\n\nDuration: 18s\nMaximum Charges: 2",
+          "description_fr": "Restaure périodiquement les PV de la cible.\n\nPuissance: 200 Durée: 18s\nMaximum de charges: 2",
+          "affinity": "GNB",
+          "affinity_fr": "PSB"
         },
         {
           "id": "GNB.Superbolide",
@@ -1509,7 +1839,11 @@
           "icon_glyph": "sword",
           "icon_id": 3416,
           "name_fr": "Bolide",
-          "action_id": 16152
+          "action_id": 16152,
+          "description": "Reduces HP to 1 and renders you impervious to most attacks.\n\nDuration: 10s",
+          "description_fr": "Réduit vos PV à 1 et vous rend invulnérable à la plupart des attaques.\n\nDurée: 10s",
+          "affinity": "GNB",
+          "affinity_fr": "PSB"
         }
       ],
       "name_fr": "Pistosabreur"
@@ -1536,7 +1870,11 @@
           "icon_glyph": "triangle",
           "icon_id": 866,
           "name_fr": "Magie prompte",
-          "action_id": 7561
+          "action_id": 7561,
+          "description": "Next spell is cast immediately.\n\nDuration: 10s",
+          "description_fr": "Permet à votre prochain sort d'être instantané.\n\nDurée: 10s",
+          "affinity": "CNJ THM ACN WHM BLM SMN SCH AST RDM BLU SGE PCT",
+          "affinity_fr": "ÉLM OCC MBL MNO ACN INV ÉRU AST MRG MBU SAG PIC"
         },
         {
           "id": "AST.Surecast",
@@ -1552,7 +1890,11 @@
           "icon_glyph": "triangle",
           "icon_id": 869,
           "name_fr": "Stoïcisme",
-          "action_id": 7559
+          "action_id": 7559,
+          "description": "Spells can be cast without interruption.\n\nAdditional Effect: Nullifies most knockback and draw-in effects\n\nDuration: 6s",
+          "description_fr": "Vous permet de lancer vos sorts sans risque d'interruption.\n\nAnnule la plupart des projections et attractions.\n\nDurée: 6s",
+          "affinity": "CNJ THM ACN WHM BLM SMN SCH AST RDM BLU SGE PCT",
+          "affinity_fr": "ÉLM OCC MBL MNO ACN INV ÉRU AST MRG MBU SAG PIC"
         },
         {
           "id": "AST.CollectiveUnconscious",
@@ -1569,7 +1911,11 @@
           "icon_glyph": "aegis",
           "icon_id": 3140,
           "name_fr": "Inconscient collectif",
-          "action_id": 3613
+          "action_id": 3613,
+          "description": "Creates a celestial ring 8 yalms around the caster.\n\nDuration: 18s\n\nAdditional Effect: Reduces damage taken by 10% for self and any party members within 30 yalms and applies Wheel of Fortune to self and any party members within 8 yalms\n\nDuration: 5s\n\nWheel of Fortune Effect: Regen\n\nCure Potency: 100\n\nDuration: 15s\n\nEffects will be applied continuously to self and all party members standing within the celestial ring.\n\nCollective Unconscious effect ends upon using another action or moving (including facing a different direction).\n\nCancels auto-attack upon execution.",
+          "description_fr": "Crée un dôme protecteur d'une portée de 8 yalms autour du lanceur.\n\nDurée: 18s\n\nRéduit de 10% les dégâts subis par vous et les équipiers dans un rayon de 30 yalms.\n\nDurée: 5s\n\nOctroie également un effet de restauration périodique de PV à vous et aux équipiers sous le dôme.\n\nPuissance: 100 Durée: 15s\n\nCes effets continuent de s'appliquer tant que vous ou vos alliés se trouvent dans le dôme.\n\nCelui-ci prend fin si vous effectuez une action, un déplacement ou une rotation.\n\nInterrompt vos attaques automatiques.",
+          "affinity": "AST",
+          "affinity_fr": "AST"
         },
         {
           "id": "AST.NeutralSect",
@@ -1586,7 +1932,11 @@
           "icon_glyph": "star",
           "icon_id": 3552,
           "name_fr": "Adepte de la neutralité",
-          "action_id": 16559
+          "action_id": 16559,
+          "description": "Increases healing magic potency by 20%.\n\nDuration: 20s\n\nAdditional Effect: When casting Aspected Benefic or  Helios Conjunction , erects a magicked barrier which nullifies damage\n\nAspected Benefic Effect: Nullifies damage equaling 250% of the amount of HP restored\n\n Helios Conjunction Effect: Nullifies damage equaling 125% of the amount of HP restored\n\nDuration: 30s\nAdditional Effect: Grants Suntouched\n\nDuration: 30s",
+          "description_fr": "Augmente de 20% les PV restaurés par vos sorts curatifs.\n\nDurée: 20s\n\nEffet additionnel: crée une barrière sur la cible lorsque vous utilisez Bienfaisance aspectée ou Hélios combiné .\n\nPuissance avec Bienfaisance aspectée: 250% des PV restaurés.\n\nPuissance avec Hélios combiné : 125% des PV restaurés.\n\nDurée: 30s\nEffet additionnel: vous octroie Signe solaire préparé.\n\nDurée: 30s",
+          "affinity": "AST",
+          "affinity_fr": "AST"
         },
         {
           "id": "AST.Exaltation",
@@ -1603,7 +1953,11 @@
           "icon_glyph": "shield",
           "icon_id": 3561,
           "name_fr": "Exaltation",
-          "action_id": 25873
+          "action_id": 25873,
+          "description": "Reduces damage taken by self or target party member by 10%.\n\nDuration: 8s\n\nAdditional Effect: Restores HP at the end of the effect's duration\n\nCure Potency: 500",
+          "description_fr": "Réduit de 10% vos dégâts subis ou ceux de l'équipier ciblé.\n\nDurée: 8s\n\nRestaure des PV à la fin de l'effet.\n\nPuissance: 500",
+          "affinity": "AST",
+          "affinity_fr": "AST"
         },
         {
           "id": "AST.CelestialOpposition",
@@ -1620,7 +1974,11 @@
           "icon_glyph": "cross",
           "icon_id": 3142,
           "name_fr": "Opposition céleste",
-          "action_id": 16553
+          "action_id": 16553,
+          "description": "Restores own HP and the HP of all nearby party members.\n\nCure Potency: 200\n\nAdditional Effect: Regen\n\nCure Potency: 100\n\nDuration: 15s",
+          "description_fr": "Restaure vos PV et ceux des équipiers alentour.\n\nPuissance: 200\n\nEffet additionnel: restaure périodiquement vos PV et ceux des équipiers alentour.\n\nPuissance: 100 Durée: 15s",
+          "affinity": "AST",
+          "affinity_fr": "AST"
         },
         {
           "id": "AST.EarthlyStar",
@@ -1637,7 +1995,11 @@
           "icon_glyph": "star",
           "icon_id": 3143,
           "name_fr": "Étoile terrestre",
-          "action_id": 7439
+          "action_id": 7439,
+          "description": "Deploys an Earthly Star in the designated area and grants the effect of Earthly Dominance.\n\nDuration: 10s\n\nExecuting Stellar Detonation while under the effect of Earthly Dominance creates a Stellar Burst dealing unaspected damage with a potency of 205 to all nearby enemies. Also restores own HP and the HP of all nearby party members.\n\nCure Potency: 540\n\nAfter 10s, Earthly Dominance effect is changed to Giant Dominance.\n\nDuration: 10s\n\nWaiting 10s or executing Stellar Detonation while under the effect of Giant Dominance creates a Stellar Explosion dealing unaspected damage with a potency of 310 to all nearby enemies. Also restores own HP and the HP of all nearby party members.\n\nCure Potency: 720",
+          "description_fr": "Place une étoile terrestre dans l'aire ciblée, et vous octroie Domination terrestre.\n\nDurée: 10s\n\nSi l'action est réutilisée pendant cette durée, déclenche Éclatement stellaire, effectuant une attaque magique neutre sur les ennemis dans l'aire d'effet.\n\nPuissance: 205\n\nEffet additionnel: restaure vos PV et ceux des équipiers dans l'aire d'effet.\n\nPuissance: 540\n\nAprès 10s, renforce l'étoile terrestre, et vous octroie Domination stellaire.\n\nDurée: 10s\n\nSi l'action est réutilisée pendant cette durée ou à l'issue de celle-ci, déclenche Explosion stellaire, effectuant une attaque magique neutre sur les ennemis dans l'aire d'effet.\n\nPuissance: 310\n\nEffet additionnel: restaure vos PV et ceux des équipiers dans l'aire d'effet.\n\nPuissance: 720",
+          "affinity": "AST",
+          "affinity_fr": "AST"
         },
         {
           "id": "AST.Macrocosmos",
@@ -1654,7 +2016,11 @@
           "icon_glyph": "spark",
           "icon_id": 3562,
           "name_fr": "Macrocosme",
-          "action_id": 25874
+          "action_id": 25874,
+          "description": "Deals unaspected damage to all nearby enemies with a potency of 270 for the first enemy, and 40% less for all remaining enemies.\n\nAdditional Effect: Grants Macrocosmos to self and all nearby party members\n\nDuration: 15s\n\nFor the effect's duration, 50% of damage taken is compiled.\n\nRestores HP equal to a cure of 200 potency plus compiled damage when the effect expires or upon execution of Microcosmos.\n\nAmount restored cannot exceed the target's maximum HP.\n\nRecast timer cannot be affected by status effects or gear attributes.",
+          "description_fr": "Effectue une attaque magique neutre sur les ennemis alentour.\n\nPuissance: 270 La puissance est réduite de 40% au-delà du premier ennemi touché.\n\nEffet additionnel: octroie Macrocosme à vous et aux équipiers alentour.\n\nDurée: 15s\n\nMacrocosme: restaure des PV à la fin de l'effet ou quand Microcosme est utilisé.\n\nPuissance: 200 + 50% des dégâts encaissés pendant la durée de l'effet.\n\nLe montant de PV restaurés ne peut pas dépasser les PV maximums de la cible.\n\nCe sort a un temps de recharge indépendant qui ne peut pas être modifié par des effets ou des pièces d'équipement.",
+          "affinity": "AST",
+          "affinity_fr": "AST"
         },
         {
           "id": "AST.Horoscope",
@@ -1671,7 +2037,11 @@
           "icon_glyph": "cross",
           "icon_id": 3550,
           "name_fr": "Horoscope",
-          "action_id": 16557
+          "action_id": 16557,
+          "description": "Reads your fortune and those of nearby party members, granting them Horoscope.\n\nDuration: 10s\n\nEffect upgraded to Horoscope Helios upon receiving the effects of Helios or  Helios Conjunction .\n\nDuration: 30s\n\nRestores the HP of those under either effect when the cards are read a second time or the effect expires.\n\nHoroscope Cure Potency: 200\n\nHoroscope Helios Cure Potency: 400",
+          "description_fr": "Octroie l'effet Horoscope à vous et à vos équipiers alentour.\n\nDurée: 10s\n\nSi vous utilisez Hélios ou Hélios combiné pendant la durée de l'effet, Horoscope gagne en puissance et l'effet devient Horoscope Hélios.\n\nDurée: 30s\n\nSi l'action est réutilisée pendant cette durée ou à l'issue de celle-ci, soigne ceux qui parmi vous et vos équipiers alentour bénéficient de l'effet Horoscope ou Horoscope Hélios.\n\nPuissance avec Horoscope: 200\n\nPuissance avec Horoscope Hélios: 400",
+          "affinity": "AST",
+          "affinity_fr": "AST"
         },
         {
           "id": "AST.LadyOfCrowns",
@@ -1688,7 +2058,11 @@
           "icon_glyph": "cross",
           "icon_id": 3146,
           "name_fr": "Reine des couronnes",
-          "action_id": 7445
+          "action_id": 7445,
+          "description": "Restores own HP and the HP of all nearby party members.\n\nCure Potency: 400\n\n\n\n※This action cannot be assigned to a hotbar.\n\n※Minor Arcana changes to Lady of Crowns when requirements for execution are met.",
+          "description_fr": "Restaure vos PV et ceux des équipiers alentour.\n\nPuissance: 400\n\n\n\n* Cette action ne peut pas être ajoutée aux barres de raccourcis.\n\nRemplace Arcane mineur lorsque les conditions sont réunies.",
+          "affinity": "AST",
+          "affinity_fr": "AST"
         },
         {
           "id": "AST.SunSign",
@@ -1705,7 +2079,11 @@
           "icon_glyph": "star",
           "icon_id": 3109,
           "name_fr": "Signe solaire",
-          "action_id": 37031
+          "action_id": 37031,
+          "description": "Reduces damage taken by self and nearby party members by 10%.\n\nDuration: 15s\n\nCan only be executed while Suntouched.",
+          "description_fr": "Réduit de 10% les dégâts reçus par vous et les équipiers alentour.\n\nDurée: 15s\n\nCondition: Signe solaire préparé.",
+          "affinity": "AST",
+          "affinity_fr": "AST"
         }
       ],
       "name_fr": "Astromancien"
@@ -1732,7 +2110,11 @@
           "icon_glyph": "triangle",
           "icon_id": 866,
           "name_fr": "Magie prompte",
-          "action_id": 7561
+          "action_id": 7561,
+          "description": "Next spell is cast immediately.\n\nDuration: 10s",
+          "description_fr": "Permet à votre prochain sort d'être instantané.\n\nDurée: 10s",
+          "affinity": "CNJ THM ACN WHM BLM SMN SCH AST RDM BLU SGE PCT",
+          "affinity_fr": "ÉLM OCC MBL MNO ACN INV ÉRU AST MRG MBU SAG PIC"
         },
         {
           "id": "SGE.Surecast",
@@ -1748,7 +2130,11 @@
           "icon_glyph": "triangle",
           "icon_id": 869,
           "name_fr": "Stoïcisme",
-          "action_id": 7559
+          "action_id": 7559,
+          "description": "Spells can be cast without interruption.\n\nAdditional Effect: Nullifies most knockback and draw-in effects\n\nDuration: 6s",
+          "description_fr": "Vous permet de lancer vos sorts sans risque d'interruption.\n\nAnnule la plupart des projections et attractions.\n\nDurée: 6s",
+          "affinity": "CNJ THM ACN WHM BLM SMN SCH AST RDM BLU SGE PCT",
+          "affinity_fr": "ÉLM OCC MBL MNO ACN INV ÉRU AST MRG MBU SAG PIC"
         },
         {
           "id": "SGE.Kerachole",
@@ -1765,7 +2151,11 @@
           "icon_glyph": "soil",
           "icon_id": 3666,
           "name_fr": "Kerachole",
-          "action_id": 24298
+          "action_id": 24298,
+          "description": "Reduces damage taken by self and nearby party members by 10%.\n\nDuration: 15s\n\nEffect cannot be stacked with Taurochole. Additional Effect: Regen\n\nCure Potency: 100\n\nDuration: 15s\n\n Additional Effect: Restores 7% of maximum MP\n\nAddersgall Cost: 1",
+          "description_fr": "Réduit de 10% les dégâts reçus par vous et les équipiers alentour.\n\nDurée: 15s\n\nNe peut être cumulé avec l'effet Taurochole. Effet additionnel: octroie Kerakeia à vous et aux équipiers alentour.\n\nKerakeia: restaure périodiquement les PV de la cible.\n\nPuissance: 100 Durée: 15s\n\n Effet additionnel: restaure 7% de vos PM maximums.\n\nCondition: consomme une vésicule de Bile de vipère.",
+          "affinity": "SGE",
+          "affinity_fr": "SAG"
         },
         {
           "id": "SGE.Taurochole",
@@ -1782,7 +2172,11 @@
           "icon_glyph": "aegis",
           "icon_id": 3671,
           "name_fr": "Taurochole",
-          "action_id": 24303
+          "action_id": 24303,
+          "description": "Restores own or target party member's HP.\n\nCure Potency: 700\n\nAdditional Effect: Reduces target's damage taken by 10%\n\nDuration: 15s\n\nEffect cannot be stacked with Kerachole.\n\nAdditional Effect: Restores 7% of maximum MP\n\nAddersgall Cost: 1",
+          "description_fr": "Restaure vos PV ou ceux de l'équipier ciblé.\n\nPuissance: 700\n\nEffet additionnel: réduit de 10% les dégâts subis par la cible.\n\nDurée: 15s\n\nNe peut être cumulé avec l'effet Kerachole.\n\nEffet additionnel: restaure 7% de vos PM maximums.\n\nCondition: consomme une vésicule de Bile de vipère.",
+          "affinity": "SGE",
+          "affinity_fr": "SAG"
         },
         {
           "id": "SGE.Physis",
@@ -1799,7 +2193,11 @@
           "icon_glyph": "cross",
           "icon_id": 3670,
           "name_fr": "Physis II",
-          "action_id": 24302
+          "action_id": 24302,
+          "description": "Gradually restores own HP and the HP of all nearby party members.\n\nCure Potency: 130\n\nDuration: 15s\n\nAdditional Effect: Increases HP recovered by healing actions by 10%\n\nDuration:  15 s",
+          "description_fr": "Restaure périodiquement vos PV et ceux des équipiers alentour.\n\nPuissance: 130 Durée: 15s\n\nEffet additionnel: octroie Autophysis à vous et aux équipiers alentour.\n\nDurée: 15 s\n\nAutophysis: augmente de 10% les effets curatifs reçus.",
+          "affinity": "SGE",
+          "affinity_fr": "SAG"
         },
         {
           "id": "SGE.Haima",
@@ -1816,7 +2214,11 @@
           "icon_glyph": "aegis",
           "icon_id": 3673,
           "name_fr": "Haima",
-          "action_id": 24305
+          "action_id": 24305,
+          "description": "Erects a magicked barrier around self or target party member that absorbs damage equivalent to a heal of 300 potency.\n\nAdditional Effect: Grants 5 stacks of Haimatinon\n\nDuration: 15s\n\nWhen the barrier is completely absorbed, a stack of Haimatinon is consumed and a new barrier is applied.\n\nWhen the effect duration expires, a healing effect is then applied.\n\nCure Potency: 150 per remaining stack of Haimatinon",
+          "description_fr": "Crée une barrière sur vous ou l'équipier ciblé, absorbant un certain montant de dégâts, et octroie 5 degrés de Haimatinon.\n\nPuissance: 300 Durée: 15s\n\nQuand la barrière a absorbé son montant de dégâts, elle est réappliquée en échange d'un degré de Haimatinon.\n\nHaimatinon restaure des PV à la cible lorsque l'effet prend fin.\n\nPuissance: 150 par degré restant.",
+          "affinity": "SGE",
+          "affinity_fr": "SAG"
         },
         {
           "id": "SGE.Holos",
@@ -1833,7 +2235,11 @@
           "icon_glyph": "aegis",
           "icon_id": 3678,
           "name_fr": "Holos",
-          "action_id": 24310
+          "action_id": 24310,
+          "description": "Restores own HP and the HP of all nearby party members.\n\nCure Potency: 300\n\nAdditional Effect: Erects a magicked barrier which nullifies damage equaling the amount of HP restored\n\nDuration: 30s\n\nAdditional Effect: Reduces damage taken by self and nearby party members by 10%\n\nDuration: 20s",
+          "description_fr": "Restaure vos PV et ceux des équipiers alentour.\n\nPuissance: 300\n\nEffet additionnel: crée une barrière annulant un montant de dégâts égal à 100% des PV restaurés.\n\nDurée: 30s\n\nEffet additionnel: réduit de 10% les dégâts reçus par vous et les équipiers alentour.\n\nDurée: 20s",
+          "affinity": "SGE",
+          "affinity_fr": "SAG"
         },
         {
           "id": "SGE.Panhaima",
@@ -1850,7 +2256,11 @@
           "icon_glyph": "aegis",
           "icon_id": 3679,
           "name_fr": "Panhaima",
-          "action_id": 24311
+          "action_id": 24311,
+          "description": "Erects a magicked barrier around self and all party members near you that absorbs damage equivalent to a heal of 200 potency.\n\nAdditional Effect: Grants 5 stacks of Panhaimatinon\n\nDuration: 15s\n\nWhen the barrier is completely absorbed, a stack of Panhaimatinon is consumed and a new barrier is applied.\n\nWhen the effect duration expires, a healing effect is then applied.\n\nCure Potency: 100 per remaining stack of Panhaimatinon",
+          "description_fr": "Crée une barrière sur vous et les équipiers alentour, absorbant un certain montant de dégâts, et octroie 5 degrés de Panhaimatinon.\n\nPuissance: 200 Durée: 15s\n\nQuand la barrière a absorbé son montant de dégâts, elle est réappliquée en échange d'un degré de Panhaimatinon.\n\nPanhaimatinon restaure des PV à la cible lorsque l'effet prend fin.\n\nPuissance: 100 par degré restant.",
+          "affinity": "SGE",
+          "affinity_fr": "SAG"
         },
         {
           "id": "SGE.Krasis",
@@ -1867,7 +2277,11 @@
           "icon_glyph": "heart",
           "icon_id": 3685,
           "name_fr": "Krasis",
-          "action_id": 24317
+          "action_id": 24317,
+          "description": "Increases HP recovery via healing actions for a party member or self by 20%.\n\nDuration: 10s",
+          "description_fr": "Augmente de 20% les effets curatifs sur vous ou l'équipier ciblé.\n\nDurée: 10s",
+          "affinity": "SGE",
+          "affinity_fr": "SAG"
         },
         {
           "id": "SGE.Pneuma",
@@ -1884,7 +2298,11 @@
           "icon_glyph": "cross",
           "icon_id": 3686,
           "name_fr": "Pneuma",
-          "action_id": 24318
+          "action_id": 24318,
+          "description": "Deals unaspected damage to all enemies in a straight line before you with a potency of 360 for the first enemy, and 40% less for all remaining enemies.\n\nAdditional Effect: Restores own HP and the HP of all party members within a radius of 20 yalms\n\nCure Potency: 600\n\nAdditional Effect: Restores HP to targets under the effect of Kardion granted by you\n\nCure Potency:  170 Recast timer cannot be affected by status effects or gear attributes.",
+          "description_fr": "Effectue une attaque magique neutre en ligne droite vers la cible.\n\nPuissance: 360 La puissance au-delà du premier ennemi touché est réduite de 40%.\n\nEffet additionnel: restaure vos PV et ceux des équipiers alentour dans un rayon de 20 yalms.\n\nPuissance: 600\n\nEffet additionnel: restaure les PV de la cible de votre Kardion.\n\nPuissance: 170 Ce sort a un temps de recharge indépendant qui ne peut pas être modifié par des effets ou des pièces d'équipement.",
+          "affinity": "SGE",
+          "affinity_fr": "SAG"
         }
       ],
       "name_fr": "Sage"
@@ -1911,7 +2329,11 @@
           "icon_glyph": "cross",
           "icon_id": 821,
           "name_fr": "Second souffle",
-          "action_id": 7541
+          "action_id": 7541,
+          "description": "Instantly restores own HP.\n\nCure Potency:  800",
+          "description_fr": "Restaure vos PV.\n\nPuissance: 800",
+          "affinity": "PGL LNC ARC ROG MNK DRG BRD NIN MCH SAM DNC RPR VPR",
+          "affinity_fr": "PGL HAS ARC MOI DRG BRD SUR NIN MCH SAM DNS FCH VPR"
         },
         {
           "id": "MNK.Bloodbath",
@@ -1927,7 +2349,11 @@
           "icon_glyph": "heart",
           "icon_id": 823,
           "name_fr": "Bain de sang",
-          "action_id": 7542
+          "action_id": 7542,
+          "description": "Converts a portion of physical damage dealt into HP.\n\nDuration: 20s",
+          "description_fr": "Convertit une partie des dégâts infligés par vos attaques physiques en PV.\n\nDurée: 20s",
+          "affinity": "PGL LNC ROG MNK DRG NIN SAM RPR VPR",
+          "affinity_fr": "PGL HAS MOI DRG SUR NIN SAM FCH VPR"
         },
         {
           "id": "MNK.Feint",
@@ -1943,7 +2369,11 @@
           "icon_glyph": "diamond",
           "icon_id": 828,
           "name_fr": "Restreinte",
-          "action_id": 7549
+          "action_id": 7549,
+          "description": "Lowers target's physical damage dealt by 10% and magic damage dealt by 5%.\n\nDuration:  15 s",
+          "description_fr": "Réduit respectivement de 10% et 5% les dégâts physiques et magiques infligés par la cible.\n\nDurée: 15 s",
+          "affinity": "PGL LNC ROG MNK DRG NIN SAM RPR VPR",
+          "affinity_fr": "PGL HAS MOI DRG SUR NIN SAM FCH VPR"
         },
         {
           "id": "MNK.ArmsLength",
@@ -1959,7 +2389,11 @@
           "icon_glyph": "triangle",
           "icon_id": 822,
           "name_fr": "Portée de bras",
-          "action_id": 7548
+          "action_id": 7548,
+          "description": "Creates a barrier nullifying most knockback and draw-in effects.\n\nDuration: 6s\n\nAdditional Effect: Slow +20% when barrier is struck\n\nDuration: 15s",
+          "description_fr": "Crée sur vous une barrière annulant la plupart des projections et attractions.\n\nDurée: 6s\n\nEffet additionnel: 100% de chances que Lenteur 20% soit infligée à l'assaillant à chaque attaque physique portée contre vous.\n\nDurée: 15s",
+          "affinity": "GLA PGL MRD LNC ARC PLD MNK WAR DRG BRD ROG NIN MCH DRK SAM GNB DNC RPR VPR",
+          "affinity_fr": "GLA PGL MRD HAS ARC PLD MOI GUE DRG BRD SUR NIN MCH CHN SAM PSB DNS FCH VPR"
         },
         {
           "id": "MNK.Mantra",
@@ -1976,7 +2410,11 @@
           "icon_glyph": "star",
           "icon_id": 216,
           "name_fr": "Mantra",
-          "action_id": 65
+          "action_id": 65,
+          "description_fr": "Augmente de 10% les effets de récupération de PV sur vous et les équipiers alentour.\n\nDurée: 15s",
+          "description": "Increases HP recovery via healing actions by 10% for self and nearby party members.\n\nDuration: 15s",
+          "affinity": "PGL MNK",
+          "affinity_fr": "PGL MOI"
         },
         {
           "id": "MNK.RiddleOfEarth",
@@ -1993,7 +2431,11 @@
           "icon_glyph": "shield",
           "icon_id": 2537,
           "name_fr": "Énigme de la terre",
-          "action_id": 7394
+          "action_id": 7394,
+          "description": "Reduces damage taken by 20%.\n\nDuration: 10s\n\nAdditional Effect: Grants Earth's Resolve upon taking damage\n\nEarth's Resolve Effect: Gradually restores HP\n\nCure Potency: 100\n\nDuration: 15s\n\nAdditional Effect: Grants Earth's Rumination\n\nDuration: 30s",
+          "description_fr": "Réduit de 20% vos dégâts subis.\n\nDurée: 10s\n\nEffet additionnel: si vous subissez des dégâts pendant la durée de l'effet, vous octroie  Détermination de la terre.\n\nDétermination de la terre: restaure périodiquement vos PV.\n\nPuissance: 100 Durée: 15s\n\nEffet additionnel: vous octroie Grondement de la terre.\n\nDurée: 30s",
+          "affinity": "MNK",
+          "affinity_fr": "MOI"
         }
       ],
       "name_fr": "Moine"
@@ -2020,7 +2462,11 @@
           "icon_glyph": "cross",
           "icon_id": 821,
           "name_fr": "Second souffle",
-          "action_id": 7541
+          "action_id": 7541,
+          "description": "Instantly restores own HP.\n\nCure Potency:  800",
+          "description_fr": "Restaure vos PV.\n\nPuissance: 800",
+          "affinity": "PGL LNC ARC ROG MNK DRG BRD NIN MCH SAM DNC RPR VPR",
+          "affinity_fr": "PGL HAS ARC MOI DRG BRD SUR NIN MCH SAM DNS FCH VPR"
         },
         {
           "id": "NIN.Bloodbath",
@@ -2036,7 +2482,11 @@
           "icon_glyph": "heart",
           "icon_id": 823,
           "name_fr": "Bain de sang",
-          "action_id": 7542
+          "action_id": 7542,
+          "description_fr": "Convertit une partie des dégâts infligés par vos attaques physiques en PV.\n\nDurée: 20s",
+          "description": "Converts a portion of physical damage dealt into HP.\n\nDuration: 20s",
+          "affinity": "PGL LNC ROG MNK DRG NIN SAM RPR VPR",
+          "affinity_fr": "PGL HAS MOI DRG SUR NIN SAM FCH VPR"
         },
         {
           "id": "NIN.Feint",
@@ -2052,7 +2502,11 @@
           "icon_glyph": "diamond",
           "icon_id": 828,
           "name_fr": "Restreinte",
-          "action_id": 7549
+          "action_id": 7549,
+          "description": "Lowers target's physical damage dealt by 10% and magic damage dealt by 5%.\n\nDuration:  15 s",
+          "description_fr": "Réduit respectivement de 10% et 5% les dégâts physiques et magiques infligés par la cible.\n\nDurée: 15 s",
+          "affinity": "PGL LNC ROG MNK DRG NIN SAM RPR VPR",
+          "affinity_fr": "PGL HAS MOI DRG SUR NIN SAM FCH VPR"
         },
         {
           "id": "NIN.ArmsLength",
@@ -2068,7 +2522,11 @@
           "icon_glyph": "triangle",
           "icon_id": 822,
           "name_fr": "Portée de bras",
-          "action_id": 7548
+          "action_id": 7548,
+          "description": "Creates a barrier nullifying most knockback and draw-in effects.\n\nDuration: 6s\n\nAdditional Effect: Slow +20% when barrier is struck\n\nDuration: 15s",
+          "description_fr": "Crée sur vous une barrière annulant la plupart des projections et attractions.\n\nDurée: 6s\n\nEffet additionnel: 100% de chances que Lenteur 20% soit infligée à l'assaillant à chaque attaque physique portée contre vous.\n\nDurée: 15s",
+          "affinity": "GLA PGL MRD LNC ARC PLD MNK WAR DRG BRD ROG NIN MCH DRK SAM GNB DNC RPR VPR",
+          "affinity_fr": "GLA PGL MRD HAS ARC PLD MOI GUE DRG BRD SUR NIN MCH CHN SAM PSB DNS FCH VPR"
         },
         {
           "id": "NIN.ShadeShift",
@@ -2085,7 +2543,11 @@
           "icon_glyph": "hex",
           "icon_id": 607,
           "name_fr": "Décalage d'ombre",
-          "action_id": 2241
+          "action_id": 2241,
+          "description": "Create shadows that nullify damage up to 20% of maximum HP.\n\nDuration: 20s",
+          "description_fr": "Annule vos dégâts subis jusqu'à 20% de vos PV maximums.\n\nDurée: 20s",
+          "affinity": "ROG NIN",
+          "affinity_fr": "SUR NIN"
         }
       ],
       "name_fr": "Ninja"
@@ -2112,7 +2574,11 @@
           "icon_glyph": "cross",
           "icon_id": 821,
           "name_fr": "Second souffle",
-          "action_id": 7541
+          "action_id": 7541,
+          "description": "Instantly restores own HP.\n\nCure Potency:  800",
+          "description_fr": "Restaure vos PV.\n\nPuissance: 800",
+          "affinity": "PGL LNC ARC ROG MNK DRG BRD NIN MCH SAM DNC RPR VPR",
+          "affinity_fr": "PGL HAS ARC MOI DRG BRD SUR NIN MCH SAM DNS FCH VPR"
         },
         {
           "id": "RPR.Bloodbath",
@@ -2128,7 +2594,11 @@
           "icon_glyph": "heart",
           "icon_id": 823,
           "name_fr": "Bain de sang",
-          "action_id": 7542
+          "action_id": 7542,
+          "description": "Converts a portion of physical damage dealt into HP.\n\nDuration: 20s",
+          "description_fr": "Convertit une partie des dégâts infligés par vos attaques physiques en PV.\n\nDurée: 20s",
+          "affinity": "PGL LNC ROG MNK DRG NIN SAM RPR VPR",
+          "affinity_fr": "PGL HAS MOI DRG SUR NIN SAM FCH VPR"
         },
         {
           "id": "RPR.Feint",
@@ -2144,7 +2614,11 @@
           "icon_glyph": "diamond",
           "icon_id": 828,
           "name_fr": "Restreinte",
-          "action_id": 7549
+          "action_id": 7549,
+          "description": "Lowers target's physical damage dealt by 10% and magic damage dealt by 5%.\n\nDuration:  15 s",
+          "description_fr": "Réduit respectivement de 10% et 5% les dégâts physiques et magiques infligés par la cible.\n\nDurée: 15 s",
+          "affinity": "PGL LNC ROG MNK DRG NIN SAM RPR VPR",
+          "affinity_fr": "PGL HAS MOI DRG SUR NIN SAM FCH VPR"
         },
         {
           "id": "RPR.ArmsLength",
@@ -2160,7 +2634,11 @@
           "icon_glyph": "triangle",
           "icon_id": 822,
           "name_fr": "Portée de bras",
-          "action_id": 7548
+          "action_id": 7548,
+          "description": "Creates a barrier nullifying most knockback and draw-in effects.\n\nDuration: 6s\n\nAdditional Effect: Slow +20% when barrier is struck\n\nDuration: 15s",
+          "description_fr": "Crée sur vous une barrière annulant la plupart des projections et attractions.\n\nDurée: 6s\n\nEffet additionnel: 100% de chances que Lenteur 20% soit infligée à l'assaillant à chaque attaque physique portée contre vous.\n\nDurée: 15s",
+          "affinity": "GLA PGL MRD LNC ARC PLD MNK WAR DRG BRD ROG NIN MCH DRK SAM GNB DNC RPR VPR",
+          "affinity_fr": "GLA PGL MRD HAS ARC PLD MOI GUE DRG BRD SUR NIN MCH CHN SAM PSB DNS FCH VPR"
         },
         {
           "id": "RPR.ArcaneCrest",
@@ -2177,7 +2655,11 @@
           "icon_glyph": "hex",
           "icon_id": 3632,
           "name_fr": "Blason arcanique",
-          "action_id": 24404
+          "action_id": 24404,
+          "description": "Grants Crest of Time Borrowed to self, creating a barrier that nullifies damage totaling up to 10% of maximum HP.\n\nDuration: 5s\nGrants Crest of Time Returned to self and nearby party members within a radius of 15 yalms when barrier is completely absorbed.\n\nCrest of Time Returned Effect: Gradually restores HP\n\nCure Potency: 50\n\nDuration: 15s",
+          "description_fr": "Vous octroie Blason protecteur, une barrière absorbant les dégâts subis pour un montant égal à 10% de vos PV maximums.\n\nDurée: 5s\nEffet additionnel: octroie Blason revigorant à vous et à vos équipiers dans un rayon de 15 yalms quand la barrière a absorbé son montant de dégâts.\n\nBlason revigorant: restaure périodiquement les PV.\n\nPuissance: 50 Durée: 15s",
+          "affinity": "RPR",
+          "affinity_fr": "FCH"
         }
       ],
       "name_fr": "Faucheur"
@@ -2204,7 +2686,11 @@
           "icon_glyph": "cross",
           "icon_id": 821,
           "name_fr": "Second souffle",
-          "action_id": 7541
+          "action_id": 7541,
+          "description": "Instantly restores own HP.\n\nCure Potency:  800",
+          "description_fr": "Restaure vos PV.\n\nPuissance: 800",
+          "affinity": "PGL LNC ARC ROG MNK DRG BRD NIN MCH SAM DNC RPR VPR",
+          "affinity_fr": "PGL HAS ARC MOI DRG BRD SUR NIN MCH SAM DNS FCH VPR"
         },
         {
           "id": "VPR.Bloodbath",
@@ -2220,7 +2706,11 @@
           "icon_glyph": "heart",
           "icon_id": 823,
           "name_fr": "Bain de sang",
-          "action_id": 7542
+          "action_id": 7542,
+          "description": "Converts a portion of physical damage dealt into HP.\n\nDuration: 20s",
+          "description_fr": "Convertit une partie des dégâts infligés par vos attaques physiques en PV.\n\nDurée: 20s",
+          "affinity": "PGL LNC ROG MNK DRG NIN SAM RPR VPR",
+          "affinity_fr": "PGL HAS MOI DRG SUR NIN SAM FCH VPR"
         },
         {
           "id": "VPR.Feint",
@@ -2236,7 +2726,11 @@
           "icon_glyph": "diamond",
           "icon_id": 828,
           "name_fr": "Restreinte",
-          "action_id": 7549
+          "action_id": 7549,
+          "description": "Lowers target's physical damage dealt by 10% and magic damage dealt by 5%.\n\nDuration:  15 s",
+          "description_fr": "Réduit respectivement de 10% et 5% les dégâts physiques et magiques infligés par la cible.\n\nDurée: 15 s",
+          "affinity": "PGL LNC ROG MNK DRG NIN SAM RPR VPR",
+          "affinity_fr": "PGL HAS MOI DRG SUR NIN SAM FCH VPR"
         },
         {
           "id": "VPR.ArmsLength",
@@ -2252,7 +2746,11 @@
           "icon_glyph": "triangle",
           "icon_id": 822,
           "name_fr": "Portée de bras",
-          "action_id": 7548
+          "action_id": 7548,
+          "description": "Creates a barrier nullifying most knockback and draw-in effects.\n\nDuration: 6s\n\nAdditional Effect: Slow +20% when barrier is struck\n\nDuration: 15s",
+          "description_fr": "Crée sur vous une barrière annulant la plupart des projections et attractions.\n\nDurée: 6s\n\nEffet additionnel: 100% de chances que Lenteur 20% soit infligée à l'assaillant à chaque attaque physique portée contre vous.\n\nDurée: 15s",
+          "affinity": "GLA PGL MRD LNC ARC PLD MNK WAR DRG BRD ROG NIN MCH DRK SAM GNB DNC RPR VPR",
+          "affinity_fr": "GLA PGL MRD HAS ARC PLD MOI GUE DRG BRD SUR NIN MCH CHN SAM PSB DNS FCH VPR"
         }
       ],
       "name_fr": "Vipère"
@@ -2279,7 +2777,11 @@
           "icon_glyph": "cross",
           "icon_id": 821,
           "name_fr": "Second souffle",
-          "action_id": 7541
+          "action_id": 7541,
+          "description": "Instantly restores own HP.\n\nCure Potency:  800",
+          "description_fr": "Restaure vos PV.\n\nPuissance: 800",
+          "affinity": "PGL LNC ARC ROG MNK DRG BRD NIN MCH SAM DNC RPR VPR",
+          "affinity_fr": "PGL HAS ARC MOI DRG BRD SUR NIN MCH SAM DNS FCH VPR"
         },
         {
           "id": "MCH.ArmsLength",
@@ -2295,7 +2797,11 @@
           "icon_glyph": "triangle",
           "icon_id": 822,
           "name_fr": "Portée de bras",
-          "action_id": 7548
+          "action_id": 7548,
+          "description": "Creates a barrier nullifying most knockback and draw-in effects.\n\nDuration: 6s\n\nAdditional Effect: Slow +20% when barrier is struck\n\nDuration: 15s",
+          "description_fr": "Crée sur vous une barrière annulant la plupart des projections et attractions.\n\nDurée: 6s\n\nEffet additionnel: 100% de chances que Lenteur 20% soit infligée à l'assaillant à chaque attaque physique portée contre vous.\n\nDurée: 15s",
+          "affinity": "GLA PGL MRD LNC ARC PLD MNK WAR DRG BRD ROG NIN MCH DRK SAM GNB DNC RPR VPR",
+          "affinity_fr": "GLA PGL MRD HAS ARC PLD MOI GUE DRG BRD SUR NIN MCH CHN SAM PSB DNS FCH VPR"
         },
         {
           "id": "MCH.Tactician",
@@ -2312,7 +2818,11 @@
           "icon_glyph": "aegis",
           "icon_id": 3040,
           "name_fr": "Tacticien",
-          "action_id": 16889
+          "action_id": 16889,
+          "description": "Reduces damage taken by self and nearby party members by 15 %.\n\nDuration: 15s\n\nEffect cannot be stacked with bard's Troubadour or dancer's Shield Samba.",
+          "description_fr": "Réduit de 15 % les dégâts reçus par vous et les équipiers alentour.\n\nDurée: 15s\n\nNe peut être cumulé ni avec l'effet Troubadour des bardes ni avec l'effet Samba protectrice des danseurs.",
+          "affinity": "MCH",
+          "affinity_fr": "MCH"
         },
         {
           "id": "MCH.Dismantle",
@@ -2329,7 +2839,11 @@
           "icon_glyph": "diamond",
           "icon_id": 3011,
           "name_fr": "Brise-arme",
-          "action_id": 2887
+          "action_id": 2887,
+          "description_fr": "Réduit de 10% les dégâts infligés par la cible.\n\nDurée: 10s",
+          "description": "Lowers target's damage dealt by 10%.\n\nDuration: 10s",
+          "affinity": "MCH",
+          "affinity_fr": "MCH"
         }
       ],
       "name_fr": "Machiniste"
@@ -2356,7 +2870,11 @@
           "icon_glyph": "cross",
           "icon_id": 821,
           "name_fr": "Second souffle",
-          "action_id": 7541
+          "action_id": 7541,
+          "description": "Instantly restores own HP.\n\nCure Potency:  800",
+          "description_fr": "Restaure vos PV.\n\nPuissance: 800",
+          "affinity": "PGL LNC ARC ROG MNK DRG BRD NIN MCH SAM DNC RPR VPR",
+          "affinity_fr": "PGL HAS ARC MOI DRG BRD SUR NIN MCH SAM DNS FCH VPR"
         },
         {
           "id": "DNC.ArmsLength",
@@ -2372,7 +2890,11 @@
           "icon_glyph": "triangle",
           "icon_id": 822,
           "name_fr": "Portée de bras",
-          "action_id": 7548
+          "action_id": 7548,
+          "description": "Creates a barrier nullifying most knockback and draw-in effects.\n\nDuration: 6s\n\nAdditional Effect: Slow +20% when barrier is struck\n\nDuration: 15s",
+          "description_fr": "Crée sur vous une barrière annulant la plupart des projections et attractions.\n\nDurée: 6s\n\nEffet additionnel: 100% de chances que Lenteur 20% soit infligée à l'assaillant à chaque attaque physique portée contre vous.\n\nDurée: 15s",
+          "affinity": "GLA PGL MRD LNC ARC PLD MNK WAR DRG BRD ROG NIN MCH DRK SAM GNB DNC RPR VPR",
+          "affinity_fr": "GLA PGL MRD HAS ARC PLD MOI GUE DRG BRD SUR NIN MCH CHN SAM PSB DNS FCH VPR"
         },
         {
           "id": "DNC.ShieldSamba",
@@ -2389,7 +2911,11 @@
           "icon_glyph": "aegis",
           "icon_id": 3469,
           "name_fr": "Samba protectrice",
-          "action_id": 16012
+          "action_id": 16012,
+          "description": "Reduces damage taken by self and nearby party members by 15 %.\n\nDuration: 15s\n\nEffect cannot be stacked with bard's Troubadour or machinist's Tactician.",
+          "description_fr": "Réduit de 15 % les dégâts reçus par vous et les équipiers alentour.\n\nDurée: 15s\n\nNe peut être cumulé ni avec l'effet Troubadour des bardes ni avec l'effet Tacticien des machinistes.",
+          "affinity": "DNC",
+          "affinity_fr": "DNS"
         },
         {
           "id": "DNC.CuringWaltz",
@@ -2406,7 +2932,11 @@
           "icon_glyph": "cross",
           "icon_id": 3468,
           "name_fr": "Valse revigorante",
-          "action_id": 16015
+          "action_id": 16015,
+          "description": "Restores own HP and the HP of all nearby party members.\n\nCure Potency: 300\n\nAdditional Effect: Party member designated as your Dance Partner will also heal self and nearby party members",
+          "description_fr": "Restaure vos PV et ceux des équipiers alentour.\n\nPuissance: 300\n\nEffet additionnel: votre Partenaire de position rapprochée restaure lui aussi les PV des équipiers proches.",
+          "affinity": "DNC",
+          "affinity_fr": "DNS"
         },
         {
           "id": "DNC.Improvisation",
@@ -2423,7 +2953,11 @@
           "icon_glyph": "note",
           "icon_id": 3477,
           "name_fr": "Improvisation",
-          "action_id": 16014
+          "action_id": 16014,
+          "description": "Dance to the beat of your own drum, granting Rising Rhythm to self.\n\nStacks increase every 3 seconds, up to a maximum of 4.\n\nAdditional Effect: Healing over time for self and nearby party members\n\nCure Potency: 100\n\nDuration: 15s\n\nEffect ends upon using another action or moving (including facing a different direction).\n\nCancels auto-attack upon execution.",
+          "description_fr": "Vous improvisez une danse, vous octroyant Frénésie des danseurs.\n\nDurée: 15s\n\nL'effet s'accumule toutes les 3 secondes jusqu'à un maximum de 4 fois.\n\nEffet additionnel: restaure périodiquement vos PV et ceux des équipiers alentour.\n\nPuissance: 100 Durée: 15s\n\nL'effet prend fin si vous effectuez une action, un déplacement ou une rotation.\n\nInterrompt vos attaques automatiques.\n\nCette action devient Final improvisé après utilisation.",
+          "affinity": "DNC",
+          "affinity_fr": "DNS"
         }
       ],
       "name_fr": "Danseur"
@@ -2450,7 +2984,11 @@
           "icon_glyph": "diamond",
           "icon_id": 861,
           "name_fr": "Embrouillement",
-          "action_id": 7560
+          "action_id": 7560,
+          "description": "Lowers target's physical damage dealt by 5% and magic damage dealt by 10%.\n\nDuration:  15 s",
+          "description_fr": "Réduit respectivement de 5% et 10% les dégâts physiques et magiques infligés par la cible.\n\nDurée: 15 s",
+          "affinity": "THM ACN BLM SMN RDM BLU PCT",
+          "affinity_fr": "OCC MNO ACN INV MRG MBU PIC"
         },
         {
           "id": "SMN.Swiftcast",
@@ -2466,7 +3004,11 @@
           "icon_glyph": "triangle",
           "icon_id": 866,
           "name_fr": "Magie prompte",
-          "action_id": 7561
+          "action_id": 7561,
+          "description": "Next spell is cast immediately.\n\nDuration: 10s",
+          "description_fr": "Permet à votre prochain sort d'être instantané.\n\nDurée: 10s",
+          "affinity": "CNJ THM ACN WHM BLM SMN SCH AST RDM BLU SGE PCT",
+          "affinity_fr": "ÉLM OCC MBL MNO ACN INV ÉRU AST MRG MBU SAG PIC"
         },
         {
           "id": "SMN.Surecast",
@@ -2482,7 +3024,11 @@
           "icon_glyph": "triangle",
           "icon_id": 869,
           "name_fr": "Stoïcisme",
-          "action_id": 7559
+          "action_id": 7559,
+          "description": "Spells can be cast without interruption.\n\nAdditional Effect: Nullifies most knockback and draw-in effects\n\nDuration: 6s",
+          "description_fr": "Vous permet de lancer vos sorts sans risque d'interruption.\n\nAnnule la plupart des projections et attractions.\n\nDurée: 6s",
+          "affinity": "CNJ THM ACN WHM BLM SMN SCH AST RDM BLU SGE PCT",
+          "affinity_fr": "ÉLM OCC MBL MNO ACN INV ÉRU AST MRG MBU SAG PIC"
         },
         {
           "id": "SMN.RadiantAegis",
@@ -2499,7 +3045,11 @@
           "icon_glyph": "hex",
           "icon_id": 2750,
           "name_fr": "Égide rayonnante",
-          "action_id": 25799
+          "action_id": 25799,
+          "description": "Orders Carbuncle to execute Radiant Aegis.\n\nRadiant Aegis Effect: Creates a barrier around self that absorbs damage totaling 20% of your maximum HP\n\nDuration: 30s Maximum Charges: 2\n\n Can only be executed while Carbuncle is summoned.",
+          "description_fr": "Ordonne à votre Carbuncle d'exécuter Égide rayonnante.\n\n\n\nCrée une barrière sur le maître absorbant les dégâts subis pour un montant égal à 20% de vos PV maximums.\n\nDurée: 30s Maximum de charges: 2\n\n Condition: Carbuncle invoqué.",
+          "affinity": "ACN SMN",
+          "affinity_fr": "ACN INV"
         },
         {
           "id": "SMN.Rekindle",
@@ -2516,7 +3066,11 @@
           "icon_glyph": "cross",
           "icon_id": 2764,
           "name_fr": "Ravivement",
-          "action_id": 25830
+          "action_id": 25830,
+          "description": "Restores own or target party member's HP.\n\nCure Potency: 400\n\nAdditional Effect: Grants Rekindle to target\n\nDuration: 30s\n\nRekindle Effect: Healing over time when HP falls below 75% or upon effect duration expiration\n\nCure Potency: 200\n\nDuration: 15s\n\nCan only be executed while in Firebird Trance.\n\n\n\n※This action cannot be assigned to a hotbar.\n\n※Astral Flow changes to Rekindle when requirements for execution are met.",
+          "description_fr": "Restaure les PV de la cible.\n\nPuissance: 400\n\nEffet additionnel: octroie Ravivement.\n\nDurée: 30s\n\nRavivement: octroie Flamme éternelle lorsque les PV tombent sous 75% ou à la fin de l'effet.\n\nFlamme éternelle: restaure périodiquement les PV de la cible.\n\nPuissance: 200 Durée: 15s\n\nCondition: Transe-Phénix.\n\n\n\n* Cette action ne peut pas être ajoutée aux barres de raccourcis.\n\nRemplace Flux astral lorsque les conditions sont réunies.",
+          "affinity": "SMN",
+          "affinity_fr": "INV"
         },
         {
           "id": "SMN.LuxSolaris",
@@ -2533,7 +3087,11 @@
           "icon_glyph": "cross",
           "icon_id": 2787,
           "name_fr": "Lux solaris",
-          "action_id": 36997
+          "action_id": 36997,
+          "description": "Restores own HP and the HP of all nearby party members.\n\nCure Potency: 500\n\nCan only be executed while under the effect of Refulgent Lux.",
+          "description_fr": "Restaure vos PV et ceux des équipiers alentour.\n\nPuissance: 500\n\nCondition: Lux solaris préparée.",
+          "affinity": "SMN",
+          "affinity_fr": "INV"
         }
       ],
       "name_fr": "Invocateur"
@@ -2560,7 +3118,11 @@
           "icon_glyph": "diamond",
           "icon_id": 861,
           "name_fr": "Embrouillement",
-          "action_id": 7560
+          "action_id": 7560,
+          "description": "Lowers target's physical damage dealt by 5% and magic damage dealt by 10%.\n\nDuration:  15 s",
+          "description_fr": "Réduit respectivement de 5% et 10% les dégâts physiques et magiques infligés par la cible.\n\nDurée: 15 s",
+          "affinity": "THM ACN BLM SMN RDM BLU PCT",
+          "affinity_fr": "OCC MNO ACN INV MRG MBU PIC"
         },
         {
           "id": "RDM.Swiftcast",
@@ -2576,7 +3138,11 @@
           "icon_glyph": "triangle",
           "icon_id": 866,
           "name_fr": "Magie prompte",
-          "action_id": 7561
+          "action_id": 7561,
+          "description": "Next spell is cast immediately.\n\nDuration: 10s",
+          "description_fr": "Permet à votre prochain sort d'être instantané.\n\nDurée: 10s",
+          "affinity": "CNJ THM ACN WHM BLM SMN SCH AST RDM BLU SGE PCT",
+          "affinity_fr": "ÉLM OCC MBL MNO ACN INV ÉRU AST MRG MBU SAG PIC"
         },
         {
           "id": "RDM.Surecast",
@@ -2592,7 +3158,11 @@
           "icon_glyph": "triangle",
           "icon_id": 869,
           "name_fr": "Stoïcisme",
-          "action_id": 7559
+          "action_id": 7559,
+          "description": "Spells can be cast without interruption.\n\nAdditional Effect: Nullifies most knockback and draw-in effects\n\nDuration: 6s",
+          "description_fr": "Vous permet de lancer vos sorts sans risque d'interruption.\n\nAnnule la plupart des projections et attractions.\n\nDurée: 6s",
+          "affinity": "CNJ THM ACN WHM BLM SMN SCH AST RDM BLU SGE PCT",
+          "affinity_fr": "ÉLM OCC MBL MNO ACN INV ÉRU AST MRG MBU SAG PIC"
         },
         {
           "id": "RDM.MagickBarrier",
@@ -2610,7 +3180,11 @@
           "icon_id": 3237,
           "mit_kind": "magical",
           "name_fr": "Barrière anti-magie",
-          "action_id": 25857
+          "action_id": 25857,
+          "description": "Reduces magic damage taken by self and nearby party members by 10%, while increasing HP recovered by healing actions by 5%.\n\nDuration: 10s",
+          "description_fr": "Réduit de 10% les dégâts magiques reçus par vous et les équipiers alentour et augmente de 5% l'effet des soins reçus.\n\nDurée: 10s",
+          "affinity": "RDM",
+          "affinity_fr": "MRG"
         }
       ],
       "name_fr": "Mage rouge"
@@ -2637,7 +3211,11 @@
           "icon_glyph": "diamond",
           "icon_id": 861,
           "name_fr": "Embrouillement",
-          "action_id": 7560
+          "action_id": 7560,
+          "description": "Lowers target's physical damage dealt by 5% and magic damage dealt by 10%.\n\nDuration:  15 s",
+          "description_fr": "Réduit respectivement de 5% et 10% les dégâts physiques et magiques infligés par la cible.\n\nDurée: 15 s",
+          "affinity": "THM ACN BLM SMN RDM BLU PCT",
+          "affinity_fr": "OCC MNO ACN INV MRG MBU PIC"
         },
         {
           "id": "PCT.Swiftcast",
@@ -2653,7 +3231,11 @@
           "icon_glyph": "triangle",
           "icon_id": 866,
           "name_fr": "Magie prompte",
-          "action_id": 7561
+          "action_id": 7561,
+          "description": "Next spell is cast immediately.\n\nDuration: 10s",
+          "description_fr": "Permet à votre prochain sort d'être instantané.\n\nDurée: 10s",
+          "affinity": "CNJ THM ACN WHM BLM SMN SCH AST RDM BLU SGE PCT",
+          "affinity_fr": "ÉLM OCC MBL MNO ACN INV ÉRU AST MRG MBU SAG PIC"
         },
         {
           "id": "PCT.Surecast",
@@ -2669,7 +3251,11 @@
           "icon_glyph": "triangle",
           "icon_id": 869,
           "name_fr": "Stoïcisme",
-          "action_id": 7559
+          "action_id": 7559,
+          "description": "Spells can be cast without interruption.\n\nAdditional Effect: Nullifies most knockback and draw-in effects\n\nDuration: 6s",
+          "description_fr": "Vous permet de lancer vos sorts sans risque d'interruption.\n\nAnnule la plupart des projections et attractions.\n\nDurée: 6s",
+          "affinity": "CNJ THM ACN WHM BLM SMN SCH AST RDM BLU SGE PCT",
+          "affinity_fr": "ÉLM OCC MBL MNO ACN INV ÉRU AST MRG MBU SAG PIC"
         },
         {
           "id": "PCT.TemperaCoat",
@@ -2686,7 +3272,11 @@
           "icon_glyph": "hex",
           "icon_id": 3835,
           "name_fr": "Enduit a tempera",
-          "action_id": 34685
+          "action_id": 34685,
+          "description": "Creates a barrier around self that absorbs damage totaling 20% of maximum HP.\n\nDuration: 10s\n\nReduces the recast time of Tempera Coat by 60 seconds when barrier is completely absorbed.",
+          "description_fr": "Vous octroie une barrière absorbant les dégâts pour un total de 20% de vos PV maximums.\n\nDurée: 10s\n\nLe temps de recharge de ce sort est réduit de 60s quand la barrière a absorbé son montant de dégâts.",
+          "affinity": "PCT",
+          "affinity_fr": "PIC"
         },
         {
           "id": "PCT.TemperaGrassa",
@@ -2703,7 +3293,11 @@
           "icon_glyph": "aegis",
           "icon_id": 3836,
           "name_fr": "Tempera grassa",
-          "action_id": 34686
+          "action_id": 34686,
+          "description": "Removes Tempera Coat to create a barrier around self and all nearby party members that absorbs damage totaling 10% of maximum HP.\n\nDuration: 10s\n\nReduces the recast time of Tempera Coat by 30 seconds when barrier is completely absorbed.\n\nCan only be executed when under the effect of Tempera Coat.",
+          "description_fr": "Met fin à votre Enduit a tempera et vous octroie ainsi qu'aux équipiers alentour une barrière absorbant les dégâts pour un total de 10% de vos PV maximums respectifs.\n\nDurée: 10s\n\nCondition: Enduit a tempera.\n\nLe temps de recharge de ce sort est réduit de 30s quand votre barrière a absorbé son montant de dégâts.",
+          "affinity": "PCT",
+          "affinity_fr": "PIC"
         }
       ],
       "name_fr": "Pictomancien"

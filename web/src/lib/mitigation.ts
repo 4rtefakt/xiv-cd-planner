@@ -126,6 +126,23 @@ export function abilityIndex(jobs: { abilities: Ability[] }[]): Map<string, Abil
 }
 
 /**
+ * Same as `abilityIndex` but resolves each entry against `level` so the
+ * stored mit_potency / recast / effect reflect the encounter's level
+ * brackets. Used by the coverage calc.
+ */
+export function abilityIndexAtLevel(
+  jobs: { abilities: Ability[] }[],
+  level: number,
+  resolve: (ab: Ability, level: number) => Ability,
+): Map<string, Ability> {
+  const map = new Map<string, Ability>();
+  for (const job of jobs) {
+    for (const ab of job.abilities) map.set(ab.id, resolve(ab, level));
+  }
+  return map;
+}
+
+/**
  * Greedy slot assignment so mech LABELS don't visually collide on the
  * boss-lane axis. Mechs are placed in the lowest slot whose previous
  * occupant ended (logically) more than `gapS` seconds ago. The function

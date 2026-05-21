@@ -1817,4 +1817,152 @@
   letter-spacing: 0.12em;
   text-transform: uppercase;
 }
+
+/* ===== ABILITY TOOLTIP (rich, FFXIV-style hover card) ===== */
+/* Host span is purely an event grabber — display:contents removes its
+ * box so children participate in the parent layout (grid rows, etc.)
+ * as if the wrapper wasn't there. Bounding rect is still correct
+ * because the children fill the original box. */
+.ab-tt-host {
+  display: contents;
+}
+
+.ab-tt {
+  position: fixed;
+  z-index: 9999;
+  background: linear-gradient(180deg, rgba(8, 12, 22, 0.97), rgba(4, 6, 12, 0.97));
+  border: 1px solid var(--line-bright);
+  box-shadow:
+    0 0 0 1px rgba(0, 0, 0, 0.4),
+    0 12px 32px rgba(0, 0, 0, 0.55),
+    0 0 18px rgba(0, 200, 240, 0.05);
+  padding: 12px;
+  color: var(--text);
+  font-family: 'Chakra Petch', sans-serif;
+  font-size: 12px;
+  line-height: 1.5;
+  pointer-events: none;
+  /* The accent color is set per-mit_type below. */
+  --tt-accent: var(--cyan);
+}
+.ab-tt.mit-personal { --tt-accent: var(--cyan); }
+.ab-tt.mit-party    { --tt-accent: var(--pink); }
+.ab-tt.mit-heal     { --tt-accent: var(--heal); }
+
+.ab-tt-head {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  padding-bottom: 8px;
+  border-bottom: 1px dashed rgba(255, 255, 255, 0.08);
+  margin-bottom: 8px;
+}
+.ab-tt-icon {
+  width: 34px;
+  height: 34px;
+  flex-shrink: 0;
+  border: 1px solid var(--tt-accent);
+  background: linear-gradient(135deg, rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.15));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2px;
+}
+.ab-tt-icon img { width: 100%; height: 100%; object-fit: contain; }
+.ab-tt-title-block { min-width: 0; }
+.ab-tt-name {
+  color: var(--tt-accent);
+  font-family: 'Chakra Petch', sans-serif;
+  font-weight: 600;
+  font-size: 15px;
+  letter-spacing: 0.02em;
+  line-height: 1.15;
+}
+.ab-tt-subtitle {
+  margin-top: 2px;
+  color: var(--text-dim);
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}
+
+.ab-tt-stats {
+  display: flex;
+  gap: 12px;
+  padding-bottom: 8px;
+  margin-bottom: 8px;
+  border-bottom: 1px dashed rgba(255, 255, 255, 0.08);
+}
+.ab-tt-stat {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+}
+.ab-tt-stat-key {
+  color: var(--text-dim);
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+.ab-tt-stat-val {
+  color: var(--tt-accent);
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.ab-tt-desc {
+  color: var(--text);
+  font-size: 12px;
+  line-height: 1.5;
+  white-space: pre-wrap;
+  margin-bottom: 8px;
+}
+
+.ab-tt-extra {
+  font-size: 11px;
+  color: var(--text-dim);
+  margin-top: 4px;
+}
+.ab-tt-charges strong {
+  color: var(--heal);
+  font-weight: 600;
+}
+.ab-tt-share-link {
+  color: var(--tt-accent);
+  font-weight: 500;
+}
+
+.ab-tt-foot {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 12px;
+  align-items: center;
+  margin-top: 10px;
+  padding-top: 8px;
+  border-top: 1px dashed rgba(255, 255, 255, 0.08);
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 0.10em;
+  text-transform: uppercase;
+  color: var(--text-dim);
+}
+.ab-tt-foot-stat {
+  color: var(--text);
+}
+.ab-tt-affinity {
+  letter-spacing: 0.06em;
+  opacity: 0.85;
+  font-size: 8.5px;
+}
+.ab-tt-foot-hint {
+  margin-left: auto;
+  opacity: 0.55;
+  letter-spacing: 0.04em;
+  text-transform: none;
+  font-family: 'Chakra Petch', sans-serif;
+  font-size: 10px;
+}
 .app-error { color: var(--bad); }

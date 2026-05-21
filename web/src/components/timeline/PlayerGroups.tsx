@@ -2,13 +2,17 @@ import { useMemo } from 'react';
 import type { Ability, Job } from '../../types';
 import { AbilityIcon, JobIcon } from '../Icon';
 import { usePlanStore } from '../../state/planStore';
-import { abilityName, abilityTooltip, jobName, useT } from '../../i18n';
+import { abilityName, jobName } from '../../i18n';
+import { resolveAbilityAtLevel } from '../../lib/abilityResolve';
 import { AbilityRow } from './AbilityRow';
+import { AbilityTooltipHost } from '../AbilityTooltip';
 
 /**
  * Filter + sort an ability list for display :
  *   - drop abilities not unlocked at the encounter's level
  *   - drop abilities the user has manually hidden for this room
+ *   - resolve level_variants → returned objects already carry the
+ *     scaled potency/recast/effect for `level`
  *   - sort by recast desc (long CDs at the top, instants at the bottom)
  *
  * Hidden abilities stay in the seed (their uses can be restored if the
@@ -23,6 +27,7 @@ function filterAndSortAbilities(
   const hiddenSet = new Set(hiddenIds);
   return job.abilities
     .filter((ab) => ab.level_unlocked <= level && !hiddenSet.has(ab.id))
+    .map((ab) => resolveAbilityAtLevel(ab, level))
     .sort((a, b) => b.recast - a.recast);
 }
 
@@ -43,7 +48,6 @@ export function PlayerGroupsLeft() {
   const hiddenAbilityIds = usePlanStore((s) => s.hiddenAbilityIds);
   const toggleAbilityHidden = usePlanStore((s) => s.toggleAbilityHidden);
   const readOnly = usePlanStore((s) => s.readOnly);
-  const t = useT();
 
   const jobByCode = useMemo(() => {
     const m = new Map<string, Job>();
@@ -86,23 +90,23 @@ export function PlayerGroupsLeft() {
               sortedAbilities.map((ab) => {
                 const altClass = alt++ % 2 === 1 ? 'alt' : '';
                 return (
-                  <div
-                    key={ab.id}
-                    className={`cd-row-left type-${ab.mit_type} cd-row-height ${altClass}`}
-                    title={`${abilityTooltip(ab, lang)}\n— ${t('ability.hiddenHint')}`}
-                    onContextMenu={(e) => {
-                      if (readOnly) return;
-                      e.preventDefault();
-                      toggleAbilityHidden(ab.id);
-                    }}
-                  >
-                    <span className="cd-indent" />
-                    <span className="cd-ability-icon" style={{ color: 'var(--ability-color)' }}>
-                      <AbilityIcon src={ab.icon} fallbackGlyph={ab.icon_glyph} alt={abilityName(ab, lang)} />
-                    </span>
-                    <span className="cd-row-name">{abilityName(ab, lang)}</span>
-                    <span className="cd-row-cd">{ab.recast}s</span>
-                  </div>
+                  <AbilityTooltipHost key={ab.id} ability={ab}>
+                    <div
+                      className={`cd-row-left type-${ab.mit_type} cd-row-height ${altClass}`}
+                      onContextMenu={(e) => {
+                        if (readOnly) return;
+                        e.preventDefault();
+                        toggleAbilityHidden(ab.id);
+                      }}
+                    >
+                      <span className="cd-indent" />
+                      <span className="cd-ability-icon" style={{ color: 'var(--ability-color)' }}>
+                        <AbilityIcon src={ab.icon} fallbackGlyph={ab.icon_glyph} alt={abilityName(ab, lang)} />
+                      </span>
+                      <span className="cd-row-name">{abilityName(ab, lang)}</span>
+                      <span className="cd-row-cd">{ab.recast}s</span>
+                    </div>
+                  </AbilityTooltipHost>
                 );
               })}
             {!isCollapsed && hiddenForThisJob.length > 0 && (

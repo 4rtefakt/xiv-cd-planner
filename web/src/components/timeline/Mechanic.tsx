@@ -1,6 +1,7 @@
 import type { Mechanic as MechanicT, Use } from '../../types';
 import { fmt, pct } from '../../lib/time';
-import { abilityIndex, computeCoverage, deriveMechType } from '../../lib/mitigation';
+import { abilityIndexAtLevel, computeCoverage, deriveMechType } from '../../lib/mitigation';
+import { resolveAbilityAtLevel } from '../../lib/abilityResolve';
 import { splitMechName } from '../../lib/mechRender';
 import { usePlanStore } from '../../state/planStore';
 import { useMemo } from 'react';
@@ -26,7 +27,10 @@ export function MechanicMarker({ mech, uses, fightDuration, slot = 0 }: Mechanic
   const hiddenAbilityIds = usePlanStore((s) => s.hiddenAbilityIds);
   const hiddenSet = useMemo(() => new Set(hiddenAbilityIds), [hiddenAbilityIds]);
 
-  const abilities = useMemo(() => abilityIndex(jobs), [jobs]);
+  const abilities = useMemo(
+    () => abilityIndexAtLevel(jobs, level, resolveAbilityAtLevel),
+    [jobs, level],
+  );
   const coverage = computeCoverage(mech, uses, abilities, partySize, undefined, level, hiddenSet);
   const visualType = deriveMechType(mech, partySize);
   const damageKind = mech.damage_kind ?? 'magical';
