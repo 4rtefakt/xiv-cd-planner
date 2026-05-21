@@ -244,6 +244,7 @@ interface PlanState {
       damage_kind: 'physical' | 'magical' | 'pure';
       source_name?: string;
       hit_count?: number;
+      cast_time?: number;
     }>;
     /** Friendly cast events from the log. Mapped to Uses[] via
      *  playerName→player_id (in newParty) and (job+actionId)→ability_id
@@ -428,6 +429,7 @@ export const usePlanStore = create<PlanState>((set) => ({
           // hit_count stored separately ; rendered as a ×N superscript
           // over the cap instead of glued to the name.
           hit_count: m.hit_count && m.hit_count > 1 ? m.hit_count : undefined,
+          cast_time: m.cast_time && m.cast_time > 0 ? m.cast_time : undefined,
         };
       });
       // Rebuild uses[] from friendly cast events. Each cast resolves to

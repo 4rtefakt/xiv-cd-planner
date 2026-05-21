@@ -86,6 +86,10 @@ interface AggregatedMech {
   /** xivapi action id (= FFLogs abilityGameID). Used post-aggregation to
    *  look up the real AttackType, which gives us a reliable damage_kind. */
   game_id?: number;
+  /** FFLogs sourceID of the NPC that cast this mech. Used (along with
+   *  game_id) to match against begincast/cast pairs and recover the
+   *  cast time. Stripped from the response. */
+  _source_id?: number;
   /** Display name of the NPC that cast this mech. Lets the frontend
    *  spawn one boss lane per concurrent enemy (Shinryu + Wings, M3S
    *  Brute body + adds, …). */
@@ -94,6 +98,14 @@ interface AggregatedMech {
    *  see "ELECTROCUTION ×3" vs "ELECTROCUTION ×1" without us having to
    *  show every hit separately on the timeline. */
   hit_count: number;
+  /** Boss cast time, in seconds. Recovered from the enemy begincast →
+   *  cast pair that resolves into this mech's first damage event.
+   *  Instant casts (no begincast) leave this undefined. */
+  cast_time?: number;
+  /** Timestamp (ms, absolute) of the FIRST event in this group. Used to
+   *  match against the enemy cast events (the begincast/cast pair that
+   *  resolves immediately before our first damage tick). Stripped. */
+  _firstEventTime: number;
   /** Timestamp (ms, absolute) of the LATEST event merged into this
    *  group. Used as the sliding-window anchor : the next event for
    *  this ability name merges only if it arrives within GROUP_WINDOW_MS
@@ -174,6 +186,32 @@ const CASTS_QUERY = `
           startTime: $start
           endTime: $end
           hostilityType: Friendlies
+          limit: 10000
+        ) {
+          data
+          nextPageTimestamp
+        }
+      }
+    }
+  }
+`;
+
+/**
+ * Enemy cast events — both `begincast` (cast bar starts) and `cast`
+ * (cast resolves, damage incoming). Pairing the two by source+ability
+ * gives us the boss cast time per ability, which we then attach to the
+ * matching aggregated mech so the frontend can render the cast bar.
+ */
+const ENEMY_CASTS_QUERY = `
+  query EnemyCasts($code: String!, $fightId: Int!, $start: Float, $end: Float) {
+    reportData {
+      report(code: $code) {
+        events(
+          fightIDs: [$fightId]
+          dataType: Casts
+          startTime: $start
+          endTime: $end
+          hostilityType: Enemies
           limit: 10000
         ) {
           data
@@ -367,8 +405,10 @@ export const onRequestPost: PagesFunction<FFLogsEnv> = async (ctx) => {
             damage_kind: 'magical', // refined below via xivapi lookup
             sample_amount: 0,
             game_id: ev.abilityGameID,
+            _source_id: ev.sourceID,
             source_name: sourceName,
             hit_count: 0,
+            _firstEventTime: ev.timestamp,
             _lastEventTime: ev.timestamp,
           });
           lastGroupIdxByName.set(name, idx);
@@ -428,6 +468,82 @@ export const onRequestPost: PagesFunction<FFLogsEnv> = async (ctx) => {
       if (castCursor !== null && castCursor >= fight.endTime) break;
     }
 
+    // 2c. Paginate enemy cast events — to recover the boss cast time per
+    // ability. FFLogs emits two event types in the Casts stream :
+    //   - begincast : cast bar appears
+    //   - cast      : cast resolves (damage incoming)
+    // Pairing them by (sourceID, abilityGameID) gives the cast duration.
+    // Instant abilities only fire `cast` (no begincast) → cast_time stays 0.
+    interface CastInterval { gameId: number; sourceID: number; endTime: number; castTime: number; }
+    const castIntervals: CastInterval[] = [];
+    /** Open begincast events waiting for their `cast` partner. Key =
+     *  `${sourceID}|${abilityGameID}` so concurrent casts of the same
+     *  ability by different mobs don't collide. */
+    const openBeginCasts = new Map<string, number>();
+    let enemyCastCursor: number | null = fight.startTime;
+    let enemyCastPages = 0;
+    while (enemyCastCursor !== null && enemyCastPages < 20) {
+      enemyCastPages++;
+      const eResp: EventsResp = await fflogsQuery<EventsResp>(ctx.env, ENEMY_CASTS_QUERY, {
+        code: body.code,
+        fightId: body.fightId,
+        start: enemyCastCursor,
+        end: fight.endTime,
+      });
+      const eRaw = eResp.reportData.report.events.data;
+      const enemyCasts: CastEvent[] = Array.isArray(eRaw)
+        ? (eRaw as CastEvent[])
+        : typeof eRaw === 'string'
+          ? (JSON.parse(eRaw) as CastEvent[])
+          : [];
+      for (const ev of enemyCasts) {
+        if (ev.abilityGameID == null) continue;
+        const key = `${ev.sourceID}|${ev.abilityGameID}`;
+        if (ev.type === 'begincast') {
+          openBeginCasts.set(key, ev.timestamp);
+        } else if (ev.type === 'cast') {
+          const begin = openBeginCasts.get(key);
+          if (begin != null) {
+            // Round to 1-decimal seconds — FFXIV cast bars are typically
+            // displayed at 100ms precision and noise below that is just
+            // network jitter.
+            const dur = Math.max(0, Math.round((ev.timestamp - begin) / 100) / 10);
+            castIntervals.push({
+              gameId: ev.abilityGameID,
+              sourceID: ev.sourceID,
+              endTime: ev.timestamp,
+              castTime: dur,
+            });
+            openBeginCasts.delete(key);
+          }
+        }
+      }
+      enemyCastCursor = eResp.reportData.report.events.nextPageTimestamp;
+      if (enemyCastCursor !== null && enemyCastCursor <= fight.startTime) break;
+      if (enemyCastCursor !== null && enemyCastCursor >= fight.endTime) break;
+    }
+
+    // Attach each cast interval to its matching aggregated mech : same
+    // (gameId, sourceID), cast end time within ±MATCH_WINDOW_MS of the
+    // group's FIRST event timestamp. Pick the closest match if several
+    // qualify (long fights can repeat the same cast every minute).
+    const MATCH_WINDOW_MS = 1500;
+    for (const g of groups) {
+      if (g.game_id == null) continue;
+      let best: CastInterval | null = null;
+      let bestDelta = MATCH_WINDOW_MS + 1;
+      for (const ci of castIntervals) {
+        if (ci.gameId !== g.game_id) continue;
+        if (ci.sourceID !== g._source_id) continue;
+        const delta = Math.abs(ci.endTime - g._firstEventTime);
+        if (delta < bestDelta) {
+          best = ci;
+          bestDelta = delta;
+        }
+      }
+      if (best && best.castTime > 0) g.cast_time = best.castTime;
+    }
+
     // Resolve damage_kind via xivapi AttackType for each unique gameID.
     // FFLogs' own ability.type is a bitfield about behaviour (auto, AoE,
     // DoT, ...), not damage school — so we go to the source of truth.
@@ -465,11 +581,13 @@ export const onRequestPost: PagesFunction<FFLogsEnv> = async (ctx) => {
 
     // Rewrite source_name on groups so any mech from a "minor" NPC
     // lands in the "Adds" bucket and doesn't trail a phantom lane.
-    // Also strip the internal _lastEventTime field — it's only useful
-    // server-side during aggregation, the client doesn't need it.
+    // Also strip the internal *_EventTime / _source_id fields — only
+    // useful server-side during aggregation, the client doesn't need them.
     for (const g of groups) {
       if (g.source_name && !bossNames.includes(g.source_name)) g.source_name = addsName;
       delete (g as Partial<AggregatedMech>)._lastEventTime;
+      delete (g as Partial<AggregatedMech>)._firstEventTime;
+      delete (g as Partial<AggregatedMech>)._source_id;
     }
 
     // Derive the synced player level from the report's expansion.

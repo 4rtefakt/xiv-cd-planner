@@ -52,6 +52,9 @@ export interface FFLogsMechanic {
   source_name?: string;
   /** Number of FFLogs damage events that collapsed into this mech. */
   hit_count?: number;
+  /** Boss cast time in seconds, recovered from begincast→cast pairing
+   *  on the server. Absent for instant mechs. */
+  cast_time?: number;
 }
 
 export interface FFLogsPlayer {
