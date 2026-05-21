@@ -663,6 +663,15 @@
      column edge ; vertical stays free for sticky to escape. */
   overflow-x: clip;
 }
+/* While the user is mid-pan (mouse down + moved > threshold), kill
+ * pointer events on the rows so React's onMouseMove (preview ghost,
+ * boss-row hover line) doesn't keep firing under the cursor. The
+ * document-level pan handler still receives mousemove because the
+ * dragged-from element keeps event capture. */
+.tl-right.is-panning .cd-row-right,
+.tl-right.is-panning .boss-row-right {
+  pointer-events: none;
+}
 
 /* Two stacked scrollers inside .tl-right :
    - tl-head-scroller : axis + boss lanes (sticky at viewport top)

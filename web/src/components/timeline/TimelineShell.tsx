@@ -191,11 +191,16 @@ export function TimelineShell() {
     return () => outer.removeEventListener('wheel', onWheel);
   }, []);
 
-  // Pan-by-drag on empty boss-lane areas. The user grabs a section of
-  // the boss row that doesn't have a mechanic on it and drags
-  // horizontally to scroll the timeline. If the mouse moved more than
-  // PAN_THRESHOLD before release we also swallow the trailing click,
-  // so the AddMechanicModal doesn't open at the release position.
+  // Pan-by-drag on empty areas of the timeline. The user grabs a
+  // section that doesn't contain an interactive marker and drags
+  // horizontally to scroll. If the mouse moved more than PAN_THRESHOLD
+  // before release we also swallow the trailing click, so the modal
+  // (AddMechanicModal on boss rows, click-to-place on ability rows)
+  // doesn't fire at the release position.
+  //
+  // Pannable zones :
+  //   - boss-row-right  : empty space (no `.mechanic`)
+  //   - cd-row-right    : empty space (no `.cd-use`)
   useEffect(() => {
     const el = rightRef.current;
     if (!el) return;
@@ -205,8 +210,12 @@ export function TimelineShell() {
       if (e.button !== 0) return; // left mouse only
       const target = e.target as HTMLElement;
       const bossRow = target.closest('.boss-row-right');
-      if (!bossRow) return;
-      if (target.closest('.mechanic')) return;
+      const cdRow = target.closest('.cd-row-right');
+      if (!bossRow && !cdRow) return;
+      // Don't hijack mousedown on existing markers — they have their
+      // own drag behaviours (mech reposition, use reposition).
+      if (bossRow && target.closest('.mechanic')) return;
+      if (cdRow && target.closest('.cd-use')) return;
 
       const headEl = headRef.current;
       if (!headEl) return;
@@ -218,7 +227,16 @@ export function TimelineShell() {
 
       const onMove = (mv: MouseEvent) => {
         const dx = mv.clientX - startX;
-        if (!moved && Math.abs(dx) > PAN_THRESHOLD) moved = true;
+        if (!moved && Math.abs(dx) > PAN_THRESHOLD) {
+          moved = true;
+          // Mark the column as panning so .cd-row-right / .boss-row-right
+          // briefly become pointer-events:none, suppressing the React
+          // mousemove handlers that would otherwise keep updating the
+          // click-to-place preview while we drag.
+          el.classList.add('is-panning');
+          // Clear any preview already drawn from a pre-drag hover.
+          usePlanStore.getState().setPreviewUse(null);
+        }
         if (moved) {
           headEl.scrollLeft = startScroll - dx;
           // Sync effect mirrors to bodyRef.
@@ -229,6 +247,7 @@ export function TimelineShell() {
         document.removeEventListener('mousemove', onMove);
         document.removeEventListener('mouseup', onUp);
         el.style.cursor = prevCursor;
+        el.classList.remove('is-panning');
         if (moved) {
           // Swallow the click that follows the drag release, so the
           // boss-row's onClick (open mech modal) doesn't fire.
