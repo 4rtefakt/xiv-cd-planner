@@ -122,17 +122,20 @@ const FIGHT_HEADER_QUERY = `
   }
 `;
 
-/** FFLogs expansion.id → max player level for that expansion. Old
- *  content (HW and earlier) returns null → client keeps its current
- *  level setting (typically 100). */
-function expansionIdToLevel(expansionId: number | undefined): number | null {
-  switch (expansionId) {
-    case 4: return 70;  // Stormblood
-    case 5: return 80;  // Shadowbringers
-    case 6: return 90;  // Endwalker
-    case 7: return 100; // Dawntrail
-    default: return null;
-  }
+/** FFLogs expansion.name → max player level for that expansion. We use
+ *  the name (string) rather than the numeric id because FFLogs hasn't
+ *  documented the id assignment publicly and the values shifted between
+ *  expansions historically. The names are stable. */
+function expansionNameToLevel(name: string | undefined): number | null {
+  if (!name) return null;
+  const n = name.toLowerCase();
+  if (n.includes('dawntrail'))      return 100;
+  if (n.includes('endwalker'))      return 90;
+  if (n.includes('shadowbringers')) return 80;
+  if (n.includes('stormblood'))     return 70;
+  if (n.includes('heavensward'))    return 60;
+  if (n.includes('realm reborn'))   return 50;
+  return null;
 }
 
 const EVENTS_QUERY = `
@@ -470,9 +473,8 @@ export const onRequestPost: PagesFunction<FFLogsEnv> = async (ctx) => {
     }
 
     // Derive the synced player level from the report's expansion.
-    const gameLevel = expansionIdToLevel(
-      header.reportData.report.zone?.expansion?.id,
-    );
+    const zone = header.reportData.report.zone;
+    const gameLevel = expansionNameToLevel(zone?.expansion?.name);
 
     return jsonResp({
       fightName: fight.name,
@@ -485,6 +487,8 @@ export const onRequestPost: PagesFunction<FFLogsEnv> = async (ctx) => {
       mechanics: groups,
       playerUses,
       _debug: {
+        zone,
+        gameLevelDetected: gameLevel,
         castPages,
         castEventsKept: playerUses.length,
         pages,
