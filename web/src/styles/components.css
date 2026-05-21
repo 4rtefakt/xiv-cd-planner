@@ -638,7 +638,13 @@
 /* ===== TIMELINE LAYOUT ===== */
 .timeline-shell {
   display: grid;
-  grid-template-columns: 230px 1fr;
+  /* minmax(0, 1fr) is mandatory here — the default `1fr` is actually
+   * `minmax(auto, 1fr)`, which lets the track grow with its content.
+   * At high zoom the canvas inside .tl-right is 10k+ px wide and would
+   * push the grid (and the whole page) past the viewport. minmax(0, 1fr)
+   * caps the track at the remaining space and lets the inner scrollers
+   * take over horizontally. */
+  grid-template-columns: 230px minmax(0, 1fr);
   border-top: 1px solid var(--line);
   background: var(--panel-2);
 }

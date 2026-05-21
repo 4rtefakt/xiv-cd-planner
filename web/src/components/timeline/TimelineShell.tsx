@@ -86,6 +86,7 @@ export function TimelineShell() {
   // by the syncScroll effect below. This split is mandatory because a
   // single scroller with overflow-x:auto becomes the scroll container
   // for sticky inside it, which traps the freeze behaviour.
+  const leftRef = useRef<HTMLDivElement>(null);
   const rightRef = useRef<HTMLDivElement>(null);
   const headRef = useRef<HTMLDivElement>(null);
   const bodyRef = useRef<HTMLDivElement>(null);
@@ -115,6 +116,30 @@ export function TimelineShell() {
     };
   }, []);
 
+  // Shift+wheel anywhere on the LEFT label column should still pan the
+  // timeline horizontally — the left column doesn't have a horizontal
+  // scroller of its own, so without this route the user's shift+scroll
+  // would just sit there doing nothing. We mirror the deltaY (which
+  // the browser already converts to "horizontal intent" under shift)
+  // straight onto the body scroller ; the head mirrors automatically.
+  useEffect(() => {
+    const left = leftRef.current;
+    if (!left) return;
+    const onLeftWheel = (e: WheelEvent) => {
+      if (!e.shiftKey) return;
+      const body = bodyRef.current;
+      if (!body) return;
+      // Either axis can carry the intent depending on the OS/mouse
+      // (trackpads often emit deltaX directly under shift).
+      const dx = e.deltaX !== 0 ? e.deltaX : e.deltaY;
+      if (dx === 0) return;
+      e.preventDefault();
+      body.scrollLeft += dx;
+    };
+    left.addEventListener('wheel', onLeftWheel, { passive: false });
+    return () => left.removeEventListener('wheel', onLeftWheel);
+  }, []);
+
   // Wheel zoom anchored on the cursor: the timestamp under the mouse
   // stays under the mouse after the zoom step. React's onWheel is
   // passive by default (preventDefault is a no-op), so we attach a
@@ -123,7 +148,19 @@ export function TimelineShell() {
     const outer = rightRef.current;
     if (!outer) return;
     const onWheel = (e: WheelEvent) => {
-      if (e.shiftKey) return;
+      if (e.shiftKey) {
+        // Some browsers refuse to convert deltaY into horizontal scroll
+        // when the host has `overflow-y: clip` (our case for both head
+        // and body). Apply the pan ourselves so shift+wheel works
+        // uniformly regardless of platform.
+        const body = bodyRef.current;
+        if (!body) return;
+        const dx = e.deltaX !== 0 ? e.deltaX : e.deltaY;
+        if (dx === 0) return;
+        e.preventDefault();
+        body.scrollLeft += dx;
+        return;
+      }
       e.preventDefault();
       const scroller = bodyRef.current;
       if (!scroller) return;
@@ -247,7 +284,7 @@ export function TimelineShell() {
       </div>
 
       <div className="timeline-shell">
-        <div className="tl-left">
+        <div className="tl-left" ref={leftRef}>
           {/* The header block (axis spacer + boss lanes) sticks to the
               top of the viewport while the player groups below scroll
               past — see .tl-head sticky rule. */}
