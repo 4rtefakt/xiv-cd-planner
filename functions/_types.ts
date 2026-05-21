@@ -62,6 +62,8 @@ export interface Mechanic {
   id: string;
   lane_id: string;
   name: string;
+  name_fr?: string;
+  game_id?: number;
   time: number;
   category: MechCategory;
   targets: string[];

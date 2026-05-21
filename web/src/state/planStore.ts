@@ -239,6 +239,8 @@ interface PlanState {
     players?: Array<{ name: string; subType: string }>;
     mechanics: Array<{
       name: string;
+      name_fr?: string;
+      game_id?: number;
       time: number;
       targetNames: string[];
       damage_kind: 'physical' | 'magical' | 'pure';
@@ -426,6 +428,10 @@ export const usePlanStore = create<PlanState>((set) => ({
           id: `mech-fflogs-${Date.now()}-${i}`,
           lane_id: laneId,
           name: m.name.toUpperCase(),
+          // Mech labels render in UPPERCASE ; we mirror that on the FR
+          // name so the lang toggle doesn't visually shrink the label.
+          name_fr: m.name_fr ? m.name_fr.toUpperCase() : undefined,
+          game_id: m.game_id,
           time: m.time,
           category: 'damage' as const,
           targets,

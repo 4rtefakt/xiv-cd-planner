@@ -87,7 +87,16 @@ export type MechCategory = 'damage' | 'placement';
 export interface Mechanic {
   id: string;
   lane_id: string;
+  /** Display name in the import locale (FFLogs returns English). When
+   *  the user toggles the UI to French, `name_fr` takes precedence if
+   *  present — otherwise we fall back to this. */
   name: string;
+  /** French display name, populated at import time from xivapi (when
+   *  game_id is known) or lazily on first FR render for older plans. */
+  name_fr?: string;
+  /** xivapi/FFLogs action id. Kept so the client can lazily fetch a FR
+   *  translation for plans imported before `name_fr` enrichment shipped. */
+  game_id?: number;
   time: number;               // seconds — impact time (end of cast)
   category: MechCategory;
   /** Player IDs hit by this mech. Empty array means "no one" (a pure

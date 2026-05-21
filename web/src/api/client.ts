@@ -43,6 +43,14 @@ export interface FFLogsReport {
 
 export interface FFLogsMechanic {
   name: string;
+  /** French translation of `name`, resolved server-side via xivapi using
+   *  `game_id`. Absent when xivapi didn't return a translation or when
+   *  game_id is unknown (rare). */
+  name_fr?: string;
+  /** xivapi action id (= FFLogs abilityGameID). Kept on the imported
+   *  Mechanic so the client can lazily resolve a FR translation later
+   *  if needed. */
+  game_id?: number;
   time: number;
   targetNames: string[];
   damage_kind: 'physical' | 'magical' | 'pure';

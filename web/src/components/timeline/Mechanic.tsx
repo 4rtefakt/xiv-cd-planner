@@ -3,6 +3,7 @@ import { fmt, pct } from '../../lib/time';
 import { abilityIndexAtLevel, computeCoverage, deriveMechType } from '../../lib/mitigation';
 import { resolveAbilityAtLevel } from '../../lib/abilityResolve';
 import { splitMechName } from '../../lib/mechRender';
+import { useLazyFrName } from '../../lib/mechTranslate';
 import { usePlanStore } from '../../state/planStore';
 import { useMemo } from 'react';
 
@@ -24,8 +25,16 @@ export function MechanicMarker({ mech, uses, fightDuration, slot = 0 }: Mechanic
   const previewUse = usePlanStore((s) => s.previewUse);
   const readOnly = usePlanStore((s) => s.readOnly);
   const level = usePlanStore((s) => s.encounter.level);
+  const lang = usePlanStore((s) => s.lang);
+  const updateMechanic = usePlanStore((s) => s.updateMechanic);
   const hiddenAbilityIds = usePlanStore((s) => s.hiddenAbilityIds);
   const hiddenSet = useMemo(() => new Set(hiddenAbilityIds), [hiddenAbilityIds]);
+
+  // Lazy FR translation for plans imported before name_fr enrichment
+  // shipped : when the UI is in FR and a mech still only has the EN
+  // name but knows its game_id, we fetch xivapi once and patch the
+  // mech in-store. The plan auto-saver picks it up on the next tick.
+  useLazyFrName(mech, lang, updateMechanic);
 
   const abilities = useMemo(
     () => abilityIndexAtLevel(jobs, level, resolveAbilityAtLevel),
@@ -35,7 +44,7 @@ export function MechanicMarker({ mech, uses, fightDuration, slot = 0 }: Mechanic
   const visualType = deriveMechType(mech, partySize);
   const damageKind = mech.damage_kind ?? 'magical';
   const isPlacement = mech.category === 'placement';
-  const { label: displayLabel, hitCount } = splitMechName(mech);
+  const { label: displayLabel, hitCount } = splitMechName(mech, lang);
 
   // Hypothetical coverage if the user committed the currently-previewed
   // placement. We compute it ONLY when a meaningful preview exists, so

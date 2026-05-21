@@ -3,6 +3,7 @@ import { api, type FFLogsFight, type FFLogsFightData, type FFLogsReport } from '
 import { fmt } from '../../lib/time';
 import { usePlanStore } from '../../state/planStore';
 import { useT } from '../../i18n';
+import type { Lang } from '../../i18n';
 
 interface Props {
   open: boolean;
@@ -17,6 +18,7 @@ interface Props {
  */
 export function ImportLogModal({ open, onClose }: Props) {
   const importFightFromLog = usePlanStore((s) => s.importFightFromLog);
+  const lang: Lang = usePlanStore((s) => s.lang);
   const t = useT();
 
   const [url, setUrl] = useState('');
@@ -185,7 +187,7 @@ export function ImportLogModal({ open, onClose }: Props) {
                     <span className={`ff-mech-kind k-${m.damage_kind}`}>
                       {m.damage_kind === 'physical' ? 'P' : m.damage_kind === 'magical' ? 'M' : '✕'}
                     </span>
-                    <span className="ff-mech-name">{m.name}</span>
+                    <span className="ff-mech-name">{lang === 'fr' && m.name_fr ? m.name_fr : m.name}</span>
                     <span className="ff-mech-targets">
                       {m.targetNames.length} target{m.targetNames.length === 1 ? '' : 's'}
                     </span>

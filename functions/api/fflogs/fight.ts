@@ -79,6 +79,9 @@ interface DamageEvent {
 
 interface AggregatedMech {
   name: string;
+  /** French name, populated post-aggregation from xivapi. Undefined
+   *  when xivapi didn't return a translation or the lookup failed. */
+  name_fr?: string;
   time: number;           // seconds since fight start (first event's time, for display)
   targetNames: string[];  // unique player names hit
   damage_kind: 'physical' | 'magical' | 'pure';
@@ -255,19 +258,36 @@ function attackTypeIdToDamageKind(id: number | null | undefined): 'physical' | '
   return 'magical';
 }
 
-/** Batch-fetch xivapi AttackType.ID for a set of action gameIDs. Fails
- *  silently per-id (network errors map to undefined → magical default). */
-async function fetchAttackTypes(gameIds: number[]): Promise<Map<number, number | null>> {
-  const out = new Map<number, number | null>();
+interface XivApiActionMeta {
+  attackTypeId: number | null;
+  /** Localised name from xivapi. Empty string when the column is absent
+   *  in the response (some entries lack one of the locale fields). */
+  name_fr: string;
+}
+
+/** Batch-fetch xivapi metadata (AttackType.ID + Name_fr) for a set of
+ *  action gameIDs. Fails silently per-id (network errors map to a
+ *  fallback magical kind / no FR translation). One round-trip per id;
+ *  the unique-id de-dup happens at the caller. */
+async function fetchActionMeta(gameIds: number[]): Promise<Map<number, XivApiActionMeta>> {
+  const out = new Map<number, XivApiActionMeta>();
   await Promise.all(
     gameIds.map(async (id) => {
       try {
-        const res = await fetch(`https://xivapi.com/action/${id}?columns=AttackType.ID`);
+        const res = await fetch(
+          `https://xivapi.com/action/${id}?columns=AttackType.ID,Name_fr`,
+        );
         if (!res.ok) return;
-        const j = (await res.json()) as { AttackType?: { ID: number | null } };
-        out.set(id, j.AttackType?.ID ?? null);
+        const j = (await res.json()) as {
+          AttackType?: { ID: number | null };
+          Name_fr?: string;
+        };
+        out.set(id, {
+          attackTypeId: j.AttackType?.ID ?? null,
+          name_fr: typeof j.Name_fr === 'string' ? j.Name_fr : '',
+        });
       } catch {
-        /* ignore — leaves the id unset, default kicks in */
+        /* ignore — leaves the id unset, defaults kick in */
       }
     }),
   );
@@ -544,15 +564,21 @@ export const onRequestPost: PagesFunction<FFLogsEnv> = async (ctx) => {
       if (best && best.castTime > 0) g.cast_time = best.castTime;
     }
 
-    // Resolve damage_kind via xivapi AttackType for each unique gameID.
-    // FFLogs' own ability.type is a bitfield about behaviour (auto, AoE,
-    // DoT, ...), not damage school — so we go to the source of truth.
-    const uniqueIds = Array.from(new Set(groups.map((g) => g.game_id).filter((v): v is number => v != null)));
+    // Resolve damage_kind via xivapi AttackType + pick up Name_fr in the
+    // same round-trip per unique gameID. FFLogs' own ability.type is a
+    // bitfield about behaviour (auto, AoE, DoT, ...) not damage school,
+    // and FFLogs is English-only — so xivapi is the source of truth for
+    // both.
+    const uniqueIds = Array.from(
+      new Set(groups.map((g) => g.game_id).filter((v): v is number => v != null)),
+    );
     if (uniqueIds.length > 0) {
-      const typeMap = await fetchAttackTypes(uniqueIds);
+      const meta = await fetchActionMeta(uniqueIds);
       for (const g of groups) {
         if (g.game_id != null) {
-          g.damage_kind = attackTypeIdToDamageKind(typeMap.get(g.game_id));
+          const m = meta.get(g.game_id);
+          g.damage_kind = attackTypeIdToDamageKind(m?.attackTypeId);
+          if (m?.name_fr) g.name_fr = m.name_fr;
         }
       }
     }
