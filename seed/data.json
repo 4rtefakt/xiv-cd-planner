@@ -91,7 +91,7 @@
           "mit_type": "personal",
           "mit_potency": 15,
           "icon": "https://xivapi.com/i/002000/002950.png",
-          "level_unlocked": 82,
+          "level_unlocked": 35,
           "verified": true,
           "_source_url": "https://ffxiv.consolegameswiki.com/wiki/Holy_Sheltron",
           "_note": "Oath gauge cost 50; grants Knight's Resolve (15% mit, 4s) + Knight's Benediction (250p regen)",
@@ -102,7 +102,21 @@
           "description": "Reduces damage taken by 15%.\n\nDuration: 8s\n\nAdditional Effect: Grants Knight's Resolve\n\nKnight's Resolve Effect: Reduces damage taken by 15%\n\nDuration: 4s\n\nAdditional Effect: Grants Knight's Benediction\n\nKnight's Benediction Effect: Gradually restores HP\n\nCure Potency: 250\n\nDuration: 12s\n\nOath Gauge Cost: 50",
           "description_fr": "Réduit de 15% vos dégâts subis.\n\nDurée: 8s\n\nEffet additionnel: vous octroie Égide du paladin.\n\nDurée: 4s\n\nÉgide du paladin: réduit de 15% les dégâts subis.\n\nEffet additionnel: vous octroie Bénédiction du paladin.\n\nDurée: 12s\n\nBénédiction du paladin: restaure périodiquement les PV.\n\nPuissance: 250\n\nCoût Jauge du serment: 50",
           "affinity": "PLD",
-          "affinity_fr": "PLD"
+          "affinity_fr": "PLD",
+          "level_variants": {
+            "35": {
+              "name": "Sheltron",
+              "name_fr": "Schiltron",
+              "description": "Reduces damage taken by 15%.\nDuration: 6s\nOath Gauge Cost: 50",
+              "description_fr": "Réduit de 15% vos dégâts subis.\nDurée : 6s\nCoût Jauge du serment : 50"
+            },
+            "82": {
+              "name": "Holy Sheltron",
+              "name_fr": "Schiltron sacré",
+              "description": "Reduces damage taken by 15%.\n\nDuration: 8s\n\nAdditional Effect: Grants Knight's Resolve\n\nKnight's Resolve Effect: Reduces damage taken by 15%\n\nDuration: 4s\n\nAdditional Effect: Grants Knight's Benediction\n\nKnight's Benediction Effect: Gradually restores HP\n\nCure Potency: 250\n\nDuration: 12s\n\nOath Gauge Cost: 50",
+              "description_fr": "Réduit de 15% vos dégâts subis.\n\nDurée: 8s\n\nEffet additionnel: vous octroie Égide du paladin.\n\nDurée: 4s\n\nÉgide du paladin: réduit de 15% les dégâts subis.\n\nEffet additionnel: vous octroie Bénédiction du paladin.\n\nDurée: 12s\n\nBénédiction du paladin: restaure périodiquement les PV.\n\nPuissance: 250\n\nCoût Jauge du serment: 50"
+            }
+          }
         },
         {
           "id": "PLD.Sentinel",
@@ -112,7 +126,7 @@
           "mit_type": "personal",
           "mit_potency": 40,
           "icon": "https://xivapi.com/i/002000/002524.png",
-          "level_unlocked": 92,
+          "level_unlocked": 38,
           "verified": true,
           "_source_url": "https://ffxiv.consolegameswiki.com/wiki/Guardian",
           "_note": "Replaces Sentinel at lvl 92. 40% mit + 1000p shield",
@@ -123,7 +137,23 @@
           "description": "Reduces damage taken by 40%.\n\nDuration: 15s\n\nAdditional Effect: Erects a magicked barrier which nullifies damage equivalent to a heal of 1,000 potency\n\nDuration: 15s",
           "description_fr": "Réduit de 40% vos dégâts subis.\n\nDurée: 15s\n\nEffet additionnel: vous octroie une barrière absorbant un certain montant de dégâts.\n\nPuissance: 1000 Durée: 15s",
           "affinity": "PLD",
-          "affinity_fr": "PLD"
+          "affinity_fr": "PLD",
+          "level_variants": {
+            "38": {
+              "name": "Sentinel",
+              "name_fr": "Sentinelle",
+              "description": "Reduces damage taken by 30%.\nDuration: 15s",
+              "description_fr": "Réduit de 30% vos dégâts subis.\nDurée : 15s",
+              "mit_potency": 30
+            },
+            "92": {
+              "name": "Guardian",
+              "name_fr": "Garde extrême",
+              "description": "Reduces damage taken by 40%.\n\nDuration: 15s\n\nAdditional Effect: Erects a magicked barrier which nullifies damage equivalent to a heal of 1,000 potency\n\nDuration: 15s",
+              "description_fr": "Réduit de 40% vos dégâts subis.\n\nDurée: 15s\n\nEffet additionnel: vous octroie une barrière absorbant un certain montant de dégâts.\n\nPuissance: 1000 Durée: 15s",
+              "mit_potency": 40
+            }
+          }
         },
         {
           "id": "PLD.Bulwark",
@@ -167,27 +197,6 @@
           "description_fr": "Crée une barrière sur vous et les équipiers alentour, absorbant les dégâts subis pour un total de 10% de vos PV maximums.\n\nDurée: 30s Effet additionnel: restaure les PV de la cible.\n\nPuissance: 400",
           "affinity": "PLD",
           "affinity_fr": "PLD"
-        },
-        {
-          "id": "PLD.DivineCaress",
-          "name": "Divine Caress",
-          "recast": 1,
-          "effect": 10,
-          "mit_type": "party",
-          "mit_potency": 10,
-          "icon": "https://xivapi.com/i/002000/002128.png",
-          "level_unlocked": 100,
-          "verified": false,
-          "_source_url": "https://ffxiv.consolegameswiki.com/wiki/Divine_Caress",
-          "_note": "Requires Divine Grace (post-Temperance/Holy Sheltron). 400p shield + 200p regen 15s",
-          "icon_glyph": "wing",
-          "icon_id": 2128,
-          "name_fr": "Caresse divine",
-          "action_id": 37011,
-          "description": "Creates a barrier around self and all party members near you that absorbs damage equivalent to a heal of 400 potency.\n\nDuration: 10s\n\nAdditional Effect: Grants Divine Aura when barrier effect expires\n\nDivine Aura Effect: Healing over time\n\nCure Potency: 200\n\nDuration: 15s\n\nCan only be executed while Divine Grace is active.",
-          "description_fr": "Crée une barrière sur vous et les équipiers alentour, absorbant un certain montant de dégâts.\n\nPuissance: 400 Durée: 10s\n\nEffet additionnel: octroie Caresse divine une fois la barrière dissipée.\n\nCaresse divine: restaure périodiquement vos PV et ceux des équipiers alentour.\n\nPuissance: 200 Durée: 15s\n\nCondition: Caresse divine préparée.",
-          "affinity": "WHM",
-          "affinity_fr": "MBL"
         },
         {
           "id": "PLD.PassageOfArms",
@@ -373,7 +382,7 @@
           "mit_type": "personal",
           "mit_potency": 10,
           "icon": "https://xivapi.com/i/002000/002569.png",
-          "level_unlocked": 82,
+          "level_unlocked": 56,
           "verified": true,
           "_source_url": "https://ffxiv.consolegameswiki.com/wiki/Bloodwhetting",
           "_note": "10% mit + 400p sustain per weaponskill + 400p shield",
@@ -384,7 +393,21 @@
           "description": "Reduces damage taken by 10%.\n\nDuration: 8s\n\nAdditional Effect: Restores HP with each weaponskill successfully delivered\n\nCure Potency: 400\n\nAdditional Effect: Grants Stem the Flow\n\nStem the Flow Effect: Reduces damage taken by 10%\n\nDuration: 4s\n\nAdditional Effect: Grants Stem the Tide\n\nStem the Tide Effect: Creates a barrier around self that absorbs damage equivalent to a heal of 400 potency\n\nDuration: 20s\n\nShares a recast timer with Nascent Flash.",
           "description_fr": "Réduit de 10% vos dégâts subis.\n\nDurée: 8s\n\nEffet additionnel: absorbe des PV quand vous infligez des dégâts avec une technique d'arme.\n\nPuissance: 400\n\nEffet additionnel: vous octroie Barrage au sang.\n\nDurée: 4s\n\nBarrage au sang: réduit de 10% les dégâts subis.\n\nEffet additionnel: vous octroie Digue au sang, une barrière annulant un certain montant de dégâts.\n\nPuissance: 400 Durée: 20s\n\nPartage le même temps de recharge que Exaltation naissante.",
           "affinity": "WAR",
-          "affinity_fr": "GUE"
+          "affinity_fr": "GUE",
+          "level_variants": {
+            "56": {
+              "name": "Raw Intuition",
+              "name_fr": "Intuition pure",
+              "description": "Reduces damage taken by 10%.\nDuration: 6s\nAdditional Effect: Restores HP with each weaponskill successfully delivered\nCure Potency: 400\nShares a recast timer with Nascent Flash.",
+              "description_fr": "Réduit de 10% les dégâts subis.\nDurée : 6s\nEffet additionnel : absorbe des PV quand vous infligez des dégâts avec une technique d'arme.\nPuissance : 400\nPartage le même temps de recharge que Exaltation naissante."
+            },
+            "82": {
+              "name": "Bloodwhetting",
+              "name_fr": "Intuition fougueuse",
+              "description": "Reduces damage taken by 10%.\n\nDuration: 8s\n\nAdditional Effect: Restores HP with each weaponskill successfully delivered\n\nCure Potency: 400\n\nAdditional Effect: Grants Stem the Flow\n\nStem the Flow Effect: Reduces damage taken by 10%\n\nDuration: 4s\n\nAdditional Effect: Grants Stem the Tide\n\nStem the Tide Effect: Creates a barrier around self that absorbs damage equivalent to a heal of 400 potency\n\nDuration: 20s\n\nShares a recast timer with Nascent Flash.",
+              "description_fr": "Réduit de 10% vos dégâts subis.\n\nDurée: 8s\n\nEffet additionnel: absorbe des PV quand vous infligez des dégâts avec une technique d'arme.\n\nPuissance: 400\n\nEffet additionnel: vous octroie Barrage au sang.\n\nDurée: 4s\n\nBarrage au sang: réduit de 10% les dégâts subis.\n\nEffet additionnel: vous octroie Digue au sang, une barrière annulant un certain montant de dégâts.\n\nPuissance: 400 Durée: 20s\n\nPartage le même temps de recharge que Exaltation naissante."
+            }
+          }
         },
         {
           "id": "WAR.NascentFlash",
@@ -457,7 +480,7 @@
           "mit_type": "personal",
           "mit_potency": 40,
           "icon": "https://xivapi.com/i/002000/002573.png",
-          "level_unlocked": 92,
+          "level_unlocked": 38,
           "verified": true,
           "_source_url": "https://ffxiv.consolegameswiki.com/wiki/Damnation",
           "_note": "Replaces Vengeance at lvl 92. 40% mit + 55p counter + 300p post-regen 15s",
@@ -468,7 +491,23 @@
           "description_fr": "Réduit de 40% vos dégâts subis et inflige des dégâts pour chaque attaque physique que vous recevez.\n\nPuissance: 55 Durée: 15s\n\nEffet additionnel: vous octroie Damné à la première attaque subie ou à la fin de l'effet.\n\nDamné: restaure périodiquement des PV.\n\nPuissance: 400 Durée: 15s",
           "description": "Reduces damage taken by 40% and delivers an attack with a potency of 55 every time you suffer physical damage.\n\nDuration: 15s\n\nAdditional Effect: Grants Primeval Impulse when the effect expires or damage is taken\n\nPrimeval Impulse Effect: Healing over time\n\nCure Potency: 400\n\nDuration: 15s",
           "affinity": "WAR",
-          "affinity_fr": "GUE"
+          "affinity_fr": "GUE",
+          "level_variants": {
+            "38": {
+              "name": "Vengeance",
+              "name_fr": "Représailles",
+              "description": "Reduces damage taken by 30% and delivers an attack with a potency of 55 every time you suffer physical damage.\nDuration: 15s",
+              "description_fr": "Réduit de 30% vos dégâts subis et inflige des dégâts pour chaque attaque physique que vous recevez.\nPuissance : 55 Durée : 15s",
+              "mit_potency": 30
+            },
+            "92": {
+              "name": "Damnation",
+              "name_fr": "Damnation",
+              "description": "Reduces damage taken by 40% and delivers an attack with a potency of 55 every time you suffer physical damage.\n\nDuration: 15s\n\nAdditional Effect: Grants Primeval Impulse when the effect expires or damage is taken\n\nPrimeval Impulse Effect: Healing over time\n\nCure Potency: 400\n\nDuration: 15s",
+              "description_fr": "Réduit de 40% vos dégâts subis et inflige des dégâts pour chaque attaque physique que vous recevez.\n\nPuissance: 55 Durée: 15s\n\nEffet additionnel: vous octroie Damné à la première attaque subie ou à la fin de l'effet.\n\nDamné: restaure périodiquement des PV.\n\nPuissance: 400 Durée: 15s",
+              "mit_potency": 40
+            }
+          }
         },
         {
           "id": "WAR.Holmgang",
@@ -1138,7 +1177,7 @@
           "mit_type": "personal",
           "mit_potency": 10,
           "icon": "https://xivapi.com/i/003000/003190.png",
-          "level_unlocked": 82,
+          "level_unlocked": 6,
           "verified": true,
           "_source_url": "https://ffxiv.consolegameswiki.com/wiki/Tengentsu",
           "_note": "Replaces Third Eye at lvl 82. 10% mit on next hit, then post-hit 10% mit 9s + 200p heal",
@@ -1149,7 +1188,21 @@
           "description": "Reduces the amount of damage taken by the next attack by 10%.\n\nDuration: 4s\n\nAdditional Effect: Grants Tengentsu's Foresight and increases Kenki Gauge by 10 when hit\n\nTengentsu's Foresight Effect: Gradually restores your HP and reduces damage taken by 10%\n\nDuration: 9s\n\nCure Potency: 200",
           "description_fr": "Réduit de 10% les dégâts de la prochaine attaque subie.\n\nDurée: 4s\n\nEffet additionnel: remplit la Jauge de Kenki de 10 si des dégâts sont subis et devient Tengentsû: Sei.\n\nDurée: 9s\n\nTengentsû: Sei: réduit de 10% vos dégâts subis et restaure périodiquement vos PV.\n\nPuissance: 200",
           "affinity": "SAM",
-          "affinity_fr": "SAM"
+          "affinity_fr": "SAM",
+          "level_variants": {
+            "6": {
+              "name": "Third Eye",
+              "name_fr": "Troisième œil",
+              "description": "Reduces the amount of damage taken by the next attack by 10%.\nDuration: 4s\nAdditional Effect: Increases Kenki Gauge by 10 when hit",
+              "description_fr": "Réduit de 10% les dégâts de la prochaine attaque subie.\nDurée : 4s\nEffet additionnel : remplit la Jauge de Kenki de 10 si des dégâts sont subis."
+            },
+            "82": {
+              "name": "Tengentsu",
+              "name_fr": "Tengentsû",
+              "description": "Reduces the amount of damage taken by the next attack by 10%.\n\nDuration: 4s\n\nAdditional Effect: Grants Tengentsu's Foresight and increases Kenki Gauge by 10 when hit\n\nTengentsu's Foresight Effect: Gradually restores your HP and reduces damage taken by 10%\n\nDuration: 9s\n\nCure Potency: 200",
+              "description_fr": "Réduit de 10% les dégâts de la prochaine attaque subie.\n\nDurée: 4s\n\nEffet additionnel: remplit la Jauge de Kenki de 10 si des dégâts sont subis et devient Tengentsû: Sei.\n\nDurée: 9s\n\nTengentsû: Sei: réduit de 10% vos dégâts subis et restaure périodiquement vos PV.\n\nPuissance: 200"
+            }
+          }
         }
       ],
       "name_fr": "Samouraï"
@@ -1526,7 +1579,7 @@
           "mit_type": "personal",
           "mit_potency": 40,
           "icon": "https://xivapi.com/i/003000/003094.png",
-          "level_unlocked": 92,
+          "level_unlocked": 38,
           "verified": true,
           "_note": "Replaces Shadow Wall at lvl 92. 40% mit + 1200p heal at expire or HP<50%",
           "_source_url": "https://ffxiv.consolegameswiki.com/wiki/Dark_Knight",
@@ -1537,7 +1590,23 @@
           "description": "Reduces damage taken by 40%.\n\nDuration: 15s\n\nAdditional Effect: Grants Vigilant\n\nDuration: 20s\n\nVigilant Effect: Restores HP when HP falls below 50% or upon effect duration expiration\n\nCure Potency: 1,200",
           "description_fr": "Réduit de 40% vos dégâts subis.\n\nDurée: 15s\n\nEffet additionnel: vous octroie Garde ténébreuse.\n\nDurée: 20s\n\nGarde ténébreuse: restaure les PV s'ils tombent sous 50% ou à la fin de l'effet.\n\nPuissance: 1200",
           "affinity": "DRK",
-          "affinity_fr": "CHN"
+          "affinity_fr": "CHN",
+          "level_variants": {
+            "38": {
+              "name": "Shadow Wall",
+              "name_fr": "Mur d'ombre",
+              "description": "Reduces damage taken by 30%.\nDuration: 15s",
+              "description_fr": "Réduit de 30% les dégâts subis.\nDurée : 15s",
+              "mit_potency": 30
+            },
+            "92": {
+              "name": "Shadowed Vigil",
+              "name_fr": "Vigile ténébreux",
+              "description": "Reduces damage taken by 40%.\n\nDuration: 15s\n\nAdditional Effect: Grants Vigilant\n\nDuration: 20s\n\nVigilant Effect: Restores HP when HP falls below 50% or upon effect duration expiration\n\nCure Potency: 1,200",
+              "description_fr": "Réduit de 40% vos dégâts subis.\n\nDurée: 15s\n\nEffet additionnel: vous octroie Garde ténébreuse.\n\nDurée: 20s\n\nGarde ténébreuse: restaure les PV s'ils tombent sous 50% ou à la fin de l'effet.\n\nPuissance: 1200",
+              "mit_potency": 40
+            }
+          }
         },
         {
           "id": "DRK.DarkMind",
@@ -1747,7 +1816,7 @@
           "mit_type": "personal",
           "mit_potency": 40,
           "icon": "https://xivapi.com/i/003000/003435.png",
-          "level_unlocked": 92,
+          "level_unlocked": 38,
           "verified": true,
           "_note": "Replaces Nebula at lvl 92. 40% mit + 20% maxHP boost + heal",
           "_source_url": "https://ffxiv.consolegameswiki.com/wiki/Gunbreaker",
@@ -1758,7 +1827,23 @@
           "description_fr": "Réduit de 40% vos dégâts subis.\n\nEffet additionnel: augmente de 20% vos PV maximums et restaure l'équivalent du montant augmenté.\n\nDurée: 15s",
           "description": "Reduces damage taken by 40%.\n\nAdditional Effect: Increases maximum HP by 20% and restores the amount increased.\n\nDuration: 15s",
           "affinity": "GNB",
-          "affinity_fr": "PSB"
+          "affinity_fr": "PSB",
+          "level_variants": {
+            "38": {
+              "name": "Nebula",
+              "name_fr": "Nébuleuse",
+              "description": "Reduces damage taken by 30%.\nDuration: 15s",
+              "description_fr": "Réduit de 30% vos dégâts subis.\nDurée : 15s",
+              "mit_potency": 30
+            },
+            "92": {
+              "name": "Great Nebula",
+              "name_fr": "Grande nébuleuse",
+              "description": "Reduces damage taken by 40%.\n\nAdditional Effect: Increases maximum HP by 20% and restores the amount increased.\n\nDuration: 15s",
+              "description_fr": "Réduit de 40% vos dégâts subis.\n\nEffet additionnel: augmente de 20% vos PV maximums et restaure l'équivalent du montant augmenté.\n\nDurée: 15s",
+              "mit_potency": 40
+            }
+          }
         },
         {
           "id": "GNB.HeartOfLight",
@@ -1790,7 +1875,7 @@
           "mit_type": "party",
           "mit_potency": 15,
           "icon": "https://xivapi.com/i/003000/003430.png",
-          "level_unlocked": 82,
+          "level_unlocked": 68,
           "verified": true,
           "_note": "Single ally 15% mit + 4s Clarity (15% more) + 900p delayed heal. 3 charges.",
           "_source_url": "https://ffxiv.consolegameswiki.com/wiki/Gunbreaker",
@@ -1801,7 +1886,21 @@
           "description": "Reduces damage taken by target party member or self by 15%.\n\nDuration: 8s\n\nAdditional Effect: When targeting a party member while under the effect of Brutal Shell, that effect is also granted to the target\n\nDuration: 30s\n\nAdditional Effect: Grants Clarity of Corundum to target\n\nClarity of Corundum Effect: Reduces damage taken by 15%\n\nDuration: 4s\n\nAdditional Effect: Grants Catharsis of Corundum to target\n\nCatharsis of Corundum Effect: Restores HP when HP falls below 50% or upon effect duration expiration\n\nCure Potency: 900\n\nDuration: 20s",
           "description_fr": "Réduit de 15% vos dégâts subis ou ceux de l'équipier ciblé.\n\nDurée: 8s\n\nEffet additionnel: si vous bénéficiez de l'effet Impact brutal et que la cible est un équipier, octroie également cet effet à la cible.\n\nDurée: 30s\n\nEffet additionnel: octroie Clarté de corindon à la cible.\n\nDurée: 4s\n\nClarté de corindon: réduit de 15% les dégâts subis.\n\nEffet additionnel: octroie Catharsis de corindon à la cible.\n\nDurée: 20s\n\nCatharsis de corindon: restaure les PV s'ils tombent sous 50% ou à la fin de l'effet.\n\nPuissance: 900",
           "affinity": "GNB",
-          "affinity_fr": "PSB"
+          "affinity_fr": "PSB",
+          "level_variants": {
+            "68": {
+              "name": "Heart of Stone",
+              "name_fr": "Cœur de pierre",
+              "description": "Reduces damage taken by a party member or self by 15%.\nDuration: 7s\nAdditional Effect: When targeting a party member while under the effect of Brutal Shell, that effect is also granted to the target\nDuration: 30s",
+              "description_fr": "Réduit de 15% vos dégâts subis ou ceux de l'équipier ciblé.\nDurée : 7s\nEffet additionnel : si vous bénéficiez de l'effet Impact brutal et que la cible est un équipier, octroie également cet effet à la cible.\nDurée : 30s"
+            },
+            "82": {
+              "name": "Heart of Corundum",
+              "name_fr": "Cœur de corindon",
+              "description": "Reduces damage taken by target party member or self by 15%.\n\nDuration: 8s\n\nAdditional Effect: When targeting a party member while under the effect of Brutal Shell, that effect is also granted to the target\n\nDuration: 30s\n\nAdditional Effect: Grants Clarity of Corundum to target\n\nClarity of Corundum Effect: Reduces damage taken by 15%\n\nDuration: 4s\n\nAdditional Effect: Grants Catharsis of Corundum to target\n\nCatharsis of Corundum Effect: Restores HP when HP falls below 50% or upon effect duration expiration\n\nCure Potency: 900\n\nDuration: 20s",
+              "description_fr": "Réduit de 15% vos dégâts subis ou ceux de l'équipier ciblé.\n\nDurée: 8s\n\nEffet additionnel: si vous bénéficiez de l'effet Impact brutal et que la cible est un équipier, octroie également cet effet à la cible.\n\nDurée: 30s\n\nEffet additionnel: octroie Clarté de corindon à la cible.\n\nDurée: 4s\n\nClarté de corindon: réduit de 15% les dégâts subis.\n\nEffet additionnel: octroie Catharsis de corindon à la cible.\n\nDurée: 20s\n\nCatharsis de corindon: restaure les PV s'ils tombent sous 50% ou à la fin de l'effet.\n\nPuissance: 900"
+            }
+          }
         },
         {
           "id": "GNB.Aurora",
@@ -2186,7 +2285,7 @@
           "mit_type": "heal",
           "mit_potency": 0,
           "icon": "https://xivapi.com/i/003000/003670.png",
-          "level_unlocked": 60,
+          "level_unlocked": 20,
           "verified": true,
           "_note": "130p regen party + 10% heal received",
           "_source_url": "https://ffxiv.consolegameswiki.com/wiki/Sage",
@@ -2197,7 +2296,21 @@
           "description": "Gradually restores own HP and the HP of all nearby party members.\n\nCure Potency: 130\n\nDuration: 15s\n\nAdditional Effect: Increases HP recovered by healing actions by 10%\n\nDuration:  15 s",
           "description_fr": "Restaure périodiquement vos PV et ceux des équipiers alentour.\n\nPuissance: 130 Durée: 15s\n\nEffet additionnel: octroie Autophysis à vous et aux équipiers alentour.\n\nDurée: 15 s\n\nAutophysis: augmente de 10% les effets curatifs reçus.",
           "affinity": "SGE",
-          "affinity_fr": "SAG"
+          "affinity_fr": "SAG",
+          "level_variants": {
+            "20": {
+              "name": "Physis",
+              "name_fr": "Physis",
+              "description": "Gradually restores own HP and the HP of all nearby party members.\nCure Potency: 100\nDuration: 15s",
+              "description_fr": "Restaure périodiquement vos PV et ceux des équipiers alentour.\nPuissance : 100 Durée : 15s"
+            },
+            "60": {
+              "name": "Physis II",
+              "name_fr": "Physis II",
+              "description": "Gradually restores own HP and the HP of all nearby party members.\n\nCure Potency: 130\n\nDuration: 15s\n\nAdditional Effect: Increases HP recovered by healing actions by 10%\n\nDuration:  15 s",
+              "description_fr": "Restaure périodiquement vos PV et ceux des équipiers alentour.\n\nPuissance: 130 Durée: 15s\n\nEffet additionnel: octroie Autophysis à vous et aux équipiers alentour.\n\nDurée: 15 s\n\nAutophysis: augmente de 10% les effets curatifs reçus."
+            }
+          }
         },
         {
           "id": "SGE.Haima",
