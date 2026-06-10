@@ -7,6 +7,11 @@ import { useT } from '../../i18n';
 const CATEGORY_KEYS: MechCategory[] = ['damage', 'placement'];
 const DAMAGE_KINDS: DamageKind[] = ['physical', 'magical', 'pure'];
 
+/** Common raid-callout tags offered as one-click toggles. Free text is
+ *  accepted too — these are a convenience, not a whitelist. */
+const PRESET_TAGS = ['TB', 'RB', 'SHARE', 'SPREAD', 'BAIT', 'KB'];
+const TAG_MAX_LEN = 12;
+
 let mechSeq = 0;
 
 /**
@@ -22,6 +27,8 @@ export function AddMechanicModal() {
   const modal = usePlanStore((s) => s.mechanicModal);
   const fightDuration = usePlanStore((s) => s.encounter.fight_duration);
   const party = usePlanStore((s) => s.party);
+  const bossLanes = usePlanStore((s) => s.bossLanes);
+  const setMechanicModal = usePlanStore((s) => s.setMechanicModal);
   const close = usePlanStore((s) => s.closeMechanicModal);
   const addMechanic = usePlanStore((s) => s.addMechanic);
   const updateMechanic = usePlanStore((s) => s.updateMechanic);
@@ -34,6 +41,8 @@ export function AddMechanicModal() {
   const [category, setCategory] = useState<MechCategory>('damage');
   const [damageKind, setDamageKind] = useState<DamageKind>('magical');
   const [targets, setTargets] = useState<string[]>([]);
+  const [tags, setTags] = useState<string[]>([]);
+  const [tagDraft, setTagDraft] = useState('');
   const nameRef = useRef<HTMLInputElement>(null);
 
   // Sync local form state from the store every time the modal opens.
@@ -45,9 +54,21 @@ export function AddMechanicModal() {
     setCategory(modal.category);
     setDamageKind(modal.damage_kind);
     setTargets(modal.targets);
+    setTags(modal.tags ?? []);
+    setTagDraft('');
     const t = setTimeout(() => nameRef.current?.focus(), 50);
     return () => clearTimeout(t);
   }, [modal]);
+
+  function toggleTag(tag: string) {
+    setTags((cur) => (cur.includes(tag) ? cur.filter((x) => x !== tag) : [...cur, tag]));
+  }
+  function commitTagDraft() {
+    const tag = tagDraft.trim().toUpperCase().slice(0, TAG_MAX_LEN);
+    setTagDraft('');
+    if (!tag) return;
+    setTags((cur) => (cur.includes(tag) ? cur : [...cur, tag]));
+  }
 
   useEffect(() => {
     if (!modal) return;
@@ -58,7 +79,7 @@ export function AddMechanicModal() {
     window.addEventListener('keydown', onKey);
     return () => window.removeEventListener('keydown', onKey);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [modal, name, timeStr, castTimeStr, category, damageKind, targets]);
+  }, [modal, name, timeStr, castTimeStr, category, damageKind, targets, tags]);
 
   if (!modal) return null;
 
@@ -96,6 +117,7 @@ export function AddMechanicModal() {
         targets: effectiveTargets,
         damage_kind: category === 'damage' ? damageKind : undefined,
         cast_time: finalCastTime,
+        tags: tags.length > 0 ? tags : undefined,
       });
     } else {
       addMechanic({
@@ -107,6 +129,7 @@ export function AddMechanicModal() {
         targets: effectiveTargets,
         damage_kind: category === 'damage' ? damageKind : undefined,
         cast_time: finalCastTime,
+        tags: tags.length > 0 ? tags : undefined,
       });
     }
     close();
@@ -142,6 +165,24 @@ export function AddMechanicModal() {
               onChange={(e) => setName(e.target.value)}
             />
           </div>
+          {/* Lane selector — only when editing AND several lanes exist :
+              FFLogs sometimes attributes a cast to the wrong actor, so
+              the user must be able to re-home a mech. */}
+          {isEdit && bossLanes.length > 1 && (
+            <div className="modal-row">
+              <label className="modal-label">{t('mech.lane')}</label>
+              <select
+                className="modal-input"
+                value={modal.laneId}
+                onChange={(e) => setMechanicModal({ laneId: e.target.value })}
+              >
+                {bossLanes.map((l) => (
+                  <option key={l.id} value={l.id}>{l.name}</option>
+                ))}
+              </select>
+            </div>
+          )}
+
           <div className="modal-row">
             <label className="modal-label">{t('mech.timestamp')}</label>
             <input
@@ -218,6 +259,54 @@ export function AddMechanicModal() {
               </div>
             </>
           )}
+
+          <div className="modal-row">
+            <label className="modal-label" title={t('mech.tags.hint')}>{t('mech.tags')}</label>
+            <div className="tags-picker">
+              {PRESET_TAGS.map((tag) => (
+                <button
+                  key={tag}
+                  type="button"
+                  className={`tag-opt${tags.includes(tag) ? ' on' : ''}`}
+                  onClick={() => toggleTag(tag)}
+                >
+                  {tag}
+                </button>
+              ))}
+              {/* Custom (non-preset) tags appear as removable chips. */}
+              {tags
+                .filter((tag) => !PRESET_TAGS.includes(tag))
+                .map((tag) => (
+                  <button
+                    key={tag}
+                    type="button"
+                    className="tag-opt on tag-custom"
+                    title={t('mech.tags.removeHint')}
+                    onClick={() => toggleTag(tag)}
+                  >
+                    {tag} ×
+                  </button>
+                ))}
+              <input
+                className="tags-input"
+                type="text"
+                placeholder={t('mech.tags.placeholder')}
+                maxLength={TAG_MAX_LEN}
+                value={tagDraft}
+                onChange={(e) => setTagDraft(e.target.value)}
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter') {
+                    // Swallow the modal-level Enter→confirm shortcut :
+                    // Enter in this field just commits the tag.
+                    e.preventDefault();
+                    e.stopPropagation();
+                    commitTagDraft();
+                  }
+                }}
+                onBlur={commitTagDraft}
+              />
+            </div>
+          </div>
         </div>
         <div className="modal-footer">
           {isEdit && (

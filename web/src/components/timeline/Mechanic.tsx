@@ -106,8 +106,18 @@ export function MechanicMarker({ mech, uses, fightDuration, slot = 0 }: Mechanic
             bloat the label below. */}
         {hitCount > 1 && <span className="mech-hitcount">×{hitCount}</span>}
       </div>
-      <div className="mech-label" title={`${displayLabel} · ${fmt(mech.time)}`}>
+      <div
+        className="mech-label"
+        title={`${displayLabel}${mech.tags?.length ? ` [${mech.tags.join(' · ')}]` : ''} · ${fmt(mech.time)}`}
+      >
         <span className="mech-label-text">{displayLabel}</span>
+        {mech.tags && mech.tags.length > 0 && (
+          <span className="mech-tags">
+            {mech.tags.map((tag) => (
+              <span key={tag} className="mech-tag">{tag}</span>
+            ))}
+          </span>
+        )}
       </div>
       <div className="mech-time">{fmt(mech.time)}</div>
       {/* Coverage badge : skipped when there's nothing meaningful to

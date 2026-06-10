@@ -11,7 +11,7 @@
  */
 
 import { create } from 'zustand';
-import type { BossLane, DamageKind, Encounter, Job, MechCategory, MechType, Mechanic, Player, Use } from '../types';
+import type { BossLane, DamageKind, Encounter, Job, MechCategory, MechType, Mechanic, Phase, Player, Use } from '../types';
 import { demoParty } from '../data/demoParty';
 import { loadStoredLang, storeLang, type Lang } from '../i18n';
 
@@ -114,6 +114,8 @@ export interface MechanicModalState {
   targets: string[];
   damage_kind: DamageKind;
   cast_time: number;          // 0 = instant, visualised as a cast bar before `time`
+  /** User tags (TB, RB, SHARE, …) — chips next to the mech label. */
+  tags: string[];
   /** Legacy visual flavour — kept for the modal's color-flavor picker
    *  if we re-add it later. Unused for now ; derived from targets. */
   type?: MechType;
@@ -194,6 +196,8 @@ interface PlanState {
   bossLanes: BossLane[];
   mechanics: Mechanic[];
   uses: Use[];
+  /** Phase markers (P1/P2/…) — labeled vertical lines on the timeline. */
+  phases: Phase[];
   /** Per-plan blacklist of ability ids hidden from the player rows.
    *  Stored in the Plan blob so it travels with the slug. */
   hiddenAbilityIds: string[];
@@ -224,6 +228,13 @@ interface PlanState {
   // Actions — party
   setParty(party: Player[]): void;
   setPlayerName(playerId: string, name: string): void;
+  /**
+   * Swap a player with their neighbour (dir −1 = up/left, +1 =
+   * down/right). Players keep their id (uses and mech targets follow
+   * them) ; BADGES stay glued to the slot position, so moving someone
+   * into slot 0 makes them MT.
+   */
+  movePlayer(playerId: string, dir: -1 | 1): void;
   /**
    * Replace the entire party. Uses are remapped per slot (p1..p8) by
    * ability name : if the slot's new job has an ability with the same
@@ -291,6 +302,14 @@ interface PlanState {
    *  reassigned to `toId`, then `fromId` is removed. No-ops if the
    *  source or destination doesn't exist or both ids are the same. */
   mergeBossLanes(fromId: string, toId: string): void;
+  /** Swap a boss lane with its neighbour (dir −1 = up, +1 = down). */
+  moveBossLane(id: string, dir: -1 | 1): void;
+
+  // Actions — phases
+  addPhase(): void;
+  removePhase(id: string): void;
+  setPhaseName(id: string, name: string): void;
+  movePhase(id: string, time: number): void;
 
   // Actions — modal
   openMechanicModal(
@@ -352,6 +371,7 @@ interface PlanState {
     mechanics: Mechanic[];
     uses: Use[];
     hiddenAbilityIds: string[];
+    phases: Phase[];
   }): void;
   /**
    * Replace the entire plan content from a server payload. Used by
@@ -366,6 +386,7 @@ interface PlanState {
     mechanics?: Mechanic[];
     uses?: Use[];
     hidden_ability_ids?: string[];
+    phases?: Phase[];
   }): void;
 }
 
@@ -393,6 +414,7 @@ export const usePlanStore = create<PlanState>((set) => ({
   bossLanes: [{ id: 'lane-1', name: 'BOSS A' }],
   mechanics: [],
   uses: [],
+  phases: [],
   hiddenAbilityIds: [],
   collapsed: {},
   zoom: 2,
@@ -408,6 +430,19 @@ export const usePlanStore = create<PlanState>((set) => ({
   setParty: (party) => set({ party }),
   setPlayerName: (playerId, name) =>
     set((s) => ({ party: s.party.map((p) => (p.id === playerId ? { ...p, name } : p)) })),
+  movePlayer: (playerId, dir) =>
+    set((s) => {
+      const idx = s.party.findIndex((p) => p.id === playerId);
+      const j = idx + dir;
+      if (idx < 0 || j < 0 || j >= s.party.length) return {};
+      const party = [...s.party];
+      [party[idx], party[j]] = [party[j]!, party[idx]!];
+      // Badges belong to the SLOT : re-stamp them by position so the
+      // first card is always MT, the second OT, etc.
+      return {
+        party: party.map((p, i) => ({ ...p, badge: SLOT_BADGES[i] ?? p.badge })),
+      };
+    }),
   importFightFromLog: (payload) =>
     set((s) => {
       // Build one lane per detected source ; fall back to a single
@@ -526,6 +561,9 @@ export const usePlanStore = create<PlanState>((set) => ({
         bossLanes: lanes,
         mechanics: importedMechs,
         uses: importedUses,
+        // Phase markers from a previous fight don't line up with the
+        // freshly imported timeline — start clean.
+        phases: [],
       };
     }),
   importParty: (newParty) =>
@@ -606,6 +644,38 @@ export const usePlanStore = create<PlanState>((set) => ({
         ),
       };
     }),
+  moveBossLane: (id, dir) =>
+    set((s) => {
+      const idx = s.bossLanes.findIndex((l) => l.id === id);
+      const j = idx + dir;
+      if (idx < 0 || j < 0 || j >= s.bossLanes.length) return {};
+      const bossLanes = [...s.bossLanes];
+      [bossLanes[idx], bossLanes[j]] = [bossLanes[j]!, bossLanes[idx]!];
+      return { bossLanes };
+    }),
+
+  addPhase: () =>
+    set((s) => {
+      // New phase lands 60s after the last one (or at 0:00 for the
+      // first) — the user drags the marker where they want it.
+      const last = s.phases.reduce((mx, p) => Math.max(mx, p.time), -60);
+      const time = Math.min(s.encounter.fight_duration - 5, last + 60);
+      return {
+        phases: [
+          ...s.phases,
+          { id: `phase-${Date.now()}-${s.phases.length}`, name: `P${s.phases.length + 1}`, time: Math.max(0, time) },
+        ],
+      };
+    }),
+  removePhase: (id) => set((s) => ({ phases: s.phases.filter((p) => p.id !== id) })),
+  setPhaseName: (id, name) =>
+    set((s) => ({ phases: s.phases.map((p) => (p.id === id ? { ...p, name } : p)) })),
+  movePhase: (id, time) =>
+    set((s) => ({
+      phases: s.phases.map((p) =>
+        p.id === id ? { ...p, time: Math.max(0, Math.min(s.encounter.fight_duration, time)) } : p,
+      ),
+    })),
 
   openMechanicModal: (laneId, time, init) =>
     set((s) => ({
@@ -620,6 +690,7 @@ export const usePlanStore = create<PlanState>((set) => ({
         targets: init?.targets ?? s.party.map((p) => p.id),
         damage_kind: init?.damage_kind ?? 'magical',
         cast_time: init?.cast_time ?? 0,
+        tags: [],
       },
     })),
   openEditMechanic: (m) =>
@@ -637,6 +708,7 @@ export const usePlanStore = create<PlanState>((set) => ({
         targets: [...m.targets],
         damage_kind: m.damage_kind ?? 'magical',
         cast_time: m.cast_time ?? 0,
+        tags: [...(m.tags ?? [])],
       },
     })),
   setMechanicModal: (patch) =>
@@ -694,6 +766,7 @@ export const usePlanStore = create<PlanState>((set) => ({
     set({
       mechanics: [],
       uses: [],
+      phases: [],
       bossLanes: [{ id: 'lane-1', name: 'BOSS A' }],
     }),
 
@@ -712,6 +785,7 @@ export const usePlanStore = create<PlanState>((set) => ({
       mechanics: snap.mechanics,
       uses: snap.uses,
       hiddenAbilityIds: snap.hiddenAbilityIds,
+      phases: snap.phases,
       // Don't touch transient UI ; undo a placement shouldn't reopen a modal.
     }),
   hydratePlan: (plan) =>
@@ -729,6 +803,7 @@ export const usePlanStore = create<PlanState>((set) => ({
       mechanics: plan.mechanics ?? s.mechanics,
       uses: plan.uses ?? s.uses,
       hiddenAbilityIds: plan.hidden_ability_ids ?? [],
+      phases: plan.phases ?? [],
       // Reset transient UI so a stale modal/preview doesn't leak across loads
       mechanicModal: null,
       dragCtx: null,

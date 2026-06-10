@@ -17,7 +17,7 @@
  * subscription is tied to the app's lifetime in dev (StrictMode-safe).
  */
 
-import type { BossLane, Encounter, Mechanic, Player, Use } from '../types';
+import type { BossLane, Encounter, Mechanic, Phase, Player, Use } from '../types';
 import { usePlanStore } from './planStore';
 
 interface Snapshot {
@@ -27,6 +27,7 @@ interface Snapshot {
   mechanics: Mechanic[];
   uses: Use[];
   hiddenAbilityIds: string[];
+  phases: Phase[];
 }
 
 const HISTORY_CAP = 100;
@@ -49,6 +50,7 @@ function capture(): Snapshot {
     mechanics: s.mechanics.map((m) => ({ ...m, targets: [...m.targets] })),
     uses: s.uses.map((u) => ({ ...u })),
     hiddenAbilityIds: [...s.hiddenAbilityIds],
+    phases: s.phases.map((p) => ({ ...p })),
   };
 }
 
@@ -70,7 +72,8 @@ export function initHistory(): () => void {
       state.bossLanes !== prevState.bossLanes ||
       state.mechanics !== prevState.mechanics ||
       state.uses !== prevState.uses ||
-      state.hiddenAbilityIds !== prevState.hiddenAbilityIds;
+      state.hiddenAbilityIds !== prevState.hiddenAbilityIds ||
+      state.phases !== prevState.phases;
     if (!changed) return;
     if (suppressNext) {
       suppressNext = false;
