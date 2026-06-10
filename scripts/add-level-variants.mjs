@@ -239,6 +239,19 @@ const UPGRADES = [
       _source_url: 'https://ffxiv.consolegameswiki.com/wiki/Third_Eye',
     },
   },
+  {
+    id: 'SGE.Physis',
+    upgradeAt: 60,
+    base: {
+      action_id: 24288,
+      level_unlocked: 20,
+      effect: 15,
+      mit_potency: 0,
+      recast: 60,
+      _note: 'Party HoT 100p. Upgrades to Physis II at 60.',
+      _source_url: 'https://ffxiv.consolegameswiki.com/wiki/Physis',
+    },
+  },
 ];
 
 /** Fields that define an ability's identity — moved into the variant

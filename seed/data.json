@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updated_at": "2026-06-10T13:53:48.250Z",
+  "updated_at": "2026-06-10T14:33:12.383Z",
   "_patch": "FFXIV 7.5 (Dawntrail)",
   "_sources": [
     "https://ffxiv.consolegameswiki.com/wiki/ (per-ability and per-job pages)",
@@ -2358,24 +2358,36 @@
         },
         {
           "id": "SGE.Physis",
-          "name": "Physis II",
+          "name": "Physis",
           "recast": 60,
           "effect": 15,
           "mit_type": "heal",
           "mit_potency": 0,
-          "icon": "https://xivapi.com/i/003000/003670.png",
-          "level_unlocked": 60,
+          "icon": "https://xivapi.com/i/003000/003656.png",
+          "level_unlocked": 20,
           "verified": true,
-          "_note": "130p regen party + 10% heal received",
-          "_source_url": "https://ffxiv.consolegameswiki.com/wiki/Sage",
+          "_note": "Party HoT 100p. Upgrades to Physis II at 60.",
+          "_source_url": "https://ffxiv.consolegameswiki.com/wiki/Physis",
           "icon_glyph": "cross",
-          "icon_id": 3670,
-          "name_fr": "Physis II",
-          "action_id": 24302,
-          "description": "Gradually restores own HP and the HP of all nearby party members.\n\nCure Potency: 130\n\nDuration: 15s\n\nAdditional Effect: Increases HP recovered by healing actions by 10%\n\nDuration:  15 s",
-          "description_fr": "Restaure périodiquement vos PV et ceux des équipiers alentour.\n\nPuissance: 130 Durée: 15s\n\nEffet additionnel: octroie Autophysis à vous et aux équipiers alentour.\n\nDurée: 15 s\n\nAutophysis: augmente de 10% les effets curatifs reçus.",
+          "icon_id": 3656,
+          "name_fr": "Physis",
+          "action_id": 24288,
+          "description": "Gradually restores own HP and the HP of all nearby party members.\n\nCure Potency: 100\n\nDuration: 15s",
+          "description_fr": "Restaure périodiquement vos PV et ceux des équipiers alentour.\n\nPuissance: 100 Durée: 15s",
           "affinity": "SGE",
-          "affinity_fr": "SAG"
+          "affinity_fr": "SAG",
+          "level_variants": {
+            "60": {
+              "name": "Physis II",
+              "name_fr": "Physis II",
+              "icon": "https://xivapi.com/i/003000/003670.png",
+              "icon_id": 3670,
+              "action_id": 24302,
+              "description": "Gradually restores own HP and the HP of all nearby party members.\n\nCure Potency: 130\n\nDuration: 15s\n\nAdditional Effect: Increases HP recovered by healing actions by 10%\n\nDuration:  15 s",
+              "description_fr": "Restaure périodiquement vos PV et ceux des équipiers alentour.\n\nPuissance: 130 Durée: 15s\n\nEffet additionnel: octroie Autophysis à vous et aux équipiers alentour.\n\nDurée: 15 s\n\nAutophysis: augmente de 10% les effets curatifs reçus.",
+              "_note": "130p regen party + 10% heal received"
+            }
+          }
         },
         {
           "id": "SGE.Haima",
