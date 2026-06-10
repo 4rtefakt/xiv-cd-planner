@@ -11,10 +11,11 @@
  */
 
 import { create } from 'zustand';
-import type { BossLane, DamageKind, Encounter, Job, MechCategory, MechType, Mechanic, Phase, Player, Use } from '../types';
+import type { BossLane, DamageKind, Encounter, Job, MechCategory, MechType, Mechanic, Phase, Player, PullVariant, Use } from '../types';
 import { demoParty } from '../data/demoParty';
 import { loadStoredLang, storeLang, type Lang } from '../i18n';
 import { loadStoredOrientation, storeOrientation, type Orientation } from '../lib/orientation';
+import { duplicateVariant, ensureVariants, nextVariantName, singleVariant, syncActiveVariant } from '../lib/variants';
 
 /**
  * FFLogs subType (Paladin, WhiteMage, BlackMage, …) → our seed job
@@ -208,6 +209,18 @@ interface PlanState {
    *  Stored in the Plan blob so it travels with the slug. */
   hiddenAbilityIds: string[];
 
+  // Multi-pull (inc.1) — see docs/design/multi-pull.md.
+  /** All pull variants. Always ≥ 1 after init/hydrate. The ACTIVE
+   *  variant's mechanics/uses are mirrored into the top-level
+   *  `mechanics`/`uses` above (the live editing surface) ; the entry
+   *  here is reconciled lazily at the persist / undo / switch
+   *  boundaries via syncActiveVariant(). `variants` is the source of
+   *  truth on load. */
+  variants: PullVariant[];
+  /** Id of the variant currently shown in the timeline. Store-only UI
+   *  state — not persisted ; on load we default to the first variant. */
+  activeVariantId: string;
+
   // UI
   collapsed: Record<string, boolean>;
   /** Timeline horizontal zoom. 1 = "base" (≈ all 600s fit a 1600px-wide
@@ -312,6 +325,19 @@ interface PlanState {
    */
   switchPlayerJob(playerId: string, newJobCode: string): void;
 
+  // Actions — pull variants (multi-pull, inc.1)
+  /** Duplicate the active variant into a new "PULL #n" and switch to it. */
+  addVariant(): void;
+  /** Remove a variant. No-op on the last one ; if the active variant is
+   *  removed, falls back to the first remaining. */
+  removeVariant(id: string): void;
+  /** Rename a variant (the tab label). */
+  renameVariant(id: string, name: string): void;
+  /** Make `id` the active variant : the current edits are synced back
+   *  into the outgoing variant, then the target's mechanics/uses become
+   *  the live top-level surface. */
+  switchVariant(id: string): void;
+
   // Actions — boss lanes
   addBossLane(): void;
   removeBossLane(id: string): void;
@@ -392,6 +418,8 @@ interface PlanState {
     uses: Use[];
     hiddenAbilityIds: string[];
     phases: Phase[];
+    variants: PullVariant[];
+    activeVariantId: string;
   }): void;
   /**
    * Replace the entire plan content from a server payload. Used by
@@ -407,6 +435,7 @@ interface PlanState {
     uses?: Use[];
     hidden_ability_ids?: string[];
     phases?: Phase[];
+    variants?: PullVariant[];
   }): void;
 }
 
@@ -437,6 +466,8 @@ export const usePlanStore = create<PlanState>((set) => ({
   uses: [],
   phases: [],
   hiddenAbilityIds: [],
+  variants: [{ id: 'variant-1', name: 'PULL #1', mechanics: [], uses: [] }],
+  activeVariantId: 'variant-1',
   collapsed: {},
   zoom: 2,
   hiddenMechCategories: [],
@@ -600,6 +631,9 @@ export const usePlanStore = create<PlanState>((set) => ({
         // Phase markers from a previous fight don't line up with the
         // freshly imported timeline — start clean.
         phases: [],
+        // An imported log = one pull. Replace any existing variants with
+        // a single fresh one (multi-log import is inc.3, not inc.1).
+        ...singleVariant(importedMechs, importedUses),
       };
     }),
   importParty: (newParty) =>
@@ -607,24 +641,33 @@ export const usePlanStore = create<PlanState>((set) => ({
       // Map slot-id → old job + new job. Slots that didn't change job
       // skip the remap and keep their uses as-is.
       const newById = new Map(newParty.map((p) => [p.id, p]));
-      const remappedUses: Use[] = [];
-      for (const u of s.uses) {
-        const oldPlayer = s.party.find((p) => p.id === u.player_id);
-        const newPlayer = newById.get(u.player_id);
-        if (!newPlayer) continue; // slot disappeared (unlikely with 8 fixed slots)
-        if (oldPlayer && oldPlayer.job === newPlayer.job) {
-          remappedUses.push(u);
-          continue;
+      const remapUses = (uses: Use[]): Use[] => {
+        const out: Use[] = [];
+        for (const u of uses) {
+          const oldPlayer = s.party.find((p) => p.id === u.player_id);
+          const newPlayer = newById.get(u.player_id);
+          if (!newPlayer) continue; // slot disappeared (unlikely with 8 fixed slots)
+          if (oldPlayer && oldPlayer.job === newPlayer.job) {
+            out.push(u);
+            continue;
+          }
+          const oldJob = s.jobs.find((j) => j.code === oldPlayer?.job);
+          const newJob = s.jobs.find((j) => j.code === newPlayer.job);
+          if (!oldJob || !newJob) continue;
+          const oldAb = oldJob.abilities.find((a) => a.id === u.ability_id);
+          if (!oldAb) continue;
+          const matchAb = newJob.abilities.find((a) => a.name === oldAb.name);
+          if (matchAb) out.push({ ...u, ability_id: matchAb.id });
         }
-        const oldJob = s.jobs.find((j) => j.code === oldPlayer?.job);
-        const newJob = s.jobs.find((j) => j.code === newPlayer.job);
-        if (!oldJob || !newJob) continue;
-        const oldAb = oldJob.abilities.find((a) => a.id === u.ability_id);
-        if (!oldAb) continue;
-        const matchAb = newJob.abilities.find((a) => a.name === oldAb.name);
-        if (matchAb) remappedUses.push({ ...u, ability_id: matchAb.id });
-      }
-      return { party: newParty, uses: remappedUses };
+        return out;
+      };
+      // The party is shared across all variants — remap every variant's
+      // uses, not just the active one, so an inactive pull doesn't keep
+      // dangling references to the old job's abilities.
+      const variants = syncActiveVariant(s.variants, s.activeVariantId, s.mechanics, s.uses)
+        .map((v) => ({ ...v, uses: remapUses(v.uses) }));
+      const active = variants.find((v) => v.id === s.activeVariantId);
+      return { party: newParty, variants, uses: active ? active.uses : remapUses(s.uses) };
     }),
   switchPlayerJob: (playerId, newJobCode) =>
     set((s) => {
@@ -634,22 +677,79 @@ export const usePlanStore = create<PlanState>((set) => ({
       const newJob = s.jobs.find((j) => j.code === newJobCode);
       if (!oldJob || !newJob) return {};
 
-      const remappedUses: Use[] = [];
-      for (const u of s.uses) {
-        if (u.player_id !== playerId) {
-          remappedUses.push(u);
-          continue;
+      const remapUses = (uses: Use[]): Use[] => {
+        const out: Use[] = [];
+        for (const u of uses) {
+          if (u.player_id !== playerId) {
+            out.push(u);
+            continue;
+          }
+          const oldAb = oldJob.abilities.find((a) => a.id === u.ability_id);
+          if (!oldAb) continue;
+          const matchAb = newJob.abilities.find((a) => a.name === oldAb.name);
+          if (matchAb) out.push({ ...u, ability_id: matchAb.id });
+          // else: ability not in new job → drop the use silently
         }
-        const oldAb = oldJob.abilities.find((a) => a.id === u.ability_id);
-        if (!oldAb) continue;
-        const matchAb = newJob.abilities.find((a) => a.name === oldAb.name);
-        if (matchAb) remappedUses.push({ ...u, ability_id: matchAb.id });
-        // else: ability not in new job → drop the use silently
-      }
+        return out;
+      };
+      // Party is shared : remap this player's uses in every variant.
+      const variants = syncActiveVariant(s.variants, s.activeVariantId, s.mechanics, s.uses)
+        .map((v) => ({ ...v, uses: remapUses(v.uses) }));
+      const active = variants.find((v) => v.id === s.activeVariantId);
 
       return {
         party: s.party.map((p) => (p.id === playerId ? { ...p, job: newJobCode } : p)),
-        uses: remappedUses,
+        variants,
+        uses: active ? active.uses : remapUses(s.uses),
+      };
+    }),
+
+  addVariant: () =>
+    set((s) => {
+      const synced = syncActiveVariant(s.variants, s.activeVariantId, s.mechanics, s.uses);
+      const active = synced.find((v) => v.id === s.activeVariantId) ?? synced[0]!;
+      const id = `variant-${Date.now()}`;
+      const dup = duplicateVariant(active, id, nextVariantName(synced));
+      return {
+        variants: [...synced, dup],
+        activeVariantId: id,
+        mechanics: dup.mechanics,
+        uses: dup.uses,
+      };
+    }),
+  removeVariant: (id) =>
+    set((s) => {
+      if (s.variants.length <= 1) return {}; // never drop the last pull
+      const synced = syncActiveVariant(s.variants, s.activeVariantId, s.mechanics, s.uses);
+      const remaining = synced.filter((v) => v.id !== id);
+      if (remaining.length === synced.length) return {}; // unknown id
+      // Removing the active variant → fall back to the first remaining.
+      if (id === s.activeVariantId) {
+        const next = remaining[0]!;
+        return {
+          variants: remaining,
+          activeVariantId: next.id,
+          mechanics: next.mechanics,
+          uses: next.uses,
+        };
+      }
+      return { variants: remaining };
+    }),
+  renameVariant: (id, name) =>
+    set((s) => ({
+      variants: s.variants.map((v) => (v.id === id ? { ...v, name } : v)),
+    })),
+  switchVariant: (id) =>
+    set((s) => {
+      if (id === s.activeVariantId) return {};
+      const synced = syncActiveVariant(s.variants, s.activeVariantId, s.mechanics, s.uses);
+      const target = synced.find((v) => v.id === id);
+      if (!target) return {};
+      return {
+        variants: synced,
+        activeVariantId: id,
+        mechanics: target.mechanics,
+        uses: target.uses,
       };
     }),
 
@@ -814,6 +914,7 @@ export const usePlanStore = create<PlanState>((set) => ({
       uses: [],
       phases: [],
       bossLanes: [{ id: 'lane-1', name: 'BOSS A' }],
+      ...singleVariant([], []),
     }),
 
   setSlug: (slug) => set({ slug }),
@@ -843,31 +944,47 @@ export const usePlanStore = create<PlanState>((set) => ({
       uses: snap.uses,
       hiddenAbilityIds: snap.hiddenAbilityIds,
       phases: snap.phases,
+      // The snapshot already synced the active variant's data into
+      // `variants` at capture time, so restoring all of them keeps the
+      // top-level mechanics/uses == variants[active] invariant.
+      variants: snap.variants,
+      activeVariantId: snap.activeVariantId,
       // Don't touch transient UI ; undo a placement shouldn't reopen a modal.
     }),
   hydratePlan: (plan) =>
-    set((s) => ({
-      slug: plan.meta?.slug ?? s.slug,
-      // Backfill defaults for any field a legacy server-stored plan
-      // might lack (added later than the field's existence in code) —
-      // the runtime payload can have an undefined `level` even though
-      // the TS type marks it required.
-      encounter: plan.encounter
-        ? { ...plan.encounter, level: plan.encounter.level ?? 100 }
-        : s.encounter,
-      party: plan.party ?? s.party,
-      bossLanes: plan.boss_lanes ?? s.bossLanes,
-      mechanics: plan.mechanics ?? s.mechanics,
-      uses: plan.uses ?? s.uses,
-      hiddenAbilityIds: plan.hidden_ability_ids ?? [],
-      phases: plan.phases ?? [],
-      // Reset transient UI so a stale modal/preview doesn't leak across loads
-      mechanicModal: null,
-      dragCtx: null,
-      previewUse: null,
-      saveStatus: 'saved',
-      _skipNextSave: true,
-    })),
+    set((s) => {
+      const mechanics = plan.mechanics ?? s.mechanics;
+      const uses = plan.uses ?? s.uses;
+      // `variants` is the source of truth when present ; legacy plans are
+      // migrated into a single variant carrying mechanics/uses. The active
+      // variant's data becomes the live top-level surface.
+      const { variants, activeVariantId } = ensureVariants(mechanics, uses, plan.variants);
+      const active = variants.find((v) => v.id === activeVariantId);
+      return {
+        slug: plan.meta?.slug ?? s.slug,
+        // Backfill defaults for any field a legacy server-stored plan
+        // might lack (added later than the field's existence in code) —
+        // the runtime payload can have an undefined `level` even though
+        // the TS type marks it required.
+        encounter: plan.encounter
+          ? { ...plan.encounter, level: plan.encounter.level ?? 100 }
+          : s.encounter,
+        party: plan.party ?? s.party,
+        bossLanes: plan.boss_lanes ?? s.bossLanes,
+        mechanics: active ? active.mechanics : mechanics,
+        uses: active ? active.uses : uses,
+        hiddenAbilityIds: plan.hidden_ability_ids ?? [],
+        phases: plan.phases ?? [],
+        variants,
+        activeVariantId,
+        // Reset transient UI so a stale modal/preview doesn't leak across loads
+        mechanicModal: null,
+        dragCtx: null,
+        previewUse: null,
+        saveStatus: 'saved',
+        _skipNextSave: true,
+      };
+    }),
 }));
 
 /** Convenience selector: find an ability across all jobs (O(jobs+abilities), fine at ~150). */

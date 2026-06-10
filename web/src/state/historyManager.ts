@@ -17,8 +17,9 @@
  * subscription is tied to the app's lifetime in dev (StrictMode-safe).
  */
 
-import type { BossLane, Encounter, Mechanic, Phase, Player, Use } from '../types';
+import type { BossLane, Encounter, Mechanic, Phase, Player, PullVariant, Use } from '../types';
 import { usePlanStore } from './planStore';
+import { syncActiveVariant } from '../lib/variants';
 
 interface Snapshot {
   encounter: Encounter;
@@ -28,6 +29,8 @@ interface Snapshot {
   uses: Use[];
   hiddenAbilityIds: string[];
   phases: Phase[];
+  variants: PullVariant[];
+  activeVariantId: string;
 }
 
 const HISTORY_CAP = 100;
@@ -43,6 +46,9 @@ let unsub: (() => void) | null = null;
 
 function capture(): Snapshot {
   const s = usePlanStore.getState();
+  // Reconcile the live top-level mechanics/uses back into the active
+  // variant so the snapshot is internally consistent before deep-cloning.
+  const variants = syncActiveVariant(s.variants, s.activeVariantId, s.mechanics, s.uses);
   return {
     encounter: { ...s.encounter },
     party: s.party.map((p) => ({ ...p })),
@@ -51,6 +57,13 @@ function capture(): Snapshot {
     uses: s.uses.map((u) => ({ ...u })),
     hiddenAbilityIds: [...s.hiddenAbilityIds],
     phases: s.phases.map((p) => ({ ...p })),
+    variants: variants.map((v) => ({
+      id: v.id,
+      name: v.name,
+      mechanics: v.mechanics.map((m) => ({ ...m, targets: [...m.targets] })),
+      uses: v.uses.map((u) => ({ ...u })),
+    })),
+    activeVariantId: s.activeVariantId,
   };
 }
 
@@ -65,7 +78,7 @@ export function initHistory(): () => void {
   history = [];
   future = [];
   unsub = usePlanStore.subscribe((state, prevState) => {
-    // Reference compare on the 5 persistable slices.
+    // Reference compare on the persistable slices.
     const changed =
       state.encounter !== prevState.encounter ||
       state.party !== prevState.party ||
@@ -73,8 +86,21 @@ export function initHistory(): () => void {
       state.mechanics !== prevState.mechanics ||
       state.uses !== prevState.uses ||
       state.hiddenAbilityIds !== prevState.hiddenAbilityIds ||
-      state.phases !== prevState.phases;
+      state.phases !== prevState.phases ||
+      state.variants !== prevState.variants ||
+      state.activeVariantId !== prevState.activeVariantId;
     if (!changed) return;
+    // A pure variant switch (active id changes, the set of variant ids is
+    // unchanged) is navigation, not an undoable edit : just rebaseline so
+    // Ctrl+Z doesn't flip tabs and the history isn't flooded with switches.
+    // (add/remove change the id list and fall through to the normal path.)
+    const idsSame =
+      state.variants.length === prevState.variants.length &&
+      state.variants.every((v, i) => v.id === prevState.variants[i]!.id);
+    if (state.activeVariantId !== prevState.activeVariantId && idsSame) {
+      prev = capture();
+      return;
+    }
     if (suppressNext) {
       suppressNext = false;
       prev = capture();

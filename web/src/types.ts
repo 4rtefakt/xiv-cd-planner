@@ -156,6 +156,21 @@ export interface Use {
   time: number;               // seconds (start of effect)
 }
 
+/**
+ * A named pull pattern ("PULL #1", "PULL #2", …) — multi-pull design,
+ * increment 1 (see docs/design/multi-pull.md). Each variant carries a
+ * FULL copy of its mechanics + uses (no deltas yet). The plan's
+ * top-level `mechanics`/`uses` mirror the ACTIVE variant for backward
+ * compatibility ; `variants` is the source of truth when present. The
+ * party is shared across all variants (the 8 fixed slots p1..p8).
+ */
+export interface PullVariant {
+  id: string;
+  name: string;
+  mechanics: Mechanic[];
+  uses: Use[];
+}
+
 export interface PlanMeta {
   slug: string;
   owner_id: string | null;
@@ -188,4 +203,8 @@ export interface Plan {
   /** Phase markers (P1/P2/…). Optional for plans stored before the
    *  field existed — treated as []. */
   phases?: Phase[];
+  /** Pull variants (multi-pull, inc.1). Optional — legacy plans are
+   *  backfilled to a single variant carrying `mechanics`/`uses`, same
+   *  migration pattern as `phases`. See docs/design/multi-pull.md. */
+  variants?: PullVariant[];
 }

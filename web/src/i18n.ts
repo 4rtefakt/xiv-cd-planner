@@ -89,6 +89,11 @@ const messages = {
     'tl.orient.vertical':   'VERTICAL',
     'tl.orient.toHorizontal':'Switch to the horizontal timeline (time runs left → right)',
     'tl.orient.toVertical': 'Switch to the vertical timeline (time runs top → bottom, one column per job)',
+    // Pull variants (multi-pull)
+    'variant.label':        'PULLS',
+    'variant.add':          '+ PULL',
+    'variant.addHint':      'Duplicate the active pull into a new variant',
+    'variant.tabHint':      'double-click to rename · right-click to remove',
     // Mechanic modal
     'mech.addTitle':        '◆ ADD MECHANIC',
     'mech.editTitle':       '◆ EDIT MECHANIC',
@@ -235,6 +240,11 @@ const messages = {
     'tl.orient.vertical':   'VERTICAL',
     'tl.orient.toHorizontal':'Passer à la timeline horizontale (le temps va de gauche à droite)',
     'tl.orient.toVertical': 'Passer à la timeline verticale (le temps descend, une colonne par job)',
+    // Pull variants (multi-pull)
+    'variant.label':        'PULLS',
+    'variant.add':          '+ PULL',
+    'variant.addHint':      'Dupliquer le pull actif dans une nouvelle variante',
+    'variant.tabHint':      'double-clic pour renommer · clic droit pour supprimer',
     'mech.addTitle':        '◆ AJOUTER MÉCA',
     'mech.editTitle':       '◆ ÉDITER MÉCA',
     'mech.name':            'Nom',

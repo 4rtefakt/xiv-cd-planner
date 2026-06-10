@@ -8,6 +8,7 @@ import { PlayerGroupsLeft, PlayerGroupsRight } from './PlayerGroups';
 import { PhaseLayer } from './PhaseMarkers';
 import { TimelineVertical } from './TimelineVertical';
 import { mainAxisPx, ZOOM_STEP, ZOOM_MIN, ZOOM_MAX } from './metrics';
+import { VariantBar } from './VariantBar';
 
 /** Compact-mode pill — shrinks every boss mech to its diamond cap. */
 function CompactToggle() {
@@ -292,6 +293,7 @@ export function TimelineShell() {
 
   return (
     <>
+      <VariantBar />
       <div className="timeline-toolbar">
         <span className="tl-tool-label">{t('tl.lanes')}</span>
         <button type="button" className="tl-btn add-lane" onClick={addBossLane}>

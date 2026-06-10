@@ -1,6 +1,7 @@
 import { useEffect, useRef } from 'react';
 import { api } from '../api/client';
 import { usePlanStore } from '../state/planStore';
+import { syncActiveVariant } from '../lib/variants';
 
 /** Save debounce — 1s after the last edit. Tuned to feel "immediate"
  *  without hammering the API on every click during chained edits. */
@@ -31,6 +32,7 @@ export function AutoSaver() {
   const uses = usePlanStore((s) => s.uses);
   const hiddenAbilityIds = usePlanStore((s) => s.hiddenAbilityIds);
   const phases = usePlanStore((s) => s.phases);
+  const variants = usePlanStore((s) => s.variants);
 
   // Refs that don't trigger re-renders.
   const isFirstEffect = useRef(true);
@@ -68,6 +70,10 @@ export function AutoSaver() {
         uses: state.uses,
         hidden_ability_ids: state.hiddenAbilityIds,
         phases: state.phases,
+        // Reconcile the live edits into the active variant before saving
+        // (top-level mechanics/uses stay as the active mirror for
+        // backward compatibility with readers that ignore `variants`).
+        variants: syncActiveVariant(state.variants, state.activeVariantId, state.mechanics, state.uses),
       };
       try {
         if (!state.slug) {
@@ -87,7 +93,7 @@ export function AutoSaver() {
     return () => {
       if (inFlight.current) window.clearTimeout(inFlight.current);
     };
-  }, [encounter, party, bossLanes, mechanics, uses, hiddenAbilityIds, phases]);
+  }, [encounter, party, bossLanes, mechanics, uses, hiddenAbilityIds, phases, variants]);
 
   return null;
 }
