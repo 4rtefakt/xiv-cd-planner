@@ -49,11 +49,16 @@ export interface Ability {
    *  because the FR client uses different abbreviations (HAS, SUR…). */
   affinity?: string;
   affinity_fr?: string;
-  /** Per-level overrides. Key = max level bracket (50, 60, 70, 80, 90,
-   *  100). resolveAbilityAtLevel(ab, level) picks the highest bracket
-   *  ≤ level whose entry exists and merges its keys over the base. So
-   *  `{ 70: { mit_potency: 25 }, 90: { mit_potency: 30 } }` means base
-   *  value applies at 100, 30% applies at 90, 25% at 70 and 80. */
+  /** Per-level UPGRADES. Base fields = the ability's LOWEST-level form
+   *  (what you get at level_unlocked). Each key is the level where a
+   *  trait or action upgrade kicks in ; its patch applies from that
+   *  level upward (keys ≤ level merge in ascending order, higher keys
+   *  overwrite lower ones). Keys can be any level — trait levels like
+   *  88/94/98 work even though encounters only use the 50…100 brackets.
+   *  Two flavours :
+   *    - trait : `{ 98: { effect: 15 } }` on Reprisal (10s before 98)
+   *    - action upgrade : `{ 82: { name: 'Holy Sheltron', icon: …,
+   *      action_id: … } }` on Sheltron — name/icon/stats all swap. */
   level_variants?: Record<number, Partial<Omit<Ability, 'id' | 'level_variants'>>>;
   verified?: boolean;
   _source_url?: string;
