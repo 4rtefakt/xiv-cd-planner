@@ -203,8 +203,11 @@ function PreviewGhost({
   fightDuration: number;
 }) {
   const lang = usePlanStore((s) => s.lang);
-  const totalPct = (ability.recast / fightDuration) * 100;
-  const activeWidthPct = Math.min(1, ability.effect / ability.recast) * 100;
+  // Same end-of-fight clipping as CdUse so the ghost previews exactly
+  // what will be rendered once committed.
+  const visibleS = Math.max(0, Math.min(ability.recast, fightDuration - time));
+  const totalPct = (visibleS / fightDuration) * 100;
+  const activeWidthPct = (visibleS > 0 ? Math.min(1, ability.effect / visibleS) : 0) * 100;
   return (
     <div
       className={

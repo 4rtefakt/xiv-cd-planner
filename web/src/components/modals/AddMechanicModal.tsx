@@ -77,9 +77,20 @@ export function AddMechanicModal() {
     const finalCastTime = castClamped > 0 ? castClamped : undefined;
 
     if (isEdit && modal.mechanicId) {
+      // The field was pre-filled with the LOCALIZED name. Only persist a
+      // rename when the user actually edited it — otherwise saving a FR
+      // display name into `name` would clobber the EN one. A real rename
+      // clears name_fr : the custom name wins in both languages.
+      const state = usePlanStore.getState();
+      const orig = state.mechanics.find((m) => m.id === modal.mechanicId);
+      const origDisplay = orig
+        ? (state.lang === 'fr' && orig.name_fr ? orig.name_fr : orig.name).toUpperCase()
+        : undefined;
+      const renamed = orig ? finalName !== origDisplay : true;
       updateMechanic(modal.mechanicId, {
         lane_id: modal.laneId,
-        name: finalName,
+        name: renamed ? finalName : orig!.name,
+        ...(renamed ? { name_fr: undefined } : {}),
         time: t,
         category,
         targets: effectiveTargets,

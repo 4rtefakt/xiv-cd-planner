@@ -614,7 +614,7 @@
   font-size: 9px;
 }
 .tl-btn.tl-vis.c-damage    { --vis-color: var(--tankbuster); }
-.tl-btn.tl-vis.c-placement { --vis-color: var(--custom); }
+.tl-btn.tl-vis.c-placement { --vis-color: var(--cyan); }
 .tl-btn.tl-vis.on {
   color: var(--vis-color);
   border-color: var(--vis-color);
@@ -1017,14 +1017,22 @@
  *  the current room. Each chip = one hidden ability ; click to restore. */
 .cd-row-hidden-footer {
   display: flex;
-  flex-wrap: wrap;
+  /* Single line, horizontally scrollable : the footer MUST stay exactly
+   * 30px tall to mirror .cd-row-hidden-footer-spacer on the right
+   * column — wrapping to a second line desyncs every row below it. */
+  flex-wrap: nowrap;
+  overflow-x: auto;
+  overflow-y: hidden;
+  scrollbar-width: thin;
   align-items: center;
   gap: 4px;
   padding: 4px 10px 4px 14px;
-  min-height: 22px;
+  height: 30px;
+  box-sizing: border-box;
   background: rgba(255, 255, 255, 0.015);
   border-bottom: 1px solid var(--line);
 }
+.cd-row-hidden-footer .cd-hidden-chip { flex: 0 0 auto; }
 .cd-row-hidden-footer .cd-indent {
   /* Override the grid-cell sizing — the footer is a flex container. */
   width: 24px;
@@ -1063,15 +1071,11 @@
   margin-left: 2px;
 }
 /* Right-column spacer that matches the left-column footer height so the
- * two scroll regions stay row-aligned. Height tracks .cd-row-hidden-footer
- * (min-height 22 + padding 4+4 = 30px ; flex wrap adds rows of ~22px
- * each, so the spacer auto-grows via the natural content of nothing —
- * we compute via min-height + use vertical padding to match). */
+ * two scroll regions stay row-aligned. Both are hard-locked at 30px —
+ * the footer never wraps (it scrolls horizontally instead). */
 .cd-row-hidden-footer-spacer {
-  /* Mirror the min content height of the footer ; if the user has many
-   * hidden CDs and the footer wraps to 2 rows, the right side will
-   * still be 1 row tall — minor cosmetic, acceptable for now. */
-  min-height: 30px;
+  height: 30px;
+  box-sizing: border-box;
   background: rgba(255, 255, 255, 0.015);
   border-bottom: 1px solid var(--line);
 }
@@ -1342,8 +1346,11 @@
  * the cast bar timing. */
 .mech-cast-bar {
   position: absolute;
-  top: 18px;
-  height: 14px;
+  /* Near-full lane height (feedback : the 14px strip was easy to miss).
+   * top/bottom instead of a fixed height so the bar follows the lane
+   * when stacked mech labels grow it via --mech-slots. */
+  top: 2px;
+  bottom: 2px;
   z-index: 2;
   pointer-events: none;
   background: repeating-linear-gradient(
@@ -1377,7 +1384,6 @@
   white-space: nowrap;
   text-shadow: 0 0 4px rgba(0, 0, 0, 0.8);
 }
-.app.compact-mechs .mech-cast-bar { top: 12px; height: 10px; }
 .app.compact-mechs .mech-cast-bar-label { font-size: 8px; }
 /* Single color scheme : damage_kind for damage mechs, 'placement' for
    the rest. The cap, the vertical line, the label border and the
@@ -1735,7 +1741,9 @@
   box-shadow: 0 0 10px var(--cat-color);
 }
 .category-opt.c-damage    { --cat-color: var(--tankbuster); }
-.category-opt.c-placement { --cat-color: var(--custom); }
+/* Cyan, NOT --custom (violet) : placement mechs render cyan on the
+ * timeline + legend, the modal picker must announce the same color. */
+.category-opt.c-placement { --cat-color: var(--cyan); }
 .category-label {
   font-family: 'JetBrains Mono', monospace;
   font-size: 11px;

@@ -31,12 +31,16 @@ const SUBTYPE_TO_JOB: Record<string, string> = {
 const SLOT_BADGES = ['MT', 'OT', 'H1', 'H2', 'M1', 'M2', 'R1', 'R2'] as const;
 
 /**
- * Build an 8-slot Player[] from a FFLogs roster. Greedy slot allocator :
- * each badge picks from its expected bucket (MT/OT from tanks, H1/H2
- * from heals, M1/M2 from melee, R1 from phys-ranged, R2 from caster).
- * If a bucket runs out we fall back to whoever's still in leftover.
- * Names of slots without a matching player keep the placeholder
- * names from the existing party (Tank 1, Healer 1, …).
+ * Build an 8-slot Player[] from a FFLogs roster. Two-pass allocator :
+ *   1. Each badge picks from its expected bucket (MT/OT from tanks,
+ *      H1/H2 from heals, M1/M2 from melee, R1 from phys-ranged then
+ *      caster, R2 from caster then phys-ranged).
+ *   2. Every player still unassigned (off-meta comps : 3 ranged + 1
+ *      melee, 3 tanks, …) fills the remaining empty slots in order —
+ *      nobody from the log is ever dropped just because their bucket
+ *      overflowed.
+ * Slots still empty after both passes keep the placeholder names from
+ * the existing party (Tank 1, Healer 1, …).
  */
 function mapLogPlayersToParty(
   players: Array<{ name: string; subType: string }>,
@@ -60,15 +64,29 @@ function mapLogPlayersToParty(
   const phys = resolved.filter((p) => p.subRole === 'phys_ranged');
   const caster = resolved.filter((p) => p.subRole === 'magic_ranged');
 
+  // Pass 1 — preferred buckets per badge.
+  const picks: (Resolved | undefined)[] = SLOT_BADGES.map((badge) => {
+    if (badge === 'MT' || badge === 'OT') return tanks.shift();
+    if (badge === 'H1' || badge === 'H2') return heals.shift();
+    if (badge === 'M1' || badge === 'M2') return melee.shift();
+    if (badge === 'R1') return phys.shift() ?? caster.shift();
+    return caster.shift() ?? phys.shift(); // R2
+  });
+
+  // Pass 2 — distribute the overflow into whatever slots stayed empty.
+  // DPS slots are served first so an extra ranged lands in M2 rather
+  // than evicting a placeholder healer seat.
+  const leftovers = [...melee, ...phys, ...caster, ...tanks, ...heals];
+  const FILL_ORDER = [4, 5, 6, 7, 0, 1, 2, 3]; // M1 M2 R1 R2 MT OT H1 H2
+  for (const i of FILL_ORDER) {
+    if (leftovers.length === 0) break;
+    if (!picks[i]) picks[i] = leftovers.shift();
+  }
+
   const result: Player[] = [];
   for (let i = 0; i < SLOT_BADGES.length; i++) {
     const badge = SLOT_BADGES[i]!;
-    let pick: Resolved | undefined;
-    if (badge === 'MT' || badge === 'OT') pick = tanks.shift();
-    else if (badge === 'H1' || badge === 'H2') pick = heals.shift();
-    else if (badge === 'M1' || badge === 'M2') pick = melee.shift();
-    else if (badge === 'R1') pick = phys.shift() ?? caster.shift() ?? melee.shift();
-    else if (badge === 'R2') pick = caster.shift() ?? phys.shift() ?? melee.shift();
+    const pick = picks[i];
     if (pick) {
       result.push({ id: `p${i + 1}`, name: pick.name, job: pick.code, badge });
     } else {
@@ -596,19 +614,22 @@ export const usePlanStore = create<PlanState>((set) => ({
       },
     })),
   openEditMechanic: (m) =>
-    set({
+    set((s) => ({
       mechanicModal: {
         mode: 'edit',
         mechanicId: m.id,
         laneId: m.lane_id,
         time: m.time,
-        name: m.name,
+        // Pre-fill with the LOCALIZED name (what the user sees on the
+        // timeline). AddMechanicModal only persists a rename when the
+        // field actually changed from this value.
+        name: s.lang === 'fr' && m.name_fr ? m.name_fr : m.name,
         category: m.category,
         targets: [...m.targets],
         damage_kind: m.damage_kind ?? 'magical',
         cast_time: m.cast_time ?? 0,
       },
-    }),
+    })),
   setMechanicModal: (patch) =>
     set((s) => (s.mechanicModal ? { mechanicModal: { ...s.mechanicModal, ...patch } } : {})),
   closeMechanicModal: () => set({ mechanicModal: null }),
