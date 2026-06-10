@@ -77,12 +77,71 @@ export function TimelineVertical() {
     return () => scroller.removeEventListener('wheel', onWheel);
   }, []);
 
+  // Pan-by-drag on empty canvas zones — grab anywhere that isn't an
+  // interactive marker and drag to scroll in BOTH axes (time = Y,
+  // columns = X). Mirrors the horizontal shell's pan, but 2-D. If the
+  // mouse moved past the threshold we swallow the trailing click so a
+  // drag doesn't also place a cooldown / open the mech modal.
+  useEffect(() => {
+    const el = scrollRef.current;
+    if (!el) return;
+    const PAN_THRESHOLD = 4; // px
+    const onMouseDown = (e: MouseEvent) => {
+      if (e.button !== 0) return;
+      const target = e.target as HTMLElement;
+      if (!target.closest('.tl-vert-canvas')) return; // canvas only
+      // Leave the markers' own drag/click behaviours alone.
+      if (target.closest('.mechanic') || target.closest('.cd-use') || target.closest('.phase-label')) return;
+
+      const startX = e.clientX;
+      const startY = e.clientY;
+      const startLeft = el.scrollLeft;
+      const startTop = el.scrollTop;
+      let moved = false;
+      const prevCursor = el.style.cursor;
+
+      const onMove = (mv: MouseEvent) => {
+        const dx = mv.clientX - startX;
+        const dy = mv.clientY - startY;
+        if (!moved && Math.hypot(dx, dy) > PAN_THRESHOLD) {
+          moved = true;
+          el.classList.add('is-panning');
+          el.style.cursor = 'grabbing';
+          usePlanStore.getState().setPreviewUse(null);
+        }
+        if (moved) {
+          el.scrollLeft = startLeft - dx;
+          el.scrollTop = startTop - dy;
+          mv.preventDefault();
+        }
+      };
+      const onUp = () => {
+        document.removeEventListener('mousemove', onMove);
+        document.removeEventListener('mouseup', onUp);
+        el.style.cursor = prevCursor;
+        el.classList.remove('is-panning');
+        if (moved) {
+          const suppress = (cl: MouseEvent) => {
+            cl.stopPropagation();
+            cl.preventDefault();
+            document.removeEventListener('click', suppress, true);
+          };
+          document.addEventListener('click', suppress, true);
+          setTimeout(() => document.removeEventListener('click', suppress, true), 300);
+        }
+      };
+      document.addEventListener('mousemove', onMove);
+      document.addEventListener('mouseup', onUp);
+    };
+    el.addEventListener('mousedown', onMouseDown);
+    return () => el.removeEventListener('mousedown', onMouseDown);
+  }, []);
+
   return (
     <div className="timeline-shell orient-vertical">
       <div className="tl-vert" ref={scrollRef}>
-        <div className="tl-vert-corner">
-          PLAYER <span className="sep" style={{ color: 'var(--text-faint)', margin: '0 6px' }}>/</span> ABILITY
-        </div>
+        {/* Empty frozen corner (over the ruler × headers intersection). */}
+        <div className="tl-vert-corner" aria-hidden />
         <div className="tl-vert-colhead">
           <BossLanesLeft />
           <PlayerGroupsLeft />

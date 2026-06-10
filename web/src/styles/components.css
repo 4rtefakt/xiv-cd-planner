@@ -2325,6 +2325,15 @@
   background: var(--panel-2);
 }
 
+/* Drag-to-pan : empty canvas columns read as grabbable ; while a pan is
+   in progress, kill pointer events on the rows so the click-to-place
+   preview doesn't keep firing under the moving cursor. */
+.orient-vertical .boss-row-right,
+.orient-vertical .cd-row-right { cursor: grab; }
+.tl-vert.is-panning { cursor: grabbing; }
+.tl-vert.is-panning .cd-row-right,
+.tl-vert.is-panning .boss-row-right { pointer-events: none; }
+
 /* ── Containers : stack rows → columns ────────────────────── */
 .orient-vertical .left-boss-lanes,
 .orient-vertical .right-boss-lanes,
