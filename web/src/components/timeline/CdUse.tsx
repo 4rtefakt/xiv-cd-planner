@@ -23,8 +23,13 @@ export function CdUse({ use, ability, fightDuration }: CdUseProps) {
   const setDragCtx = usePlanStore((s) => s.setDragCtx);
   const removeUse = usePlanStore((s) => s.removeUse);
 
-  const totalPct = (ability.recast / fightDuration) * 100;
-  const activeRatio = Math.min(1, ability.effect / ability.recast);
+  // Visual width is CLIPPED at the end of the fight : a 120s recast
+  // placed at T-30s renders 30s wide instead of stretching the canvas
+  // past the boss timeline (which desynced the two scrollers). Conflict
+  // detection still uses the full recast — only the render is clipped.
+  const visibleS = Math.max(0, Math.min(ability.recast, fightDuration - use.time));
+  const totalPct = (visibleS / fightDuration) * 100;
+  const activeRatio = visibleS > 0 ? Math.min(1, ability.effect / visibleS) : 0;
   const activeWidthPct = activeRatio * 100;
   const lang = usePlanStore((s) => s.lang);
   const localName = abilityName(ability, lang);

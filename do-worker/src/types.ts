@@ -29,6 +29,10 @@ export interface Mechanic {
   id: string;
   lane_id: string;
   name: string;
+  /** French in-game name — see web/src/types.ts. */
+  name_fr?: string;
+  /** xivapi/FFLogs action id — see web/src/types.ts. */
+  game_id?: number;
   time: number;
   category: MechCategory;
   targets: string[];
