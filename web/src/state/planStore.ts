@@ -307,6 +307,7 @@ interface PlanState {
       time: number;
       cast_time?: number;
       source_name?: string;
+      hit_count?: number;
     }>;
     /** Friendly cast events from the log. Mapped to Uses[] via
      *  playerName→player_id (in newParty) and (job+actionId)→ability_id
@@ -561,6 +562,8 @@ export const usePlanStore = create<PlanState>((set) => ({
         category: 'cast' as const,
         targets: [],
         cast_time: c.cast_time && c.cast_time > 0 ? c.cast_time : undefined,
+        // ×N badge when the server collapsed repeated casts (Hyperpulse…).
+        hit_count: c.hit_count && c.hit_count > 1 ? c.hit_count : undefined,
       }));
       // Rebuild uses[] from friendly cast events. Each cast resolves to
       // a Use iff :
