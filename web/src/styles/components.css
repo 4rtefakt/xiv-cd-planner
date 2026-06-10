@@ -615,6 +615,7 @@
 }
 .tl-btn.tl-vis.c-damage    { --vis-color: var(--tankbuster); }
 .tl-btn.tl-vis.c-placement { --vis-color: var(--cyan); }
+.tl-btn.tl-vis.c-cast      { --vis-color: var(--pink); }
 .tl-btn.tl-vis.on {
   color: var(--vis-color);
   border-color: var(--vis-color);
@@ -1376,6 +1377,7 @@
 .mech-cast-bar[data-color="magical"]   { --cast-color: var(--magic-ranged); }
 .mech-cast-bar[data-color="pure"]      { --cast-color: var(--text-faint); }
 .mech-cast-bar[data-color="placement"] { --cast-color: var(--cyan); }
+.mech-cast-bar[data-color="cast"]      { --cast-color: var(--pink); }
 .mech-cast-bar-label {
   font-family: 'JetBrains Mono', monospace;
   font-size: 9px;
@@ -1392,6 +1394,7 @@
 .mechanic[data-color="magical"]   { --mech-color: var(--magic-ranged);  --mech-glow: rgba(192, 132, 252, 0.55); }
 .mechanic[data-color="pure"]      { --mech-color: var(--text-faint);    --mech-glow: rgba(61, 74, 102, 0.3); }
 .mechanic[data-color="placement"] { --mech-color: var(--cyan);          --mech-glow: rgba(0, 229, 255, 0.45); }
+.mechanic[data-color="cast"]      { --mech-color: var(--pink);          --mech-glow: rgba(255, 46, 154, 0.5); }
 /* Legacy visualType classes kept as no-ops — old plans in storage may
    still carry a raidwide / tankbuster / autos / custom tag in their
    class string, but the color now always comes from data-color. */
@@ -1744,6 +1747,8 @@
 /* Cyan, NOT --custom (violet) : placement mechs render cyan on the
  * timeline + legend, the modal picker must announce the same color. */
 .category-opt.c-placement { --cat-color: var(--cyan); }
+/* Pink : matches the boss-cast accent on the timeline + VIEW toggle. */
+.category-opt.c-cast      { --cat-color: var(--pink); }
 .category-label {
   font-family: 'JetBrains Mono', monospace;
   font-size: 11px;
@@ -1881,6 +1886,14 @@
   background: transparent;
   border: 1px solid var(--mech-color);
   box-shadow: none;
+}
+/* Boss-cast cap : hollow diamond like placement (it's a cue, not a hit)
+ * but in the cast accent, so casts read as "what you see" without being
+ * mistaken for a damage diamond. */
+.mechanic.is-cast .mech-cap {
+  background: transparent;
+  border: 1.5px solid var(--mech-color);
+  box-shadow: 0 0 6px var(--mech-glow);
 }
 .modal-footer {
   padding: 14px 20px;

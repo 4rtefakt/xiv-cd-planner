@@ -93,6 +93,7 @@ export function ImportLogModal({ open, onClose }: Props) {
       bossLanes: preview.bossLanes,
       players: preview.players,
       mechanics: preview.mechanics,
+      bossCasts: preview.bossCasts,
       playerUses: preview.playerUses,
     });
     onClose();

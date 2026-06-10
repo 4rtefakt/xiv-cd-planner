@@ -312,6 +312,12 @@ export function TimelineShell() {
           titleShow={t('tl.view.showPlacement')}
           titleHide={t('tl.view.hidePlacement')}
         />
+        <VisibilityToggle
+          category="cast"
+          label={t('tl.view.cast')}
+          titleShow={t('tl.view.showCast')}
+          titleHide={t('tl.view.hideCast')}
+        />
         <CompactToggle />
       </div>
 
@@ -355,6 +361,7 @@ export function TimelineShell() {
         <div className="legend-item"><div className="legend-line" style={{ '--sw': 'var(--magic-ranged)' } as React.CSSProperties} />MAGICAL</div>
         <div className="legend-item"><div className="legend-line" style={{ '--sw': 'var(--text-faint)' } as React.CSSProperties} />PURE</div>
         <div className="legend-item"><div className="legend-line" style={{ '--sw': 'var(--cyan)' } as React.CSSProperties} />PLACEMENT</div>
+        <div className="legend-item"><div className="legend-line" style={{ '--sw': 'var(--pink)' } as React.CSSProperties} />CAST</div>
         <div className="legend-item"><div className="legend-swatch" style={{ '--sw': 'var(--cyan)' } as React.CSSProperties} />PERSONAL</div>
         <div className="legend-item"><div className="legend-swatch" style={{ '--sw': 'var(--pink)' } as React.CSSProperties} />PARTY</div>
         <div className="legend-item"><div className="legend-swatch" style={{ '--sw': 'var(--heal)' } as React.CSSProperties} />HEAL</div>
