@@ -277,6 +277,18 @@ interface PlanState {
       hit_count?: number;
       cast_time?: number;
     }>;
+    /** Standalone boss casts (FFLogs "sorts" tab) imported as 'cast'
+     *  category mechs, in addition to the damage mechs above. No
+     *  damage_kind / targets — they're non-mitigable visual cues with
+     *  their own display toggle. */
+    bossCasts?: Array<{
+      name: string;
+      name_fr?: string;
+      game_id?: number;
+      time: number;
+      cast_time?: number;
+      source_name?: string;
+    }>;
     /** Friendly cast events from the log. Mapped to Uses[] via
      *  playerName→player_id (in newParty) and (job+actionId)→ability_id
      *  (in jobs seed). Casts we can't resolve are silently dropped. */
@@ -495,6 +507,21 @@ export const usePlanStore = create<PlanState>((set) => ({
           cast_time: m.cast_time && m.cast_time > 0 ? m.cast_time : undefined,
         };
       });
+      // Standalone boss casts → 'cast' category mechs. No targets /
+      // damage_kind : they're non-mitigable cues (what players read off
+      // the boss cast bar), shown alongside the damage mechs with their
+      // own VIEW toggle.
+      const importedCasts: Mechanic[] = (payload.bossCasts ?? []).map((c, i) => ({
+        id: `mech-fflogs-cast-${Date.now()}-${i}`,
+        lane_id: (c.source_name && nameToLane.get(c.source_name)) ?? fallbackLaneId,
+        name: c.name.toUpperCase(),
+        name_fr: c.name_fr ? c.name_fr.toUpperCase() : undefined,
+        game_id: c.game_id,
+        time: c.time,
+        category: 'cast' as const,
+        targets: [],
+        cast_time: c.cast_time && c.cast_time > 0 ? c.cast_time : undefined,
+      }));
       // Rebuild uses[] from friendly cast events. Each cast resolves to
       // a Use iff :
       //   - playerName matches one of newParty's player names (exact)
@@ -559,7 +586,7 @@ export const usePlanStore = create<PlanState>((set) => ({
         },
         party: newParty,
         bossLanes: lanes,
-        mechanics: importedMechs,
+        mechanics: [...importedMechs, ...importedCasts],
         uses: importedUses,
         // Phase markers from a previous fight don't line up with the
         // freshly imported timeline — start clean.

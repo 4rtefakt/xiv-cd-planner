@@ -56,7 +56,9 @@ export interface BossLane {
   name: string;
 }
 
-export type MechCategory = 'damage' | 'placement';
+/** 'cast' = boss cast imported as a standalone entry (no damage_kind,
+ *  non-mitigable). See web/src/types.ts for the full rationale. */
+export type MechCategory = 'damage' | 'placement' | 'cast';
 
 export interface Mechanic {
   id: string;

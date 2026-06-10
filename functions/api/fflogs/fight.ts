@@ -233,6 +233,28 @@ interface CastEvent {
   ability?: { name: string; guid: number };
 }
 
+/**
+ * A standalone boss cast (the "sorts" tab in FFLogs) emitted as its own
+ * timeline entry, independent of the damage events. Players read the
+ * boss cast bar, not the damage event names (which are often
+ * misleading), so we surface them as their own mechs with a display
+ * toggle. The damage type is intentionally absent — cast and damage are
+ * different FFLogs objects and a cast doesn't carry hitType/damageType.
+ */
+interface BossCast {
+  name: string;
+  name_fr?: string;
+  /** Seconds since fight start — the `cast` (resolve) timestamp. */
+  time: number;
+  /** begincast → cast duration in seconds. Instant casts leave it
+   *  undefined (no cast bar). */
+  cast_time?: number;
+  /** xivapi action id — used to resolve name_fr (and lazily later). */
+  game_id?: number;
+  /** Display name of the NPC that cast it → drives lane assignment. */
+  source_name?: string;
+}
+
 /** Multi-hit boss abilities (Akh Morn = 5 hits over ~5s, Earthen Fury
  *  multi-tick raidwide, Tidal Wave double-cast) collapse into a single
  *  mech if the same name fires again within this window. 6s catches
@@ -496,6 +518,10 @@ export const onRequestPost: PagesFunction<FFLogsEnv> = async (ctx) => {
     // Instant abilities only fire `cast` (no begincast) → cast_time stays 0.
     interface CastInterval { gameId: number; sourceID: number; endTime: number; castTime: number; }
     const castIntervals: CastInterval[] = [];
+    /** Standalone boss casts emitted to the timeline (one per `cast`
+     *  event). Independent of the damage aggregation above — these are
+     *  what the players actually see on the boss cast bar. */
+    const bossCasts: BossCast[] = [];
     /** Open begincast events waiting for their `cast` partner. Key =
      *  `${sourceID}|${abilityGameID}` so concurrent casts of the same
      *  ability by different mobs don't collide. */
@@ -523,11 +549,15 @@ export const onRequestPost: PagesFunction<FFLogsEnv> = async (ctx) => {
           openBeginCasts.set(key, ev.timestamp);
         } else if (ev.type === 'cast') {
           const begin = openBeginCasts.get(key);
+          // Cast bar duration : begincast → cast. Instant casts have no
+          // begincast partner, so the bar duration stays 0 (undefined
+          // downstream).
+          let dur = 0;
           if (begin != null) {
             // Round to 1-decimal seconds — FFXIV cast bars are typically
             // displayed at 100ms precision and noise below that is just
             // network jitter.
-            const dur = Math.max(0, Math.round((ev.timestamp - begin) / 100) / 10);
+            dur = Math.max(0, Math.round((ev.timestamp - begin) / 100) / 10);
             castIntervals.push({
               gameId: ev.abilityGameID,
               sourceID: ev.sourceID,
@@ -535,6 +565,21 @@ export const onRequestPost: PagesFunction<FFLogsEnv> = async (ctx) => {
               castTime: dur,
             });
             openBeginCasts.delete(key);
+          }
+          // Emit the cast as a standalone timeline entry. Resolve the
+          // name from the inlined ability or the masterData catalog ;
+          // skip autoattacks (the boss's filler swings would flood the
+          // lane) and casts we can't name.
+          const castName = ev.ability?.name ?? abilities.get(ev.abilityGameID)?.name;
+          if (castName && castName.toLowerCase() !== 'attack') {
+            const castSource = actors.get(ev.sourceID);
+            bossCasts.push({
+              name: castName,
+              time: Math.max(0, Math.round((ev.timestamp - fight.startTime) / 100) / 10),
+              cast_time: dur > 0 ? dur : undefined,
+              game_id: ev.abilityGameID,
+              source_name: castSource?.name || 'Unknown',
+            });
           }
         }
       }
@@ -570,7 +615,11 @@ export const onRequestPost: PagesFunction<FFLogsEnv> = async (ctx) => {
     // and FFLogs is English-only — so xivapi is the source of truth for
     // both.
     const uniqueIds = Array.from(
-      new Set(groups.map((g) => g.game_id).filter((v): v is number => v != null)),
+      new Set(
+        [...groups.map((g) => g.game_id), ...bossCasts.map((c) => c.game_id)].filter(
+          (v): v is number => v != null,
+        ),
+      ),
     );
     if (uniqueIds.length > 0) {
       const meta = await fetchActionMeta(uniqueIds);
@@ -579,6 +628,14 @@ export const onRequestPost: PagesFunction<FFLogsEnv> = async (ctx) => {
           const m = meta.get(g.game_id);
           g.damage_kind = attackTypeIdToDamageKind(m?.attackTypeId);
           if (m?.name_fr) g.name_fr = m.name_fr;
+        }
+      }
+      // Boss casts only need the FR name — no damage_kind (cast and
+      // damage are different FFLogs objects ; a cast carries no type).
+      for (const c of bossCasts) {
+        if (c.game_id != null) {
+          const m = meta.get(c.game_id);
+          if (m?.name_fr) c.name_fr = m.name_fr;
         }
       }
     }
@@ -615,6 +672,14 @@ export const onRequestPost: PagesFunction<FFLogsEnv> = async (ctx) => {
       delete (g as Partial<AggregatedMech>)._firstEventTime;
       delete (g as Partial<AggregatedMech>)._source_id;
     }
+    // Same lane-remap for boss casts : a cast from a "minor" NPC (no
+    // dedicated lane) lands in "Adds" so it doesn't trail a phantom
+    // lane on the client. Sources with no damage events at all fall
+    // through to the client's fallback lane.
+    for (const c of bossCasts) {
+      if (c.source_name && !bossNames.includes(c.source_name)) c.source_name = addsName;
+    }
+    bossCasts.sort((a, b) => a.time - b.time);
 
     // Derive the synced player level from the report's expansion.
     const zone = header.reportData.report.zone;
@@ -629,12 +694,14 @@ export const onRequestPost: PagesFunction<FFLogsEnv> = async (ctx) => {
       bossLanes: lanes,
       players,
       mechanics: groups,
+      bossCasts,
       playerUses,
       _debug: {
         zone,
         gameLevelDetected: gameLevel,
         castPages,
         castEventsKept: playerUses.length,
+        bossCastsCount: bossCasts.length,
         pages,
         rawEventCount,
         skipNoAbility,

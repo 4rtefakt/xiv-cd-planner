@@ -44,13 +44,14 @@ export function MechanicMarker({ mech, uses, fightDuration, slot = 0 }: Mechanic
   const visualType = deriveMechType(mech, partySize);
   const damageKind = mech.damage_kind ?? 'magical';
   const isPlacement = mech.category === 'placement';
+  const isCast = mech.category === 'cast';
   const { label: displayLabel, hitCount } = splitMechName(mech, lang);
 
   // Hypothetical coverage if the user committed the currently-previewed
   // placement. We compute it ONLY when a meaningful preview exists, so
   // the comparison stays cheap.
   const previewCov =
-    previewUse && !previewUse.conflict && !isPlacement && damageKind !== 'pure'
+    previewUse && !previewUse.conflict && !isPlacement && !isCast && damageKind !== 'pure'
       ? computeCoverage(mech, uses, abilities, partySize, {
           ability_id: previewUse.ability_id,
           time: previewUse.time,
@@ -61,15 +62,18 @@ export function MechanicMarker({ mech, uses, fightDuration, slot = 0 }: Mechanic
   const showingPreview = previewCov && previewCov.pct !== coverage.pct;
 
   // The "color key" drives the whole mech's color (line, label, cap,
-  // coverage badge). One scheme for both : damage_kind for damage
-  // mechs (phys/magic/pure), 'placement' for non-damaging cues.
-  const colorKey = isPlacement ? 'placement' : damageKind;
+  // coverage badge). One scheme : damage_kind for damage mechs
+  // (phys/magic/pure), 'placement' for positional cues, 'cast' for
+  // boss casts (their own accent so they read distinctly when shown
+  // alongside the damage mechs).
+  const colorKey = isCast ? 'cast' : isPlacement ? 'placement' : damageKind;
 
   return (
     <div
       className={
         `mechanic ${visualType} kind-${damageKind}` +
         (isPlacement ? ' is-placement' : '') +
+        (isCast ? ' is-cast' : '') +
         (previewCovered ? ' preview-covered' : '')
       }
       style={{ left: `${pct(mech.time, fightDuration)}%`, ['--mech-slot' as any]: slot }}
@@ -176,7 +180,8 @@ export function MechanicMarker({ mech, uses, fightDuration, slot = 0 }: Mechanic
 export function MechanicCastBar({ mech, fightDuration }: { mech: MechanicT; fightDuration: number }) {
   const damageKind = mech.damage_kind ?? 'magical';
   const isPlacement = mech.category === 'placement';
-  const colorKey = isPlacement ? 'placement' : damageKind;
+  const isCast = mech.category === 'cast';
+  const colorKey = isCast ? 'cast' : isPlacement ? 'placement' : damageKind;
   if (!mech.cast_time || mech.cast_time <= 0) return null;
   const startPct = pct(Math.max(0, mech.time - mech.cast_time), fightDuration);
   const widthPct = (mech.cast_time / fightDuration) * 100;

@@ -65,6 +65,25 @@ export interface FFLogsMechanic {
   cast_time?: number;
 }
 
+/**
+ * A standalone boss cast (FFLogs "sorts" tab) imported as its own
+ * timeline entry, in addition to the damage mechs. No damage_kind —
+ * cast and damage are distinct FFLogs objects.
+ */
+export interface FFLogsBossCast {
+  name: string;
+  /** FR translation resolved server-side via xivapi from `game_id`. */
+  name_fr?: string;
+  /** xivapi action id — kept for lazy FR resolution later. */
+  game_id?: number;
+  /** Seconds since fight start (the cast resolve time). */
+  time: number;
+  /** begincast → cast duration in seconds. Absent for instant casts. */
+  cast_time?: number;
+  /** Source NPC display name — drives lane assignment on import. */
+  source_name?: string;
+}
+
 export interface FFLogsPlayer {
   name: string;
   /** Raw FFLogs subType (Paladin, WhiteMage, BlackMage, …). The
@@ -98,6 +117,10 @@ export interface FFLogsFightData {
   /** Player roster pulled from the report's master data. */
   players: FFLogsPlayer[];
   mechanics: FFLogsMechanic[];
+  /** Standalone boss casts (the "sorts" tab) — imported as 'cast'
+   *  category mechs alongside `mechanics`, with their own display
+   *  toggle. Absent on responses from older API deploys. */
+  bossCasts?: FFLogsBossCast[];
   /** All confirmed friendly cast events from the fight. The client
    *  filters down to those whose actionId matches an ability in our
    *  seed and rebuilds `uses[]`. */
