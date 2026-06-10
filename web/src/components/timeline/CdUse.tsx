@@ -1,5 +1,6 @@
 import type { Ability, Use } from '../../types';
-import { fmt, pct } from '../../lib/time';
+import { fmt } from '../../lib/time';
+import { mainBlock, mainExtentPct } from '../../lib/orientation';
 import { AbilityIcon } from '../Icon';
 import { usePlanStore } from '../../state/planStore';
 import { abilityName } from '../../i18n';
@@ -22,15 +23,17 @@ interface CdUseProps {
 export function CdUse({ use, ability, fightDuration }: CdUseProps) {
   const setDragCtx = usePlanStore((s) => s.setDragCtx);
   const removeUse = usePlanStore((s) => s.removeUse);
+  const orientation = usePlanStore((s) => s.orientation);
 
   // Visual width is CLIPPED at the end of the fight : a 120s recast
   // placed at T-30s renders 30s wide instead of stretching the canvas
   // past the boss timeline (which desynced the two scrollers). Conflict
   // detection still uses the full recast — only the render is clipped.
   const visibleS = Math.max(0, Math.min(ability.recast, fightDuration - use.time));
-  const totalPct = (visibleS / fightDuration) * 100;
   const activeRatio = visibleS > 0 ? Math.min(1, ability.effect / visibleS) : 0;
-  const activeWidthPct = activeRatio * 100;
+  // Fraction of the use occupied by its ACTIVE window (vs the cooldown
+  // tail). Projected onto width (horizontal) or height (vertical) below.
+  const activeExtentPct = activeRatio * 100;
   const lang = usePlanStore((s) => s.lang);
   const localName = abilityName(ability, lang);
   const activeLabel = lang === 'fr' ? 'ACTIVE' : 'ACTIVE';
@@ -42,10 +45,7 @@ export function CdUse({ use, ability, fightDuration }: CdUseProps) {
     <div
       className={`cd-use type-${ability.mit_type}`}
       draggable={!usePlanStore.getState().readOnly}
-      style={{
-        left: `${pct(use.time, fightDuration)}%`,
-        width: `${totalPct}%`,
-      }}
+      style={mainBlock(use.time, visibleS, fightDuration, orientation)}
       data-use-id={use.id}
       onDragStart={(e) => {
         if (usePlanStore.getState().readOnly) { e.preventDefault(); return; }
@@ -53,9 +53,12 @@ export function CdUse({ use, ability, fightDuration }: CdUseProps) {
         e.dataTransfer.effectAllowed = 'move';
         e.dataTransfer.setData('text/plain', `use:${use.id}`);
         // Preserve the grab offset so the use lands where the cursor is,
-        // not where the cursor lands relative to the left edge.
+        // not where the cursor lands relative to the leading edge. The
+        // offset is measured along the main (time) axis : X horizontal,
+        // Y vertical.
         const rect = (e.currentTarget as HTMLElement).getBoundingClientRect();
-        const grabOffsetPx = e.clientX - rect.left;
+        const grabOffsetPx =
+          orientation === 'vertical' ? e.clientY - rect.top : e.clientX - rect.left;
         setDragCtx({
           kind: 'use',
           playerId: use.player_id,
@@ -83,7 +86,7 @@ export function CdUse({ use, ability, fightDuration }: CdUseProps) {
     >
       <div
         className="cd-use-active-block"
-        style={{ width: `${activeWidthPct}%`, color: 'var(--cd-color)' }}
+        style={{ ...mainExtentPct(activeExtentPct, orientation), color: 'var(--cd-color)' }}
       >
         <div className="cd-use-icon" style={{ color: 'var(--cd-color)' }}>
           <AbilityIcon src={ability.icon} fallbackGlyph={ability.icon_glyph} alt={localName} />

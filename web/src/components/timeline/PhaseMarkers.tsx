@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { usePlanStore } from '../../state/planStore';
-import { fmt, pct, xToTime } from '../../lib/time';
+import { fmt } from '../../lib/time';
+import { mainStart, coordToTime } from '../../lib/orientation';
 import { useT } from '../../i18n';
 
 interface PhaseLayerProps {
@@ -27,6 +28,7 @@ export function PhaseLayer({ fightDuration, withLabels = false }: PhaseLayerProp
   const removePhase = usePlanStore((s) => s.removePhase);
   const setPhaseName = usePlanStore((s) => s.setPhaseName);
   const readOnly = usePlanStore((s) => s.readOnly);
+  const orientation = usePlanStore((s) => s.orientation);
   const layerRef = useRef<HTMLDivElement>(null);
   const [editingId, setEditingId] = useState<string | null>(null);
   const t = useT();
@@ -39,7 +41,7 @@ export function PhaseLayer({ fightDuration, withLabels = false }: PhaseLayerProp
     e.stopPropagation();
     const layer = layerRef.current;
     const onMove = (mv: MouseEvent) => {
-      movePhase(phaseId, xToTime(mv.clientX, layer, fightDuration));
+      movePhase(phaseId, coordToTime(mv.clientX, mv.clientY, layer, fightDuration, orientation));
     };
     const onUp = () => {
       document.removeEventListener('mousemove', onMove);
@@ -55,7 +57,7 @@ export function PhaseLayer({ fightDuration, withLabels = false }: PhaseLayerProp
         <div
           key={p.id}
           className="phase-marker"
-          style={{ left: `${pct(p.time, fightDuration)}%` }}
+          style={mainStart(p.time, fightDuration, orientation)}
         >
           {withLabels &&
             (editingId === p.id ? (

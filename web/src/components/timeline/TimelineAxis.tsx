@@ -1,11 +1,14 @@
 import { useMemo } from 'react';
-import { fmt, pct } from '../../lib/time';
+import { fmt } from '../../lib/time';
+import { mainStart } from '../../lib/orientation';
+import { usePlanStore } from '../../state/planStore';
 
 interface TimelineAxisProps {
   fightDuration: number;
 }
 
 export function TimelineAxis({ fightDuration }: TimelineAxisProps) {
+  const orientation = usePlanStore((s) => s.orientation);
   const { ticks, labels } = useMemo(() => {
     const step = fightDuration > 300 ? 30 : 15;
     const major = fightDuration > 300 ? 60 : 30;
@@ -25,14 +28,14 @@ export function TimelineAxis({ fightDuration }: TimelineAxisProps) {
         <div
           key={`tick-${t}`}
           className={`tl-tick ${isMajor ? 'major' : 'minor'}`}
-          style={{ left: `${pct(t, fightDuration)}%` }}
+          style={mainStart(t, fightDuration, orientation)}
         />
       ))}
       {labels.map(({ t, label }) => (
         <div
           key={`label-${t}`}
           className="tl-tick-label"
-          style={{ left: `${pct(t, fightDuration)}%` }}
+          style={mainStart(t, fightDuration, orientation)}
         >
           {label}
         </div>

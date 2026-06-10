@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { usePlanStore } from '../../state/planStore';
-import { fmt, pct, xToTime } from '../../lib/time';
+import { fmt } from '../../lib/time';
+import { mainStart, coordToTime } from '../../lib/orientation';
 import { computeMechSlots } from '../../lib/mitigation';
 import { useT } from '../../i18n';
 import { MechanicMarker, MechanicCastBar } from './Mechanic';
@@ -290,6 +291,7 @@ function BossLaneRow({
   const ref = useRef<HTMLDivElement | null>(null);
   const [hover, setHover] = useState<{ t: number } | null>(null);
   const readOnly = usePlanStore((s) => s.readOnly);
+  const orientation = usePlanStore((s) => s.orientation);
 
   const { slotOf, slotCount } = computeMechSlots(mechanics);
 
@@ -313,33 +315,33 @@ function BossLaneRow({
           return;
         }
         if (!ref.current) return;
-        setHover({ t: xToTime(e.clientX, ref.current, fightDuration) });
+        setHover({ t: coordToTime(e.clientX, e.clientY, ref.current, fightDuration, orientation) });
       }}
       onMouseLeave={() => setHover(null)}
       onClick={(e) => {
         if (readOnly) return;
         if ((e.target as HTMLElement).closest('.mechanic')) return;
         if (!ref.current) return;
-        onAddAt(xToTime(e.clientX, ref.current, fightDuration));
+        onAddAt(coordToTime(e.clientX, e.clientY, ref.current, fightDuration, orientation));
       }}
       // Accept dropped mechanics being repositioned within this lane.
       onDragOver={(e) => {
         if (!draggingOurMech || !ref.current) return;
         e.preventDefault();
         e.dataTransfer.dropEffect = 'move';
-        setHover({ t: xToTime(e.clientX, ref.current, fightDuration) });
+        setHover({ t: coordToTime(e.clientX, e.clientY, ref.current, fightDuration, orientation) });
       }}
       onDragLeave={() => setHover(null)}
       onDrop={(e) => {
         if (!draggingOurMech || !ref.current || !dragCtx?.mechId) return;
         e.preventDefault();
-        const t = xToTime(e.clientX, ref.current, fightDuration);
+        const t = coordToTime(e.clientX, e.clientY, ref.current, fightDuration, orientation);
         onMoveMech(dragCtx.mechId, t);
         setHover(null);
       }}
     >
       {hover && (
-        <div className="boss-hover show" style={{ left: `${pct(hover.t, fightDuration)}%` }}>
+        <div className="boss-hover show" style={mainStart(hover.t, fightDuration, orientation)}>
           <span className="boss-hover-time">{fmt(hover.t)}</span>
         </div>
       )}
