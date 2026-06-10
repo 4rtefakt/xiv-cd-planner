@@ -27,6 +27,8 @@ export function AddMechanicModal() {
   const modal = usePlanStore((s) => s.mechanicModal);
   const fightDuration = usePlanStore((s) => s.encounter.fight_duration);
   const party = usePlanStore((s) => s.party);
+  const bossLanes = usePlanStore((s) => s.bossLanes);
+  const setMechanicModal = usePlanStore((s) => s.setMechanicModal);
   const close = usePlanStore((s) => s.closeMechanicModal);
   const addMechanic = usePlanStore((s) => s.addMechanic);
   const updateMechanic = usePlanStore((s) => s.updateMechanic);
@@ -163,6 +165,24 @@ export function AddMechanicModal() {
               onChange={(e) => setName(e.target.value)}
             />
           </div>
+          {/* Lane selector — only when editing AND several lanes exist :
+              FFLogs sometimes attributes a cast to the wrong actor, so
+              the user must be able to re-home a mech. */}
+          {isEdit && bossLanes.length > 1 && (
+            <div className="modal-row">
+              <label className="modal-label">{t('mech.lane')}</label>
+              <select
+                className="modal-input"
+                value={modal.laneId}
+                onChange={(e) => setMechanicModal({ laneId: e.target.value })}
+              >
+                {bossLanes.map((l) => (
+                  <option key={l.id} value={l.id}>{l.name}</option>
+                ))}
+              </select>
+            </div>
+          )}
+
           <div className="modal-row">
             <label className="modal-label">{t('mech.timestamp')}</label>
             <input
