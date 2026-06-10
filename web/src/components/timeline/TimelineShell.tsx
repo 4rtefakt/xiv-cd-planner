@@ -51,6 +51,26 @@ function VisibilityToggle({ category, label, titleShow, titleHide }: {
   );
 }
 
+/** Orientation pill — flips the whole timeline between time-on-X
+ *  (horizontal, default) and time-on-Y (vertical, one column per job). */
+function OrientationToggle() {
+  const orientation = usePlanStore((s) => s.orientation);
+  const toggle = usePlanStore((s) => s.toggleOrientation);
+  const t = useT();
+  const vertical = orientation === 'vertical';
+  return (
+    <button
+      type="button"
+      className={`tl-btn tl-vis ${vertical ? 'on' : 'off'} c-orient`}
+      onClick={toggle}
+      title={vertical ? t('tl.orient.toHorizontal') : t('tl.orient.toVertical')}
+    >
+      <span className="tl-vis-dot">{vertical ? '↓' : '→'}</span>
+      {vertical ? t('tl.orient.vertical') : t('tl.orient.horizontal')}
+    </button>
+  );
+}
+
 /** Base pixels-per-second at zoom 1.0. The default zoom is 2× so the
  *  initial canvas fits ~5 min of action in a 1600px viewport. */
 const BASE_PX_PER_SEC = 2.667;
@@ -73,6 +93,7 @@ export function TimelineShell() {
   const addPhase = usePlanStore((s) => s.addPhase);
   const resetEncounter = usePlanStore((s) => s.resetEncounter);
   const readOnly = usePlanStore((s) => s.readOnly);
+  const orientation = usePlanStore((s) => s.orientation);
   const zoom = usePlanStore((s) => s.zoom);
   // setZoom is read from usePlanStore.getState() inside the wheel
   // handler (which needs the latest store-reading function), not via
@@ -313,9 +334,12 @@ export function TimelineShell() {
           titleHide={t('tl.view.hidePlacement')}
         />
         <CompactToggle />
+        <div className="tl-divider" />
+        <span className="tl-tool-label">{t('tl.orient')}</span>
+        <OrientationToggle />
       </div>
 
-      <div className="timeline-shell">
+      <div className={`timeline-shell orient-${orientation}`}>
         <div className="tl-left" ref={leftRef}>
           {/* The header block (axis spacer + boss lanes) sticks to the
               top of the viewport while the player groups below scroll

@@ -14,6 +14,7 @@ import { create } from 'zustand';
 import type { BossLane, DamageKind, Encounter, Job, MechCategory, MechType, Mechanic, Phase, Player, Use } from '../types';
 import { demoParty } from '../data/demoParty';
 import { loadStoredLang, storeLang, type Lang } from '../i18n';
+import { loadStoredOrientation, storeOrientation, type Orientation } from '../lib/orientation';
 
 /**
  * FFLogs subType (Paladin, WhiteMage, BlackMage, …) → our seed job
@@ -189,6 +190,11 @@ interface PlanState {
   /** UI language. Persisted in localStorage (see i18n.ts). Initial
    *  value comes from localStorage or navigator.language detection. */
   lang: Lang;
+  /** Timeline orientation. 'horizontal' = time runs left→right (default,
+   *  rows per ability) ; 'vertical' = time runs top→bottom (columns per
+   *  ability). Per-device UI preference persisted in localStorage, NOT in
+   *  the plan blob (see lib/orientation.ts). */
+  orientation: Orientation;
 
   // Plan content
   encounter: Encounter;
@@ -363,6 +369,8 @@ interface PlanState {
   setSaveStatus(status: SaveStatus): void;
   setReadOnly(readOnly: boolean): void;
   setLang(lang: Lang): void;
+  setOrientation(orientation: Orientation): void;
+  toggleOrientation(): void;
   /** Used by historyManager to swap back to a past snapshot. */
   restoreSnapshot(snap: {
     encounter: Encounter;
@@ -409,6 +417,7 @@ export const usePlanStore = create<PlanState>((set) => ({
   _skipNextSave: false,
   readOnly: false,
   lang: loadStoredLang(),
+  orientation: loadStoredOrientation(),
   encounter: defaultEncounter,
   party: demoParty,
   bossLanes: [{ id: 'lane-1', name: 'BOSS A' }],
@@ -777,6 +786,17 @@ export const usePlanStore = create<PlanState>((set) => ({
     storeLang(lang);
     set({ lang });
   },
+  setOrientation: (orientation) => {
+    storeOrientation(orientation);
+    set({ orientation });
+  },
+  toggleOrientation: () =>
+    set((s) => {
+      const orientation: Orientation =
+        s.orientation === 'horizontal' ? 'vertical' : 'horizontal';
+      storeOrientation(orientation);
+      return { orientation };
+    }),
   restoreSnapshot: (snap) =>
     set({
       encounter: snap.encounter,
