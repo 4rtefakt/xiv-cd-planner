@@ -78,6 +78,7 @@ export function PlayerGroupsLeft() {
             <div
               className={`player-header-left player-header-row-height role-${role}${role === 'dps' && job?.sub_role ? ` sub-${job.sub_role}` : ''}`}
               onClick={() => toggleCollapsed(p.id)}
+              title={`${p.name} · ${p.badge}`}
             >
               <div className="ph-job-icon">
                 {job ? <JobIcon src={job.icon} fallbackCode={job.code} alt={jobName(job, lang)} /> : null}

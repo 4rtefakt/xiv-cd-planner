@@ -2277,8 +2277,8 @@
   --tl-ruler-w: 56px;
   --tl-lane-col: 156px;
   --tl-ab-col: 48px;
-  --tl-phead-col: 92px;
-  --tl-vhead-h: 66px;
+  --tl-phead-col: 64px;
+  --tl-vhead-h: 48px;
 
   position: relative;
   display: grid;
@@ -2385,11 +2385,15 @@
   grid-template-columns: none;
   flex-direction: column;
   align-items: center; justify-content: center;
-  gap: 3px; padding: 4px;
+  gap: 4px; padding: 4px;
   text-align: center;
+  cursor: pointer;
 }
 .orient-vertical .player-header-left .ph-name-block { flex-direction: column; gap: 3px; align-items: center; }
-.orient-vertical .player-header-left .ph-name { max-width: 80px; }
+/* Job icon + badge identify the column ; the player NAME is hidden and
+   surfaced on hover (title) so the header stays compact. */
+.orient-vertical .player-header-left .ph-name { display: none; }
+.orient-vertical .player-header-left .ph-collapse { display: none; }
 /* Role accent : top bar → left bar running down the column. */
 .orient-vertical .player-header-right::before {
   top: 0; bottom: 0; left: 0; right: auto;
@@ -2410,13 +2414,15 @@
   display: flex; flex-direction: column;
   align-items: center; justify-content: center;
   gap: 3px; padding: 5px 2px;
+  cursor: help;
 }
 .orient-vertical .cd-row-left .cd-indent { display: none; }
-.orient-vertical .cd-row-left .cd-row-name {
-  font-size: 8px; max-width: 100%; text-align: center; line-height: 1.1;
-}
-.orient-vertical .cd-row-left .cd-ability-icon { width: 20px; height: 20px; }
-.orient-vertical .cd-row-left .cd-row-cd { font-size: 8px; }
+.orient-vertical .cd-row-left .cd-ability-icon { width: 22px; height: 22px; }
+/* Icon-only headers in vertical : the ability name + recast would never
+   fit a 48px column legibly, so we drop them here. The full detail
+   (name, recast, effect, …) is one hover away via AbilityTooltipHost. */
+.orient-vertical .cd-row-left .cd-row-name,
+.orient-vertical .cd-row-left .cd-row-cd { display: none; }
 /* The "+N hidden" footer is a horizontal-only nicety — drop it here so
    it doesn't add a stray column that would desync header vs canvas. */
 .orient-vertical .cd-row-hidden-footer,
