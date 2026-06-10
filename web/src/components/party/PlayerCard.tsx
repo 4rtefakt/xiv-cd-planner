@@ -26,6 +26,9 @@ export function PlayerCard({ player, job }: PlayerCardProps) {
   const jobs = usePlanStore((s) => s.jobs);
   const setPlayerName = usePlanStore((s) => s.setPlayerName);
   const switchPlayerJob = usePlanStore((s) => s.switchPlayerJob);
+  const movePlayer = usePlanStore((s) => s.movePlayer);
+  const partyLen = usePlanStore((s) => s.party.length);
+  const slotIndex = usePlanStore((s) => s.party.findIndex((p) => p.id === player.id));
   const readOnly = usePlanStore((s) => s.readOnly);
   const lang = usePlanStore((s) => s.lang);
   const t = useT();
@@ -87,6 +90,38 @@ export function PlayerCard({ player, job }: PlayerCardProps) {
           <div className="pcm-badge">{player.badge}</div>
         </div>
       </div>
+
+      {/* Reorder arrows — swap with the neighbour card. The badge stays
+          glued to the slot (first card is always MT), so this is how a
+          roster gets matched to MT/OT/H1/…/R2 after an import. */}
+      {!readOnly && (
+        <div className="pcm-reorder">
+          <button
+            type="button"
+            className="pcm-reorder-btn"
+            disabled={slotIndex <= 0}
+            title={t('player.moveLeft')}
+            onClick={(e) => {
+              e.stopPropagation();
+              movePlayer(player.id, -1);
+            }}
+          >
+            ◂
+          </button>
+          <button
+            type="button"
+            className="pcm-reorder-btn"
+            disabled={slotIndex >= partyLen - 1}
+            title={t('player.moveRight')}
+            onClick={(e) => {
+              e.stopPropagation();
+              movePlayer(player.id, 1);
+            }}
+          >
+            ▸
+          </button>
+        </div>
+      )}
 
       {picking && job && (
         <JobPickerPopover

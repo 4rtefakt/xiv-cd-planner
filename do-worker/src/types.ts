@@ -40,6 +40,15 @@ export interface Mechanic {
   hit_count?: number;
   cast_time?: number;
   type?: MechType;
+  /** Short user-applied labels — see web/src/types.ts. */
+  tags?: string[];
+}
+
+/** Phase marker — see web/src/types.ts. */
+export interface Phase {
+  id: string;
+  name: string;
+  time: number;
 }
 
 export interface Use {
@@ -73,4 +82,6 @@ export interface Plan {
   uses: Use[];
   /** Per-plan blacklist of ability ids to hide from the player rows. */
   hidden_ability_ids: string[];
+  /** Phase markers — optional for legacy stored plans. */
+  phases?: Phase[];
 }

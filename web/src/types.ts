@@ -122,6 +122,21 @@ export interface Mechanic {
   /** Legacy field kept for migration ; new mechs derive their visual
    *  type from category + targets via deriveMechType(). */
   type?: MechType;
+  /** Short user-applied labels (TB, RB, SHARE, SPREAD, BAIT, …) shown
+   *  as tiny chips next to the mech label. Free-form — presets are a
+   *  UI nicety, not a constraint. */
+  tags?: string[];
+}
+
+/**
+ * Named phase marker (P1, INTERMISSION, …). Rendered as a labeled
+ * vertical line across the whole timeline at `time`. Pure annotation —
+ * no impact on coverage.
+ */
+export interface Phase {
+  id: string;
+  name: string;
+  time: number;               // seconds — start of the phase
 }
 
 export interface Use {
@@ -160,4 +175,7 @@ export interface Plan {
    *  this room (e.g. a CD that the team decided not to use, or a job
    *  variant that's irrelevant). Coverage calc ignores them. */
   hidden_ability_ids: string[];
+  /** Phase markers (P1/P2/…). Optional for plans stored before the
+   *  field existed — treated as []. */
+  phases?: Phase[];
 }

@@ -18,6 +18,7 @@ export function BossLanesLeft() {
   const removeBossLane = usePlanStore((s) => s.removeBossLane);
   const setBossLaneName = usePlanStore((s) => s.setBossLaneName);
   const mergeBossLanes = usePlanStore((s) => s.mergeBossLanes);
+  const moveBossLane = usePlanStore((s) => s.moveBossLane);
   const readOnly = usePlanStore((s) => s.readOnly);
   const t = useT();
   const [editingId, setEditingId] = useState<string | null>(null);
@@ -60,6 +61,34 @@ export function BossLanesLeft() {
               }}
             >
               {lane.name}
+            </span>
+          )}
+          {!readOnly && bossLanes.length > 1 && (
+            <span className="lane-reorder">
+              <button
+                type="button"
+                className="lane-reorder-btn"
+                disabled={idx === 0}
+                title={t('lane.moveUp')}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  moveBossLane(lane.id, -1);
+                }}
+              >
+                ▴
+              </button>
+              <button
+                type="button"
+                className="lane-reorder-btn"
+                disabled={idx === bossLanes.length - 1}
+                title={t('lane.moveDown')}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  moveBossLane(lane.id, 1);
+                }}
+              >
+                ▾
+              </button>
             </span>
           )}
           {!readOnly && bossLanes.length > 1 && (

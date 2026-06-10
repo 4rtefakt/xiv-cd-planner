@@ -5,6 +5,7 @@ import { useT } from '../../i18n';
 import { TimelineAxis } from './TimelineAxis';
 import { BossLanesLeft, BossLanesRight } from './BossLanes';
 import { PlayerGroupsLeft, PlayerGroupsRight } from './PlayerGroups';
+import { PhaseLayer } from './PhaseMarkers';
 
 /** Compact-mode pill — shrinks every boss mech to its diamond cap. */
 function CompactToggle() {
@@ -69,7 +70,9 @@ const ZOOM_STEP = 0.15;
 export function TimelineShell() {
   const fightDuration = usePlanStore((s) => s.encounter.fight_duration);
   const addBossLane = usePlanStore((s) => s.addBossLane);
+  const addPhase = usePlanStore((s) => s.addPhase);
   const resetEncounter = usePlanStore((s) => s.resetEncounter);
+  const readOnly = usePlanStore((s) => s.readOnly);
   const zoom = usePlanStore((s) => s.zoom);
   // setZoom is read from usePlanStore.getState() inside the wheel
   // handler (which needs the latest store-reading function), not via
@@ -276,6 +279,16 @@ export function TimelineShell() {
         <button type="button" className="tl-btn add-lane" onClick={addBossLane}>
           {t('tl.addLane')}
         </button>
+        {!readOnly && (
+          <button
+            type="button"
+            className="tl-btn add-phase"
+            onClick={addPhase}
+            title={t('tl.addPhase.hint')}
+          >
+            {t('tl.addPhase')}
+          </button>
+        )}
         <button
           type="button"
           className="tl-btn reset no-plus"
@@ -323,11 +336,15 @@ export function TimelineShell() {
             <div className="tl-canvas" style={{ minWidth: `${canvasWidth}px` }}>
               <TimelineAxis fightDuration={fightDuration} />
               <BossLanesRight />
+              {/* Labeled, interactive phase markers live on the head
+                  canvas ; the body canvas mirrors the lines only. */}
+              <PhaseLayer fightDuration={fightDuration} withLabels />
             </div>
           </div>
           <div className="tl-body-scroller" ref={bodyRef}>
             <div className="tl-canvas" style={{ minWidth: `${canvasWidth}px` }}>
               <PlayerGroupsRight />
+              <PhaseLayer fightDuration={fightDuration} />
             </div>
           </div>
         </div>

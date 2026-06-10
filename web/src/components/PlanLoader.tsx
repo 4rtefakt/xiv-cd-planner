@@ -41,6 +41,10 @@ export function PlanLoader() {
           boss_lanes: plan.boss_lanes,
           mechanics: plan.mechanics,
           uses: plan.uses,
+          // These two were missing → hidden abilities silently came
+          // back (and phases would vanish) on every page reload.
+          hidden_ability_ids: plan.hidden_ability_ids,
+          phases: plan.phases,
         });
         // Wipe the in-memory history baseline so Ctrl+Z after a fresh
         // load can't revert the user to the empty-default party.
