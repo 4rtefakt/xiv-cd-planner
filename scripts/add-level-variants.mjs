@@ -92,10 +92,14 @@ const TRAITS = [
   },
   {
     match: /\.(Troubadour|Tactician|ShieldSamba)$/,
-    at: 98, // Enhanced Troubadour / Tactician / Shield Samba
-    base: { mit_potency: 10 },
+    at: 98, // Enhanced Troubadour/Tactician/Shield Samba II : 10% → 15%
+    base: { mit_potency: 10, recast: 120 },
     patchFrom: ['mit_potency'],
     descReplace: [/15\s*%/g, '10%'],
+    // Enhanced Troubadour/Tactician/Shield Samba (without the II) is a
+    // SEPARATE lvl-88 trait : recast 120s → 90s. Patched from the
+    // current seed value (90).
+    extra: { 88: ['recast'] },
   },
   {
     match: /\.(DeploymentTactics)$/,
@@ -112,14 +116,8 @@ const TRAITS = [
     explicitPatch: { max_charges: 2 },
     descReplace: [/\n*Maximum (Charges|de charges)\s*:\s*2/gi, ''],
   },
-  {
-    match: /\.(Dismantle)$/,
-    at: 98, // Enhanced Dismantle → 2 charges
-    base: { max_charges: undefined },
-    patchFrom: [],
-    explicitPatch: { max_charges: 2 },
-    descReplace: [/\n*Maximum (Charges|de charges)\s*:\s*2/gi, ''],
-  },
+  // NOTE : pas d'« Enhanced Dismantle » en 7.x (vérifié sur le wiki +
+  // liste des traits MCH) — Dismantle reste à 1 charge, rien à scaler.
   {
     match: /\.(RadiantAegis)$/,
     at: 88, // Enhanced Radiant Aegis → 2 charges
@@ -287,13 +285,24 @@ for (const ab of allAbilities) {
       }
     }
 
+    // Secondary trait levels : patch listed fields from their CURRENT
+    // seed value (e.g. songs' recast 90 moves into the lvl-88 variant).
+    const variants = { [spec.at]: patch };
+    if (spec.extra) {
+      for (const [lvl, fields] of Object.entries(spec.extra)) {
+        const p = {};
+        for (const f of fields) p[f] = ab[f];
+        variants[lvl] = p;
+      }
+    }
+
     // Downgrade the base stats.
     for (const [k, v] of Object.entries(spec.base)) {
       if (v === undefined) delete ab[k];
       else ab[k] = v;
     }
 
-    ab.level_variants = { [spec.at]: patch };
+    ab.level_variants = variants;
     report.traits++;
   }
 }
