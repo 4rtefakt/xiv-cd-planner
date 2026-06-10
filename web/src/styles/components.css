@@ -2534,3 +2534,14 @@
 .orient-vertical .phase-name-input {
   top: 0; left: 0; transform: translateY(-50%);
 }
+
+/* ── Compact mode in vertical ─────────────────────────────────
+   The compact rules above shrink the mech to a thin line and bump
+   the cap — but they assume a vertical line (width). Here the line
+   is horizontal, so shrink its HEIGHT and re-center the cap. */
+.app.compact-mechs .orient-vertical .mechanic { width: auto; height: 1px; }
+.app.compact-mechs .orient-vertical .mech-cap {
+  top: 50%; left: 3px;
+  transform: translateY(-50%) rotate(45deg);
+}
+.app.compact-mechs .orient-vertical .mech-hitcount { top: 50%; left: -10px; }
