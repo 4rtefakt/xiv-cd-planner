@@ -2280,8 +2280,8 @@
   /* Header band : a player "band" row (name + job) sits above the row of
      per-ability icons. --tl-pband-h is the band's height, --tl-vhead-h
      the full header height (band + ability icons). */
-  --tl-pband-h: 22px;
-  --tl-vhead-h: 50px;
+  --tl-pband-h: 24px;
+  --tl-vhead-h: 58px;
 
   position: relative;
   display: grid;
@@ -2401,8 +2401,8 @@
   grid-template-columns: none;
   flex-direction: row;
   align-items: center;
-  justify-content: flex-start;
-  gap: 6px;
+  justify-content: center;
+  gap: 7px;
   padding: 0 8px;
   overflow: hidden;
   border-top: none;
@@ -2410,16 +2410,14 @@
   border-bottom: 1px solid var(--line);
   border-left: none;
   cursor: pointer;
-  /* faint role wash so the band reads as that player's at a glance */
-  background: linear-gradient(90deg,
-    color-mix(in srgb, var(--role-color) 16%, var(--panel-4)),
-    var(--panel-4) 60%);
+  /* faint role tint so the band reads as that player's at a glance */
+  background: color-mix(in srgb, var(--role-color) 12%, var(--panel-4));
 }
 .orient-vertical .player-header-left .ph-name-block { flex-direction: row; gap: 6px; align-items: center; min-width: 0; }
-.orient-vertical .player-header-left .ph-name { display: block; }
+.orient-vertical .player-header-left .ph-name { display: block; font-size: 12px; }
 .orient-vertical .player-header-left .ph-badge { display: inline-block; }
 .orient-vertical .player-header-left .ph-collapse { display: none; }
-.orient-vertical .player-header-left .ph-job-icon { width: 18px; height: 18px; }
+.orient-vertical .player-header-left .ph-job-icon { width: 22px; height: 22px; flex: 0 0 auto; }
 /* The canvas side needs no band — the header carries the identity. */
 .orient-vertical .player-header-right { display: none; }
 
@@ -2443,7 +2441,10 @@
   height: calc(var(--tl-vhead-h) - var(--tl-pband-h));
 }
 .orient-vertical .cd-row-left .cd-indent { display: none; }
-.orient-vertical .cd-row-left .cd-ability-icon { width: 22px; height: 22px; }
+/* Bigger glyphs : the 1px border + 2px padding was shrinking the icon to
+   ~16px in a 22px box. Drop the padding and grow the box so the spell
+   art reads clearly in the narrow column. */
+.orient-vertical .cd-row-left .cd-ability-icon { width: 28px; height: 28px; padding: 0; }
 /* Icon-only headers in vertical : the ability name + recast would never
    fit a 48px column legibly, so we drop them here. The full detail
    (name, recast, effect, …) is one hover away via AbilityTooltipHost. */
