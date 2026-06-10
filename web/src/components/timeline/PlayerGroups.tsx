@@ -48,6 +48,7 @@ export function PlayerGroupsLeft() {
   const hiddenAbilityIds = usePlanStore((s) => s.hiddenAbilityIds);
   const toggleAbilityHidden = usePlanStore((s) => s.toggleAbilityHidden);
   const readOnly = usePlanStore((s) => s.readOnly);
+  const orientation = usePlanStore((s) => s.orientation);
 
   const jobByCode = useMemo(() => {
     const m = new Map<string, Job>();
@@ -71,13 +72,17 @@ export function PlayerGroupsLeft() {
               .filter((ab) => hiddenAbilityIds.includes(ab.id) && ab.level_unlocked <= level)
               .map((ab) => resolveAbilityAtLevel(ab, level))
           : [];
-        const isCollapsed = !!collapsed[p.id];
+        // Collapse is a horizontal-only affordance — in vertical the
+        // header is a spanning band with no caret, and a 0-width collapsed
+        // band would be untappable. Force-expand here ; the stored state
+        // is preserved for when the user switches back to horizontal.
+        const isCollapsed = orientation === 'vertical' ? false : !!collapsed[p.id];
         const role = job?.role ?? 'dps';
         return (
           <div key={p.id} className="player-group">
             <div
               className={`player-header-left player-header-row-height role-${role}${role === 'dps' && job?.sub_role ? ` sub-${job.sub_role}` : ''}`}
-              onClick={() => toggleCollapsed(p.id)}
+              onClick={() => { if (orientation !== 'vertical') toggleCollapsed(p.id); }}
               title={`${p.name} · ${p.badge}`}
             >
               <div className="ph-job-icon">
@@ -152,6 +157,7 @@ export function PlayerGroupsRight() {
   const fightDuration = usePlanStore((s) => s.encounter.fight_duration);
   const level = usePlanStore((s) => s.encounter.level);
   const hiddenAbilityIds = usePlanStore((s) => s.hiddenAbilityIds);
+  const orientation = usePlanStore((s) => s.orientation);
 
   const jobByCode = useMemo(() => {
     const m = new Map<string, Job>();
@@ -171,7 +177,9 @@ export function PlayerGroupsRight() {
               (ab) => hiddenAbilityIds.includes(ab.id) && ab.level_unlocked <= level,
             )
           : [];
-        const isCollapsed = !!collapsed[p.id];
+        // Mirror PlayerGroupsLeft : vertical always expands so header and
+        // canvas render the same columns.
+        const isCollapsed = orientation === 'vertical' ? false : !!collapsed[p.id];
         const role = job?.role ?? 'dps';
         return (
           <div key={p.id} className="player-group">

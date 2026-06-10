@@ -2277,8 +2277,11 @@
   --tl-ruler-w: 56px;
   --tl-lane-col: 156px;
   --tl-ab-col: 38px;
-  --tl-phead-col: 34px;
-  --tl-vhead-h: 46px;
+  /* Header band : a player "band" row (name + job) sits above the row of
+     per-ability icons. --tl-pband-h is the band's height, --tl-vhead-h
+     the full header height (band + ability icons). */
+  --tl-pband-h: 22px;
+  --tl-vhead-h: 50px;
 
   position: relative;
   display: grid;
@@ -2371,38 +2374,54 @@
 .orient-vertical .boss-row-left .lane-merge,
 .orient-vertical .boss-row-left .lane-remove { display: none; }
 
-/* ── Player header columns (role-tinted separators) ───────── */
-.orient-vertical .player-header-left,
-.orient-vertical .player-header-right {
-  flex: 0 0 var(--tl-phead-col);
-  width: var(--tl-phead-col);
-  height: 100%;
-  min-height: 0;
-  border-top: none;
-  border-right: 1px solid var(--line-bright);
+/* ── Player header : a BAND spanning the player's ability columns ──
+   Not a divider column. The header-side player-group wraps : the band
+   takes a full-width first line (job icon + name + badge), the ability
+   icons wrap onto the line below. The canvas-side player-group has no
+   band — its abilities sit directly under, and a strong line separates
+   one player from the next (kept aligned by giving BOTH sides the same
+   left border). */
+/* The header group reserves the band's height with padding-top and the
+   band is ABSOLUTELY positioned over it — so the band never influences
+   the group's width (only the ability columns do), which is what keeps
+   header and canvas in lockstep. */
+.orient-vertical .left-player-groups .player-group {
+  position: relative;
+  padding-top: var(--tl-pband-h);
+}
+.orient-vertical .left-player-groups .player-group,
+.orient-vertical .right-player-groups .player-group {
+  border-left: 2px solid var(--line-bright);
 }
 .orient-vertical .player-header-left {
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: var(--tl-pband-h);
+  min-height: 0;
   grid-template-columns: none;
-  flex-direction: column;
-  align-items: center; justify-content: center;
-  gap: 4px; padding: 4px;
-  text-align: center;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 6px;
+  padding: 0 8px;
+  overflow: hidden;
+  border-top: none;
+  border-right: none;
+  border-bottom: 1px solid var(--line);
+  border-left: none;
   cursor: pointer;
+  /* faint role wash so the band reads as that player's at a glance */
+  background: linear-gradient(90deg,
+    color-mix(in srgb, var(--role-color) 16%, var(--panel-4)),
+    var(--panel-4) 60%);
 }
-.orient-vertical .player-header-left .ph-name-block { flex-direction: column; gap: 3px; align-items: center; }
-/* The job icon alone identifies the column ; the player NAME and slot
-   BADGE (MT/OT/M1…) are hidden and surfaced on hover (title) so the
-   header stays as narrow as possible to fit more ability columns. */
-.orient-vertical .player-header-left .ph-name,
-.orient-vertical .player-header-left .ph-badge { display: none; }
+.orient-vertical .player-header-left .ph-name-block { flex-direction: row; gap: 6px; align-items: center; min-width: 0; }
+.orient-vertical .player-header-left .ph-name { display: block; }
+.orient-vertical .player-header-left .ph-badge { display: inline-block; }
 .orient-vertical .player-header-left .ph-collapse { display: none; }
-.orient-vertical .player-header-left { padding: 4px 2px; }
-.orient-vertical .player-header-left .ph-job-icon { width: 22px; height: 22px; }
-/* Role accent : top bar → left bar running down the column. */
-.orient-vertical .player-header-right::before {
-  top: 0; bottom: 0; left: 0; right: auto;
-  width: 2px; height: auto;
-}
+.orient-vertical .player-header-left .ph-job-icon { width: 18px; height: 18px; }
+/* The canvas side needs no band — the header carries the identity. */
+.orient-vertical .player-header-right { display: none; }
 
 /* ── Ability columns (header + canvas) ────────────────────── */
 .orient-vertical .cd-row-left,
@@ -2417,8 +2436,11 @@
 .orient-vertical .cd-row-left {
   display: flex; flex-direction: column;
   align-items: center; justify-content: center;
-  gap: 3px; padding: 5px 2px;
+  gap: 3px; padding: 4px 2px;
   cursor: help;
+  /* Ability icons occupy the band-less remainder of the header height,
+     so they line up as a clean row below every player band. */
+  height: calc(var(--tl-vhead-h) - var(--tl-pband-h));
 }
 .orient-vertical .cd-row-left .cd-indent { display: none; }
 .orient-vertical .cd-row-left .cd-ability-icon { width: 22px; height: 22px; }
