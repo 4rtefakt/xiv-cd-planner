@@ -253,6 +253,12 @@ interface BossCast {
   game_id?: number;
   /** Display name of the NPC that cast it → drives lane assignment. */
   source_name?: string;
+  /** Number of consecutive casts of this ability (same source) that
+   *  collapsed into this entry within GROUP_WINDOW_MS. 1 = single cast.
+   *  Rendered as a ×N badge, same as damage mechs — so a rapid-fire
+   *  cast (Hyperpulse on Omega fires ~20× in a row) is one "×20" marker
+   *  instead of 20 stacked entries. */
+  hit_count: number;
 }
 
 /** Multi-hit boss abilities (Akh Morn = 5 hits over ~5s, Earthen Fury
@@ -518,10 +524,17 @@ export const onRequestPost: PagesFunction<FFLogsEnv> = async (ctx) => {
     // Instant abilities only fire `cast` (no begincast) → cast_time stays 0.
     interface CastInterval { gameId: number; sourceID: number; endTime: number; castTime: number; }
     const castIntervals: CastInterval[] = [];
-    /** Standalone boss casts emitted to the timeline (one per `cast`
-     *  event). Independent of the damage aggregation above — these are
-     *  what the players actually see on the boss cast bar. */
+    /** Standalone boss casts emitted to the timeline. Independent of the
+     *  damage aggregation above — these are what the players actually see
+     *  on the boss cast bar. Repeated casts of the same ability collapse
+     *  into one entry (see lastBossCastByKey). */
     const bossCasts: BossCast[] = [];
+    /** Sliding-window grouping for casts, mirroring the damage path :
+     *  key = `${sourceID}|${abilityGameID}` → { index in bossCasts,
+     *  timestamp of the last cast merged }. A new cast of the same
+     *  ability within GROUP_WINDOW_MS bumps the existing entry's
+     *  hit_count instead of pushing a duplicate. */
+    const lastBossCastByKey = new Map<string, { idx: number; lastTs: number }>();
     /** Open begincast events waiting for their `cast` partner. Key =
      *  `${sourceID}|${abilityGameID}` so concurrent casts of the same
      *  ability by different mobs don't collide. */
@@ -567,19 +580,38 @@ export const onRequestPost: PagesFunction<FFLogsEnv> = async (ctx) => {
             openBeginCasts.delete(key);
           }
           // Emit the cast as a standalone timeline entry. Resolve the
-          // name from the inlined ability or the masterData catalog ;
-          // skip autoattacks (the boss's filler swings would flood the
-          // lane) and casts we can't name.
+          // name from the inlined ability or the masterData catalog.
+          // Skip : autoattacks (filler swings flood the lane) and
+          // unnamed "Unknown_####" casts (pure noise — you can't act on
+          // a nameless cast ; FFLogs labels uncatalogued abilities this
+          // way). Repeated casts of the same ability by the same source
+          // within GROUP_WINDOW_MS collapse into one ×N entry, exactly
+          // like the damage aggregation above — otherwise a rapid-fire
+          // cast (Hyperpulse on Omega) stacks 20 markers.
           const castName = ev.ability?.name ?? abilities.get(ev.abilityGameID)?.name;
-          if (castName && castName.toLowerCase() !== 'attack') {
-            const castSource = actors.get(ev.sourceID);
-            bossCasts.push({
-              name: castName,
-              time: Math.max(0, Math.round((ev.timestamp - fight.startTime) / 100) / 10),
-              cast_time: dur > 0 ? dur : undefined,
-              game_id: ev.abilityGameID,
-              source_name: castSource?.name || 'Unknown',
-            });
+          if (
+            castName &&
+            castName.toLowerCase() !== 'attack' &&
+            !/^unknown[_ ]?\d+$/i.test(castName)
+          ) {
+            const gkey = `${ev.sourceID}|${ev.abilityGameID}`;
+            const last = lastBossCastByKey.get(gkey);
+            if (last && ev.timestamp - last.lastTs < GROUP_WINDOW_MS) {
+              bossCasts[last.idx]!.hit_count++;
+              last.lastTs = ev.timestamp;
+            } else {
+              const castSource = actors.get(ev.sourceID);
+              const idx = bossCasts.length;
+              bossCasts.push({
+                name: castName,
+                time: Math.max(0, Math.round((ev.timestamp - fight.startTime) / 100) / 10),
+                cast_time: dur > 0 ? dur : undefined,
+                game_id: ev.abilityGameID,
+                source_name: castSource?.name || 'Unknown',
+                hit_count: 1,
+              });
+              lastBossCastByKey.set(gkey, { idx, lastTs: ev.timestamp });
+            }
           }
         }
       }

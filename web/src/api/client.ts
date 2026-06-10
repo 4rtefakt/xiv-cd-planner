@@ -82,6 +82,9 @@ export interface FFLogsBossCast {
   cast_time?: number;
   /** Source NPC display name — drives lane assignment on import. */
   source_name?: string;
+  /** Consecutive same-ability casts collapsed into this entry (×N badge).
+   *  1 = single cast. */
+  hit_count?: number;
 }
 
 export interface FFLogsPlayer {
