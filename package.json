@@ -9,8 +9,8 @@
     "do-worker"
   ],
   "scripts": {
-    "dev": "concurrently -n do,pages -c magenta,cyan \"npm run dev -w do-worker\" \"npm run dev:pages\"",
-    "dev:pages": "wrangler pages dev --port 8788 --persist-to .wrangler/state -- npm --prefix web run dev -- --host 127.0.0.1 --port 5173",
+    "dev": "concurrently -n do,api,web -c magenta,cyan,green \"npm run dev -w do-worker\" \"npm run dev:pages\" \"npm run dev:web\"",
+    "dev:pages": "wrangler pages dev web/public --port 8788 --persist-to .wrangler/state",
     "dev:web": "npm run dev -w web",
     "dev:worker": "npm run dev -w do-worker",
     "build": "npm run build -w web",
