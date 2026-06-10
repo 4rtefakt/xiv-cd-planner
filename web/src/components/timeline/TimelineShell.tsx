@@ -6,6 +6,8 @@ import { TimelineAxis } from './TimelineAxis';
 import { BossLanesLeft, BossLanesRight } from './BossLanes';
 import { PlayerGroupsLeft, PlayerGroupsRight } from './PlayerGroups';
 import { PhaseLayer } from './PhaseMarkers';
+import { TimelineVertical } from './TimelineVertical';
+import { mainAxisPx, ZOOM_STEP, ZOOM_MIN, ZOOM_MAX } from './metrics';
 
 /** Compact-mode pill — shrinks every boss mech to its diamond cap. */
 function CompactToggle() {
@@ -71,11 +73,6 @@ function OrientationToggle() {
   );
 }
 
-/** Base pixels-per-second at zoom 1.0. The default zoom is 2× so the
- *  initial canvas fits ~5 min of action in a 1600px viewport. */
-const BASE_PX_PER_SEC = 2.667;
-const ZOOM_STEP = 0.15;
-
 /**
  * Section 02 main grid. C.1 ships:
  *   - Toolbar (buttons still wireless — they'll get handlers in C.2/C.4)
@@ -101,7 +98,7 @@ export function TimelineShell() {
 
   const t = useT();
 
-  const canvasWidth = Math.max(800, Math.round(fightDuration * BASE_PX_PER_SEC * zoom));
+  const canvasWidth = mainAxisPx(fightDuration, zoom);
 
   // The right column is split into two stacked horizontal scrollers :
   //   - tl-head-scroller : axis + boss lanes (position:sticky top:0)
@@ -198,7 +195,7 @@ export function TimelineShell() {
       const timeFraction = Math.max(0, Math.min(1, cursorXInCanvas / oldWidth));
 
       const state = usePlanStore.getState();
-      const newZoom = Math.max(0.5, Math.min(8, state.zoom - Math.sign(e.deltaY) * ZOOM_STEP));
+      const newZoom = Math.max(ZOOM_MIN, Math.min(ZOOM_MAX, state.zoom - Math.sign(e.deltaY) * ZOOM_STEP));
       if (Math.abs(newZoom - state.zoom) < 0.001) return;
       state.setZoom(newZoom);
 
@@ -339,7 +336,10 @@ export function TimelineShell() {
         <OrientationToggle />
       </div>
 
-      <div className={`timeline-shell orient-${orientation}`}>
+      {orientation === 'vertical' ? (
+        <TimelineVertical />
+      ) : (
+      <div className="timeline-shell orient-horizontal">
         <div className="tl-left" ref={leftRef}>
           {/* The header block (axis spacer + boss lanes) sticks to the
               top of the viewport while the player groups below scroll
@@ -373,6 +373,7 @@ export function TimelineShell() {
           </div>
         </div>
       </div>
+      )}
 
       <div className="legend">
         <div className="legend-item"><div className="legend-line" style={{ '--sw': 'var(--phys-ranged)' } as React.CSSProperties} />PHYSICAL</div>

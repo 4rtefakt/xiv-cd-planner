@@ -2248,3 +2248,289 @@
 }
 .phase-name-input:focus { outline: none; }
 .app.read-only .phase-label { cursor: default; }
+
+/* ============================================================
+   VERTICAL TIMELINE  (.timeline-shell.orient-vertical)
+   ------------------------------------------------------------
+   A REAL re-layout, not a CSS rotation : time runs top→bottom
+   (Y), lanes/abilities become columns (X). The SAME children as
+   the horizontal shell are reused — markers are positioned by
+   lib/orientation (top/height instead of left/width) — and these
+   rules transpose the containers + the static marker geometry.
+
+   Layout is a frozen-pane grid in one scroll container
+   (see TimelineVertical.tsx) :
+     row1 : corner (sticky top-left) | column headers (sticky top)
+     row2 : time ruler (sticky left) | canvas columns
+   Column headers (the reused *Left components) and the canvas
+   columns (the reused *Right components) walk the same data in
+   the same order ; the fixed column-width vars below keep every
+   header aligned over its column.
+   ============================================================ */
+.timeline-shell.orient-vertical {
+  display: block;
+  border-top: 1px solid var(--line);
+  background: var(--panel-2);
+}
+.tl-vert {
+  /* Column widths — shared by header band and canvas so they align. */
+  --tl-ruler-w: 56px;
+  --tl-lane-col: 156px;
+  --tl-ab-col: 48px;
+  --tl-phead-col: 92px;
+  --tl-vhead-h: 66px;
+
+  position: relative;
+  display: grid;
+  grid-template-columns: var(--tl-ruler-w) max-content;
+  grid-template-rows: var(--tl-vhead-h) max-content;
+  overflow: auto;
+  max-height: 78vh;
+  background: var(--panel-2);
+}
+
+/* ── Frozen panes ─────────────────────────────────────────── */
+.tl-vert-corner {
+  grid-row: 1; grid-column: 1;
+  position: sticky; top: 0; left: 0; z-index: 30;
+  background: var(--panel);
+  border-right: 1px solid var(--line-bright);
+  border-bottom: 1px solid var(--line-bright);
+  display: flex; align-items: center; justify-content: center;
+  padding: 2px; text-align: center;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 8px; letter-spacing: 0.08em;
+  text-transform: uppercase; color: var(--text-faint);
+}
+.tl-vert-colhead {
+  grid-row: 1; grid-column: 2;
+  position: sticky; top: 0; z-index: 20;
+  display: flex; flex-direction: row; align-items: stretch;
+  background: var(--panel);
+  border-bottom: 1px solid var(--line-bright);
+}
+.tl-vert-ruler {
+  grid-row: 2; grid-column: 1;
+  position: sticky; left: 0; z-index: 15;
+  background: var(--panel);
+  border-right: 1px solid var(--line-bright);
+}
+.tl-vert-canvas {
+  grid-row: 2; grid-column: 2;
+  position: relative;
+  display: flex; flex-direction: row; align-items: stretch;
+  background: var(--panel-2);
+}
+
+/* ── Containers : stack rows → columns ────────────────────── */
+.orient-vertical .left-boss-lanes,
+.orient-vertical .right-boss-lanes,
+.orient-vertical .left-player-groups,
+.orient-vertical .right-player-groups,
+.orient-vertical .player-group {
+  display: flex; flex-direction: row; align-items: stretch;
+  height: 100%;
+}
+
+/* ── Time ruler (vertical axis) ───────────────────────────── */
+.orient-vertical .tl-axis {
+  height: 100%; width: var(--tl-ruler-w);
+  border-bottom: none;
+}
+.orient-vertical .tl-tick {
+  bottom: auto; left: auto;
+  right: 0; top: 0;            /* `top` set inline (mainStart) */
+  width: 8px; height: 1px;
+}
+.orient-vertical .tl-tick.major { width: 18px; height: 1px; background: var(--text-dim); }
+.orient-vertical .tl-tick.minor { width: 8px; height: 1px; }
+.orient-vertical .tl-tick-label {
+  top: 0; left: 5px;          /* `top` set inline */
+  transform: translateY(-50%);
+}
+
+/* ── Boss-lane columns (header + canvas) ──────────────────── */
+.orient-vertical .boss-row-left,
+.orient-vertical .boss-row-right {
+  flex: 0 0 var(--tl-lane-col);
+  width: var(--tl-lane-col);
+  min-height: 0;
+  border-bottom: none;
+  border-right: 1px solid var(--line);
+}
+.orient-vertical .boss-row-left {
+  height: 100%;
+  flex-direction: column;
+  justify-content: center;
+  gap: 4px;
+}
+.orient-vertical .boss-row-right { height: 100%; }
+/* Hide the lane-management affordances in the compact vertical header —
+   they stay available in the horizontal view. */
+.orient-vertical .boss-row-left .lane-reorder,
+.orient-vertical .boss-row-left .lane-merge,
+.orient-vertical .boss-row-left .lane-remove { display: none; }
+
+/* ── Player header columns (role-tinted separators) ───────── */
+.orient-vertical .player-header-left,
+.orient-vertical .player-header-right {
+  flex: 0 0 var(--tl-phead-col);
+  width: var(--tl-phead-col);
+  height: 100%;
+  min-height: 0;
+  border-top: none;
+  border-right: 1px solid var(--line-bright);
+}
+.orient-vertical .player-header-left {
+  grid-template-columns: none;
+  flex-direction: column;
+  align-items: center; justify-content: center;
+  gap: 3px; padding: 4px;
+  text-align: center;
+}
+.orient-vertical .player-header-left .ph-name-block { flex-direction: column; gap: 3px; align-items: center; }
+.orient-vertical .player-header-left .ph-name { max-width: 80px; }
+/* Role accent : top bar → left bar running down the column. */
+.orient-vertical .player-header-right::before {
+  top: 0; bottom: 0; left: 0; right: auto;
+  width: 2px; height: auto;
+}
+
+/* ── Ability columns (header + canvas) ────────────────────── */
+.orient-vertical .cd-row-left,
+.orient-vertical .cd-row-right {
+  flex: 0 0 var(--tl-ab-col);
+  width: var(--tl-ab-col);
+  height: 100%;
+  min-height: 0;
+  border-bottom: none;
+  border-right: 1px solid var(--line);
+}
+.orient-vertical .cd-row-left {
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  gap: 3px; padding: 5px 2px;
+}
+.orient-vertical .cd-row-left .cd-indent { display: none; }
+.orient-vertical .cd-row-left .cd-row-name {
+  font-size: 8px; max-width: 100%; text-align: center; line-height: 1.1;
+}
+.orient-vertical .cd-row-left .cd-ability-icon { width: 20px; height: 20px; }
+.orient-vertical .cd-row-left .cd-row-cd { font-size: 8px; }
+/* The "+N hidden" footer is a horizontal-only nicety — drop it here so
+   it doesn't add a stray column that would desync header vs canvas. */
+.orient-vertical .cd-row-hidden-footer,
+.orient-vertical .cd-row-hidden-footer-spacer { display: none; }
+
+/* ── Mechanic marker (horizontal line at time = Y) ────────── */
+.orient-vertical .mechanic {
+  top: auto; bottom: auto;     /* `top` set inline (mainStart) */
+  left: 0; right: 0; width: auto; height: 2px;
+}
+.orient-vertical .mech-cap {
+  top: 50%; left: 2px;
+  transform: translateY(-50%) rotate(45deg);
+}
+.orient-vertical .mech-hitcount {
+  top: 50%; left: -10px;
+  transform: translateY(-50%) rotate(-45deg);
+}
+.orient-vertical .mech-label {
+  bottom: auto; left: 16px;    /* to the right of the cap */
+  top: 50%; transform: translateY(-50%);
+  max-width: calc(var(--tl-lane-col) - 22px);
+}
+.orient-vertical .mech-label-text { max-width: calc(var(--tl-lane-col) - 60px); }
+.orient-vertical .mech-time {
+  bottom: auto; left: 16px;
+  top: calc(50% + 11px); transform: translateY(-50%);
+}
+.orient-vertical .mech-coverage {
+  top: 50%; left: auto; right: 4px; margin-left: 0;
+  transform: translateY(-50%);
+}
+.orient-vertical .mech-remove {
+  top: 2px; left: auto; right: 2px; margin-left: 0;
+}
+
+/* ── Boss cast bar (band along Y) ─────────────────────────── */
+.orient-vertical .mech-cast-bar {
+  top: auto; bottom: auto;     /* `top`+`height` set inline (mainBlock) */
+  left: 2px; right: 2px; width: auto;
+  border-left: none; border-right: none;
+  border-top: 1px dashed color-mix(in srgb, var(--cast-color, var(--magic-ranged)) 60%, transparent);
+  border-bottom: 1px solid var(--cast-color, var(--magic-ranged));
+  align-items: flex-end; justify-content: center;
+  padding-right: 0; padding-bottom: 3px;
+  background: repeating-linear-gradient(
+      135deg,
+      rgba(255, 255, 255, 0.04),
+      rgba(255, 255, 255, 0.04) 4px,
+      transparent 4px,
+      transparent 8px
+    ),
+    linear-gradient(180deg,
+      color-mix(in srgb, var(--cast-color, var(--magic-ranged)) 12%, transparent),
+      color-mix(in srgb, var(--cast-color, var(--magic-ranged)) 28%, transparent));
+}
+
+/* ── Mechanic guideline through ability columns ───────────── */
+.orient-vertical .mech-guideline {
+  top: auto; bottom: auto;     /* `top` set inline */
+  left: 0; right: 0; width: auto; height: 1px;
+}
+
+/* ── Boss-row hover indicator ─────────────────────────────── */
+.orient-vertical .boss-hover {
+  top: auto; bottom: auto;     /* `top` set inline */
+  left: 0; right: 0; width: auto;
+  border-left: none; border-top: 1px dotted var(--text-dim);
+}
+.orient-vertical .boss-hover-time {
+  top: 0; left: 2px; transform: translateY(-50%);
+}
+
+/* ── Placed cooldown (block along Y) ──────────────────────── */
+.orient-vertical .cd-use {
+  top: auto; height: auto;     /* `top`+`height` set inline (mainBlock) */
+  left: 3px; right: 3px; width: auto;
+  flex-direction: column;
+}
+.orient-vertical .cd-use-active-block {
+  width: 100%; height: auto;   /* `height` set inline (mainExtentPct) */
+}
+.orient-vertical .cd-use-active-block::after {
+  top: auto; bottom: 0; left: 0; right: 0; width: auto; height: 3px;
+}
+.orient-vertical .cd-use-active-extend {
+  border-left: none; border-top: 1px solid rgba(255, 255, 255, 0.15);
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.18), rgba(255, 255, 255, 0.06));
+}
+.orient-vertical .cd-use-cooldown {
+  border-right: 1px solid var(--cd-color); border-left: 1px solid var(--cd-color);
+  border-top: none;
+}
+/* Hover meta : tip/start-time to the side instead of above. */
+.orient-vertical .cd-use-tip {
+  bottom: auto; left: 100%; top: 0;
+  transform: translateX(6px);
+}
+.orient-vertical .cd-use-start-time {
+  bottom: auto; top: 0; left: 100%;
+  transform: translateX(3px);
+}
+.orient-vertical .cd-use-remove { top: -3px; right: -3px; }
+.orient-vertical .cd-use-preview-tip {
+  bottom: auto; left: 100%; top: 0; transform: translateX(4px);
+}
+
+/* ── Phase markers (horizontal lines across all columns) ──── */
+.orient-vertical .phase-marker {
+  top: auto; bottom: auto;     /* `top` set inline */
+  left: 0; right: 0; width: auto;
+  border-left: none; border-top: 1px dashed var(--text-dim);
+}
+.orient-vertical .phase-label,
+.orient-vertical .phase-name-input {
+  top: 0; left: 0; transform: translateY(-50%);
+}
