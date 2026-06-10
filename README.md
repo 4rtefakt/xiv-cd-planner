@@ -15,13 +15,16 @@ npm run dev
 
 Trois processus se lancent en parallèle :
 
-| Process       | Port | Rôle                                                |
-|---------------|------|-----------------------------------------------------|
-| Vite          | 5173 | React HMR (proxifié par wrangler)                   |
-| Pages dev     | 8788 | Pages Functions + assets statiques + proxy vers vite |
-| DO worker dev | 8787 | Worker `cooldown-planner-do` (classe `PlanDO`)      |
+| Process       | Port | Rôle                                                      |
+|---------------|------|-----------------------------------------------------------|
+| Vite          | 5173 | L'app (React HMR) — proxifie `/api/*` vers wrangler       |
+| Pages dev     | 8788 | Pages Functions + bindings (KV, DO) — API uniquement      |
+| DO worker dev | 8787 | Worker `cooldown-planner-do` (classe `PlanDO`)            |
 
-Ouvre http://localhost:8788. Les requêtes `/api/*` vont aux Functions, le reste à Vite.
+**Ouvre http://localhost:5173.** Les requêtes `/api/*` sont proxifiées par Vite
+vers wrangler (même origine côté navigateur, donc pas de CORS en dev). Le mode
+proxy `wrangler pages dev -- <cmd>` n'est plus utilisé : il est déprécié et
+incompatible avec `pages_build_output_dir` depuis wrangler ~4.9x.
 
 ## Build & deploy
 

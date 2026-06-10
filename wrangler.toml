@@ -2,10 +2,15 @@ name = "cooldown-planner"
 compatibility_date = "2025-12-01"
 compatibility_flags = ["nodejs_compat"]
 pages_build_output_dir = "web/dist"
-# Local dev uses `wrangler pages dev --proxy 5173` against a separate vite
-# server (see package.json dev:pages). The `-- <vite-cmd>` proxy mode is
-# incompatible with pages_build_output_dir, but that mode is also
-# deprecated in wrangler 4.x — the two-process flow is the supported one.
+# Local dev does NOT use wrangler's `-- <cmd>` proxy mode : it's deprecated
+# AND refuses to coexist with pages_build_output_dir since wrangler ~4.9x
+# ("Specify either a directory OR a proxy command, not both"). Instead the
+# dev flow runs three processes (see package.json) :
+#   - wrangler pages dev web/public :8788 -> Functions + bindings only (the
+#     static dir is a placeholder ; nobody browses 8788 directly)
+#   - vite :5173 -> the app, with /api proxied to 8788 (web/vite.config.ts)
+#   - do-worker :8787 -> PlanDO
+# Open http://localhost:5173 in dev.
 
 # ---------------------------------------------------------------------------
 # Bindings exposed to Pages Functions (functions/**)
