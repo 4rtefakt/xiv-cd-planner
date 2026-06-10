@@ -259,6 +259,10 @@ interface BossCast {
    *  cast (Hyperpulse on Omega fires ~20× in a row) is one "×20" marker
    *  instead of 20 stacked entries. */
   hit_count: number;
+  /** FFLogs sourceID of the caster. Used to dedup against damage mechs
+   *  (a cast that resolves into an aggregated damage event is already
+   *  represented by that mech + its cast bar). Stripped from the response. */
+  _source_id?: number;
 }
 
 /** Multi-hit boss abilities (Akh Morn = 5 hits over ~5s, Earthen Fury
@@ -592,7 +596,10 @@ export const onRequestPost: PagesFunction<FFLogsEnv> = async (ctx) => {
           if (
             castName &&
             castName.toLowerCase() !== 'attack' &&
-            !/^unknown[_ ]?\d+$/i.test(castName)
+            // FFLogs labels uncatalogued abilities "unknown_<hex>" (e.g.
+            // unknown_32fe) — the suffix is HEX, not decimal, so match
+            // [0-9a-f] not \d.
+            !/^unknown[_ ]?[0-9a-f]+$/i.test(castName)
           ) {
             const gkey = `${ev.sourceID}|${ev.abilityGameID}`;
             const last = lastBossCastByKey.get(gkey);
@@ -609,6 +616,7 @@ export const onRequestPost: PagesFunction<FFLogsEnv> = async (ctx) => {
                 game_id: ev.abilityGameID,
                 source_name: castSource?.name || 'Unknown',
                 hit_count: 1,
+                _source_id: ev.sourceID,
               });
               lastBossCastByKey.set(gkey, { idx, lastTs: ev.timestamp });
             }
@@ -619,6 +627,30 @@ export const onRequestPost: PagesFunction<FFLogsEnv> = async (ctx) => {
       if (enemyCastCursor !== null && enemyCastCursor <= fight.startTime) break;
       if (enemyCastCursor !== null && enemyCastCursor >= fight.endTime) break;
     }
+
+    // Dedup casts against damage mechs : a cast that resolves into an
+    // aggregated damage event is ALREADY represented by that damage mech
+    // (which carries the same name + its own cast bar via cast_time).
+    // Emitting a standalone 'cast' entry on top is pure duplication —
+    // exactly the doubling Laser Shower / Pile Pitch / … produce on
+    // Omega. We keep ONLY casts with no matching damage mech : the
+    // "invisible" mechanics (a telegraph / animation with no trackable
+    // damage event), which is what the cast layer is actually for.
+    // Match = same ability (game_id) + same source within ±window of the
+    // damage group's time.
+    const CAST_DEDUP_WINDOW_S = 2.5;
+    const standaloneCasts = bossCasts.filter(
+      (c) =>
+        !groups.some(
+          (g) =>
+            g.game_id != null &&
+            g.game_id === c.game_id &&
+            g._source_id === c._source_id &&
+            Math.abs(g.time - c.time) <= CAST_DEDUP_WINDOW_S,
+        ),
+    );
+    bossCasts.length = 0;
+    bossCasts.push(...standaloneCasts);
 
     // Attach each cast interval to its matching aggregated mech : same
     // (gameId, sourceID), cast end time within ±MATCH_WINDOW_MS of the
@@ -710,6 +742,7 @@ export const onRequestPost: PagesFunction<FFLogsEnv> = async (ctx) => {
     // through to the client's fallback lane.
     for (const c of bossCasts) {
       if (c.source_name && !bossNames.includes(c.source_name)) c.source_name = addsName;
+      delete (c as Partial<BossCast>)._source_id;
     }
     bossCasts.sort((a, b) => a.time - b.time);
 
