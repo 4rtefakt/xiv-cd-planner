@@ -259,10 +259,6 @@ interface BossCast {
    *  cast (Hyperpulse on Omega fires ~20× in a row) is one "×20" marker
    *  instead of 20 stacked entries. */
   hit_count: number;
-  /** FFLogs sourceID of the caster. Used to dedup against damage mechs
-   *  (a cast that resolves into an aggregated damage event is already
-   *  represented by that mech + its cast bar). Stripped from the response. */
-  _source_id?: number;
 }
 
 /** Multi-hit boss abilities (Akh Morn = 5 hits over ~5s, Earthen Fury
@@ -616,7 +612,6 @@ export const onRequestPost: PagesFunction<FFLogsEnv> = async (ctx) => {
                 game_id: ev.abilityGameID,
                 source_name: castSource?.name || 'Unknown',
                 hit_count: 1,
-                _source_id: ev.sourceID,
               });
               lastBossCastByKey.set(gkey, { idx, lastTs: ev.timestamp });
             }
@@ -636,17 +631,16 @@ export const onRequestPost: PagesFunction<FFLogsEnv> = async (ctx) => {
     // Omega. We keep ONLY casts with no matching damage mech : the
     // "invisible" mechanics (a telegraph / animation with no trackable
     // damage event), which is what the cast layer is actually for.
-    // Match = same ability (game_id) + same source within ±window of the
-    // damage group's time.
-    const CAST_DEDUP_WINDOW_S = 2.5;
+    // Match on NAME + time, NOT (game_id, source) : in FFXIV a boss cast
+    // and the damage it deals routinely have DIFFERENT ability ids AND
+    // are attributed to DIFFERENT sub-actors (on O12S "Mega Beam Omega"
+    // is cast gid=13109 by Omega-M but its damage is gid=13111 from
+    // Omega-F). The display name is the only stable join key.
+    const CAST_DEDUP_WINDOW_S = 3.5;
     const standaloneCasts = bossCasts.filter(
       (c) =>
         !groups.some(
-          (g) =>
-            g.game_id != null &&
-            g.game_id === c.game_id &&
-            g._source_id === c._source_id &&
-            Math.abs(g.time - c.time) <= CAST_DEDUP_WINDOW_S,
+          (g) => g.name === c.name && Math.abs(g.time - c.time) <= CAST_DEDUP_WINDOW_S,
         ),
     );
     bossCasts.length = 0;
@@ -742,7 +736,6 @@ export const onRequestPost: PagesFunction<FFLogsEnv> = async (ctx) => {
     // through to the client's fallback lane.
     for (const c of bossCasts) {
       if (c.source_name && !bossNames.includes(c.source_name)) c.source_name = addsName;
-      delete (c as Partial<BossCast>)._source_id;
     }
     bossCasts.sort((a, b) => a.time - b.time);
 
