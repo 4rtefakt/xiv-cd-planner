@@ -1,18 +1,17 @@
 /**
- * resolveAbilityAtLevel : merge an ability's base values with the
- * narrowest applicable level_variants bracket for `level`.
+ * resolveAbilityAtLevel : merge an ability's base values with every
+ * level_variants patch whose key is ≤ `level`.
  *
- * Mental model :
- *   - Base values in the ability are the MAX-level reference (lvl 100).
- *   - `level_variants` keys are sorted ascending : 50, 60, 70, …, 100.
- *   - We pick every bracket key ≤ level and merge them in ascending
- *     order (lower brackets first, higher overwrite lower keys).
- *     So `{ 70: { mit_potency: 25 }, 90: { mit_potency: 30 } }` at
- *     lvl 70 → 25%, at lvl 90 → 30%, at lvl 100 → falls back to base.
- *
- * Example : Bloodwhetting (WAR) doesn't exist until lvl82 → the base
- * value is the lvl100 version. At lvl70 the ability is filtered out
- * entirely (level_unlocked > level) and never resolves.
+ * Mental model (matches the authoring convention in seed/data.json) :
+ *   - Base fields describe the ability's LOWEST-level form — what a
+ *     player has right at level_unlocked.
+ *   - Each `level_variants` key is the level where a trait or action
+ *     upgrade kicks in ; its patch applies from that level UPWARD.
+ *   - Keys ≤ level merge in ascending order (higher keys overwrite
+ *     lower ones), so chained upgrades compose naturally.
+ *     e.g. Reprisal `{ 98: { effect: 15 } }` → 10s below 98, 15s after.
+ *     e.g. Sheltron `{ 82: { name: 'Holy Sheltron', … } }` → the whole
+ *     identity (name, icon, action_id, stats) swaps at 82.
  *
  * The returned object is a fresh shallow copy ; callers can read fields
  * without worrying about mutating the seed.

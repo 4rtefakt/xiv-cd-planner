@@ -64,10 +64,12 @@ export function PlayerGroupsLeft() {
         const sortedAbilities = filterAndSortAbilities(job, level, hiddenAbilityIds);
         // Abilities the user hid for this room AND that this job actually
         // has (so a hidden BRD ability doesn't surface as "hidden" on PLD).
+        // Resolved at the encounter level so the chip shows the right
+        // form (name + icon) — Sheltron, not Holy Sheltron, at lvl 70.
         const hiddenForThisJob = job
-          ? job.abilities.filter(
-              (ab) => hiddenAbilityIds.includes(ab.id) && ab.level_unlocked <= level,
-            )
+          ? job.abilities
+              .filter((ab) => hiddenAbilityIds.includes(ab.id) && ab.level_unlocked <= level)
+              .map((ab) => resolveAbilityAtLevel(ab, level))
           : [];
         const isCollapsed = !!collapsed[p.id];
         const role = job?.role ?? 'dps';

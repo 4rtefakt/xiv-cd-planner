@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updated_at": "2026-05-21T16:13:31.047Z",
+  "updated_at": "2026-06-10T14:33:12.383Z",
   "_patch": "FFXIV 7.5 (Dawntrail)",
   "_sources": [
     "https://ffxiv.consolegameswiki.com/wiki/ (per-ability and per-job pages)",
@@ -9,7 +9,7 @@
   "_notes": [
     "Each ability has 'verified': true when both recast/duration and effect are taken directly from the wiki stat block.",
     "verified: false when the field is an approximation (e.g. shield absorbed-damage modelled as effective mit %) or when the wiki source did not provide an explicit number.",
-    "Upgrade chains (Sentinel→Guardian, Vengeance→Damnation, Third Eye→Tengentsu, Raw Intuition→Bloodwhetting, Sheltron→Holy Sheltron) keep only the highest-level form, since the planner targets level-100 raids.",
+    "Upgrade chains (Sheltron→Holy Sheltron, Sentinel→Guardian, Vengeance→Damnation, Raw Intuition→Bloodwhetting, Shadow Wall→Shadowed Vigil, Nebula→Great Nebula, Heart of Stone→Heart of Corundum, Third Eye→Tengentsu) store the LOW-level form as base and the upgrade in level_variants[upgradeLevel]. Trait scaling (Enhanced Reprisal/Feint/Addle/Swiftcast/…) works the same way.",
     "icon field references a glyph name from the V0.4 mockup's SVG sprite (shield/cross/aegis/sword/star/eye/wing/diamond/triangle/note/hex/soil/heart/spark). Replace with /icons/abilities/<id>.png once a real-icon source is wired up.",
     "mit_potency for shields/barriers is an effective-equivalent at lvl-100 raidwide damage (not the raw shield potency)."
   ],
@@ -67,7 +67,7 @@
           "id": "PLD.Reprisal",
           "name": "Reprisal",
           "recast": 60,
-          "effect": 15,
+          "effect": 10,
           "mit_type": "party",
           "mit_potency": 10,
           "icon": "https://xivapi.com/i/000000/000806.png",
@@ -78,80 +78,83 @@
           "icon_id": 806,
           "name_fr": "Rétorsion",
           "action_id": 7535,
-          "description": "Reduces damage dealt by nearby enemies by 10%.\n\nDuration:  15 s",
-          "description_fr": "Réduit de 10% les dégâts infligés par les ennemis alentour.\n\nDurée: 15 s",
+          "description": "Reduces damage dealt by nearby enemies by 10%.\n\nDuration:  10s",
+          "description_fr": "Réduit de 10% les dégâts infligés par les ennemis alentour.\n\nDurée: 10s",
           "affinity": "GLA MRD PLD WAR DRK GNB",
-          "affinity_fr": "GLA MRD PLD GUE CHN PSB"
+          "affinity_fr": "GLA MRD PLD GUE CHN PSB",
+          "level_variants": {
+            "98": {
+              "effect": 15,
+              "description": "Reduces damage dealt by nearby enemies by 10%.\n\nDuration:  15 s",
+              "description_fr": "Réduit de 10% les dégâts infligés par les ennemis alentour.\n\nDurée: 15 s"
+            }
+          }
         },
         {
           "id": "PLD.Sheltron",
-          "name": "Holy Sheltron",
+          "name": "Sheltron",
           "recast": 5,
-          "effect": 8,
+          "effect": 6,
           "mit_type": "personal",
           "mit_potency": 15,
-          "icon": "https://xivapi.com/i/002000/002950.png",
+          "icon": "https://xivapi.com/i/002000/002510.png",
           "level_unlocked": 35,
           "verified": true,
-          "_source_url": "https://ffxiv.consolegameswiki.com/wiki/Holy_Sheltron",
-          "_note": "Oath gauge cost 50; grants Knight's Resolve (15% mit, 4s) + Knight's Benediction (250p regen)",
+          "_source_url": "https://ffxiv.consolegameswiki.com/wiki/Sheltron",
+          "_note": "Oath gauge cost 50. Upgrades to Holy Sheltron at 82.",
           "icon_glyph": "aegis",
-          "icon_id": 2950,
-          "name_fr": "Schiltron sacré",
-          "action_id": 25746,
-          "description": "Reduces damage taken by 15%.\n\nDuration: 8s\n\nAdditional Effect: Grants Knight's Resolve\n\nKnight's Resolve Effect: Reduces damage taken by 15%\n\nDuration: 4s\n\nAdditional Effect: Grants Knight's Benediction\n\nKnight's Benediction Effect: Gradually restores HP\n\nCure Potency: 250\n\nDuration: 12s\n\nOath Gauge Cost: 50",
-          "description_fr": "Réduit de 15% vos dégâts subis.\n\nDurée: 8s\n\nEffet additionnel: vous octroie Égide du paladin.\n\nDurée: 4s\n\nÉgide du paladin: réduit de 15% les dégâts subis.\n\nEffet additionnel: vous octroie Bénédiction du paladin.\n\nDurée: 12s\n\nBénédiction du paladin: restaure périodiquement les PV.\n\nPuissance: 250\n\nCoût Jauge du serment: 50",
+          "icon_id": 2510,
+          "name_fr": "Schiltron",
+          "action_id": 3542,
+          "description": "Reduces damage taken by 15%.\n\nDuration: 6 s\n\nOath Gauge Cost: 50",
+          "description_fr": "Réduit de 15% vos dégâts subis.\n\nDurée: 6 s\n\nCoût Jauge du serment: 50",
           "affinity": "PLD",
           "affinity_fr": "PLD",
           "level_variants": {
-            "35": {
-              "name": "Sheltron",
-              "name_fr": "Schiltron",
-              "description": "Reduces damage taken by 15%.\nDuration: 6s\nOath Gauge Cost: 50",
-              "description_fr": "Réduit de 15% vos dégâts subis.\nDurée : 6s\nCoût Jauge du serment : 50"
-            },
             "82": {
               "name": "Holy Sheltron",
               "name_fr": "Schiltron sacré",
+              "icon": "https://xivapi.com/i/002000/002950.png",
+              "icon_id": 2950,
+              "action_id": 25746,
               "description": "Reduces damage taken by 15%.\n\nDuration: 8s\n\nAdditional Effect: Grants Knight's Resolve\n\nKnight's Resolve Effect: Reduces damage taken by 15%\n\nDuration: 4s\n\nAdditional Effect: Grants Knight's Benediction\n\nKnight's Benediction Effect: Gradually restores HP\n\nCure Potency: 250\n\nDuration: 12s\n\nOath Gauge Cost: 50",
-              "description_fr": "Réduit de 15% vos dégâts subis.\n\nDurée: 8s\n\nEffet additionnel: vous octroie Égide du paladin.\n\nDurée: 4s\n\nÉgide du paladin: réduit de 15% les dégâts subis.\n\nEffet additionnel: vous octroie Bénédiction du paladin.\n\nDurée: 12s\n\nBénédiction du paladin: restaure périodiquement les PV.\n\nPuissance: 250\n\nCoût Jauge du serment: 50"
+              "description_fr": "Réduit de 15% vos dégâts subis.\n\nDurée: 8s\n\nEffet additionnel: vous octroie Égide du paladin.\n\nDurée: 4s\n\nÉgide du paladin: réduit de 15% les dégâts subis.\n\nEffet additionnel: vous octroie Bénédiction du paladin.\n\nDurée: 12s\n\nBénédiction du paladin: restaure périodiquement les PV.\n\nPuissance: 250\n\nCoût Jauge du serment: 50",
+              "effect": 8,
+              "_note": "Oath gauge cost 50; grants Knight's Resolve (15% mit, 4s) + Knight's Benediction (250p regen)"
             }
           }
         },
         {
           "id": "PLD.Sentinel",
-          "name": "Guardian",
+          "name": "Sentinel",
           "recast": 120,
           "effect": 15,
           "mit_type": "personal",
-          "mit_potency": 40,
-          "icon": "https://xivapi.com/i/002000/002524.png",
+          "mit_potency": 30,
+          "icon": "https://xivapi.com/i/000000/000151.png",
           "level_unlocked": 38,
           "verified": true,
-          "_source_url": "https://ffxiv.consolegameswiki.com/wiki/Guardian",
-          "_note": "Replaces Sentinel at lvl 92. 40% mit + 1000p shield",
+          "_source_url": "https://ffxiv.consolegameswiki.com/wiki/Sentinel",
+          "_note": "30% mit. Upgrades to Guardian at 92.",
           "icon_glyph": "shield",
-          "icon_id": 2524,
-          "name_fr": "Garde extrême",
-          "action_id": 36920,
-          "description": "Reduces damage taken by 40%.\n\nDuration: 15s\n\nAdditional Effect: Erects a magicked barrier which nullifies damage equivalent to a heal of 1,000 potency\n\nDuration: 15s",
-          "description_fr": "Réduit de 40% vos dégâts subis.\n\nDurée: 15s\n\nEffet additionnel: vous octroie une barrière absorbant un certain montant de dégâts.\n\nPuissance: 1000 Durée: 15s",
+          "icon_id": 151,
+          "name_fr": "Sentinelle",
+          "action_id": 17,
+          "description": "Reduces damage taken by 30%.\n\nDuration: 15s",
+          "description_fr": "Réduit de 30% vos dégâts subis.\n\nDurée: 15s",
           "affinity": "PLD",
           "affinity_fr": "PLD",
           "level_variants": {
-            "38": {
-              "name": "Sentinel",
-              "name_fr": "Sentinelle",
-              "description": "Reduces damage taken by 30%.\nDuration: 15s",
-              "description_fr": "Réduit de 30% vos dégâts subis.\nDurée : 15s",
-              "mit_potency": 30
-            },
             "92": {
               "name": "Guardian",
               "name_fr": "Garde extrême",
+              "icon": "https://xivapi.com/i/002000/002524.png",
+              "icon_id": 2524,
+              "action_id": 36920,
               "description": "Reduces damage taken by 40%.\n\nDuration: 15s\n\nAdditional Effect: Erects a magicked barrier which nullifies damage equivalent to a heal of 1,000 potency\n\nDuration: 15s",
               "description_fr": "Réduit de 40% vos dégâts subis.\n\nDurée: 15s\n\nEffet additionnel: vous octroie une barrière absorbant un certain montant de dégâts.\n\nPuissance: 1000 Durée: 15s",
-              "mit_potency": 40
+              "mit_potency": 40,
+              "_note": "Replaces Sentinel at lvl 92. 40% mit + 1000p shield"
             }
           }
         },
@@ -337,7 +340,7 @@
           "id": "WAR.Reprisal",
           "name": "Reprisal",
           "recast": 60,
-          "effect": 15,
+          "effect": 10,
           "mit_type": "party",
           "mit_potency": 10,
           "icon": "https://xivapi.com/i/000000/000806.png",
@@ -348,10 +351,17 @@
           "icon_id": 806,
           "name_fr": "Rétorsion",
           "action_id": 7535,
-          "description": "Reduces damage dealt by nearby enemies by 10%.\n\nDuration:  15 s",
-          "description_fr": "Réduit de 10% les dégâts infligés par les ennemis alentour.\n\nDurée: 15 s",
+          "description": "Reduces damage dealt by nearby enemies by 10%.\n\nDuration:  10s",
+          "description_fr": "Réduit de 10% les dégâts infligés par les ennemis alentour.\n\nDurée: 10s",
           "affinity": "GLA MRD PLD WAR DRK GNB",
-          "affinity_fr": "GLA MRD PLD GUE CHN PSB"
+          "affinity_fr": "GLA MRD PLD GUE CHN PSB",
+          "level_variants": {
+            "98": {
+              "effect": 15,
+              "description": "Reduces damage dealt by nearby enemies by 10%.\n\nDuration:  15 s",
+              "description_fr": "Réduit de 10% les dégâts infligés par les ennemis alentour.\n\nDurée: 15 s"
+            }
+          }
         },
         {
           "id": "WAR.ThrillOfBattle",
@@ -376,36 +386,35 @@
         },
         {
           "id": "WAR.Bloodwhetting",
-          "name": "Bloodwhetting",
+          "name": "Raw Intuition",
           "recast": 25,
-          "effect": 8,
+          "effect": 6,
           "mit_type": "personal",
           "mit_potency": 10,
-          "icon": "https://xivapi.com/i/002000/002569.png",
+          "icon": "https://xivapi.com/i/002000/002559.png",
           "level_unlocked": 56,
           "verified": true,
-          "_source_url": "https://ffxiv.consolegameswiki.com/wiki/Bloodwhetting",
-          "_note": "10% mit + 400p sustain per weaponskill + 400p shield",
+          "_source_url": "https://ffxiv.consolegameswiki.com/wiki/Raw_Intuition",
+          "_note": "10% mit + sustain. Upgrades to Bloodwhetting at 82.",
           "icon_glyph": "heart",
-          "icon_id": 2569,
-          "name_fr": "Intuition fougueuse",
-          "action_id": 25751,
-          "description": "Reduces damage taken by 10%.\n\nDuration: 8s\n\nAdditional Effect: Restores HP with each weaponskill successfully delivered\n\nCure Potency: 400\n\nAdditional Effect: Grants Stem the Flow\n\nStem the Flow Effect: Reduces damage taken by 10%\n\nDuration: 4s\n\nAdditional Effect: Grants Stem the Tide\n\nStem the Tide Effect: Creates a barrier around self that absorbs damage equivalent to a heal of 400 potency\n\nDuration: 20s\n\nShares a recast timer with Nascent Flash.",
-          "description_fr": "Réduit de 10% vos dégâts subis.\n\nDurée: 8s\n\nEffet additionnel: absorbe des PV quand vous infligez des dégâts avec une technique d'arme.\n\nPuissance: 400\n\nEffet additionnel: vous octroie Barrage au sang.\n\nDurée: 4s\n\nBarrage au sang: réduit de 10% les dégâts subis.\n\nEffet additionnel: vous octroie Digue au sang, une barrière annulant un certain montant de dégâts.\n\nPuissance: 400 Durée: 20s\n\nPartage le même temps de recharge que Exaltation naissante.",
+          "icon_id": 2559,
+          "name_fr": "Intuition pure",
+          "action_id": 3551,
+          "description": "Reduces damage taken by 10%.\n\nDuration: 6s\n\nAdditional Effect: Restores HP with each weaponskill successfully delivered\n\nCure Potency: 400\nShares a recast timer with Nascent Flash.",
+          "description_fr": "Réduit de 10% les dégâts subis.\n\nDurée: 6s\n\nEffet additionnel: absorbe des PV quand vous infligez des dégâts avec une technique d'arme.\n\nPuissance: 400\nPartage le même temps de recharge que Exaltation naissante.",
           "affinity": "WAR",
           "affinity_fr": "GUE",
           "level_variants": {
-            "56": {
-              "name": "Raw Intuition",
-              "name_fr": "Intuition pure",
-              "description": "Reduces damage taken by 10%.\nDuration: 6s\nAdditional Effect: Restores HP with each weaponskill successfully delivered\nCure Potency: 400\nShares a recast timer with Nascent Flash.",
-              "description_fr": "Réduit de 10% les dégâts subis.\nDurée : 6s\nEffet additionnel : absorbe des PV quand vous infligez des dégâts avec une technique d'arme.\nPuissance : 400\nPartage le même temps de recharge que Exaltation naissante."
-            },
             "82": {
               "name": "Bloodwhetting",
               "name_fr": "Intuition fougueuse",
+              "icon": "https://xivapi.com/i/002000/002569.png",
+              "icon_id": 2569,
+              "action_id": 25751,
               "description": "Reduces damage taken by 10%.\n\nDuration: 8s\n\nAdditional Effect: Restores HP with each weaponskill successfully delivered\n\nCure Potency: 400\n\nAdditional Effect: Grants Stem the Flow\n\nStem the Flow Effect: Reduces damage taken by 10%\n\nDuration: 4s\n\nAdditional Effect: Grants Stem the Tide\n\nStem the Tide Effect: Creates a barrier around self that absorbs damage equivalent to a heal of 400 potency\n\nDuration: 20s\n\nShares a recast timer with Nascent Flash.",
-              "description_fr": "Réduit de 10% vos dégâts subis.\n\nDurée: 8s\n\nEffet additionnel: absorbe des PV quand vous infligez des dégâts avec une technique d'arme.\n\nPuissance: 400\n\nEffet additionnel: vous octroie Barrage au sang.\n\nDurée: 4s\n\nBarrage au sang: réduit de 10% les dégâts subis.\n\nEffet additionnel: vous octroie Digue au sang, une barrière annulant un certain montant de dégâts.\n\nPuissance: 400 Durée: 20s\n\nPartage le même temps de recharge que Exaltation naissante."
+              "description_fr": "Réduit de 10% vos dégâts subis.\n\nDurée: 8s\n\nEffet additionnel: absorbe des PV quand vous infligez des dégâts avec une technique d'arme.\n\nPuissance: 400\n\nEffet additionnel: vous octroie Barrage au sang.\n\nDurée: 4s\n\nBarrage au sang: réduit de 10% les dégâts subis.\n\nEffet additionnel: vous octroie Digue au sang, une barrière annulant un certain montant de dégâts.\n\nPuissance: 400 Durée: 20s\n\nPartage le même temps de recharge que Exaltation naissante.",
+              "effect": 8,
+              "_note": "10% mit + 400p sustain per weaponskill + 400p shield"
             }
           }
         },
@@ -474,38 +483,35 @@
         },
         {
           "id": "WAR.Vengeance",
-          "name": "Damnation",
+          "name": "Vengeance",
           "recast": 120,
           "effect": 15,
           "mit_type": "personal",
-          "mit_potency": 40,
-          "icon": "https://xivapi.com/i/002000/002573.png",
+          "mit_potency": 30,
+          "icon": "https://xivapi.com/i/000000/000267.png",
           "level_unlocked": 38,
           "verified": true,
-          "_source_url": "https://ffxiv.consolegameswiki.com/wiki/Damnation",
-          "_note": "Replaces Vengeance at lvl 92. 40% mit + 55p counter + 300p post-regen 15s",
+          "_source_url": "https://ffxiv.consolegameswiki.com/wiki/Vengeance",
+          "_note": "30% mit + 55p counter. Upgrades to Damnation at 92.",
           "icon_glyph": "sword",
-          "icon_id": 2573,
-          "name_fr": "Damnation",
-          "action_id": 36923,
-          "description_fr": "Réduit de 40% vos dégâts subis et inflige des dégâts pour chaque attaque physique que vous recevez.\n\nPuissance: 55 Durée: 15s\n\nEffet additionnel: vous octroie Damné à la première attaque subie ou à la fin de l'effet.\n\nDamné: restaure périodiquement des PV.\n\nPuissance: 400 Durée: 15s",
-          "description": "Reduces damage taken by 40% and delivers an attack with a potency of 55 every time you suffer physical damage.\n\nDuration: 15s\n\nAdditional Effect: Grants Primeval Impulse when the effect expires or damage is taken\n\nPrimeval Impulse Effect: Healing over time\n\nCure Potency: 400\n\nDuration: 15s",
+          "icon_id": 267,
+          "name_fr": "Représailles",
+          "action_id": 44,
+          "description_fr": "Réduit de 30% vos dégâts subis et inflige des dégâts pour chaque attaque physique que vous recevez.\n\nPuissance: 55 Durée: 15s",
+          "description": "Reduces damage taken by 30% and delivers an attack with a potency of 55 every time you suffer physical damage.\n\nDuration: 15s",
           "affinity": "WAR",
           "affinity_fr": "GUE",
           "level_variants": {
-            "38": {
-              "name": "Vengeance",
-              "name_fr": "Représailles",
-              "description": "Reduces damage taken by 30% and delivers an attack with a potency of 55 every time you suffer physical damage.\nDuration: 15s",
-              "description_fr": "Réduit de 30% vos dégâts subis et inflige des dégâts pour chaque attaque physique que vous recevez.\nPuissance : 55 Durée : 15s",
-              "mit_potency": 30
-            },
             "92": {
               "name": "Damnation",
               "name_fr": "Damnation",
+              "icon": "https://xivapi.com/i/002000/002573.png",
+              "icon_id": 2573,
+              "action_id": 36923,
               "description": "Reduces damage taken by 40% and delivers an attack with a potency of 55 every time you suffer physical damage.\n\nDuration: 15s\n\nAdditional Effect: Grants Primeval Impulse when the effect expires or damage is taken\n\nPrimeval Impulse Effect: Healing over time\n\nCure Potency: 400\n\nDuration: 15s",
               "description_fr": "Réduit de 40% vos dégâts subis et inflige des dégâts pour chaque attaque physique que vous recevez.\n\nPuissance: 55 Durée: 15s\n\nEffet additionnel: vous octroie Damné à la première attaque subie ou à la fin de l'effet.\n\nDamné: restaure périodiquement des PV.\n\nPuissance: 400 Durée: 15s",
-              "mit_potency": 40
+              "mit_potency": 40,
+              "_note": "Replaces Vengeance at lvl 92. 40% mit + 55p counter + 300p post-regen 15s"
             }
           }
         },
@@ -544,7 +550,7 @@
         {
           "id": "WHM.Swiftcast",
           "name": "Swiftcast",
-          "recast": 40,
+          "recast": 60,
           "effect": 10,
           "mit_type": "personal",
           "mit_potency": 0,
@@ -559,7 +565,12 @@
           "description": "Next spell is cast immediately.\n\nDuration: 10s",
           "description_fr": "Permet à votre prochain sort d'être instantané.\n\nDurée: 10s",
           "affinity": "CNJ THM ACN WHM BLM SMN SCH AST RDM BLU SGE PCT",
-          "affinity_fr": "ÉLM OCC MBL MNO ACN INV ÉRU AST MRG MBU SAG PIC"
+          "affinity_fr": "ÉLM OCC MBL MNO ACN INV ÉRU AST MRG MBU SAG PIC",
+          "level_variants": {
+            "94": {
+              "recast": 40
+            }
+          }
         },
         {
           "id": "WHM.Surecast",
@@ -597,10 +608,17 @@
           "icon_id": 2638,
           "name_fr": "Faveur divine",
           "action_id": 7432,
-          "description": "Creates a barrier around self or target party member that absorbs damage equivalent to a heal of 500 potency.\n\nDuration: 15s\nMaximum Charges: 2",
-          "description_fr": "Crée une barrière sur vous ou l'équipier ciblé, absorbant un certain montant de dégâts.\n\nPuissance: 500 Durée: 15s\nMaximum de charges: 2",
+          "description": "Creates a barrier around self or target party member that absorbs damage equivalent to a heal of 500 potency.\n\nDuration: 15s",
+          "description_fr": "Crée une barrière sur vous ou l'équipier ciblé, absorbant un certain montant de dégâts.\n\nPuissance: 500 Durée: 15s",
           "affinity": "WHM",
-          "affinity_fr": "MBL"
+          "affinity_fr": "MBL",
+          "level_variants": {
+            "88": {
+              "max_charges": 2,
+              "description": "Creates a barrier around self or target party member that absorbs damage equivalent to a heal of 500 potency.\n\nDuration: 15s\nMaximum Charges: 2",
+              "description_fr": "Crée une barrière sur vous ou l'équipier ciblé, absorbant un certain montant de dégâts.\n\nPuissance: 500 Durée: 15s\nMaximum de charges: 2"
+            }
+          }
         },
         {
           "id": "WHM.Aquaveil",
@@ -763,7 +781,7 @@
         {
           "id": "SCH.Swiftcast",
           "name": "Swiftcast",
-          "recast": 40,
+          "recast": 60,
           "effect": 10,
           "mit_type": "personal",
           "mit_potency": 0,
@@ -778,7 +796,12 @@
           "description": "Next spell is cast immediately.\n\nDuration: 10s",
           "description_fr": "Permet à votre prochain sort d'être instantané.\n\nDurée: 10s",
           "affinity": "CNJ THM ACN WHM BLM SMN SCH AST RDM BLU SGE PCT",
-          "affinity_fr": "ÉLM OCC MBL MNO ACN INV ÉRU AST MRG MBU SAG PIC"
+          "affinity_fr": "ÉLM OCC MBL MNO ACN INV ÉRU AST MRG MBU SAG PIC",
+          "level_variants": {
+            "94": {
+              "recast": 40
+            }
+          }
         },
         {
           "id": "SCH.Surecast",
@@ -867,7 +890,7 @@
         {
           "id": "SCH.DeploymentTactics",
           "name": "Deployment Tactics",
-          "recast": 90,
+          "recast": 120,
           "effect": 30,
           "mit_type": "heal",
           "mit_potency": 0,
@@ -883,7 +906,12 @@
           "description": "Extends Galvanize effect cast on self or target party member to other nearby party members.\n\nDuration: Time remaining on original effect\n\nNo effect when target is not under the effect of Galvanize.",
           "description_fr": "Octroie votre effet Réconfort dont vous ou la cible bénéficiez aux équipiers autour.\n\nDurée: temps restant de l'effet initial.",
           "affinity": "SCH",
-          "affinity_fr": "ÉRU"
+          "affinity_fr": "ÉRU",
+          "level_variants": {
+            "88": {
+              "recast": 90
+            }
+          }
         },
         {
           "id": "SCH.Excogitation",
@@ -1132,7 +1160,7 @@
           "id": "SAM.Feint",
           "name": "Feint",
           "recast": 90,
-          "effect": 15,
+          "effect": 10,
           "mit_type": "party",
           "mit_potency": 10,
           "icon": "https://xivapi.com/i/000000/000828.png",
@@ -1144,10 +1172,17 @@
           "icon_id": 828,
           "name_fr": "Restreinte",
           "action_id": 7549,
-          "description": "Lowers target's physical damage dealt by 10% and magic damage dealt by 5%.\n\nDuration:  15 s",
-          "description_fr": "Réduit respectivement de 10% et 5% les dégâts physiques et magiques infligés par la cible.\n\nDurée: 15 s",
+          "description": "Lowers target's physical damage dealt by 10% and magic damage dealt by 5%.\n\nDuration:  10s",
+          "description_fr": "Réduit respectivement de 10% et 5% les dégâts physiques et magiques infligés par la cible.\n\nDurée: 10s",
           "affinity": "PGL LNC ROG MNK DRG NIN SAM RPR VPR",
-          "affinity_fr": "PGL HAS MOI DRG SUR NIN SAM FCH VPR"
+          "affinity_fr": "PGL HAS MOI DRG SUR NIN SAM FCH VPR",
+          "level_variants": {
+            "98": {
+              "effect": 15,
+              "description": "Lowers target's physical damage dealt by 10% and magic damage dealt by 5%.\n\nDuration:  15 s",
+              "description_fr": "Réduit respectivement de 10% et 5% les dégâts physiques et magiques infligés par la cible.\n\nDurée: 15 s"
+            }
+          }
         },
         {
           "id": "SAM.ArmsLength",
@@ -1171,36 +1206,34 @@
         },
         {
           "id": "SAM.ThirdEye",
-          "name": "Tengentsu",
+          "name": "Third Eye",
           "recast": 15,
           "effect": 4,
           "mit_type": "personal",
           "mit_potency": 10,
-          "icon": "https://xivapi.com/i/003000/003190.png",
+          "icon": "https://xivapi.com/i/003000/003153.png",
           "level_unlocked": 6,
           "verified": true,
-          "_source_url": "https://ffxiv.consolegameswiki.com/wiki/Tengentsu",
-          "_note": "Replaces Third Eye at lvl 82. 10% mit on next hit, then post-hit 10% mit 9s + 200p heal",
+          "_source_url": "https://ffxiv.consolegameswiki.com/wiki/Third_Eye",
+          "_note": "10% mit on next hit. Upgrades to Tengentsu at 82.",
           "icon_glyph": "eye",
-          "icon_id": 3190,
-          "name_fr": "Tengentsû",
-          "action_id": 36962,
-          "description": "Reduces the amount of damage taken by the next attack by 10%.\n\nDuration: 4s\n\nAdditional Effect: Grants Tengentsu's Foresight and increases Kenki Gauge by 10 when hit\n\nTengentsu's Foresight Effect: Gradually restores your HP and reduces damage taken by 10%\n\nDuration: 9s\n\nCure Potency: 200",
-          "description_fr": "Réduit de 10% les dégâts de la prochaine attaque subie.\n\nDurée: 4s\n\nEffet additionnel: remplit la Jauge de Kenki de 10 si des dégâts sont subis et devient Tengentsû: Sei.\n\nDurée: 9s\n\nTengentsû: Sei: réduit de 10% vos dégâts subis et restaure périodiquement vos PV.\n\nPuissance: 200",
+          "icon_id": 3153,
+          "name_fr": "Troisième œil",
+          "action_id": 7498,
+          "description": "Reduces the amount of damage taken by the next attack by 10%.\n\nDuration: 4s\nAdditional Effect: Increases Kenki Gauge by 10 when hit",
+          "description_fr": "Réduit de 10% les dégâts de la prochaine attaque subie.\n\nDurée: 4s\nEffet additionnel: remplit la Jauge de Kenki de 10 si des dégâts sont subis.",
           "affinity": "SAM",
           "affinity_fr": "SAM",
           "level_variants": {
-            "6": {
-              "name": "Third Eye",
-              "name_fr": "Troisième œil",
-              "description": "Reduces the amount of damage taken by the next attack by 10%.\nDuration: 4s\nAdditional Effect: Increases Kenki Gauge by 10 when hit",
-              "description_fr": "Réduit de 10% les dégâts de la prochaine attaque subie.\nDurée : 4s\nEffet additionnel : remplit la Jauge de Kenki de 10 si des dégâts sont subis."
-            },
             "82": {
               "name": "Tengentsu",
               "name_fr": "Tengentsû",
+              "icon": "https://xivapi.com/i/003000/003190.png",
+              "icon_id": 3190,
+              "action_id": 36962,
               "description": "Reduces the amount of damage taken by the next attack by 10%.\n\nDuration: 4s\n\nAdditional Effect: Grants Tengentsu's Foresight and increases Kenki Gauge by 10 when hit\n\nTengentsu's Foresight Effect: Gradually restores your HP and reduces damage taken by 10%\n\nDuration: 9s\n\nCure Potency: 200",
-              "description_fr": "Réduit de 10% les dégâts de la prochaine attaque subie.\n\nDurée: 4s\n\nEffet additionnel: remplit la Jauge de Kenki de 10 si des dégâts sont subis et devient Tengentsû: Sei.\n\nDurée: 9s\n\nTengentsû: Sei: réduit de 10% vos dégâts subis et restaure périodiquement vos PV.\n\nPuissance: 200"
+              "description_fr": "Réduit de 10% les dégâts de la prochaine attaque subie.\n\nDurée: 4s\n\nEffet additionnel: remplit la Jauge de Kenki de 10 si des dégâts sont subis et devient Tengentsû: Sei.\n\nDurée: 9s\n\nTengentsû: Sei: réduit de 10% vos dégâts subis et restaure périodiquement vos PV.\n\nPuissance: 200",
+              "_note": "Replaces Third Eye at lvl 82. 10% mit on next hit, then post-hit 10% mit 9s + 200p heal"
             }
           }
         }
@@ -1259,7 +1292,7 @@
           "id": "DRG.Feint",
           "name": "Feint",
           "recast": 90,
-          "effect": 15,
+          "effect": 10,
           "mit_type": "party",
           "mit_potency": 10,
           "icon": "https://xivapi.com/i/000000/000828.png",
@@ -1270,10 +1303,17 @@
           "icon_id": 828,
           "name_fr": "Restreinte",
           "action_id": 7549,
-          "description": "Lowers target's physical damage dealt by 10% and magic damage dealt by 5%.\n\nDuration:  15 s",
-          "description_fr": "Réduit respectivement de 10% et 5% les dégâts physiques et magiques infligés par la cible.\n\nDurée: 15 s",
+          "description": "Lowers target's physical damage dealt by 10% and magic damage dealt by 5%.\n\nDuration:  10s",
+          "description_fr": "Réduit respectivement de 10% et 5% les dégâts physiques et magiques infligés par la cible.\n\nDurée: 10s",
           "affinity": "PGL LNC ROG MNK DRG NIN SAM RPR VPR",
-          "affinity_fr": "PGL HAS MOI DRG SUR NIN SAM FCH VPR"
+          "affinity_fr": "PGL HAS MOI DRG SUR NIN SAM FCH VPR",
+          "level_variants": {
+            "98": {
+              "effect": 15,
+              "description": "Lowers target's physical damage dealt by 10% and magic damage dealt by 5%.\n\nDuration:  15 s",
+              "description_fr": "Réduit respectivement de 10% et 5% les dégâts physiques et magiques infligés par la cible.\n\nDurée: 15 s"
+            }
+          }
         },
         {
           "id": "DRG.ArmsLength",
@@ -1369,10 +1409,10 @@
         {
           "id": "BRD.Troubadour",
           "name": "Troubadour",
-          "recast": 90,
+          "recast": 120,
           "effect": 15,
           "mit_type": "party",
-          "mit_potency": 15,
+          "mit_potency": 10,
           "icon": "https://xivapi.com/i/002000/002612.png",
           "level_unlocked": 62,
           "verified": true,
@@ -1381,10 +1421,20 @@
           "icon_id": 2612,
           "name_fr": "Troubadour",
           "action_id": 7405,
-          "description": "Reduces damage taken by self and nearby party members by 15 %.\n\nDuration: 15s\n\nEffect cannot be stacked with machinist's Tactician or dancer's Shield Samba.",
-          "description_fr": "Réduit de 15 % les dégâts reçus par vous et les équipiers alentour.\n\nDurée: 15s\n\nNe peut être cumulé ni avec l'effet Tacticien des machinistes ni avec l'effet Samba protectrice des danseurs.",
+          "description": "Reduces damage taken by self and nearby party members by 10%.\n\nDuration: 15s\n\nEffect cannot be stacked with machinist's Tactician or dancer's Shield Samba.",
+          "description_fr": "Réduit de 10% les dégâts reçus par vous et les équipiers alentour.\n\nDurée: 15s\n\nNe peut être cumulé ni avec l'effet Tacticien des machinistes ni avec l'effet Samba protectrice des danseurs.",
           "affinity": "BRD",
-          "affinity_fr": "BRD"
+          "affinity_fr": "BRD",
+          "level_variants": {
+            "88": {
+              "recast": 90
+            },
+            "98": {
+              "mit_potency": 15,
+              "description": "Reduces damage taken by self and nearby party members by 15 %.\n\nDuration: 15s\n\nEffect cannot be stacked with machinist's Tactician or dancer's Shield Samba.",
+              "description_fr": "Réduit de 15 % les dégâts reçus par vous et les équipiers alentour.\n\nDurée: 15s\n\nNe peut être cumulé ni avec l'effet Tacticien des machinistes ni avec l'effet Samba protectrice des danseurs."
+            }
+          }
         },
         {
           "id": "BRD.NaturesMinne",
@@ -1422,7 +1472,7 @@
           "id": "BLM.Addle",
           "name": "Addle",
           "recast": 90,
-          "effect": 15,
+          "effect": 10,
           "mit_type": "party",
           "mit_potency": 10,
           "icon": "https://xivapi.com/i/000000/000861.png",
@@ -1434,15 +1484,22 @@
           "icon_id": 861,
           "name_fr": "Embrouillement",
           "action_id": 7560,
-          "description": "Lowers target's physical damage dealt by 5% and magic damage dealt by 10%.\n\nDuration:  15 s",
-          "description_fr": "Réduit respectivement de 5% et 10% les dégâts physiques et magiques infligés par la cible.\n\nDurée: 15 s",
+          "description": "Lowers target's physical damage dealt by 5% and magic damage dealt by 10%.\n\nDuration:  10s",
+          "description_fr": "Réduit respectivement de 5% et 10% les dégâts physiques et magiques infligés par la cible.\n\nDurée: 10s",
           "affinity": "THM ACN BLM SMN RDM BLU PCT",
-          "affinity_fr": "OCC MNO ACN INV MRG MBU PIC"
+          "affinity_fr": "OCC MNO ACN INV MRG MBU PIC",
+          "level_variants": {
+            "98": {
+              "effect": 15,
+              "description": "Lowers target's physical damage dealt by 5% and magic damage dealt by 10%.\n\nDuration:  15 s",
+              "description_fr": "Réduit respectivement de 5% et 10% les dégâts physiques et magiques infligés par la cible.\n\nDurée: 15 s"
+            }
+          }
         },
         {
           "id": "BLM.Swiftcast",
           "name": "Swiftcast",
-          "recast": 40,
+          "recast": 60,
           "effect": 10,
           "mit_type": "personal",
           "mit_potency": 0,
@@ -1457,7 +1514,12 @@
           "description": "Next spell is cast immediately.\n\nDuration: 10s",
           "description_fr": "Permet à votre prochain sort d'être instantané.\n\nDurée: 10s",
           "affinity": "CNJ THM ACN WHM BLM SMN SCH AST RDM BLU SGE PCT",
-          "affinity_fr": "ÉLM OCC MBL MNO ACN INV ÉRU AST MRG MBU SAG PIC"
+          "affinity_fr": "ÉLM OCC MBL MNO ACN INV ÉRU AST MRG MBU SAG PIC",
+          "level_variants": {
+            "94": {
+              "recast": 40
+            }
+          }
         },
         {
           "id": "BLM.Manaward",
@@ -1555,7 +1617,7 @@
           "id": "DRK.Reprisal",
           "name": "Reprisal",
           "recast": 60,
-          "effect": 15,
+          "effect": 10,
           "mit_type": "party",
           "mit_potency": 10,
           "icon": "https://xivapi.com/i/000000/000806.png",
@@ -1566,45 +1628,49 @@
           "icon_id": 806,
           "name_fr": "Rétorsion",
           "action_id": 7535,
-          "description": "Reduces damage dealt by nearby enemies by 10%.\n\nDuration:  15 s",
-          "description_fr": "Réduit de 10% les dégâts infligés par les ennemis alentour.\n\nDurée: 15 s",
+          "description": "Reduces damage dealt by nearby enemies by 10%.\n\nDuration:  10s",
+          "description_fr": "Réduit de 10% les dégâts infligés par les ennemis alentour.\n\nDurée: 10s",
           "affinity": "GLA MRD PLD WAR DRK GNB",
-          "affinity_fr": "GLA MRD PLD GUE CHN PSB"
+          "affinity_fr": "GLA MRD PLD GUE CHN PSB",
+          "level_variants": {
+            "98": {
+              "effect": 15,
+              "description": "Reduces damage dealt by nearby enemies by 10%.\n\nDuration:  15 s",
+              "description_fr": "Réduit de 10% les dégâts infligés par les ennemis alentour.\n\nDurée: 15 s"
+            }
+          }
         },
         {
           "id": "DRK.ShadowedVigil",
-          "name": "Shadowed Vigil",
+          "name": "Shadow Wall",
           "recast": 120,
           "effect": 15,
           "mit_type": "personal",
-          "mit_potency": 40,
-          "icon": "https://xivapi.com/i/003000/003094.png",
+          "mit_potency": 30,
+          "icon": "https://xivapi.com/i/003000/003075.png",
           "level_unlocked": 38,
           "verified": true,
-          "_note": "Replaces Shadow Wall at lvl 92. 40% mit + 1200p heal at expire or HP<50%",
-          "_source_url": "https://ffxiv.consolegameswiki.com/wiki/Dark_Knight",
+          "_note": "30% mit. Upgrades to Shadowed Vigil at 92.",
+          "_source_url": "https://ffxiv.consolegameswiki.com/wiki/Shadow_Wall",
           "icon_glyph": "shield",
-          "icon_id": 3094,
-          "name_fr": "Vigile ténébreux",
-          "action_id": 36927,
-          "description": "Reduces damage taken by 40%.\n\nDuration: 15s\n\nAdditional Effect: Grants Vigilant\n\nDuration: 20s\n\nVigilant Effect: Restores HP when HP falls below 50% or upon effect duration expiration\n\nCure Potency: 1,200",
-          "description_fr": "Réduit de 40% vos dégâts subis.\n\nDurée: 15s\n\nEffet additionnel: vous octroie Garde ténébreuse.\n\nDurée: 20s\n\nGarde ténébreuse: restaure les PV s'ils tombent sous 50% ou à la fin de l'effet.\n\nPuissance: 1200",
+          "icon_id": 3075,
+          "name_fr": "Mur d'ombre",
+          "action_id": 3636,
+          "description": "Reduces damage taken by 30%.\n\nDuration: 15s",
+          "description_fr": "Réduit de 30% les dégâts subis.\n\nDurée: 15s",
           "affinity": "DRK",
           "affinity_fr": "CHN",
           "level_variants": {
-            "38": {
-              "name": "Shadow Wall",
-              "name_fr": "Mur d'ombre",
-              "description": "Reduces damage taken by 30%.\nDuration: 15s",
-              "description_fr": "Réduit de 30% les dégâts subis.\nDurée : 15s",
-              "mit_potency": 30
-            },
             "92": {
               "name": "Shadowed Vigil",
               "name_fr": "Vigile ténébreux",
+              "icon": "https://xivapi.com/i/003000/003094.png",
+              "icon_id": 3094,
+              "action_id": 36927,
               "description": "Reduces damage taken by 40%.\n\nDuration: 15s\n\nAdditional Effect: Grants Vigilant\n\nDuration: 20s\n\nVigilant Effect: Restores HP when HP falls below 50% or upon effect duration expiration\n\nCure Potency: 1,200",
               "description_fr": "Réduit de 40% vos dégâts subis.\n\nDurée: 15s\n\nEffet additionnel: vous octroie Garde ténébreuse.\n\nDurée: 20s\n\nGarde ténébreuse: restaure les PV s'ils tombent sous 50% ou à la fin de l'effet.\n\nPuissance: 1200",
-              "mit_potency": 40
+              "mit_potency": 40,
+              "_note": "Replaces Shadow Wall at lvl 92. 40% mit + 1200p heal at expire or HP<50%"
             }
           }
         },
@@ -1771,7 +1837,7 @@
           "id": "GNB.Reprisal",
           "name": "Reprisal",
           "recast": 60,
-          "effect": 15,
+          "effect": 10,
           "mit_type": "party",
           "mit_potency": 10,
           "icon": "https://xivapi.com/i/000000/000806.png",
@@ -1782,10 +1848,17 @@
           "icon_id": 806,
           "name_fr": "Rétorsion",
           "action_id": 7535,
-          "description": "Reduces damage dealt by nearby enemies by 10%.\n\nDuration:  15 s",
-          "description_fr": "Réduit de 10% les dégâts infligés par les ennemis alentour.\n\nDurée: 15 s",
+          "description": "Reduces damage dealt by nearby enemies by 10%.\n\nDuration:  10s",
+          "description_fr": "Réduit de 10% les dégâts infligés par les ennemis alentour.\n\nDurée: 10s",
           "affinity": "GLA MRD PLD WAR DRK GNB",
-          "affinity_fr": "GLA MRD PLD GUE CHN PSB"
+          "affinity_fr": "GLA MRD PLD GUE CHN PSB",
+          "level_variants": {
+            "98": {
+              "effect": 15,
+              "description": "Reduces damage dealt by nearby enemies by 10%.\n\nDuration:  15 s",
+              "description_fr": "Réduit de 10% les dégâts infligés par les ennemis alentour.\n\nDurée: 15 s"
+            }
+          }
         },
         {
           "id": "GNB.Camouflage",
@@ -1810,38 +1883,35 @@
         },
         {
           "id": "GNB.GreatNebula",
-          "name": "Great Nebula",
+          "name": "Nebula",
           "recast": 120,
           "effect": 15,
           "mit_type": "personal",
-          "mit_potency": 40,
-          "icon": "https://xivapi.com/i/003000/003435.png",
+          "mit_potency": 30,
+          "icon": "https://xivapi.com/i/003000/003412.png",
           "level_unlocked": 38,
           "verified": true,
-          "_note": "Replaces Nebula at lvl 92. 40% mit + 20% maxHP boost + heal",
-          "_source_url": "https://ffxiv.consolegameswiki.com/wiki/Gunbreaker",
+          "_note": "30% mit. Upgrades to Great Nebula at 92.",
+          "_source_url": "https://ffxiv.consolegameswiki.com/wiki/Nebula",
           "icon_glyph": "shield",
-          "icon_id": 3435,
-          "name_fr": "Grande nébuleuse",
-          "action_id": 36935,
-          "description_fr": "Réduit de 40% vos dégâts subis.\n\nEffet additionnel: augmente de 20% vos PV maximums et restaure l'équivalent du montant augmenté.\n\nDurée: 15s",
-          "description": "Reduces damage taken by 40%.\n\nAdditional Effect: Increases maximum HP by 20% and restores the amount increased.\n\nDuration: 15s",
+          "icon_id": 3412,
+          "name_fr": "Nébuleuse",
+          "action_id": 16148,
+          "description_fr": "Réduit de 30% vos dégâts subis.\n\nDurée: 15s",
+          "description": "Reduces damage taken by 30%.\n\nDuration: 15s",
           "affinity": "GNB",
           "affinity_fr": "PSB",
           "level_variants": {
-            "38": {
-              "name": "Nebula",
-              "name_fr": "Nébuleuse",
-              "description": "Reduces damage taken by 30%.\nDuration: 15s",
-              "description_fr": "Réduit de 30% vos dégâts subis.\nDurée : 15s",
-              "mit_potency": 30
-            },
             "92": {
               "name": "Great Nebula",
               "name_fr": "Grande nébuleuse",
+              "icon": "https://xivapi.com/i/003000/003435.png",
+              "icon_id": 3435,
+              "action_id": 36935,
               "description": "Reduces damage taken by 40%.\n\nAdditional Effect: Increases maximum HP by 20% and restores the amount increased.\n\nDuration: 15s",
               "description_fr": "Réduit de 40% vos dégâts subis.\n\nEffet additionnel: augmente de 20% vos PV maximums et restaure l'équivalent du montant augmenté.\n\nDurée: 15s",
-              "mit_potency": 40
+              "mit_potency": 40,
+              "_note": "Replaces Nebula at lvl 92. 40% mit + 20% maxHP boost + heal"
             }
           }
         },
@@ -1869,36 +1939,35 @@
         },
         {
           "id": "GNB.HeartOfCorundum",
-          "name": "Heart of Corundum",
+          "name": "Heart of Stone",
           "recast": 25,
-          "effect": 8,
+          "effect": 7,
           "mit_type": "party",
           "mit_potency": 15,
-          "icon": "https://xivapi.com/i/003000/003430.png",
+          "icon": "https://xivapi.com/i/003000/003425.png",
           "level_unlocked": 68,
           "verified": true,
-          "_note": "Single ally 15% mit + 4s Clarity (15% more) + 900p delayed heal. 3 charges.",
-          "_source_url": "https://ffxiv.consolegameswiki.com/wiki/Gunbreaker",
+          "_note": "Single ally 15% mit. Upgrades to Heart of Corundum at 82.",
+          "_source_url": "https://ffxiv.consolegameswiki.com/wiki/Heart_of_Stone",
           "icon_glyph": "aegis",
-          "icon_id": 3430,
-          "name_fr": "Cœur de corindon",
-          "action_id": 25758,
-          "description": "Reduces damage taken by target party member or self by 15%.\n\nDuration: 8s\n\nAdditional Effect: When targeting a party member while under the effect of Brutal Shell, that effect is also granted to the target\n\nDuration: 30s\n\nAdditional Effect: Grants Clarity of Corundum to target\n\nClarity of Corundum Effect: Reduces damage taken by 15%\n\nDuration: 4s\n\nAdditional Effect: Grants Catharsis of Corundum to target\n\nCatharsis of Corundum Effect: Restores HP when HP falls below 50% or upon effect duration expiration\n\nCure Potency: 900\n\nDuration: 20s",
-          "description_fr": "Réduit de 15% vos dégâts subis ou ceux de l'équipier ciblé.\n\nDurée: 8s\n\nEffet additionnel: si vous bénéficiez de l'effet Impact brutal et que la cible est un équipier, octroie également cet effet à la cible.\n\nDurée: 30s\n\nEffet additionnel: octroie Clarté de corindon à la cible.\n\nDurée: 4s\n\nClarté de corindon: réduit de 15% les dégâts subis.\n\nEffet additionnel: octroie Catharsis de corindon à la cible.\n\nDurée: 20s\n\nCatharsis de corindon: restaure les PV s'ils tombent sous 50% ou à la fin de l'effet.\n\nPuissance: 900",
+          "icon_id": 3425,
+          "name_fr": "Cœur de pierre",
+          "action_id": 16161,
+          "description": "Reduces damage taken by a party member or self by 15%.\n\nDuration: 7s\n\nAdditional Effect: When targeting a party member while under the effect of Brutal Shell, that effect is also granted to the target\n\nDuration: 30s",
+          "description_fr": "Réduit de 15% vos dégâts subis ou ceux de l'équipier ciblé.\n\nDurée: 7s\n\nEffet additionnel: si vous bénéficiez de l'effet Impact brutal et que la cible est un équipier, octroie également cet effet à la cible.\n\nDurée: 30s",
           "affinity": "GNB",
           "affinity_fr": "PSB",
           "level_variants": {
-            "68": {
-              "name": "Heart of Stone",
-              "name_fr": "Cœur de pierre",
-              "description": "Reduces damage taken by a party member or self by 15%.\nDuration: 7s\nAdditional Effect: When targeting a party member while under the effect of Brutal Shell, that effect is also granted to the target\nDuration: 30s",
-              "description_fr": "Réduit de 15% vos dégâts subis ou ceux de l'équipier ciblé.\nDurée : 7s\nEffet additionnel : si vous bénéficiez de l'effet Impact brutal et que la cible est un équipier, octroie également cet effet à la cible.\nDurée : 30s"
-            },
             "82": {
               "name": "Heart of Corundum",
               "name_fr": "Cœur de corindon",
+              "icon": "https://xivapi.com/i/003000/003430.png",
+              "icon_id": 3430,
+              "action_id": 25758,
               "description": "Reduces damage taken by target party member or self by 15%.\n\nDuration: 8s\n\nAdditional Effect: When targeting a party member while under the effect of Brutal Shell, that effect is also granted to the target\n\nDuration: 30s\n\nAdditional Effect: Grants Clarity of Corundum to target\n\nClarity of Corundum Effect: Reduces damage taken by 15%\n\nDuration: 4s\n\nAdditional Effect: Grants Catharsis of Corundum to target\n\nCatharsis of Corundum Effect: Restores HP when HP falls below 50% or upon effect duration expiration\n\nCure Potency: 900\n\nDuration: 20s",
-              "description_fr": "Réduit de 15% vos dégâts subis ou ceux de l'équipier ciblé.\n\nDurée: 8s\n\nEffet additionnel: si vous bénéficiez de l'effet Impact brutal et que la cible est un équipier, octroie également cet effet à la cible.\n\nDurée: 30s\n\nEffet additionnel: octroie Clarté de corindon à la cible.\n\nDurée: 4s\n\nClarté de corindon: réduit de 15% les dégâts subis.\n\nEffet additionnel: octroie Catharsis de corindon à la cible.\n\nDurée: 20s\n\nCatharsis de corindon: restaure les PV s'ils tombent sous 50% ou à la fin de l'effet.\n\nPuissance: 900"
+              "description_fr": "Réduit de 15% vos dégâts subis ou ceux de l'équipier ciblé.\n\nDurée: 8s\n\nEffet additionnel: si vous bénéficiez de l'effet Impact brutal et que la cible est un équipier, octroie également cet effet à la cible.\n\nDurée: 30s\n\nEffet additionnel: octroie Clarté de corindon à la cible.\n\nDurée: 4s\n\nClarté de corindon: réduit de 15% les dégâts subis.\n\nEffet additionnel: octroie Catharsis de corindon à la cible.\n\nDurée: 20s\n\nCatharsis de corindon: restaure les PV s'ils tombent sous 50% ou à la fin de l'effet.\n\nPuissance: 900",
+              "effect": 8,
+              "_note": "Single ally 15% mit + 4s Clarity (15% more) + 900p delayed heal. 3 charges."
             }
           }
         },
@@ -1958,7 +2027,7 @@
         {
           "id": "AST.Swiftcast",
           "name": "Swiftcast",
-          "recast": 40,
+          "recast": 60,
           "effect": 10,
           "mit_type": "personal",
           "mit_potency": 0,
@@ -1973,7 +2042,12 @@
           "description": "Next spell is cast immediately.\n\nDuration: 10s",
           "description_fr": "Permet à votre prochain sort d'être instantané.\n\nDurée: 10s",
           "affinity": "CNJ THM ACN WHM BLM SMN SCH AST RDM BLU SGE PCT",
-          "affinity_fr": "ÉLM OCC MBL MNO ACN INV ÉRU AST MRG MBU SAG PIC"
+          "affinity_fr": "ÉLM OCC MBL MNO ACN INV ÉRU AST MRG MBU SAG PIC",
+          "level_variants": {
+            "94": {
+              "recast": 40
+            }
+          }
         },
         {
           "id": "AST.Surecast",
@@ -2198,7 +2272,7 @@
         {
           "id": "SGE.Swiftcast",
           "name": "Swiftcast",
-          "recast": 40,
+          "recast": 60,
           "effect": 10,
           "mit_type": "personal",
           "mit_potency": 0,
@@ -2213,7 +2287,12 @@
           "description": "Next spell is cast immediately.\n\nDuration: 10s",
           "description_fr": "Permet à votre prochain sort d'être instantané.\n\nDurée: 10s",
           "affinity": "CNJ THM ACN WHM BLM SMN SCH AST RDM BLU SGE PCT",
-          "affinity_fr": "ÉLM OCC MBL MNO ACN INV ÉRU AST MRG MBU SAG PIC"
+          "affinity_fr": "ÉLM OCC MBL MNO ACN INV ÉRU AST MRG MBU SAG PIC",
+          "level_variants": {
+            "94": {
+              "recast": 40
+            }
+          }
         },
         {
           "id": "SGE.Surecast",
@@ -2279,36 +2358,34 @@
         },
         {
           "id": "SGE.Physis",
-          "name": "Physis II",
+          "name": "Physis",
           "recast": 60,
           "effect": 15,
           "mit_type": "heal",
           "mit_potency": 0,
-          "icon": "https://xivapi.com/i/003000/003670.png",
+          "icon": "https://xivapi.com/i/003000/003656.png",
           "level_unlocked": 20,
           "verified": true,
-          "_note": "130p regen party + 10% heal received",
-          "_source_url": "https://ffxiv.consolegameswiki.com/wiki/Sage",
+          "_note": "Party HoT 100p. Upgrades to Physis II at 60.",
+          "_source_url": "https://ffxiv.consolegameswiki.com/wiki/Physis",
           "icon_glyph": "cross",
-          "icon_id": 3670,
-          "name_fr": "Physis II",
-          "action_id": 24302,
-          "description": "Gradually restores own HP and the HP of all nearby party members.\n\nCure Potency: 130\n\nDuration: 15s\n\nAdditional Effect: Increases HP recovered by healing actions by 10%\n\nDuration:  15 s",
-          "description_fr": "Restaure périodiquement vos PV et ceux des équipiers alentour.\n\nPuissance: 130 Durée: 15s\n\nEffet additionnel: octroie Autophysis à vous et aux équipiers alentour.\n\nDurée: 15 s\n\nAutophysis: augmente de 10% les effets curatifs reçus.",
+          "icon_id": 3656,
+          "name_fr": "Physis",
+          "action_id": 24288,
+          "description": "Gradually restores own HP and the HP of all nearby party members.\n\nCure Potency: 100\n\nDuration: 15s",
+          "description_fr": "Restaure périodiquement vos PV et ceux des équipiers alentour.\n\nPuissance: 100 Durée: 15s",
           "affinity": "SGE",
           "affinity_fr": "SAG",
           "level_variants": {
-            "20": {
-              "name": "Physis",
-              "name_fr": "Physis",
-              "description": "Gradually restores own HP and the HP of all nearby party members.\nCure Potency: 100\nDuration: 15s",
-              "description_fr": "Restaure périodiquement vos PV et ceux des équipiers alentour.\nPuissance : 100 Durée : 15s"
-            },
             "60": {
               "name": "Physis II",
               "name_fr": "Physis II",
+              "icon": "https://xivapi.com/i/003000/003670.png",
+              "icon_id": 3670,
+              "action_id": 24302,
               "description": "Gradually restores own HP and the HP of all nearby party members.\n\nCure Potency: 130\n\nDuration: 15s\n\nAdditional Effect: Increases HP recovered by healing actions by 10%\n\nDuration:  15 s",
-              "description_fr": "Restaure périodiquement vos PV et ceux des équipiers alentour.\n\nPuissance: 130 Durée: 15s\n\nEffet additionnel: octroie Autophysis à vous et aux équipiers alentour.\n\nDurée: 15 s\n\nAutophysis: augmente de 10% les effets curatifs reçus."
+              "description_fr": "Restaure périodiquement vos PV et ceux des équipiers alentour.\n\nPuissance: 130 Durée: 15s\n\nEffet additionnel: octroie Autophysis à vous et aux équipiers alentour.\n\nDurée: 15 s\n\nAutophysis: augmente de 10% les effets curatifs reçus.",
+              "_note": "130p regen party + 10% heal received"
             }
           }
         },
@@ -2472,7 +2549,7 @@
           "id": "MNK.Feint",
           "name": "Feint",
           "recast": 90,
-          "effect": 15,
+          "effect": 10,
           "mit_type": "party",
           "mit_potency": 10,
           "icon": "https://xivapi.com/i/000000/000828.png",
@@ -2483,10 +2560,17 @@
           "icon_id": 828,
           "name_fr": "Restreinte",
           "action_id": 7549,
-          "description": "Lowers target's physical damage dealt by 10% and magic damage dealt by 5%.\n\nDuration:  15 s",
-          "description_fr": "Réduit respectivement de 10% et 5% les dégâts physiques et magiques infligés par la cible.\n\nDurée: 15 s",
+          "description": "Lowers target's physical damage dealt by 10% and magic damage dealt by 5%.\n\nDuration:  10s",
+          "description_fr": "Réduit respectivement de 10% et 5% les dégâts physiques et magiques infligés par la cible.\n\nDurée: 10s",
           "affinity": "PGL LNC ROG MNK DRG NIN SAM RPR VPR",
-          "affinity_fr": "PGL HAS MOI DRG SUR NIN SAM FCH VPR"
+          "affinity_fr": "PGL HAS MOI DRG SUR NIN SAM FCH VPR",
+          "level_variants": {
+            "98": {
+              "effect": 15,
+              "description": "Lowers target's physical damage dealt by 10% and magic damage dealt by 5%.\n\nDuration:  15 s",
+              "description_fr": "Réduit respectivement de 10% et 5% les dégâts physiques et magiques infligés par la cible.\n\nDurée: 15 s"
+            }
+          }
         },
         {
           "id": "MNK.ArmsLength",
@@ -2605,7 +2689,7 @@
           "id": "NIN.Feint",
           "name": "Feint",
           "recast": 90,
-          "effect": 15,
+          "effect": 10,
           "mit_type": "party",
           "mit_potency": 10,
           "icon": "https://xivapi.com/i/000000/000828.png",
@@ -2616,10 +2700,17 @@
           "icon_id": 828,
           "name_fr": "Restreinte",
           "action_id": 7549,
-          "description": "Lowers target's physical damage dealt by 10% and magic damage dealt by 5%.\n\nDuration:  15 s",
-          "description_fr": "Réduit respectivement de 10% et 5% les dégâts physiques et magiques infligés par la cible.\n\nDurée: 15 s",
+          "description": "Lowers target's physical damage dealt by 10% and magic damage dealt by 5%.\n\nDuration:  10s",
+          "description_fr": "Réduit respectivement de 10% et 5% les dégâts physiques et magiques infligés par la cible.\n\nDurée: 10s",
           "affinity": "PGL LNC ROG MNK DRG NIN SAM RPR VPR",
-          "affinity_fr": "PGL HAS MOI DRG SUR NIN SAM FCH VPR"
+          "affinity_fr": "PGL HAS MOI DRG SUR NIN SAM FCH VPR",
+          "level_variants": {
+            "98": {
+              "effect": 15,
+              "description": "Lowers target's physical damage dealt by 10% and magic damage dealt by 5%.\n\nDuration:  15 s",
+              "description_fr": "Réduit respectivement de 10% et 5% les dégâts physiques et magiques infligés par la cible.\n\nDurée: 15 s"
+            }
+          }
         },
         {
           "id": "NIN.ArmsLength",
@@ -2717,7 +2808,7 @@
           "id": "RPR.Feint",
           "name": "Feint",
           "recast": 90,
-          "effect": 15,
+          "effect": 10,
           "mit_type": "party",
           "mit_potency": 10,
           "icon": "https://xivapi.com/i/000000/000828.png",
@@ -2728,10 +2819,17 @@
           "icon_id": 828,
           "name_fr": "Restreinte",
           "action_id": 7549,
-          "description": "Lowers target's physical damage dealt by 10% and magic damage dealt by 5%.\n\nDuration:  15 s",
-          "description_fr": "Réduit respectivement de 10% et 5% les dégâts physiques et magiques infligés par la cible.\n\nDurée: 15 s",
+          "description": "Lowers target's physical damage dealt by 10% and magic damage dealt by 5%.\n\nDuration:  10s",
+          "description_fr": "Réduit respectivement de 10% et 5% les dégâts physiques et magiques infligés par la cible.\n\nDurée: 10s",
           "affinity": "PGL LNC ROG MNK DRG NIN SAM RPR VPR",
-          "affinity_fr": "PGL HAS MOI DRG SUR NIN SAM FCH VPR"
+          "affinity_fr": "PGL HAS MOI DRG SUR NIN SAM FCH VPR",
+          "level_variants": {
+            "98": {
+              "effect": 15,
+              "description": "Lowers target's physical damage dealt by 10% and magic damage dealt by 5%.\n\nDuration:  15 s",
+              "description_fr": "Réduit respectivement de 10% et 5% les dégâts physiques et magiques infligés par la cible.\n\nDurée: 15 s"
+            }
+          }
         },
         {
           "id": "RPR.ArmsLength",
@@ -2829,7 +2927,7 @@
           "id": "VPR.Feint",
           "name": "Feint",
           "recast": 90,
-          "effect": 15,
+          "effect": 10,
           "mit_type": "party",
           "mit_potency": 10,
           "icon": "https://xivapi.com/i/000000/000828.png",
@@ -2840,10 +2938,17 @@
           "icon_id": 828,
           "name_fr": "Restreinte",
           "action_id": 7549,
-          "description": "Lowers target's physical damage dealt by 10% and magic damage dealt by 5%.\n\nDuration:  15 s",
-          "description_fr": "Réduit respectivement de 10% et 5% les dégâts physiques et magiques infligés par la cible.\n\nDurée: 15 s",
+          "description": "Lowers target's physical damage dealt by 10% and magic damage dealt by 5%.\n\nDuration:  10s",
+          "description_fr": "Réduit respectivement de 10% et 5% les dégâts physiques et magiques infligés par la cible.\n\nDurée: 10s",
           "affinity": "PGL LNC ROG MNK DRG NIN SAM RPR VPR",
-          "affinity_fr": "PGL HAS MOI DRG SUR NIN SAM FCH VPR"
+          "affinity_fr": "PGL HAS MOI DRG SUR NIN SAM FCH VPR",
+          "level_variants": {
+            "98": {
+              "effect": 15,
+              "description": "Lowers target's physical damage dealt by 10% and magic damage dealt by 5%.\n\nDuration:  15 s",
+              "description_fr": "Réduit respectivement de 10% et 5% les dégâts physiques et magiques infligés par la cible.\n\nDurée: 15 s"
+            }
+          }
         },
         {
           "id": "VPR.ArmsLength",
@@ -2919,10 +3024,10 @@
         {
           "id": "MCH.Tactician",
           "name": "Tactician",
-          "recast": 90,
+          "recast": 120,
           "effect": 15,
           "mit_type": "party",
-          "mit_potency": 15,
+          "mit_potency": 10,
           "icon": "https://xivapi.com/i/003000/003040.png",
           "level_unlocked": 56,
           "verified": true,
@@ -2932,10 +3037,20 @@
           "icon_id": 3040,
           "name_fr": "Tacticien",
           "action_id": 16889,
-          "description": "Reduces damage taken by self and nearby party members by 15 %.\n\nDuration: 15s\n\nEffect cannot be stacked with bard's Troubadour or dancer's Shield Samba.",
-          "description_fr": "Réduit de 15 % les dégâts reçus par vous et les équipiers alentour.\n\nDurée: 15s\n\nNe peut être cumulé ni avec l'effet Troubadour des bardes ni avec l'effet Samba protectrice des danseurs.",
+          "description": "Reduces damage taken by self and nearby party members by 10%.\n\nDuration: 15s\n\nEffect cannot be stacked with bard's Troubadour or dancer's Shield Samba.",
+          "description_fr": "Réduit de 10% les dégâts reçus par vous et les équipiers alentour.\n\nDurée: 15s\n\nNe peut être cumulé ni avec l'effet Troubadour des bardes ni avec l'effet Samba protectrice des danseurs.",
           "affinity": "MCH",
-          "affinity_fr": "MCH"
+          "affinity_fr": "MCH",
+          "level_variants": {
+            "88": {
+              "recast": 90
+            },
+            "98": {
+              "mit_potency": 15,
+              "description": "Reduces damage taken by self and nearby party members by 15 %.\n\nDuration: 15s\n\nEffect cannot be stacked with bard's Troubadour or dancer's Shield Samba.",
+              "description_fr": "Réduit de 15 % les dégâts reçus par vous et les équipiers alentour.\n\nDurée: 15s\n\nNe peut être cumulé ni avec l'effet Troubadour des bardes ni avec l'effet Samba protectrice des danseurs."
+            }
+          }
         },
         {
           "id": "MCH.Dismantle",
@@ -3012,10 +3127,10 @@
         {
           "id": "DNC.ShieldSamba",
           "name": "Shield Samba",
-          "recast": 90,
+          "recast": 120,
           "effect": 15,
           "mit_type": "party",
-          "mit_potency": 15,
+          "mit_potency": 10,
           "icon": "https://xivapi.com/i/003000/003469.png",
           "level_unlocked": 56,
           "verified": true,
@@ -3025,10 +3140,20 @@
           "icon_id": 3469,
           "name_fr": "Samba protectrice",
           "action_id": 16012,
-          "description": "Reduces damage taken by self and nearby party members by 15 %.\n\nDuration: 15s\n\nEffect cannot be stacked with bard's Troubadour or machinist's Tactician.",
-          "description_fr": "Réduit de 15 % les dégâts reçus par vous et les équipiers alentour.\n\nDurée: 15s\n\nNe peut être cumulé ni avec l'effet Troubadour des bardes ni avec l'effet Tacticien des machinistes.",
+          "description": "Reduces damage taken by self and nearby party members by 10%.\n\nDuration: 15s\n\nEffect cannot be stacked with bard's Troubadour or machinist's Tactician.",
+          "description_fr": "Réduit de 10% les dégâts reçus par vous et les équipiers alentour.\n\nDurée: 15s\n\nNe peut être cumulé ni avec l'effet Troubadour des bardes ni avec l'effet Tacticien des machinistes.",
           "affinity": "DNC",
-          "affinity_fr": "DNS"
+          "affinity_fr": "DNS",
+          "level_variants": {
+            "88": {
+              "recast": 90
+            },
+            "98": {
+              "mit_potency": 15,
+              "description": "Reduces damage taken by self and nearby party members by 15 %.\n\nDuration: 15s\n\nEffect cannot be stacked with bard's Troubadour or machinist's Tactician.",
+              "description_fr": "Réduit de 15 % les dégâts reçus par vous et les équipiers alentour.\n\nDurée: 15s\n\nNe peut être cumulé ni avec l'effet Troubadour des bardes ni avec l'effet Tacticien des machinistes."
+            }
+          }
         },
         {
           "id": "DNC.CuringWaltz",
@@ -3087,7 +3212,7 @@
           "id": "SMN.Addle",
           "name": "Addle",
           "recast": 90,
-          "effect": 15,
+          "effect": 10,
           "mit_type": "party",
           "mit_potency": 10,
           "icon": "https://xivapi.com/i/000000/000861.png",
@@ -3098,15 +3223,22 @@
           "icon_id": 861,
           "name_fr": "Embrouillement",
           "action_id": 7560,
-          "description": "Lowers target's physical damage dealt by 5% and magic damage dealt by 10%.\n\nDuration:  15 s",
-          "description_fr": "Réduit respectivement de 5% et 10% les dégâts physiques et magiques infligés par la cible.\n\nDurée: 15 s",
+          "description": "Lowers target's physical damage dealt by 5% and magic damage dealt by 10%.\n\nDuration:  10s",
+          "description_fr": "Réduit respectivement de 5% et 10% les dégâts physiques et magiques infligés par la cible.\n\nDurée: 10s",
           "affinity": "THM ACN BLM SMN RDM BLU PCT",
-          "affinity_fr": "OCC MNO ACN INV MRG MBU PIC"
+          "affinity_fr": "OCC MNO ACN INV MRG MBU PIC",
+          "level_variants": {
+            "98": {
+              "effect": 15,
+              "description": "Lowers target's physical damage dealt by 5% and magic damage dealt by 10%.\n\nDuration:  15 s",
+              "description_fr": "Réduit respectivement de 5% et 10% les dégâts physiques et magiques infligés par la cible.\n\nDurée: 15 s"
+            }
+          }
         },
         {
           "id": "SMN.Swiftcast",
           "name": "Swiftcast",
-          "recast": 40,
+          "recast": 60,
           "effect": 10,
           "mit_type": "personal",
           "mit_potency": 0,
@@ -3121,7 +3253,12 @@
           "description": "Next spell is cast immediately.\n\nDuration: 10s",
           "description_fr": "Permet à votre prochain sort d'être instantané.\n\nDurée: 10s",
           "affinity": "CNJ THM ACN WHM BLM SMN SCH AST RDM BLU SGE PCT",
-          "affinity_fr": "ÉLM OCC MBL MNO ACN INV ÉRU AST MRG MBU SAG PIC"
+          "affinity_fr": "ÉLM OCC MBL MNO ACN INV ÉRU AST MRG MBU SAG PIC",
+          "level_variants": {
+            "94": {
+              "recast": 40
+            }
+          }
         },
         {
           "id": "SMN.Surecast",
@@ -3159,10 +3296,17 @@
           "icon_id": 2750,
           "name_fr": "Égide rayonnante",
           "action_id": 25799,
-          "description": "Orders Carbuncle to execute Radiant Aegis.\n\nRadiant Aegis Effect: Creates a barrier around self that absorbs damage totaling 20% of your maximum HP\n\nDuration: 30s Maximum Charges: 2\n\n Can only be executed while Carbuncle is summoned.",
-          "description_fr": "Ordonne à votre Carbuncle d'exécuter Égide rayonnante.\n\n\n\nCrée une barrière sur le maître absorbant les dégâts subis pour un montant égal à 20% de vos PV maximums.\n\nDurée: 30s Maximum de charges: 2\n\n Condition: Carbuncle invoqué.",
+          "description": "Orders Carbuncle to execute Radiant Aegis.\n\nRadiant Aegis Effect: Creates a barrier around self that absorbs damage totaling 20% of your maximum HP\n\nDuration: 30s \n\n Can only be executed while Carbuncle is summoned.",
+          "description_fr": "Ordonne à votre Carbuncle d'exécuter Égide rayonnante.\n\n\n\nCrée une barrière sur le maître absorbant les dégâts subis pour un montant égal à 20% de vos PV maximums.\n\nDurée: 30s \n\n Condition: Carbuncle invoqué.",
           "affinity": "ACN SMN",
-          "affinity_fr": "ACN INV"
+          "affinity_fr": "ACN INV",
+          "level_variants": {
+            "88": {
+              "max_charges": 2,
+              "description": "Orders Carbuncle to execute Radiant Aegis.\n\nRadiant Aegis Effect: Creates a barrier around self that absorbs damage totaling 20% of your maximum HP\n\nDuration: 30s Maximum Charges: 2\n\n Can only be executed while Carbuncle is summoned.",
+              "description_fr": "Ordonne à votre Carbuncle d'exécuter Égide rayonnante.\n\n\n\nCrée une barrière sur le maître absorbant les dégâts subis pour un montant égal à 20% de vos PV maximums.\n\nDurée: 30s Maximum de charges: 2\n\n Condition: Carbuncle invoqué."
+            }
+          }
         },
         {
           "id": "SMN.Rekindle",
@@ -3221,7 +3365,7 @@
           "id": "RDM.Addle",
           "name": "Addle",
           "recast": 90,
-          "effect": 15,
+          "effect": 10,
           "mit_type": "party",
           "mit_potency": 10,
           "icon": "https://xivapi.com/i/000000/000861.png",
@@ -3232,15 +3376,22 @@
           "icon_id": 861,
           "name_fr": "Embrouillement",
           "action_id": 7560,
-          "description": "Lowers target's physical damage dealt by 5% and magic damage dealt by 10%.\n\nDuration:  15 s",
-          "description_fr": "Réduit respectivement de 5% et 10% les dégâts physiques et magiques infligés par la cible.\n\nDurée: 15 s",
+          "description": "Lowers target's physical damage dealt by 5% and magic damage dealt by 10%.\n\nDuration:  10s",
+          "description_fr": "Réduit respectivement de 5% et 10% les dégâts physiques et magiques infligés par la cible.\n\nDurée: 10s",
           "affinity": "THM ACN BLM SMN RDM BLU PCT",
-          "affinity_fr": "OCC MNO ACN INV MRG MBU PIC"
+          "affinity_fr": "OCC MNO ACN INV MRG MBU PIC",
+          "level_variants": {
+            "98": {
+              "effect": 15,
+              "description": "Lowers target's physical damage dealt by 5% and magic damage dealt by 10%.\n\nDuration:  15 s",
+              "description_fr": "Réduit respectivement de 5% et 10% les dégâts physiques et magiques infligés par la cible.\n\nDurée: 15 s"
+            }
+          }
         },
         {
           "id": "RDM.Swiftcast",
           "name": "Swiftcast",
-          "recast": 40,
+          "recast": 60,
           "effect": 10,
           "mit_type": "personal",
           "mit_potency": 0,
@@ -3255,7 +3406,12 @@
           "description": "Next spell is cast immediately.\n\nDuration: 10s",
           "description_fr": "Permet à votre prochain sort d'être instantané.\n\nDurée: 10s",
           "affinity": "CNJ THM ACN WHM BLM SMN SCH AST RDM BLU SGE PCT",
-          "affinity_fr": "ÉLM OCC MBL MNO ACN INV ÉRU AST MRG MBU SAG PIC"
+          "affinity_fr": "ÉLM OCC MBL MNO ACN INV ÉRU AST MRG MBU SAG PIC",
+          "level_variants": {
+            "94": {
+              "recast": 40
+            }
+          }
         },
         {
           "id": "RDM.Surecast",
@@ -3314,7 +3470,7 @@
           "id": "PCT.Addle",
           "name": "Addle",
           "recast": 90,
-          "effect": 15,
+          "effect": 10,
           "mit_type": "party",
           "mit_potency": 10,
           "icon": "https://xivapi.com/i/000000/000861.png",
@@ -3325,15 +3481,22 @@
           "icon_id": 861,
           "name_fr": "Embrouillement",
           "action_id": 7560,
-          "description": "Lowers target's physical damage dealt by 5% and magic damage dealt by 10%.\n\nDuration:  15 s",
-          "description_fr": "Réduit respectivement de 5% et 10% les dégâts physiques et magiques infligés par la cible.\n\nDurée: 15 s",
+          "description": "Lowers target's physical damage dealt by 5% and magic damage dealt by 10%.\n\nDuration:  10s",
+          "description_fr": "Réduit respectivement de 5% et 10% les dégâts physiques et magiques infligés par la cible.\n\nDurée: 10s",
           "affinity": "THM ACN BLM SMN RDM BLU PCT",
-          "affinity_fr": "OCC MNO ACN INV MRG MBU PIC"
+          "affinity_fr": "OCC MNO ACN INV MRG MBU PIC",
+          "level_variants": {
+            "98": {
+              "effect": 15,
+              "description": "Lowers target's physical damage dealt by 5% and magic damage dealt by 10%.\n\nDuration:  15 s",
+              "description_fr": "Réduit respectivement de 5% et 10% les dégâts physiques et magiques infligés par la cible.\n\nDurée: 15 s"
+            }
+          }
         },
         {
           "id": "PCT.Swiftcast",
           "name": "Swiftcast",
-          "recast": 40,
+          "recast": 60,
           "effect": 10,
           "mit_type": "personal",
           "mit_potency": 0,
@@ -3348,7 +3511,12 @@
           "description": "Next spell is cast immediately.\n\nDuration: 10s",
           "description_fr": "Permet à votre prochain sort d'être instantané.\n\nDurée: 10s",
           "affinity": "CNJ THM ACN WHM BLM SMN SCH AST RDM BLU SGE PCT",
-          "affinity_fr": "ÉLM OCC MBL MNO ACN INV ÉRU AST MRG MBU SAG PIC"
+          "affinity_fr": "ÉLM OCC MBL MNO ACN INV ÉRU AST MRG MBU SAG PIC",
+          "level_variants": {
+            "94": {
+              "recast": 40
+            }
+          }
         },
         {
           "id": "PCT.Surecast",

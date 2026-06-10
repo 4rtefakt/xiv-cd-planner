@@ -485,7 +485,16 @@ export const usePlanStore = create<PlanState>((set) => ({
           if (!player) continue;
           const job = jobByCode.get(player.job);
           if (!job) continue;
-          const ab = job.abilities.find((a) => a.action_id === pu.actionId);
+          // Match against the base action id AND every level-variant
+          // form : a lvl-70 log casts Sheltron (3542) while a lvl-100
+          // log casts Holy Sheltron (25746) — both must map onto the
+          // same PLD.Sheltron row.
+          const ab = job.abilities.find(
+            (a) =>
+              a.action_id === pu.actionId ||
+              (a.level_variants &&
+                Object.values(a.level_variants).some((v) => v?.action_id === pu.actionId)),
+          );
           if (!ab) continue;
           const dedupKey = `${player.id}|${ab.id}|${Math.floor(pu.time * 2)}`;
           if (seen.has(dedupKey)) continue;
