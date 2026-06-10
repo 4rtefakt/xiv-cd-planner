@@ -81,6 +81,11 @@ const messages = {
     'tl.view.compact':      'COMPACT',
     'tl.view.compact.on':   'Compact boss mechs (icons only, hover for name)',
     'tl.view.compact.off':  'Expand boss mech labels back',
+    // Pull variants (multi-pull)
+    'variant.label':        'PULLS',
+    'variant.add':          '+ PULL',
+    'variant.addHint':      'Duplicate the active pull into a new variant',
+    'variant.tabHint':      'double-click to rename · right-click to remove',
     // Mechanic modal
     'mech.addTitle':        '◆ ADD MECHANIC',
     'mech.editTitle':       '◆ EDIT MECHANIC',
@@ -217,6 +222,11 @@ const messages = {
     'tl.view.compact':      'COMPACT',
     'tl.view.compact.on':   'Compacter les mécas (icônes seulement, nom au hover)',
     'tl.view.compact.off':  'Réafficher les labels complets',
+    // Pull variants (multi-pull)
+    'variant.label':        'PULLS',
+    'variant.add':          '+ PULL',
+    'variant.addHint':      'Dupliquer le pull actif dans une nouvelle variante',
+    'variant.tabHint':      'double-clic pour renommer · clic droit pour supprimer',
     'mech.addTitle':        '◆ AJOUTER MÉCA',
     'mech.editTitle':       '◆ ÉDITER MÉCA',
     'mech.name':            'Nom',

@@ -89,6 +89,14 @@ export interface Use {
   time: number;
 }
 
+/** A named pull pattern — multi-pull inc.1. See web/src/types.ts. */
+export interface PullVariant {
+  id: string;
+  name: string;
+  mechanics: Mechanic[];
+  uses: Use[];
+}
+
 export interface PlanMeta {
   slug: string;
   owner_id: string | null;
@@ -116,6 +124,8 @@ export interface Plan {
   hidden_ability_ids: string[];
   /** Phase markers — optional for legacy stored plans. */
   phases?: Phase[];
+  /** Pull variants — optional, backfilled to a single variant. */
+  variants?: PullVariant[];
 }
 
 export interface Env {

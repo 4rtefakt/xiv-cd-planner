@@ -72,6 +72,7 @@ export class PlanDO {
       uses: body.uses ?? [],
       hidden_ability_ids: body.hidden_ability_ids ?? [],
       phases: body.phases ?? [],
+      variants: body.variants ?? [],
     };
 
     await this.state.storage.put('plan', plan);
@@ -101,6 +102,7 @@ export class PlanDO {
       uses: patch.uses ?? current.uses,
       hidden_ability_ids: patch.hidden_ability_ids ?? current.hidden_ability_ids ?? [],
       phases: patch.phases ?? current.phases ?? [],
+      variants: patch.variants ?? current.variants ?? [],
     };
 
     await this.state.storage.put('plan', merged);
