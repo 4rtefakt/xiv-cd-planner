@@ -2398,6 +2398,9 @@
   top: 0; left: 0; right: 0;
   height: var(--tl-pband-h);
   min-height: 0;
+  /* override the base `display:grid` — otherwise the icon + name stack
+     into separate grid rows and the name is clipped by the band height. */
+  display: flex;
   grid-template-columns: none;
   flex-direction: row;
   align-items: center;
