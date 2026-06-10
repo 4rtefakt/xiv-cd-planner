@@ -2205,6 +2205,21 @@
   pointer-events: none;
   z-index: 5;
 }
+/* Faint per-phase wash. Horizontal → a vertical band (full lane height,
+   left+width from inline). Rendered before the markers in the DOM so the
+   dashed lines + labels paint on top. */
+.phase-region {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  pointer-events: none;
+}
+.orient-vertical .phase-region {
+  top: auto;
+  bottom: auto;
+  left: 0;
+  right: 0;
+}
 .phase-marker {
   position: absolute;
   top: 0;
