@@ -2276,9 +2276,9 @@
   /* Column widths — shared by header band and canvas so they align. */
   --tl-ruler-w: 56px;
   --tl-lane-col: 156px;
-  --tl-ab-col: 48px;
-  --tl-phead-col: 64px;
-  --tl-vhead-h: 48px;
+  --tl-ab-col: 38px;
+  --tl-phead-col: 34px;
+  --tl-vhead-h: 46px;
 
   position: relative;
   display: grid;
@@ -2390,10 +2390,14 @@
   cursor: pointer;
 }
 .orient-vertical .player-header-left .ph-name-block { flex-direction: column; gap: 3px; align-items: center; }
-/* Job icon + badge identify the column ; the player NAME is hidden and
-   surfaced on hover (title) so the header stays compact. */
-.orient-vertical .player-header-left .ph-name { display: none; }
+/* The job icon alone identifies the column ; the player NAME and slot
+   BADGE (MT/OT/M1…) are hidden and surfaced on hover (title) so the
+   header stays as narrow as possible to fit more ability columns. */
+.orient-vertical .player-header-left .ph-name,
+.orient-vertical .player-header-left .ph-badge { display: none; }
 .orient-vertical .player-header-left .ph-collapse { display: none; }
+.orient-vertical .player-header-left { padding: 4px 2px; }
+.orient-vertical .player-header-left .ph-job-icon { width: 22px; height: 22px; }
 /* Role accent : top bar → left bar running down the column. */
 .orient-vertical .player-header-right::before {
   top: 0; bottom: 0; left: 0; right: auto;
