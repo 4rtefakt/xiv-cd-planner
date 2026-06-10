@@ -80,8 +80,11 @@ export function computeCoverage(
   level: number = 100,
   hiddenAbilityIds: Set<string> = new Set(),
 ): Coverage {
-  // Placement mechs are informational only — no damage to mitigate.
-  if (mech.category === 'placement') {
+  // Placement mechs and boss casts are informational only — no
+  // (reliable) damage to mitigate. A 'cast' has no damage_kind from the
+  // import (cast and damage are distinct FFLogs objects), so it counts
+  // like a placement and never drags the coverage % down.
+  if (mech.category === 'placement' || mech.category === 'cast') {
     return { pct: 0, tier: 'none', expected: 0, pure: false, placement: true };
   }
   const kind: DamageKind = mech.damage_kind ?? 'magical';

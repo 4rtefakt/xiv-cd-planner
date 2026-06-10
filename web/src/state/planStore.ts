@@ -14,6 +14,7 @@ import { create } from 'zustand';
 import type { BossLane, DamageKind, Encounter, Job, MechCategory, MechType, Mechanic, Phase, Player, PullVariant, Use } from '../types';
 import { demoParty } from '../data/demoParty';
 import { loadStoredLang, storeLang, type Lang } from '../i18n';
+import { loadStoredOrientation, storeOrientation, type Orientation } from '../lib/orientation';
 import { duplicateVariant, ensureVariants, nextVariantName, singleVariant, syncActiveVariant } from '../lib/variants';
 
 /**
@@ -190,6 +191,11 @@ interface PlanState {
   /** UI language. Persisted in localStorage (see i18n.ts). Initial
    *  value comes from localStorage or navigator.language detection. */
   lang: Lang;
+  /** Timeline orientation. 'horizontal' = time runs left→right (default,
+   *  rows per ability) ; 'vertical' = time runs top→bottom (columns per
+   *  ability). Per-device UI preference persisted in localStorage, NOT in
+   *  the plan blob (see lib/orientation.ts). */
+  orientation: Orientation;
 
   // Plan content
   encounter: Encounter;
@@ -290,6 +296,18 @@ interface PlanState {
       hit_count?: number;
       cast_time?: number;
     }>;
+    /** Standalone boss casts (FFLogs "sorts" tab) imported as 'cast'
+     *  category mechs, in addition to the damage mechs above. No
+     *  damage_kind / targets — they're non-mitigable visual cues with
+     *  their own display toggle. */
+    bossCasts?: Array<{
+      name: string;
+      name_fr?: string;
+      game_id?: number;
+      time: number;
+      cast_time?: number;
+      source_name?: string;
+    }>;
     /** Friendly cast events from the log. Mapped to Uses[] via
      *  playerName→player_id (in newParty) and (job+actionId)→ability_id
      *  (in jobs seed). Casts we can't resolve are silently dropped. */
@@ -389,6 +407,8 @@ interface PlanState {
   setSaveStatus(status: SaveStatus): void;
   setReadOnly(readOnly: boolean): void;
   setLang(lang: Lang): void;
+  setOrientation(orientation: Orientation): void;
+  toggleOrientation(): void;
   /** Used by historyManager to swap back to a past snapshot. */
   restoreSnapshot(snap: {
     encounter: Encounter;
@@ -438,6 +458,7 @@ export const usePlanStore = create<PlanState>((set) => ({
   _skipNextSave: false,
   readOnly: false,
   lang: loadStoredLang(),
+  orientation: loadStoredOrientation(),
   encounter: defaultEncounter,
   party: demoParty,
   bossLanes: [{ id: 'lane-1', name: 'BOSS A' }],
@@ -526,6 +547,21 @@ export const usePlanStore = create<PlanState>((set) => ({
           cast_time: m.cast_time && m.cast_time > 0 ? m.cast_time : undefined,
         };
       });
+      // Standalone boss casts → 'cast' category mechs. No targets /
+      // damage_kind : they're non-mitigable cues (what players read off
+      // the boss cast bar), shown alongside the damage mechs with their
+      // own VIEW toggle.
+      const importedCasts: Mechanic[] = (payload.bossCasts ?? []).map((c, i) => ({
+        id: `mech-fflogs-cast-${Date.now()}-${i}`,
+        lane_id: (c.source_name && nameToLane.get(c.source_name)) ?? fallbackLaneId,
+        name: c.name.toUpperCase(),
+        name_fr: c.name_fr ? c.name_fr.toUpperCase() : undefined,
+        game_id: c.game_id,
+        time: c.time,
+        category: 'cast' as const,
+        targets: [],
+        cast_time: c.cast_time && c.cast_time > 0 ? c.cast_time : undefined,
+      }));
       // Rebuild uses[] from friendly cast events. Each cast resolves to
       // a Use iff :
       //   - playerName matches one of newParty's player names (exact)
@@ -590,7 +626,7 @@ export const usePlanStore = create<PlanState>((set) => ({
         },
         party: newParty,
         bossLanes: lanes,
-        mechanics: importedMechs,
+        mechanics: [...importedMechs, ...importedCasts],
         uses: importedUses,
         // Phase markers from a previous fight don't line up with the
         // freshly imported timeline — start clean.
@@ -756,16 +792,26 @@ export const usePlanStore = create<PlanState>((set) => ({
 
   addPhase: () =>
     set((s) => {
-      // New phase lands 60s after the last one (or at 0:00 for the
+      const additions: Phase[] = [];
+      // Anchor the start of the fight as a real phase : inserting a "P2"
+      // shouldn't leave the opening stretch as an unnamed, uncolored
+      // region. Only kicks in when phases already exist but none sits at
+      // the very start (e.g. the first marker was dragged off 0:00).
+      const hasStart = s.phases.some((p) => p.time <= 0);
+      if (s.phases.length > 0 && !hasStart) {
+        additions.push({ id: `phase-${Date.now()}-start`, name: 'P1', time: 0 });
+      }
+      const base = [...s.phases, ...additions];
+      // New phase lands 60s after the last one (or at 0:00 for the very
       // first) — the user drags the marker where they want it.
-      const last = s.phases.reduce((mx, p) => Math.max(mx, p.time), -60);
+      const last = base.reduce((mx, p) => Math.max(mx, p.time), -60);
       const time = Math.min(s.encounter.fight_duration - 5, last + 60);
-      return {
-        phases: [
-          ...s.phases,
-          { id: `phase-${Date.now()}-${s.phases.length}`, name: `P${s.phases.length + 1}`, time: Math.max(0, time) },
-        ],
-      };
+      additions.push({
+        id: `phase-${Date.now()}-${base.length}`,
+        name: `P${base.length + 1}`,
+        time: Math.max(0, time),
+      });
+      return { phases: [...s.phases, ...additions] };
     }),
   removePhase: (id) => set((s) => ({ phases: s.phases.filter((p) => p.id !== id) })),
   setPhaseName: (id, name) =>
@@ -878,6 +924,17 @@ export const usePlanStore = create<PlanState>((set) => ({
     storeLang(lang);
     set({ lang });
   },
+  setOrientation: (orientation) => {
+    storeOrientation(orientation);
+    set({ orientation });
+  },
+  toggleOrientation: () =>
+    set((s) => {
+      const orientation: Orientation =
+        s.orientation === 'horizontal' ? 'vertical' : 'horizontal';
+      storeOrientation(orientation);
+      return { orientation };
+    }),
   restoreSnapshot: (snap) =>
     set({
       encounter: snap.encounter,

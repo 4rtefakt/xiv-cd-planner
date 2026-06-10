@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { usePlanStore } from '../../state/planStore';
-import { fmt, pct, xToTime } from '../../lib/time';
+import { fmt } from '../../lib/time';
+import { mainStart, mainBlock, coordToTime } from '../../lib/orientation';
 import { useT } from '../../i18n';
 
 interface PhaseLayerProps {
@@ -11,6 +12,18 @@ interface PhaseLayerProps {
    *  visually without duplicating the interactive surface. */
   withLabels?: boolean;
 }
+
+/** Faint per-phase wash colors, cycled by phase order. Kept very low
+ *  alpha — the tint should hint at the phase, never fight the markers or
+ *  the ability art on top of it. */
+const PHASE_TINTS = [
+  'rgba(0, 229, 255, 0.07)',   // cyan
+  'rgba(255, 46, 154, 0.07)',  // pink
+  'rgba(74, 222, 128, 0.07)',  // green
+  'rgba(192, 132, 252, 0.07)', // purple
+  'rgba(255, 181, 71, 0.07)',  // amber
+  'rgba(96, 165, 250, 0.07)',  // blue
+];
 
 /**
  * Phase markers — vertical dashed lines spanning the whole canvas, one
@@ -27,6 +40,7 @@ export function PhaseLayer({ fightDuration, withLabels = false }: PhaseLayerProp
   const removePhase = usePlanStore((s) => s.removePhase);
   const setPhaseName = usePlanStore((s) => s.setPhaseName);
   const readOnly = usePlanStore((s) => s.readOnly);
+  const orientation = usePlanStore((s) => s.orientation);
   const layerRef = useRef<HTMLDivElement>(null);
   const [editingId, setEditingId] = useState<string | null>(null);
   const t = useT();
@@ -39,7 +53,7 @@ export function PhaseLayer({ fightDuration, withLabels = false }: PhaseLayerProp
     e.stopPropagation();
     const layer = layerRef.current;
     const onMove = (mv: MouseEvent) => {
-      movePhase(phaseId, xToTime(mv.clientX, layer, fightDuration));
+      movePhase(phaseId, coordToTime(mv.clientX, mv.clientY, layer, fightDuration, orientation));
     };
     const onUp = () => {
       document.removeEventListener('mousemove', onMove);
@@ -49,13 +63,31 @@ export function PhaseLayer({ fightDuration, withLabels = false }: PhaseLayerProp
     document.addEventListener('mouseup', onUp);
   }
 
+  // Phase REGIONS : each phase paints a faint band from its start to the
+  // next phase (or the fight end). Sorted by time so the bands tile in
+  // order and the color cycles by position, not insertion order.
+  const sorted = [...phases].sort((a, b) => a.time - b.time);
+
   return (
     <div ref={layerRef} className="phase-layer">
+      {sorted.map((p, i) => {
+        const start = p.time;
+        const end = i + 1 < sorted.length ? sorted[i + 1]!.time : fightDuration;
+        const span = Math.max(0, end - start);
+        if (span <= 0) return null;
+        return (
+          <div
+            key={`region-${p.id}`}
+            className="phase-region"
+            style={{ ...mainBlock(start, span, fightDuration, orientation), background: PHASE_TINTS[i % PHASE_TINTS.length] }}
+          />
+        );
+      })}
       {phases.map((p) => (
         <div
           key={p.id}
           className="phase-marker"
-          style={{ left: `${pct(p.time, fightDuration)}%` }}
+          style={mainStart(p.time, fightDuration, orientation)}
         >
           {withLabels &&
             (editingId === p.id ? (

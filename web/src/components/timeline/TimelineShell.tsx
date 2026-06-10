@@ -6,6 +6,8 @@ import { TimelineAxis } from './TimelineAxis';
 import { BossLanesLeft, BossLanesRight } from './BossLanes';
 import { PlayerGroupsLeft, PlayerGroupsRight } from './PlayerGroups';
 import { PhaseLayer } from './PhaseMarkers';
+import { TimelineVertical } from './TimelineVertical';
+import { mainAxisPx, ZOOM_STEP, ZOOM_MIN, ZOOM_MAX } from './metrics';
 import { VariantBar } from './VariantBar';
 
 /** Compact-mode pill — shrinks every boss mech to its diamond cap. */
@@ -52,10 +54,25 @@ function VisibilityToggle({ category, label, titleShow, titleHide }: {
   );
 }
 
-/** Base pixels-per-second at zoom 1.0. The default zoom is 2× so the
- *  initial canvas fits ~5 min of action in a 1600px viewport. */
-const BASE_PX_PER_SEC = 2.667;
-const ZOOM_STEP = 0.15;
+/** Orientation pill — flips the whole timeline between time-on-X
+ *  (horizontal, default) and time-on-Y (vertical, one column per job). */
+function OrientationToggle() {
+  const orientation = usePlanStore((s) => s.orientation);
+  const toggle = usePlanStore((s) => s.toggleOrientation);
+  const t = useT();
+  const vertical = orientation === 'vertical';
+  return (
+    <button
+      type="button"
+      className={`tl-btn tl-vis ${vertical ? 'on' : 'off'} c-orient`}
+      onClick={toggle}
+      title={vertical ? t('tl.orient.toHorizontal') : t('tl.orient.toVertical')}
+    >
+      <span className="tl-vis-dot">{vertical ? '↓' : '→'}</span>
+      {vertical ? t('tl.orient.vertical') : t('tl.orient.horizontal')}
+    </button>
+  );
+}
 
 /**
  * Section 02 main grid. C.1 ships:
@@ -74,6 +91,7 @@ export function TimelineShell() {
   const addPhase = usePlanStore((s) => s.addPhase);
   const resetEncounter = usePlanStore((s) => s.resetEncounter);
   const readOnly = usePlanStore((s) => s.readOnly);
+  const orientation = usePlanStore((s) => s.orientation);
   const zoom = usePlanStore((s) => s.zoom);
   // setZoom is read from usePlanStore.getState() inside the wheel
   // handler (which needs the latest store-reading function), not via
@@ -81,7 +99,7 @@ export function TimelineShell() {
 
   const t = useT();
 
-  const canvasWidth = Math.max(800, Math.round(fightDuration * BASE_PX_PER_SEC * zoom));
+  const canvasWidth = mainAxisPx(fightDuration, zoom);
 
   // The right column is split into two stacked horizontal scrollers :
   //   - tl-head-scroller : axis + boss lanes (position:sticky top:0)
@@ -178,7 +196,7 @@ export function TimelineShell() {
       const timeFraction = Math.max(0, Math.min(1, cursorXInCanvas / oldWidth));
 
       const state = usePlanStore.getState();
-      const newZoom = Math.max(0.5, Math.min(8, state.zoom - Math.sign(e.deltaY) * ZOOM_STEP));
+      const newZoom = Math.max(ZOOM_MIN, Math.min(ZOOM_MAX, state.zoom - Math.sign(e.deltaY) * ZOOM_STEP));
       if (Math.abs(newZoom - state.zoom) < 0.001) return;
       state.setZoom(newZoom);
 
@@ -314,10 +332,22 @@ export function TimelineShell() {
           titleShow={t('tl.view.showPlacement')}
           titleHide={t('tl.view.hidePlacement')}
         />
+        <VisibilityToggle
+          category="cast"
+          label={t('tl.view.cast')}
+          titleShow={t('tl.view.showCast')}
+          titleHide={t('tl.view.hideCast')}
+        />
         <CompactToggle />
+        <div className="tl-divider" />
+        <span className="tl-tool-label">{t('tl.orient')}</span>
+        <OrientationToggle />
       </div>
 
-      <div className="timeline-shell">
+      {orientation === 'vertical' ? (
+        <TimelineVertical />
+      ) : (
+      <div className="timeline-shell orient-horizontal">
         <div className="tl-left" ref={leftRef}>
           {/* The header block (axis spacer + boss lanes) sticks to the
               top of the viewport while the player groups below scroll
@@ -351,12 +381,14 @@ export function TimelineShell() {
           </div>
         </div>
       </div>
+      )}
 
       <div className="legend">
         <div className="legend-item"><div className="legend-line" style={{ '--sw': 'var(--phys-ranged)' } as React.CSSProperties} />PHYSICAL</div>
         <div className="legend-item"><div className="legend-line" style={{ '--sw': 'var(--magic-ranged)' } as React.CSSProperties} />MAGICAL</div>
         <div className="legend-item"><div className="legend-line" style={{ '--sw': 'var(--text-faint)' } as React.CSSProperties} />PURE</div>
         <div className="legend-item"><div className="legend-line" style={{ '--sw': 'var(--cyan)' } as React.CSSProperties} />PLACEMENT</div>
+        <div className="legend-item"><div className="legend-line" style={{ '--sw': 'var(--pink)' } as React.CSSProperties} />CAST</div>
         <div className="legend-item"><div className="legend-swatch" style={{ '--sw': 'var(--cyan)' } as React.CSSProperties} />PERSONAL</div>
         <div className="legend-item"><div className="legend-swatch" style={{ '--sw': 'var(--pink)' } as React.CSSProperties} />PARTY</div>
         <div className="legend-item"><div className="legend-swatch" style={{ '--sw': 'var(--heal)' } as React.CSSProperties} />HEAL</div>

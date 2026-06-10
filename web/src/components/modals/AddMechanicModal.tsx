@@ -4,7 +4,7 @@ import { fmt, parseTime } from '../../lib/time';
 import { usePlanStore } from '../../state/planStore';
 import { useT } from '../../i18n';
 
-const CATEGORY_KEYS: MechCategory[] = ['damage', 'placement'];
+const CATEGORY_KEYS: MechCategory[] = ['damage', 'placement', 'cast'];
 const DAMAGE_KINDS: DamageKind[] = ['physical', 'magical', 'pure'];
 
 /** Common raid-callout tags offered as one-click toggles. Free text is
@@ -89,7 +89,9 @@ export function AddMechanicModal() {
     if (!modal) return;
     const t = Math.max(0, Math.min(fightDuration, parseTime(timeStr)));
     const finalName = (name.trim() || 'UNNAMED').toUpperCase();
-    const effectiveTargets = category === 'placement' ? [] : targets;
+    // Only damage mechs carry targets ; placement + cast are
+    // non-mitigable cues with no one to "hit".
+    const effectiveTargets = category === 'damage' ? targets : [];
     // Cast time : parsed as a positive float, clamped to [0, time] so
     // the cast bar can't start before the fight does. 0 → undefined to
     // keep the stored mechanic small for instant casts.
@@ -216,8 +218,8 @@ export function AddMechanicModal() {
             <label className="modal-label">{t('mech.category')}</label>
             <div className="category-grid">
               {CATEGORY_KEYS.map((key) => {
-                const label = t(key === 'damage' ? 'mech.cat.damage' : 'mech.cat.placement');
-                const help = t(key === 'damage' ? 'mech.cat.damage.help' : 'mech.cat.placement.help');
+                const label = t(`mech.cat.${key}` as 'mech.cat.damage' | 'mech.cat.placement' | 'mech.cat.cast');
+                const help = t(`mech.cat.${key}.help` as 'mech.cat.damage.help' | 'mech.cat.placement.help' | 'mech.cat.cast.help');
                 return (
                   <div
                     key={key}

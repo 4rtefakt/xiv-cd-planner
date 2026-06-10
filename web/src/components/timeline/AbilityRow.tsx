@@ -1,6 +1,7 @@
 import { useRef } from 'react';
 import type { Ability, Use } from '../../types';
-import { fmt, pct, xToTime } from '../../lib/time';
+import { fmt } from '../../lib/time';
+import { mainStart, mainBlock, mainExtentPct, coordToTime, type Orientation } from '../../lib/orientation';
 import { findUseConflict } from '../../lib/mitigation';
 import { usePlanStore } from '../../state/planStore';
 import { abilityName } from '../../i18n';
@@ -41,6 +42,7 @@ export function AbilityRow({ playerId, ability, uses, alt, fightDuration }: Abil
   const mechanicsAll = usePlanStore((s) => s.mechanics);
   const hiddenCats = usePlanStore((s) => s.hiddenMechCategories);
   const readOnly = usePlanStore((s) => s.readOnly);
+  const orientation = usePlanStore((s) => s.orientation);
 
   // Apply the same category filter as the boss lane so guidelines
   // disappear in lockstep with the mech markers above.
@@ -60,13 +62,16 @@ export function AbilityRow({ playerId, ability, uses, alt, fightDuration }: Abil
   // For new placements (click-to-place hover), excludeUseId is undefined.
   // For drags of an existing use, we exclude it so the use doesn't
   // self-conflict against its own current recast window.
-  function computePreviewAt(clientX: number, excludeUseId?: string) {
+  function computePreviewAt(clientX: number, clientY: number, excludeUseId?: string) {
     if (!ref.current) return null;
-    // If the user grabbed the use 25px from its left edge, we want the
-    // use to LAND such that its left edge is 25px to the LEFT of the
-    // current cursor — preserve the visual grab anchor.
+    // If the user grabbed the use 25px from its leading edge, we want the
+    // use to LAND such that that edge stays 25px before the cursor —
+    // preserve the visual grab anchor. The offset is along the main axis
+    // (X horizontal, Y vertical), so subtract it from the matching coord.
     const offsetPx = matchesUseDrag ? dragCtx?.grabOffsetPx ?? 0 : 0;
-    const rawTime = xToTime(clientX - offsetPx, ref.current, fightDuration);
+    const px = orientation === 'vertical' ? clientX : clientX - offsetPx;
+    const py = orientation === 'vertical' ? clientY - offsetPx : clientY;
+    const rawTime = coordToTime(px, py, ref.current, fightDuration, orientation);
     // Snap to a nearby mech if one is within SNAP_THRESHOLD_S — saves
     // the user from pixel-perfect aim when they want the CD to start
     // exactly when the mech fires.
@@ -109,7 +114,7 @@ export function AbilityRow({ playerId, ability, uses, alt, fightDuration }: Abil
         if (readOnly) return;
         // Suppress preview while a CdUse drag is in progress.
         if (dragCtx) return;
-        const p = computePreviewAt(e.clientX);
+        const p = computePreviewAt(e.clientX, e.clientY);
         if (p) setPreviewUse(p);
       }}
       onMouseLeave={() => setPreviewUse(null)}
@@ -120,7 +125,7 @@ export function AbilityRow({ playerId, ability, uses, alt, fightDuration }: Abil
         // gate via class name in case that ever changes.
         const inUse = (e.target as HTMLElement).closest('.cd-use');
         if (inUse && !inUse.classList.contains('cd-use-preview')) return;
-        const p = computePreviewAt(e.clientX);
+        const p = computePreviewAt(e.clientX, e.clientY);
         if (!p) return;
         if (p.conflict) return; // visual rejection only; no use added
         addUse({
@@ -142,7 +147,7 @@ export function AbilityRow({ playerId, ability, uses, alt, fightDuration }: Abil
         e.dataTransfer.dropEffect = 'move';
         // Show the same ghost + mech-covered highlight as click-to-place,
         // anchored to the grab-offset rather than the cursor.
-        const p = computePreviewAt(e.clientX, dragCtx?.useId);
+        const p = computePreviewAt(e.clientX, e.clientY, dragCtx?.useId);
         if (p) setPreviewUse(p);
       }}
       onDragLeave={(e) => {
@@ -157,7 +162,9 @@ export function AbilityRow({ playerId, ability, uses, alt, fightDuration }: Abil
         if (!matchesUseDrag || !ref.current) return;
         e.preventDefault();
         const offsetPx = dragCtx?.grabOffsetPx ?? 0;
-        const t = xToTime(e.clientX - offsetPx, ref.current, fightDuration);
+        const px = orientation === 'vertical' ? e.clientX : e.clientX - offsetPx;
+        const py = orientation === 'vertical' ? e.clientY - offsetPx : e.clientY;
+        const t = coordToTime(px, py, ref.current, fightDuration, orientation);
         const conflict =
           findUseConflict(playerId, ability.id, t, ability.recast, rowUses, dragCtx?.useId) !== null;
         if (!conflict && dragCtx?.useId) moveUse(dragCtx.useId, t);
@@ -168,7 +175,7 @@ export function AbilityRow({ playerId, ability, uses, alt, fightDuration }: Abil
         <div
           key={`g-${m.id}`}
           className={`mech-guideline ${m.type}`}
-          style={{ left: `${pct(m.time, fightDuration)}%` }}
+          style={mainStart(m.time, fightDuration, orientation)}
         />
       ))}
 
@@ -179,6 +186,7 @@ export function AbilityRow({ playerId, ability, uses, alt, fightDuration }: Abil
           snapped={previewUse!.snapped ?? false}
           ability={ability}
           fightDuration={fightDuration}
+          orientation={orientation}
         />
       )}
 
@@ -195,19 +203,20 @@ function PreviewGhost({
   snapped,
   ability,
   fightDuration,
+  orientation,
 }: {
   time: number;
   conflict: boolean;
   snapped: boolean;
   ability: Ability;
   fightDuration: number;
+  orientation: Orientation;
 }) {
   const lang = usePlanStore((s) => s.lang);
   // Same end-of-fight clipping as CdUse so the ghost previews exactly
   // what will be rendered once committed.
   const visibleS = Math.max(0, Math.min(ability.recast, fightDuration - time));
-  const totalPct = (visibleS / fightDuration) * 100;
-  const activeWidthPct = (visibleS > 0 ? Math.min(1, ability.effect / visibleS) : 0) * 100;
+  const activeExtentPct = (visibleS > 0 ? Math.min(1, ability.effect / visibleS) : 0) * 100;
   return (
     <div
       className={
@@ -215,10 +224,10 @@ function PreviewGhost({
         (conflict ? ' is-conflict' : '') +
         (snapped ? ' is-snapped' : '')
       }
-      style={{ left: `${pct(time, fightDuration)}%`, width: `${totalPct}%`, pointerEvents: 'none' }}
+      style={{ ...mainBlock(time, visibleS, fightDuration, orientation), pointerEvents: 'none' }}
       aria-hidden
     >
-      <div className="cd-use-active-block" style={{ width: `${activeWidthPct}%` }}>
+      <div className="cd-use-active-block" style={mainExtentPct(activeExtentPct, orientation)}>
         <div className="cd-use-active-extend" />
       </div>
       <div className="cd-use-cooldown" />

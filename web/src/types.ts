@@ -87,7 +87,17 @@ export interface BossLane {
   name: string;
 }
 
-export type MechCategory = 'damage' | 'placement';
+/**
+ * 'damage'    — deals damage to players ; carries a damage_kind and
+ *               participates in the coverage calc.
+ * 'placement' — positional cue, nothing to mitigate.
+ * 'cast'      — a boss cast (the "sorts" tab in FFLogs) imported as a
+ *               standalone entry. What players actually see on the cast
+ *               bar. No reliable damage_kind (cast and damage are
+ *               distinct FFLogs objects), so treated as non-mitigable
+ *               like a placement for coverage. Toggleable on its own.
+ */
+export type MechCategory = 'damage' | 'placement' | 'cast';
 
 export interface Mechanic {
   id: string;
