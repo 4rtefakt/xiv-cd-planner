@@ -1,5 +1,6 @@
 import type { Mechanic as MechanicT, Use } from '../../types';
-import { fmt, pct } from '../../lib/time';
+import { fmt } from '../../lib/time';
+import { mainStart, mainBlock } from '../../lib/orientation';
 import { abilityIndexAtLevel, computeCoverage, deriveMechType } from '../../lib/mitigation';
 import { resolveAbilityAtLevel } from '../../lib/abilityResolve';
 import { splitMechName } from '../../lib/mechRender';
@@ -27,6 +28,7 @@ export function MechanicMarker({ mech, uses, fightDuration, slot = 0 }: Mechanic
   const level = usePlanStore((s) => s.encounter.level);
   const lang = usePlanStore((s) => s.lang);
   const updateMechanic = usePlanStore((s) => s.updateMechanic);
+  const orientation = usePlanStore((s) => s.orientation);
   const hiddenAbilityIds = usePlanStore((s) => s.hiddenAbilityIds);
   const hiddenSet = useMemo(() => new Set(hiddenAbilityIds), [hiddenAbilityIds]);
 
@@ -76,7 +78,7 @@ export function MechanicMarker({ mech, uses, fightDuration, slot = 0 }: Mechanic
         (isCast ? ' is-cast' : '') +
         (previewCovered ? ' preview-covered' : '')
       }
-      style={{ left: `${pct(mech.time, fightDuration)}%`, ['--mech-slot' as any]: slot }}
+      style={{ ...mainStart(mech.time, fightDuration, orientation), ['--mech-slot' as any]: slot }}
       data-mech-id={mech.id}
       data-category={mech.category}
       data-slot={slot}
@@ -178,18 +180,19 @@ export function MechanicMarker({ mech, uses, fightDuration, slot = 0 }: Mechanic
  * bar is purely visual.
  */
 export function MechanicCastBar({ mech, fightDuration }: { mech: MechanicT; fightDuration: number }) {
+  const orientation = usePlanStore((s) => s.orientation);
   const damageKind = mech.damage_kind ?? 'magical';
   const isPlacement = mech.category === 'placement';
   const isCast = mech.category === 'cast';
   const colorKey = isCast ? 'cast' : isPlacement ? 'placement' : damageKind;
   if (!mech.cast_time || mech.cast_time <= 0) return null;
-  const startPct = pct(Math.max(0, mech.time - mech.cast_time), fightDuration);
-  const widthPct = (mech.cast_time / fightDuration) * 100;
+  // The cast bar starts `cast_time` before impact and spans up to it.
+  const start = Math.max(0, mech.time - mech.cast_time);
   return (
     <div
       className="mech-cast-bar"
       data-color={colorKey}
-      style={{ left: `${startPct}%`, width: `${widthPct}%` }}
+      style={mainBlock(start, mech.cast_time, fightDuration, orientation)}
       title={`${mech.cast_time}s cast → ${fmt(mech.time)}`}
     >
       <span className="mech-cast-bar-label">{mech.cast_time}s</span>
